@@ -14,6 +14,7 @@
     "@types/crypto-js": "^4.2.2",
     "axios": "^1.7.9",
     "crypto-js": "^4.2.0",
+    "esptool-js": "file:vendor\\esptool-js-0.5.3.tgz",
     "i18next": "^24.1.0",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
@@ -23,7 +24,10 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.0.2",
     "redux": "^5.0.1",
-    "universal-cookie": "^7.2.2"
+    "ua-parser-js": "^2.0.0",
+    "universal-cookie": "^7.2.2",
+    "vite-plugin-pwa": "^0.21.1",
+    "xlsx": "file:vendor\\xlsx-0.20.3.tgz"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

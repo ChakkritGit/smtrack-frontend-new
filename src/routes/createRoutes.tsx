@@ -4,7 +4,7 @@ import { tmsChildren } from "./tmsChildren"
 import MainSmtrack from "../main/smtrack/main"
 import MainTms from "../main/tms/main"
 import { AuthRoute } from "../middleware/authprotect"
-import { LogoutAuth } from "../middleware/logoutAuth"
+import { LogoutAuth } from "../middleware/Auth"
 
 const router = (role: string, tmsMode: boolean) => createBrowserRouter([
   {

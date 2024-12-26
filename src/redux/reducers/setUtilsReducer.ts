@@ -1,11 +1,12 @@
 // redux/reducers/toggleReducer.js
 import { cookies } from '../../constants/utils/utilsConstants'
-import { COOKIE_ENCODE, COOKIE_DECODE, TOKEN_DECODE, TMS_MODE, UtilsState, UtilsAction, IS_EXPAND } from '../types/utilsTypes'
+import { COOKIE_ENCODE, COOKIE_DECODE, TOKEN_DECODE, TMS_MODE, UtilsState, UtilsAction, IS_EXPAND, USER_PROFILE } from '../types/utilsTypes'
 
 const initialState: UtilsState = {
   cookieEncode: cookies.get('tokenObject'),
   cookieDecode: undefined,
   tokenDecode: undefined,
+  userProfile: undefined,
   tmsMode: false,
   isExpand: localStorage.getItem('expandaside') === 'true',
 }
@@ -18,6 +19,8 @@ const utilsReducer = (state = initialState, action: UtilsAction): UtilsState => 
       return { ...state, cookieDecode: action.payload }
     case TOKEN_DECODE:
       return { ...state, tokenDecode: action.payload }
+    case USER_PROFILE:
+      return { ...state, userProfile: action.payload }
     case TMS_MODE:
       return { ...state, tmsMode: !state.tmsMode }
     case IS_EXPAND:

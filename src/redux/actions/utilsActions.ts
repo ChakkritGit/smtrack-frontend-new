@@ -1,7 +1,7 @@
 // redux/actions/toggleActions.js
 import { TokenDecodeType } from '../../types/smtrack/constants/constantsType'
-import { TokenType } from '../../types/smtrack/utilsRedux/utilsReduxType'
-import { COOKIE_ENCODE, COOKIE_DECODE, TOKEN_DECODE, TMS_MODE, IS_EXPAND } from '../types/utilsTypes'
+import { TokenType, UserProfileType } from '../../types/smtrack/utilsRedux/utilsReduxType'
+import { COOKIE_ENCODE, COOKIE_DECODE, TOKEN_DECODE, USER_PROFILE, TMS_MODE, IS_EXPAND } from '../types/utilsTypes'
 
 const setCookieEncode = (dataEncode: string) => ({
   type: COOKIE_ENCODE,
@@ -18,6 +18,11 @@ const setTokenDecode = (tokenDecode: TokenType) => ({
   payload: tokenDecode,
 })
 
+const setUserProfile = (userData: UserProfileType) => ({
+  type: USER_PROFILE,
+  payload: userData,
+})
+
 const setTmsMode = () => ({
   type: TMS_MODE,
 })
@@ -26,4 +31,4 @@ const setIsExpand = () => ({
   type: IS_EXPAND,
 })
 
-export { setCookieEncode, setCookieDecode, setTokenDecode, setTmsMode, setIsExpand }
+export { setCookieEncode, setCookieDecode, setTokenDecode, setUserProfile, setTmsMode, setIsExpand }

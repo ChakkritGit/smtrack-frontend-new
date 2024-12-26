@@ -14,7 +14,7 @@ export const LogoutAuth = () => {
   return <Login />
 }
 
-export const Hidesetting = () => {
+export const HideSetting = () => {
   const { tokenDecode } = useSelector((state: RootState) => state.utils)
   const { role } = tokenDecode || {}
   return (

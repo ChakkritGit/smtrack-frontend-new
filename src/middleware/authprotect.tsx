@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import CryptoJS from "crypto-js"
-import { setCookieDecode, setCookieEncode, setTmsMode } from '../redux/actions/utilsActions'
+import { setCookieDecode, setCookieEncode } from '../redux/actions/utilsActions'
 import { RootState } from '../redux/reducers/rootReducer'
 import { TokenDecodeType } from '../types/smtrack/constants/constantsType'
 import { cookieDecodeObject, cookieOptions, cookies } from '../constants/utils/utilsConstants'
@@ -34,14 +34,14 @@ const ProtectedRoute = ({ children }: AuthProps) => {
           setIsValid(true)
         } else {
           dispatch(setCookieEncode(''))
-          dispatch(setTmsMode())
+          // dispatch(setTmsMode())
           cookies.remove('tokenObject', cookieOptions)
           cookies.update()
           setIsValid(false)
         }
       } catch (error) {
         dispatch(setCookieEncode(''))
-        dispatch(setTmsMode())
+        // dispatch(setTmsMode())
         cookies.remove('tokenObject', cookieOptions)
         cookies.update()
         setIsValid(false)

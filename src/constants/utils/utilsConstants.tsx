@@ -1,6 +1,7 @@
 import { TokenDecodeType } from "../../types/smtrack/constants/constantsType"
 import Cookies, { CookieSetOptions } from "universal-cookie"
 import CryptoJS from "crypto-js"
+import { UserRole } from "../../types/smtrack/users/usersType"
 
 const accessToken = (tokenObject: TokenDecodeType) => CryptoJS.AES.encrypt(JSON.stringify(tokenObject), `${import.meta.env.VITE_APP_SECRETKEY}`)
 const cookieDecodeObject = (cookieEncode: string) => CryptoJS.AES.decrypt(cookieEncode, `${import.meta.env.VITE_APP_SECRETKEY}`)
@@ -22,4 +23,23 @@ export const cookieOptions: CookieSetOptions = {
   sameSite: 'strict' // ตัวเลือก 'strict', 'lax', หรือ 'none'
 }
 
-export { accessToken, cookieDecodeObject, cookies }
+const getRoleLabel = (role: UserRole | undefined, t: (key: string) => string): string => {
+  switch (role) {
+    case UserRole.SUPER:
+      return t('levelSuper')
+    case UserRole.SERVICE:
+      return t('levelService')
+    case UserRole.ADMIN:
+      return t('levelAdmin')
+    case UserRole.USER:
+      return t('levelUser')
+    case UserRole.LEGACY_ADMIN:
+      return 'LEGACY_ADMIN'
+    case UserRole.LEGACY_USER:
+      return 'LEGACY_USER'
+    default:
+      return 'GUEST'
+  }
+}
+
+export { accessToken, cookieDecodeObject, getRoleLabel, cookies }
