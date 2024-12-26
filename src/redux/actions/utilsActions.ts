@@ -1,7 +1,7 @@
 // redux/actions/toggleActions.js
 import { TokenDecodeType } from '../../types/smtrack/constants/constantsType'
 import { TokenType, UserProfileType } from '../../types/smtrack/utilsRedux/utilsReduxType'
-import { COOKIE_ENCODE, COOKIE_DECODE, TOKEN_DECODE, USER_PROFILE, TMS_MODE, IS_EXPAND } from '../types/utilsTypes'
+import { COOKIE_ENCODE, COOKIE_DECODE, TOKEN_DECODE, USER_PROFILE, TMS_MODE, IS_EXPAND, GLOBAL_SEARCH, THEME_MODE } from '../types/utilsTypes'
 
 const setCookieEncode = (dataEncode: string) => ({
   type: COOKIE_ENCODE,
@@ -31,4 +31,14 @@ const setIsExpand = () => ({
   type: IS_EXPAND,
 })
 
-export { setCookieEncode, setCookieDecode, setTokenDecode, setUserProfile, setTmsMode, setIsExpand }
+const setSearch = (search: string) => ({
+  type: GLOBAL_SEARCH,
+  payload: search,
+})
+
+const setTheme = (theme: string) => ({
+  type: THEME_MODE,
+  payload: theme,
+})
+
+export { setCookieEncode, setCookieDecode, setTokenDecode, setUserProfile, setTmsMode, setIsExpand, setSearch, setTheme }

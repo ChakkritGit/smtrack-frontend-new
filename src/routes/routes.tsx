@@ -9,9 +9,13 @@ import { jwtDecode } from 'jwt-decode'
 
 const Routes = () => {
   const dispatch = useDispatch()
-  const { tokenDecode, cookieDecode, tmsMode } = useSelector((state: RootState) => state.utils)
+  const { tokenDecode, cookieDecode, tmsMode, themeMode } = useSelector((state: RootState) => state.utils)
   const { role = 'USER' } = tokenDecode || {}
   const { token } = cookieDecode || {}
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", themeMode)
+  }, [themeMode])
 
   const decodeToken = async (getToken: string) => {
     const decoded: TokenType = await jwtDecode(getToken)

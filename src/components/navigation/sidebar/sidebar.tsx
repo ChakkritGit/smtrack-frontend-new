@@ -4,10 +4,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import { RiDashboardFill, RiDashboardLine, RiFileSettingsFill, RiFileSettingsLine, RiHome3Fill, RiHome3Line, RiListSettingsFill, RiListSettingsLine, RiSettings3Fill, RiSettings3Line, RiShieldCheckFill, RiShieldCheckLine, RiUser6Fill, RiUser6Line } from "react-icons/ri"
 import { setTmsMode } from "../../../redux/actions/utilsActions"
 import DefaultPic from "../../../assets/images/default-pic.png"
+import { useTranslation } from "react-i18next"
 
 const Sidebar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const location = useLocation()
   const { isExpand, userProfile } = useSelector((state: RootState) => state.utils)
   const { ward } = userProfile || {}
@@ -30,7 +32,7 @@ const Sidebar = () => {
                   :
                   <RiHome3Line size={24} />
               }
-              {!isExpand && <span className="text-[16px]">Show All Devices</span>}
+              {!isExpand && <span className="text-[16px]">{t('sideShowAllBox')}</span>}
             </Link>
             <Link to={"/dashboard"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/dashboard" || location.pathname.split('/')[2] === "chart" || location.pathname.split('/')[2] === "table" || location.pathname === "/dashboard/chart/compare" ? "btn-primary" : "btn-ghost"}`}>
               {
@@ -39,7 +41,7 @@ const Sidebar = () => {
                   :
                   <RiDashboardLine size={24} />
               }
-              {!isExpand && <span className="text-[16px]">Dashboard</span>}
+              {!isExpand && <span className="text-[16px]">{t('sideDashboard')}</span>}
             </Link>
             <Link to={"/permission"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/permission" ? "btn-primary" : "btn-ghost"}`}>
               {
@@ -48,7 +50,7 @@ const Sidebar = () => {
                   :
                   <RiUser6Line size={24} />
               }
-              {!isExpand && <span className="text-[16px]">Manage Users</span>}
+              {!isExpand && <span className="text-[16px]">{t('sidePermission')}</span>}
             </Link>
             <Link to={"/management"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/management" || location.pathname === "/management/logadjust" || location.pathname === '/management/flasher' ? "btn-primary" : "btn-ghost"}`}>
               {
@@ -57,7 +59,7 @@ const Sidebar = () => {
                   :
                   <RiListSettingsLine size={24} />
               }
-              {!isExpand && <span className="text-[16px]">Manage</span>}
+              {!isExpand && <span className="text-[16px]">{t('sideManage')}</span>}
             </Link>
           </div>
           <div className="divider mb-0"></div>
@@ -69,7 +71,7 @@ const Sidebar = () => {
                   :
                   <RiShieldCheckLine size={24} />
               }
-              {!isExpand && <span className="text-[16px]">Warranties</span>}
+              {!isExpand && <span className="text-[16px]">{t('sideWarranty')}</span>}
             </Link>
             <Link to={"/repair"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/repair" ? "btn-primary" : "btn-ghost"}`}>
               {
@@ -78,7 +80,7 @@ const Sidebar = () => {
                   :
                   <RiFileSettingsLine size={24} />
               }
-              {!isExpand && <span className="text-[16px]">Repairs</span>}
+              {!isExpand && <span className="text-[16px]">{t('sideRepair')}</span>}
             </Link>
           </div>
         </div>
@@ -98,7 +100,7 @@ const Sidebar = () => {
                   :
                   <RiSettings3Line size={24} />
               }
-              {!isExpand && <span className="text-[16px]">Settings</span>}
+              {!isExpand && <span className="text-[16px]">{t('sideSetting')}</span>}
             </Link>
           </div>
         </div>

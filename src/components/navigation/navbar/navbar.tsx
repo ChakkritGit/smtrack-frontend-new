@@ -2,21 +2,24 @@ import { useEffect, useRef } from 'react'
 import { RiMenuFoldLine, RiMenuUnfoldLine, RiNotification4Line, RiSearchLine, RiArrowDownSLine } from 'react-icons/ri'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
-import { setIsExpand } from '../../../redux/actions/utilsActions'
+import { setIsExpand, setSearch } from '../../../redux/actions/utilsActions'
 import DefaultPic from '../../../assets/images/default-pic.png'
 import { UAParser } from "ua-parser-js"
 import { getRoleLabel } from '../../../constants/utils/utilsConstants'
 import { useTranslation } from 'react-i18next'
+import ThemeList from '../../theme/themeList'
+import LanguageList from '../../language/languageList'
 
 function Navbar() {
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const { isExpand, userProfile } = useSelector((state: RootState) => state.utils)
+  const { isExpand, userProfile, globalSearch } = useSelector((state: RootState) => state.utils)
   const { pic, display, role } = userProfile || {}
   const searchRef = useRef<HTMLInputElement | null>(null)
   const parser = new UAParser()
   const os = parser.getOS().name
   const isMac = os === "mac os"
+  const clearText = globalSearch === ""
 
   useEffect(() => {
     localStorage.setItem('expandaside', isExpand.toString())
@@ -50,10 +53,26 @@ function Navbar() {
             {isExpand ? <RiMenuUnfoldLine size={24} /> : <RiMenuFoldLine size={24} />}
           </label>
           <div className="form-control">
-            <label className="input input-bordered bg-base-200 hidden border-none h-10 items-center gap-2 lg:flex">
-              <input type="text" className="grow !w-28 md:w-auto" placeholder="Search" ref={searchRef} />
-              <kbd className="kbd kbd-sm">{isMac ? "⌘" : "Ctrl"}</kbd>
-              <kbd className="kbd kbd-sm">K</kbd>
+            <label className="input input-bordered bg-base-200 hidden border-none h-10 w-[250px] items-center gap-2 lg:flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                className="h-5 w-5 opacity-50">
+                <path
+                  fillRule="evenodd"
+                  d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                  clipRule="evenodd" />
+              </svg>
+              <input onChange={(e) => dispatch(setSearch(e.target.value))} value={globalSearch} type="text" className="grow !w-28 md:w-auto" placeholder="Search" ref={searchRef} />
+              {
+                clearText ? <>
+                  <kbd className="kbd kbd-sm">{isMac ? "⌘" : "Ctrl"}</kbd>
+                  <kbd className="kbd kbd-sm">K</kbd>
+                </>
+                  :
+                  <kbd className="kbd kbd-sm" onClick={() => dispatch(setSearch(''))}>X</kbd>
+              }
             </label>
           </div>
           <div className='btn btn-ghost lg:hidden'>
@@ -64,6 +83,8 @@ function Navbar() {
           <span className="indicator-item badge badge-secondary px-1 top-2 right-4 lg:right-2">99+</span>
           <RiNotification4Line size={24} />
         </div>
+        <ThemeList />
+        <LanguageList />
         <div className="lg:divider lg:divider-horizontal lg:!mx-2"></div>
         <div className="flex-none gap-2 hidden lg:block">
           <div className="dropdown dropdown-end">
@@ -74,8 +95,8 @@ function Navbar() {
                 className='w-10 rounded-full'
               />
               <div className='flex flex-col items-start gap-1'>
-                <span>{display ? display : "—"}</span>
-                <span>{getRoleLabel(role, t)}</span>
+                <span className='font-normal text-[17px]'>{display ? display : "—"}</span>
+                <span className='text-[12px]'>{role ? getRoleLabel(role, t) : "—"}</span>
               </div>
               <RiArrowDownSLine size={18} />
             </div>
