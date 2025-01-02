@@ -3,22 +3,22 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "Anuphan";
-  src: url("./assets/fonts/Anuphan-Regular.ttf") format("truetype");
+  font-family: 'Anuphan';
+  src: url('./assets/fonts/Anuphan-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Anuphan";
-  src: url("./assets/fonts/Anuphan-Bold.ttf") format("truetype");
+  font-family: 'Anuphan';
+  src: url('./assets/fonts/Anuphan-Bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Anuphan";
-  src: url("./assets/fonts/Anuphan-Light.ttf") format("truetype");
+  font-family: 'Anuphan';
+  src: url('./assets/fonts/Anuphan-Light.ttf') format('truetype');
   font-weight: normal;
   font-style: italic;
 }
@@ -26,7 +26,35 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: "Anuphan", sans-serif;
+  font-family: 'Anuphan', sans-serif;
   /* user-select: none;
   -webkit-user-select: none; */
+}
+
+@layer components {
+  .dataTableWrapper {
+    & > div > div > div,
+    & > div > div > div > div > div {
+      background-color: unset;
+      color: var(--fallback-bc, oklch(var(--bc) / 1));
+      border-bottom-color: var(--fallback-bc, oklch(var(--bc) / 0.15));
+    }
+
+    & > div:nth-child(2) > nav {
+      background-color: unset;
+      color: var(--fallback-bc, oklch(var(--bc) / 1));
+      border-top-color: var(--fallback-bc, oklch(var(--bc) / 0.15));
+
+      & > div:nth-child(4) > button:disabled {
+        color: var(--fallback-bc, oklch(var(--bc) / 1));
+        fill: var(--fallback-bc, oklch(var(--bc) / 1));
+        cursor: not-allowed;
+      }
+
+      & > div:nth-child(4) > button {
+        color: white;
+        fill: white;
+      }
+    }
+  }
 }

@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom"
 import { responseType } from "../../types/smtrack/utilsRedux/utilsReduxType"
 import { DeviceResponseType } from "../../types/global/deviceResponseType"
 import { DeviceType } from "../../types/smtrack/devices/deviceType"
+import DataTableLoading from "../../components/skeleton/table/loading"
 
 const Home = () => {
   const { t } = useTranslation()
@@ -136,12 +137,12 @@ const Home = () => {
       </div>
       {
         listAndGrid === 1 ?
-          <div>
+          <div className="dataTableWrapper">
             <DataTable
               columns={columns}
               data={devices}
-              progressComponent={<div>Loading...</div>}
-              progressPending={loading}
+              progressComponent={<DataTableLoading />}
+              progressPending={true}
               pagination
               paginationServer
               paginationTotalRows={totalRows}
@@ -155,7 +156,6 @@ const Home = () => {
               pointerOnHover
               fixedHeader
               fixedHeaderScrollHeight="calc(100dvh - 490px)"
-              className="bg-primary"
             />
           </div>
           :
