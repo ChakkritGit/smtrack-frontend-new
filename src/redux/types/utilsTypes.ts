@@ -10,6 +10,7 @@ const TMS_MODE = 'TMS_MODE'
 const IS_EXPAND = 'IS_EXPAND'
 const GLOBAL_SEARCH = 'GLOBAL_SEARCH'
 const THEME_MODE = 'THEME_MODE'
+const WARD_ID = 'WARD_ID'
 
 interface UtilsState {
   cookieEncode?: string;
@@ -20,6 +21,7 @@ interface UtilsState {
   themeMode: string;
   tmsMode: boolean;
   isExpand: boolean;
+  wardId: string;
 }
 
 type UtilsAction =
@@ -31,6 +33,7 @@ type UtilsAction =
   | { type: typeof THEME_MODE; payload: string }
   | { type: typeof TMS_MODE }
   | { type: typeof IS_EXPAND }
+  | { type: typeof WARD_ID; payload: string }
 
-export { COOKIE_ENCODE, COOKIE_DECODE, USER_PROFILE, TOKEN_DECODE, TMS_MODE, IS_EXPAND, GLOBAL_SEARCH, THEME_MODE }
+export { COOKIE_ENCODE, COOKIE_DECODE, USER_PROFILE, TOKEN_DECODE, TMS_MODE, IS_EXPAND, GLOBAL_SEARCH, THEME_MODE, WARD_ID }
 export type { UtilsState, UtilsAction }

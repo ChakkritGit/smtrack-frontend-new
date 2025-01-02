@@ -64,15 +64,6 @@ const Sidebar = () => {
           </div>
           <div className="divider mb-0"></div>
           <div className="flex items-center justify-center flex-col gap-2 p-3">
-            <Link to={"/warranty"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/warranty" ? "btn-primary" : "btn-ghost"}`}>
-              {
-                location.pathname === "/warranty" ?
-                  <RiShieldCheckFill size={24} />
-                  :
-                  <RiShieldCheckLine size={24} />
-              }
-              {!isExpand && <span className="text-[16px] truncate">{t('sideWarranty')}</span>}
-            </Link>
             <Link to={"/repair"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/repair" ? "btn-primary" : "btn-ghost"}`}>
               {
                 location.pathname === "/repair" ?
@@ -81,6 +72,15 @@ const Sidebar = () => {
                   <RiFileSettingsLine size={24} />
               }
               {!isExpand && <span className="text-[16px] truncate">{t('sideRepair')}</span>}
+            </Link>
+            <Link to={"/warranty"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/warranty" ? "btn-primary" : "btn-ghost"}`}>
+              {
+                location.pathname === "/warranty" ?
+                  <RiShieldCheckFill size={24} />
+                  :
+                  <RiShieldCheckLine size={24} />
+              }
+              {!isExpand && <span className="text-[16px] truncate">{t('sideWarranty')}</span>}
             </Link>
           </div>
         </div>

@@ -17,6 +17,23 @@ export default {
     levelUser: 'User',
     legacyAdmin: 'Admin (Legacy)',
     legacyUser: 'User (Legacy)',
-    levelGuest: 'Guest'
+    levelGuest: 'Guest',
+
+    // card count
+    countProbe: 'Temperatures',
+    countDoor: 'Doors',
+    countConnect: 'Connectivity',
+    countPlug: 'Plugs',
+    countSdCard: 'SdCards',
+    countAdjust: 'Adjusts',
+    countRepair: 'Repairs',
+    countWarranty: 'Warranties',
+    countNormalUnit: 'Times',
+    countDeviceUnit: 'Devices',
+
+    // home
+    showAllBox: 'Event of Day',
+    detailAllBox: 'All Device Details',
+    deviceFilter: 'Filters',
   },
 }
