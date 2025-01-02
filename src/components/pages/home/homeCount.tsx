@@ -15,13 +15,13 @@ const HomeCount = (props: DeviceCountPropType) => {
   ]
 
   const changFilter = (selected: string) => {
-
+    if ((countFilter === "Temperature"))
   }
 
   return (
     <div className="flex items-center justify-center flex-wrap gap-4 mt-4 p-4">
       {card.map((card, index) => (
-        <div className="card bg-base-100 w-[145px] h-[125px] overflow-hidden shadow-xl hover:scale-105 duration-300 cursor-pointer" key={index} onClick={() =>changFilter(card.name)}>
+        <div className="card bg-base-100 w-[145px] h-[125px] overflow-hidden shadow-xl hover:scale-105 duration-300 cursor-pointer" key={index} onClick={() => changFilter(card.name)}>
           <div className="card-body justify-between p-3">
             <h5 className="text-[12px]">{card.name}</h5>
             <span className="text-[28px] text-center font-bold">{card.count ?? "—"}</span>
