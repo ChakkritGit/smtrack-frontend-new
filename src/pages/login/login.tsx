@@ -33,9 +33,9 @@ const Login = () => {
         navigate(`/`)
       } catch (error) {
         if (error instanceof AxiosError) {
-          console.log(error.response?.data.message)
+          console.error(error.response?.data.message)
         } else {
-          console.log(error)
+          console.error(error)
         }
       }
     } else {
@@ -47,7 +47,7 @@ const Login = () => {
     <div className="h-dvh flex items-center justify-center">
       <div className="card bg-base-100 w-[350px] sm:w-[500px] md:w-[500px] lg:w-[500px] h-max shadow-xl">
         <div className="px-5 pt-5">
-          <h1 className="text-[32px] font-bold text-primary">SMTrack+</h1>
+          <h1 className="text-[38px] font-bold text-primary">SMTrack+</h1>
           <span>Real-time temperature monitoring with alerts for exceeding limits</span>
         </div>
         <div className="card-body">

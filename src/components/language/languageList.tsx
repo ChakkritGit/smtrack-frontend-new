@@ -17,7 +17,7 @@ const LanguageList = () => {
   }, [i18n])
 
   return (
-    <div title="Change Language" className="dropdown dropdown-end">
+    <div className="dropdown dropdown-end">
       <div tabIndex={0} role="button" className="btn btn-ghost" aria-label="Language">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-[24px] w-[24px]">
           <path fill-rule="evenodd"
@@ -33,15 +33,15 @@ const LanguageList = () => {
         className="dropdown-content bg-base-200 text-base-content rounded-box top-px mt-16 max-h-[calc(100vh-10rem)] w-40 overflow-y-auto border border-white/5 shadow-2xl outline outline-1 outline-black/5">
         <ul className="menu menu-sm gap-1">
           <li onClick={() => changeLanguage('th')}>
-            <button className={langs === "th" ? "active" : ""}>
+            <button className={`${langs === "th" ? "active" : ""} flex items-center justify-start h-9`}>
               <span
                 className="badge badge-sm badge-outline !pl-1.5 !pr-1 pt-px font-mono !text-[.6rem] font-bold tracking-widest opacity-50">
                 TH</span>
               <span className="text-[16px]">ไทย</span>
             </button>
           </li>
-          <li onClick={() => changeLanguage('en')}>
-            <button className={langs === "en" ? "active" : ""}>
+          <li onClick={() => changeLanguage('en')} >
+            <button className={`${langs === "en" ? "active" : ""} flex items-center justify-start h-9`}>
               <span
                 className="badge badge-sm badge-outline !pl-1.5 !pr-1 pt-px font-mono !text-[.6rem] font-bold tracking-widest opacity-50">
                 EN</span>

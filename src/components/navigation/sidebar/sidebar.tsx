@@ -32,7 +32,7 @@ const Sidebar = () => {
                   :
                   <RiHome3Line size={24} />
               }
-              {!isExpand && <span className="text-[16px]">{t('sideShowAllBox')}</span>}
+              {!isExpand && <span className="text-[16px] truncate">{t('sideShowAllBox')}</span>}
             </Link>
             <Link to={"/dashboard"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/dashboard" || location.pathname.split('/')[2] === "chart" || location.pathname.split('/')[2] === "table" || location.pathname === "/dashboard/chart/compare" ? "btn-primary" : "btn-ghost"}`}>
               {
@@ -41,7 +41,7 @@ const Sidebar = () => {
                   :
                   <RiDashboardLine size={24} />
               }
-              {!isExpand && <span className="text-[16px]">{t('sideDashboard')}</span>}
+              {!isExpand && <span className="text-[16px] truncate">{t('sideDashboard')}</span>}
             </Link>
             <Link to={"/permission"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/permission" ? "btn-primary" : "btn-ghost"}`}>
               {
@@ -50,7 +50,7 @@ const Sidebar = () => {
                   :
                   <RiUser6Line size={24} />
               }
-              {!isExpand && <span className="text-[16px]">{t('sidePermission')}</span>}
+              {!isExpand && <span className="text-[16px] truncate">{t('sidePermission')}</span>}
             </Link>
             <Link to={"/management"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/management" || location.pathname === "/management/logadjust" || location.pathname === '/management/flasher' ? "btn-primary" : "btn-ghost"}`}>
               {
@@ -59,7 +59,7 @@ const Sidebar = () => {
                   :
                   <RiListSettingsLine size={24} />
               }
-              {!isExpand && <span className="text-[16px]">{t('sideManage')}</span>}
+              {!isExpand && <span className="text-[16px] truncate">{t('sideManage')}</span>}
             </Link>
           </div>
           <div className="divider mb-0"></div>
@@ -71,7 +71,7 @@ const Sidebar = () => {
                   :
                   <RiShieldCheckLine size={24} />
               }
-              {!isExpand && <span className="text-[16px]">{t('sideWarranty')}</span>}
+              {!isExpand && <span className="text-[16px] truncate">{t('sideWarranty')}</span>}
             </Link>
             <Link to={"/repair"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/repair" ? "btn-primary" : "btn-ghost"}`}>
               {
@@ -80,15 +80,15 @@ const Sidebar = () => {
                   :
                   <RiFileSettingsLine size={24} />
               }
-              {!isExpand && <span className="text-[16px]">{t('sideRepair')}</span>}
+              {!isExpand && <span className="text-[16px] truncate">{t('sideRepair')}</span>}
             </Link>
           </div>
         </div>
         <div className="w-full">
           <div className="divider mb-0"></div>
-          <div className="flex items-center justify-center flex-col gap-3 p-3">
+          <div className="flex justify-center flex-col gap-3 p-3">
             <div className="flex flex-col items-center gap-2">
-              {!isExpand && <span className="text-[12px]">*Switch mode eTEMP and TMS</span>}
+              {!isExpand && <span className="text-[12px] truncate">*Switch mode eTEMP and TMS</span>}
               <div className="flex items-center justify-center gap-2">
                 <input type="checkbox" className="toggle toggle-md !h-[1.7rem]" defaultChecked={isExpand} onClick={() => dispatch(setTmsMode())} />
               </div>
@@ -100,8 +100,9 @@ const Sidebar = () => {
                   :
                   <RiSettings3Line size={24} />
               }
-              {!isExpand && <span className="text-[16px]">{t('sideSetting')}</span>}
+              {!isExpand && <span className="text-[16px] truncate">{t('sideSetting')}</span>}
             </Link>
+            <Link to={"/log"} className={`text-[12px] ${isExpand ? "text-center" : "text-right"} hover:underline cursor-pointer`}>{import.meta.env.VITE_APP_VERSION}</Link>
           </div>
         </div>
       </ul>

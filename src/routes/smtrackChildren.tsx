@@ -10,7 +10,7 @@ const smtrackChildren: RouteObject[] = [
     element: <Suspense fallback={<HomeSkeleton />}>
       <Home />
     </Suspense>,
-    errorElement: <></>
+    errorElement: <>error</>
   },
   {
     path: "dashboard",

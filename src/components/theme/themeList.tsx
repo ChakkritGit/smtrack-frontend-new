@@ -12,8 +12,7 @@ const ThemeList = () => {
   }
 
   return (
-    <div title="Change Theme"
-      className="dropdown dropdown-end hidden [@supports(color:oklch(0%_0_0))]:block">
+    <div className="dropdown dropdown-end hidden [@supports(color:oklch(0%_0_0))]:block">
       <div tabIndex={0} role="button" className="btn btn-ghost hidden lg:flex">
         <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
           className="h-[24px] w-[24px] stroke-current">

@@ -34,11 +34,11 @@ const getRoleLabel = (role: UserRole | undefined, t: (key: string) => string): s
     case UserRole.USER:
       return t('levelUser')
     case UserRole.LEGACY_ADMIN:
-      return 'LEGACY_ADMIN'
+      return t('legacyAdmin')
     case UserRole.LEGACY_USER:
-      return 'LEGACY_USER'
+      return t('legacyUser')
     default:
-      return 'GUEST'
+      return t('levelGuest')
   }
 }
 
