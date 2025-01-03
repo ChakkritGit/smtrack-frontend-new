@@ -14,7 +14,8 @@ import {
   GLOBAL_SEARCH,
   THEME_MODE,
   WARD_ID,
-  DEVICE_ID
+  DEVICE_ID,
+  HOS_ID
 } from '../types/utilsTypes'
 
 const setCookieEncode = (dataEncode: string) => ({
@@ -55,6 +56,11 @@ const setTheme = (theme: string) => ({
   payload: theme
 })
 
+const setHosId = (id: string) => ({
+  type: HOS_ID,
+  payload: id
+})
+
 const setWardId = (id: string) => ({
   type: WARD_ID,
   payload: id
@@ -74,6 +80,7 @@ export {
   setIsExpand,
   setSearch,
   setTheme,
+  setHosId,
   setWardId,
   setDeviceId
 }

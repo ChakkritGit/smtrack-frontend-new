@@ -1,32 +1,32 @@
-import axios from "axios"
-import store from "../../redux/store/index"
-import { accessToken } from "../../constants/utils/utilsConstants"
-import { setCookieEncode } from "../../redux/actions/utilsActions"
+import axios from 'axios'
+import store from '../../redux/store/index'
+import { accessToken } from '../../constants/utils/utilsConstants'
+import { setCookieEncode } from '../../redux/actions/utilsActions'
 
 const BASE_URL = import.meta.env.VITE_APP_API
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json",
-  },
+    'Content-Type': 'application/json'
+  }
 })
 
 axiosInstance.interceptors.request.use(
-  (config) => {
+  config => {
     const state = store.getState()
     const token = state.utils.cookieDecode?.token
     if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`
+      config.headers['Authorization'] = `Bearer ${token}`
     }
     return config
   },
-  (error) => Promise.reject(error)
+  error => Promise.reject(error)
 )
 
 axiosInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
+  response => response,
+  async error => {
     const originalRequest = error.config
 
     if (
@@ -55,11 +55,11 @@ axiosInstance.interceptors.response.use(
 
         store.dispatch(setCookieEncode(String(accessToken(tokenObject))))
 
-        axiosInstance.defaults.headers["Authorization"] = `Bearer ${token}`
-        originalRequest.headers["Authorization"] = `Bearer ${token}`
+        axiosInstance.defaults.headers['Authorization'] = `Bearer ${token}`
+        originalRequest.headers['Authorization'] = `Bearer ${token}`
         return axiosInstance(originalRequest)
       } catch (refreshError) {
-        console.error("Refresh token expired or invalid:", refreshError)
+        console.error('Refresh token expired or invalid:', refreshError)
         return Promise.reject(refreshError)
       }
     }

@@ -1,4 +1,4 @@
-import { UserRole } from "../users/usersType"
+import { UserRole } from "../../global/users/usersType"
 
 type responseType<T> = {
   message: string,

@@ -13,6 +13,7 @@ const TMS_MODE = 'TMS_MODE'
 const IS_EXPAND = 'IS_EXPAND'
 const GLOBAL_SEARCH = 'GLOBAL_SEARCH'
 const THEME_MODE = 'THEME_MODE'
+const HOS_ID = 'HOS_ID'
 const WARD_ID = 'WARD_ID'
 const DEVICE_ID = 'DEVICE_ID'
 
@@ -25,6 +26,7 @@ interface UtilsState {
   themeMode: string
   tmsMode: boolean
   isExpand: boolean
+  hosId: string
   wardId: string
   deviceId: string
 }
@@ -38,6 +40,7 @@ type UtilsAction =
   | { type: typeof THEME_MODE; payload: string }
   | { type: typeof TMS_MODE }
   | { type: typeof IS_EXPAND }
+  | { type: typeof HOS_ID; payload: string }
   | { type: typeof WARD_ID; payload: string }
   | { type: typeof DEVICE_ID; payload: string }
 
@@ -50,6 +53,7 @@ export {
   IS_EXPAND,
   GLOBAL_SEARCH,
   THEME_MODE,
+  HOS_ID,
   WARD_ID,
   DEVICE_ID
 }

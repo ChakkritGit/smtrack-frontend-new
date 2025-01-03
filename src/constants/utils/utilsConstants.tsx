@@ -1,7 +1,7 @@
 import { TokenDecodeType } from '../../types/smtrack/constants/constantsType'
 import Cookies, { CookieSetOptions } from 'universal-cookie'
 import CryptoJS from 'crypto-js'
-import { UserRole } from '../../types/smtrack/users/usersType'
+import { UserRole } from '../../types/global/users/usersType'
 import { DeviceType } from '../../types/smtrack/devices/deviceType'
 
 const accessToken = (tokenObject: TokenDecodeType) =>

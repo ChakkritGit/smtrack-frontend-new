@@ -10,7 +10,7 @@ import store from './redux/store/index.ts'
 
 const renderApp = () => {
   if (import.meta.env.VITE_APP_NODE_ENV === 'production') {
-    console.log = () => { }
+    console.log = () => {}
   }
 
   createRoot(document.getElementById('appWrapper')!).render(
@@ -20,7 +20,7 @@ const renderApp = () => {
           <Routes />
         </I18nextProvider>
       </Provider>
-    </StrictMode>,
+    </StrictMode>
   )
 }
 
