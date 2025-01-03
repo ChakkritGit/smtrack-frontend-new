@@ -1,6 +1,6 @@
 // redux/reducers/toggleReducer.js
 import { cookies } from '../../constants/utils/utilsConstants'
-import { COOKIE_ENCODE, COOKIE_DECODE, TOKEN_DECODE, TMS_MODE, UtilsState, UtilsAction, IS_EXPAND, USER_PROFILE, GLOBAL_SEARCH, THEME_MODE, WARD_ID } from '../types/utilsTypes'
+import { COOKIE_ENCODE, COOKIE_DECODE, TOKEN_DECODE, TMS_MODE, UtilsState, UtilsAction, IS_EXPAND, USER_PROFILE, GLOBAL_SEARCH, THEME_MODE, WARD_ID, DEVICE_ID } from '../types/utilsTypes'
 
 const initialState: UtilsState = {
   cookieEncode: cookies.get('tokenObject'),
@@ -11,7 +11,8 @@ const initialState: UtilsState = {
   themeMode: localStorage.getItem("theme") ?? "light",
   tmsMode: false,
   isExpand: localStorage.getItem('expandaside') === 'true',
-  wardId: cookies.get('wardId')
+  wardId: cookies.get('wardId'),
+  deviceId: cookies.get('deviceId')
 }
 
 const utilsReducer = (state = initialState, action: UtilsAction): UtilsState => {
@@ -34,6 +35,8 @@ const utilsReducer = (state = initialState, action: UtilsAction): UtilsState => 
       return { ...state, themeMode: action.payload }
     case WARD_ID:
       return { ...state, wardId: action.payload }
+    case DEVICE_ID:
+      return { ...state, deviceId: action.payload }
     default:
       return state
   }

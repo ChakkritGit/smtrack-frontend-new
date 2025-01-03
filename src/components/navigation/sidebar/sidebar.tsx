@@ -15,7 +15,7 @@ const Sidebar = () => {
   const { ward } = userProfile || {}
 
   return (
-    <div className="drawer-side shadow-sm z-40">
+    <div className={`drawer-side shadow-sm z-40 ${isExpand ? "!overflow-visible" : ""}`}>
       <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
       <ul className={`menu bg-base-100 text-base-content min-h-full flex flex-col !items-center justify-between !transition-all !ease-in-out !duration-300 ${isExpand ? "w-[100px]" : "w-[235px]"}`}>
         <div>
@@ -25,7 +25,7 @@ const Sidebar = () => {
           </div>
           <div className="divider mt-0 mb-0"></div>
           <div className="flex items-center justify-center flex-col gap-2 p-3">
-            <Link to={"/"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/" ? "btn-primary" : "btn-ghost"}`}>
+            <Link to={"/"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/" ? "btn-primary" : "btn-ghost"} flex ${isExpand ? "tooltip tooltip-right z-50" : ""}`} data-tip={t('sideShowAllBox')}>
               {
                 location.pathname === "/" ?
                   <RiHome3Fill size={24} />
@@ -34,7 +34,7 @@ const Sidebar = () => {
               }
               {!isExpand && <span className="text-[16px] truncate">{t('sideShowAllBox')}</span>}
             </Link>
-            <Link to={"/dashboard"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/dashboard" || location.pathname.split('/')[2] === "chart" || location.pathname.split('/')[2] === "table" || location.pathname === "/dashboard/chart/compare" ? "btn-primary" : "btn-ghost"}`}>
+            <Link to={"/dashboard"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/dashboard" || location.pathname.split('/')[2] === "chart" || location.pathname.split('/')[2] === "table" || location.pathname === "/dashboard/chart/compare" ? "btn-primary" : "btn-ghost"} flex ${isExpand ? "tooltip tooltip-right z-50" : ""}`} data-tip={t('sideDashboard')}>
               {
                 location.pathname === "/dashboard" || location.pathname.split('/')[2] === "chart" || location.pathname.split('/')[2] === "table" || location.pathname === "/dashboard/chart/compare" ?
                   <RiDashboardFill size={24} />
@@ -43,7 +43,7 @@ const Sidebar = () => {
               }
               {!isExpand && <span className="text-[16px] truncate">{t('sideDashboard')}</span>}
             </Link>
-            <Link to={"/permission"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/permission" ? "btn-primary" : "btn-ghost"}`}>
+            <Link to={"/permission"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/permission" ? "btn-primary" : "btn-ghost"} flex ${isExpand ? "tooltip tooltip-right z-50" : ""}`} data-tip={t('sidePermission')}>
               {
                 location.pathname === "/permission" ?
                   <RiUser6Fill size={24} />
@@ -52,7 +52,7 @@ const Sidebar = () => {
               }
               {!isExpand && <span className="text-[16px] truncate">{t('sidePermission')}</span>}
             </Link>
-            <Link to={"/management"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/management" || location.pathname === "/management/logadjust" || location.pathname === '/management/flasher' ? "btn-primary" : "btn-ghost"}`}>
+            <Link to={"/management"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/management" || location.pathname === "/management/logadjust" || location.pathname === '/management/flasher' ? "btn-primary" : "btn-ghost"} flex ${isExpand ? "tooltip tooltip-right z-50" : ""}`} data-tip={t('sideManage')}>
               {
                 location.pathname === "/management" || location.pathname === "/management/logadjust" || location.pathname === '/management/flasher' ?
                   <RiListSettingsFill size={24} />
@@ -64,7 +64,7 @@ const Sidebar = () => {
           </div>
           <div className="divider mb-0"></div>
           <div className="flex items-center justify-center flex-col gap-2 p-3">
-            <Link to={"/repair"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/repair" ? "btn-primary" : "btn-ghost"}`}>
+            <Link to={"/repair"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/repair" ? "btn-primary" : "btn-ghost"} flex ${isExpand ? "tooltip tooltip-right z-50" : ""}`} data-tip={t('sideRepair')}>
               {
                 location.pathname === "/repair" ?
                   <RiFileSettingsFill size={24} />
@@ -73,7 +73,7 @@ const Sidebar = () => {
               }
               {!isExpand && <span className="text-[16px] truncate">{t('sideRepair')}</span>}
             </Link>
-            <Link to={"/warranty"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/warranty" ? "btn-primary" : "btn-ghost"}`}>
+            <Link to={"/warranty"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/warranty" ? "btn-primary" : "btn-ghost"} flex ${isExpand ? "tooltip tooltip-right z-50" : ""}`} data-tip={t('sideWarranty')}>
               {
                 location.pathname === "/warranty" ?
                   <RiShieldCheckFill size={24} />
@@ -93,7 +93,7 @@ const Sidebar = () => {
                 <input type="checkbox" className="toggle toggle-md !h-[1.7rem]" defaultChecked={isExpand} onClick={() => dispatch(setTmsMode())} />
               </div>
             </div>
-            <Link to={"/settings"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/settings" ? "btn-primary" : "btn-ghost"}`}>
+            <Link to={"/settings"} className={`btn font-normal flex-nowrap justify-start w-full ${location.pathname === "/settings" ? "btn-primary" : "btn-ghost"} flex ${isExpand ? "tooltip tooltip-right z-50" : ""}`} data-tip={t('sideSetting')}>
               {
                 location.pathname === "/settings" ?
                   <RiSettings3Fill size={24} />

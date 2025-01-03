@@ -1,5 +1,8 @@
-import { TokenDecodeType } from "../../types/smtrack/constants/constantsType"
-import { TokenType, UserProfileType } from "../../types/smtrack/utilsRedux/utilsReduxType"
+import { TokenDecodeType } from '../../types/smtrack/constants/constantsType'
+import {
+  TokenType,
+  UserProfileType
+} from '../../types/smtrack/utilsRedux/utilsReduxType'
 
 // redux/types/toggleTypes.js
 const COOKIE_DECODE = 'COOKIE_DECODE'
@@ -11,17 +14,19 @@ const IS_EXPAND = 'IS_EXPAND'
 const GLOBAL_SEARCH = 'GLOBAL_SEARCH'
 const THEME_MODE = 'THEME_MODE'
 const WARD_ID = 'WARD_ID'
+const DEVICE_ID = 'DEVICE_ID'
 
 interface UtilsState {
-  cookieEncode?: string;
-  cookieDecode?: TokenDecodeType;
-  tokenDecode?: TokenType;
-  userProfile?: UserProfileType;
-  globalSearch: string;
-  themeMode: string;
-  tmsMode: boolean;
-  isExpand: boolean;
-  wardId: string;
+  cookieEncode?: string
+  cookieDecode?: TokenDecodeType
+  tokenDecode?: TokenType
+  userProfile?: UserProfileType
+  globalSearch: string
+  themeMode: string
+  tmsMode: boolean
+  isExpand: boolean
+  wardId: string
+  deviceId: string
 }
 
 type UtilsAction =
@@ -34,6 +39,18 @@ type UtilsAction =
   | { type: typeof TMS_MODE }
   | { type: typeof IS_EXPAND }
   | { type: typeof WARD_ID; payload: string }
+  | { type: typeof DEVICE_ID; payload: string }
 
-export { COOKIE_ENCODE, COOKIE_DECODE, USER_PROFILE, TOKEN_DECODE, TMS_MODE, IS_EXPAND, GLOBAL_SEARCH, THEME_MODE, WARD_ID }
+export {
+  COOKIE_ENCODE,
+  COOKIE_DECODE,
+  USER_PROFILE,
+  TOKEN_DECODE,
+  TMS_MODE,
+  IS_EXPAND,
+  GLOBAL_SEARCH,
+  THEME_MODE,
+  WARD_ID,
+  DEVICE_ID
+}
 export type { UtilsState, UtilsAction }

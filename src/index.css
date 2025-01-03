@@ -33,27 +33,76 @@
 
 @layer components {
   .dataTableWrapper {
-    & > div > div > div,
-    & > div > div > div > div > div {
+    background-color: var(--fallback-b1, oklch(var(--b1) / var(--tw-bg-opacity, 1)));
+
+    &>div>div>div>div {
+      background-color: var(--fallback-b1, oklch(var(--b1) / var(--tw-bg-opacity, 1)));;
+    }
+    &>div>div>div>div>div {
       background-color: unset;
       color: var(--fallback-bc, oklch(var(--bc) / 1));
       border-bottom-color: var(--fallback-bc, oklch(var(--bc) / 0.15));
     }
 
-    & > div:nth-child(2) > nav {
+    &>div>div>div>div:nth-child(2)>div:hover {
+      background-color: var(--fallback-bc, oklch(var(--bc) / 0.15));
+      transition: 0.3s;
+    }
+
+    &>div:nth-child(2)>nav {
       background-color: unset;
       color: var(--fallback-bc, oklch(var(--bc) / 1));
       border-top-color: var(--fallback-bc, oklch(var(--bc) / 0.15));
 
-      & > div:nth-child(4) > button:disabled {
-        color: var(--fallback-bc, oklch(var(--bc) / 1));
-        fill: var(--fallback-bc, oklch(var(--bc) / 1));
+      &>div:nth-child(4)>button:disabled {
+        color: var(--fallback-bc, oklch(var(--bc) / 0.15));
+        fill: var(--fallback-bc, oklch(var(--bc) / 0.15));
         cursor: not-allowed;
       }
 
-      & > div:nth-child(4) > button {
-        color: white;
-        fill: white;
+      &>div:nth-child(4)>button {
+        color: var(--fallback-bc, oklch(var(--bc) / 1));
+        fill: var(--fallback-bc, oklch(var(--bc) / 1));
+      }
+    }
+  }
+
+  .skeletonTableHead {
+    &>span {
+      display: flex;
+      align-items: center;
+
+      &>span:nth-child(1) {
+        margin: 0;
+      }
+
+      &>span {
+        margin: 0 0 0 12px;
+      }
+    }
+  }
+
+  .skeletonTableBody {
+    margin-top: 16px;
+
+    &>span>span {
+      margin-bottom: 14px;
+    }
+  }
+
+  .skeletonTableFooter {
+    margin-top: 16px;
+    display: flex;
+    justify-content: end;
+
+    &>span {
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      width: 30%;
+
+      &>span {
+        margin: 0 0 0 12px;
       }
     }
   }
