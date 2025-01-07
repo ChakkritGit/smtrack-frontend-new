@@ -105,7 +105,7 @@ const HospitalAndWard = () => {
   const updatedWardData = [allWard, ...wardName]
 
   return (
-    <div className='flex items-center gap-3'>
+    <div className='flex items-center justify-end w-full gap-3 h-[35px]'>
       {showFilter ? (
         <>
           {role !== 'ADMIN' && (
@@ -123,7 +123,7 @@ const HospitalAndWard = () => {
               )}
               onChange={e => getHospital(e?.value)}
               autoFocus={false}
-              className='react-select-container z-40'
+              className='react-select-container z-30'
               classNamePrefix='react-select'
             />
           )}
@@ -141,18 +141,18 @@ const HospitalAndWard = () => {
             )}
             onChange={e => getWard(e?.value)}
             autoFocus={false}
-            className='react-select-container z-40'
+            className='react-select-container z-30'
             classNamePrefix='react-select'
           />
           <RiCloseLine
             size={24}
-            className='cursor-pointer hover:fill-base-300 duration-300'
+            className='cursor-pointer hover:fill-primary duration-300'
             onClick={() => setShowFilter(false)}
           />
         </>
       ) : (
         <div
-          className='flex items-center gap-2 cursor-pointer hover:fill-base-300 hover:text-base-300 duration-300'
+          className='flex items-center gap-2 cursor-pointer hover:fill-primary hover:text-primary duration-300'
           onClick={() => setShowFilter(true)}
         >
           <RiFilter3Line size={24} />

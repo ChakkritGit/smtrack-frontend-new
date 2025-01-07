@@ -15,7 +15,7 @@ const Sidebar = () => {
   const { ward } = userProfile || {}
 
   return (
-    <div className={`drawer-side shadow-sm z-40 ${isExpand ? "!overflow-visible" : ""}`}>
+    <div className={`drawer-side shadow-sm z-[90] ${isExpand ? "!overflow-visible" : ""}`}>
       <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
       <ul className={`menu bg-base-100 text-base-content min-h-full flex flex-col !items-center justify-between !transition-all !ease-in-out !duration-300 ${isExpand ? "w-[100px]" : "w-[235px]"}`}>
         <div>

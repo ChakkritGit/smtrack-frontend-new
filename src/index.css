@@ -27,40 +27,55 @@
   margin: 0;
   padding: 0;
   font-family: 'Anuphan', sans-serif;
-  /* user-select: none;
-  -webkit-user-select: none; */
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 @layer components {
   .dataTableWrapper {
-    background-color: var(--fallback-b1, oklch(var(--b1) / var(--tw-bg-opacity, 1)));
-
-    &>div>div>div>div {
-      background-color: var(--fallback-b1, oklch(var(--b1) / var(--tw-bg-opacity, 1)));;
+    & > div:nth-child(1) {
+      border-radius: unset;
     }
-    &>div>div>div>div>div {
+
+    & > div > div > div > div {
+      background-color: var(
+        --fallback-b1,
+        oklch(var(--b1) / var(--tw-bg-opacity, 1))
+      );
+      transition-duration: 300ms;
+    }
+    & > div > div > div > div > div {
       background-color: unset;
       color: var(--fallback-bc, oklch(var(--bc) / 1));
-      border-bottom-color: var(--fallback-bc, oklch(var(--bc) / 0.15));
+      border-bottom-color: var(
+        --fallback-bc,
+        oklch(var(--bc) / 0.15)
+      ) !important;
+      transition-duration: 300ms;
+
+      & > div {
+        transition-duration: 300ms;
+      }
     }
 
-    &>div>div>div>div:nth-child(2)>div:hover {
+    & > div > div > div > div:nth-child(2) > div:hover {
       background-color: var(--fallback-bc, oklch(var(--bc) / 0.15));
       transition: 0.3s;
     }
 
-    &>div:nth-child(2)>nav {
+    & > div:nth-child(2) > nav {
       background-color: unset;
       color: var(--fallback-bc, oklch(var(--bc) / 1));
       border-top-color: var(--fallback-bc, oklch(var(--bc) / 0.15));
+      transition-duration: 300ms;
 
-      &>div:nth-child(4)>button:disabled {
+      & > div:nth-child(4) > button:disabled {
         color: var(--fallback-bc, oklch(var(--bc) / 0.15));
         fill: var(--fallback-bc, oklch(var(--bc) / 0.15));
         cursor: not-allowed;
       }
 
-      &>div:nth-child(4)>button {
+      & > div:nth-child(4) > button {
         color: var(--fallback-bc, oklch(var(--bc) / 1));
         fill: var(--fallback-bc, oklch(var(--bc) / 1));
       }
@@ -68,15 +83,15 @@
   }
 
   .skeletonTableHead {
-    &>span {
+    & > span {
       display: flex;
       align-items: center;
 
-      &>span:nth-child(1) {
+      & > span:nth-child(1) {
         margin: 0;
       }
 
-      &>span {
+      & > span {
         margin: 0 0 0 12px;
       }
     }
@@ -85,7 +100,7 @@
   .skeletonTableBody {
     margin-top: 16px;
 
-    &>span>span {
+    & > span > span {
       margin-bottom: 14px;
     }
   }
@@ -95,15 +110,60 @@
     display: flex;
     justify-content: end;
 
-    &>span {
+    & > span {
       display: flex;
       align-items: center;
       justify-content: end;
       width: 30%;
 
-      &>span {
+      & > span {
         margin: 0 0 0 12px;
       }
     }
   }
+}
+
+.react-select__control {
+  @apply !bg-transparent !border-gray-500 !rounded-btn;
+}
+
+.react-select__control--is-focused {
+  box-shadow: 0 0 0 1px var(--fallback-p, oklch(var(--p) / 1)) !important;
+}
+
+.react-select__single-value,
+.react-select__input-container {
+  @apply !text-gray-500 ;
+}
+
+.react-select__indicator-separator {
+  background-color: var(--fallback-bc, oklch(var(--bc) / 0.25)) !important;
+  @apply !divider-horizontal !mx-1 !my-2 !w-[2px];
+}
+
+.react-select__indicator,
+.react-select__dropdown-indicator {
+  & > svg {
+    fill: var(--fallback-bc, oklch(var(--bc) / 0.25)) !important;
+  }
+}
+
+.react-select__menu {
+  @apply !bg-base-100 !rounded-box !overflow-hidden !p-2 !w-auto;
+}
+
+.react-select__menu-list {
+  @apply !flex !flex-col !items-center !justify-center !gap-2 !min-w-[130px];
+}
+
+.react-select__option {
+  @apply !rounded-btn !cursor-pointer !px-4;
+}
+
+.react-select__option--is-focused {
+  @apply !bg-base-300;
+}
+
+.react-select__option--is-selected {
+  @apply !bg-primary;
 }

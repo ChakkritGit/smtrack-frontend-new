@@ -1,38 +1,45 @@
-import { lazy, Suspense } from "react"
-import { RouteObject } from "react-router-dom"
-import { HomeSkeleton } from "../components/skeleton"
-import { HideFlashFW, HideSetting } from "../middleware/Auth"
+import { lazy, Suspense } from 'react'
+import { RouteObject } from 'react-router-dom'
+import { HomeSkeleton, DashboardSkeleton } from '../components/skeleton'
+import { HideFlashFW, HideSetting } from '../middleware/Auth'
 const Home = lazy(() => import('../pages/home/home'))
+const Dashboard = lazy(() => import('../pages/dashboard/dashboard'))
 
 const smtrackChildren: RouteObject[] = [
   {
-    path: "/",
-    element: <Suspense fallback={<HomeSkeleton />}>
-      <Home />
-    </Suspense>,
+    path: '/',
+    element: (
+      <Suspense fallback={<HomeSkeleton />}>
+        <Home />
+      </Suspense>
+    ),
     errorElement: <>error</>
   },
   {
-    path: "dashboard",
-    element: <>Dashboard</>,
-    errorElement: <></>
+    path: 'dashboard',
+    element: (
+      <Suspense fallback={<DashboardSkeleton />}>
+        <Dashboard />
+      </Suspense>
+    ),
+    errorElement: <>error</>
   },
   {
     element: <HideSetting />,
     errorElement: <></>,
     children: [
       {
-        path: "permission",
+        path: 'permission',
         element: <>permission</>,
         errorElement: <></>
       },
       {
-        path: "management",
+        path: 'management',
         element: <>management</>,
         errorElement: <></>
       },
       {
-        path: "management/:id",
+        path: 'management/:id',
         element: <>management/:id</>,
         errorElement: <></>
       },
@@ -41,72 +48,74 @@ const smtrackChildren: RouteObject[] = [
         element: <>logs</>,
         errorElement: <></>
       }
-    ],
+    ]
   },
   {
-    path: "warranty",
+    path: 'warranty',
     element: <>warranty</>,
     errorElement: <></>
   },
   {
-    path: "repair",
+    path: 'repair',
     element: <>repair</>,
     errorElement: <></>
   },
   {
-    path: "settings",
+    path: 'settings',
     element: <>settings</>,
     errorElement: <></>
   },
   {
-    path: "dashboard/chart",
+    path: 'dashboard/chart',
     element: <>dashboard/chart</>,
     errorElement: <></>
   },
   {
-    path: "dashboard/chart/preview",
+    path: 'dashboard/chart/preview',
     element: <>dashboard/chart/preview</>,
     errorElement: <></>
   },
   {
-    path: "dashboard/table",
+    path: 'dashboard/table',
     element: <>dashboard/table</>,
     errorElement: <></>
   },
   {
-    path: "dashboard/chart/compare",
+    path: 'dashboard/chart/compare',
     element: <>dashboard/chart/compare</>,
     errorElement: <></>
   },
   {
-    path: "changeLog",
+    path: 'changeLog',
     element: <>changeLog</>,
     errorElement: <></>
   },
   ...(import.meta.env.VITE_APP_NODE_ENV === 'development'
     ? [
-      {
-        path: "test",
-        element: (
-          <Suspense fallback={<span>Loading...</span>}>
-            <></>
-          </Suspense>
-        ),
-        errorElement: <></>
-      }
-    ]
+        {
+          path: 'test',
+          element: (
+            <Suspense fallback={<span>Loading...</span>}>
+              <></>
+            </Suspense>
+          ),
+          errorElement: <></>
+        }
+      ]
     : []),
   {
     element: <HideFlashFW />,
     errorElement: <></>,
     children: [
       {
-        path: "management/flasher",
-        element: <Suspense fallback={<span>Loading...</span>}>
-          <>management/flasher</>
-        </Suspense>,
+        path: 'management/flasher',
+        element: (
+          <Suspense fallback={<span>Loading...</span>}>
+            <>management/flasher</>
+          </Suspense>
+        ),
         errorElement: <></>
-      },
+      }
     ]
   }
 ]

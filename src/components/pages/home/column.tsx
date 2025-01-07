@@ -93,7 +93,7 @@ const columnData = (
               isTempOutOfRange
                 ? 'bg-red-500 text-white'
                 : 'border border-primary text-primary'
-            }`}
+            } duration-300`}
           >
             {isTempOutOfRange ? (
               <RiErrorWarningLine size={14} />
@@ -121,7 +121,7 @@ const columnData = (
                   item.log[0]?.[doorKey]
                     ? 'bg-red-500 text-white'
                     : 'border border-primary text-primary'
-                }`}
+                } duration-300`}
               >
                 {item.log[0]?.[doorKey] ? (
                   <RiDoorOpenLine size={14} />
@@ -142,7 +142,7 @@ const columnData = (
         <div
           className={`w-max h-[24px] px-2 flex items-center justify-center rounded-btn ${
             item.online ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-          }`}
+          } duration-300`}
         >
           {item.online ? t('deviceOnline') : t('deviceOffline')}
         </div>
@@ -175,7 +175,7 @@ const columnData = (
               calulateDate(item).years <= 0
                 ? 'bg-red-500 text-white'
                 : ''
-            }`}
+            } duration-300`}
           >
             {item.warranty[0]?.expire
               ? calulateDate(item).daysRemaining > 0

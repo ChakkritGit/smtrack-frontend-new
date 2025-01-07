@@ -416,6 +416,9 @@ export default {
     switchModeMain: '*สลับโหมด smtrack และ TMS',
     readAll: 'อ่านทั้งหมด',
     failTolaodData: 'ไม่สามารถโหลดข้อมูลได้',
+    list: 'ตาราง',
+    grid: 'การ์ด',
+    expandSide: 'ย่อแถบเมนู',
 
     // connect
     ipAddress: 'IP',

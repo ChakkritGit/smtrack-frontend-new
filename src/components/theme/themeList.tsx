@@ -41,9 +41,9 @@ const ThemeList = () => {
       </div>
       <div
         tabIndex={0}
-        className='dropdown-content bg-base-200 text-base-content rounded-box top-px h-[28.6rem] max-h-[calc(100vh-10rem)] w-56 overflow-y-auto border border-white/5 shadow-2xl outline outline-1 outline-black/5 mt-16'
+        className='dropdown-content z-[80] bg-base-200 text-base-content rounded-box top-px h-[28.6rem] max-h-[calc(100vh-10rem)] w-56 overflow-y-auto border border-white/5 shadow-2xl outline outline-1 outline-black/5 mt-16'
       >
-        <div className='grid grid-cols-1 gap-3 p-3'>
+        <div className='grid grid-cols-1 gap-3 p-3 z-[80]'>
           <button
             onClick={() => changTheme('light')}
             className='outline-base-content text-start outline-offset-4 '

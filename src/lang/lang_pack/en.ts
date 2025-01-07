@@ -417,6 +417,9 @@ export default {
     switchModeMain: '*Switch mode smtrack and TMS',
     readAll: 'Read All',
     failTolaodData: 'Failed to load data',
+    list: 'Table',
+    grid: 'Card',
+    expandSide: 'Collapse sidebar',
 
     // connect
     ipAddress: 'IP',

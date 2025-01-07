@@ -31,4 +31,12 @@ interface DeviceType extends DevicesType {
   warranty: WarrantiesType[]
 }
 
-export type { DevicesType, DeviceType }
+interface DeviceLogsType extends DevicesType {
+  config: ConfigType
+  probe: ProbeType[]
+  log: DeviceLogType[]
+  warranty: WarrantiesType[]
+  repair: []
+}
+
+export type { DevicesType, DeviceType, DeviceLogsType }

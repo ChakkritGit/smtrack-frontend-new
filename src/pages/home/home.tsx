@@ -40,6 +40,7 @@ const Home = () => {
   const [listAndGrid, setListandGrid] = useState(
     Number(localStorage.getItem('listGrid') ?? 1)
   )
+  const [deviceConnect, setDeviceConnect] = useState('')
   const [loading, setLoading] = useState(false)
   const [totalRows, setTotalRows] = useState(0)
   const [perPage, setPerPage] = useState(10)
@@ -121,19 +122,35 @@ const Home = () => {
     console.log(deviceData)
   }
 
+  const handleFilterConnect = (status: string) => {
+    if (deviceConnect === status) {
+      setDeviceConnect('')
+    } else {
+      setDeviceConnect(status)
+    }
+  }
+
   useEffect(() => {
-    const filter = devices.filter(
-      f =>
-        f.id.toLocaleLowerCase().includes(globalSearch.toLocaleLowerCase()) ||
+    const filter = devices.filter(f => {
+      const matchesSearch =
+        f.id?.toLocaleLowerCase().includes(globalSearch.toLocaleLowerCase()) ||
         f.name
           ?.toLocaleLowerCase()
           .includes(globalSearch.toLocaleLowerCase()) ||
         f.location
           ?.toLocaleLowerCase()
           .includes(globalSearch.toLocaleLowerCase())
-    )
+
+      const matchesConnection =
+        deviceConnect === '' ||
+        (deviceConnect === 'online' && f.online === true) ||
+        (deviceConnect === 'offline' && f.online === false)
+
+      return matchesSearch && matchesConnection
+    })
+
     setDevicesFiltered(filter)
-  }, [devices, globalSearch])
+  }, [devices, globalSearch, deviceConnect])
 
   useEffect(() => {
     if (!token) return
@@ -175,6 +192,31 @@ const Home = () => {
       <div className='flex items-center justify-between my-4'>
         <span className='font-bold text-[20px]'>{t('detailAllBox')}</span>
         <div className='flex items-center gap-3 h-[40px]'>
+          <div className='flex items-center gap-3'>
+            <button
+              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
+                deviceConnect === 'online'
+                  ? 'btn-primary text-white'
+                  : 'btn-ghost border border-gray-500 text-gray-500'
+              }`}
+              onClick={() => handleFilterConnect('online')}
+            >
+              <div className='w-[10px] h-[10px] bg-green-500 rounded-btn'></div>
+              <span>{t('deviceOnline')}</span>
+            </button>
+            <button
+              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
+                deviceConnect === 'offline'
+                  ? 'btn-primary text-white'
+                  : 'btn-ghost border border-gray-500 text-gray-500'
+              }`}
+              onClick={() => handleFilterConnect('offline')}
+            >
+              <div className='w-[10px] h-[10px] bg-red-500 rounded-btn'></div>
+              <span>{t('deviceOffline')}</span>
+            </button>
+          </div>
+          <div className='divider divider-horizontal mx-0 py-2'></div>
           <HospitalAndWard />
           <div className='flex items-center gap-2'>
             <button
@@ -182,8 +224,9 @@ const Home = () => {
                 listAndGrid === 1
                   ? 'btn-primary text-white'
                   : 'btn-ghost border border-primary text-primary'
-              } w-[36px] h-[36px] min-h-0 p-2`}
+              } w-[36px] h-[36px] min-h-0 p-2 tooltip tooltip-top`}
               onClick={() => changListAndGrid(1)}
+              data-tip={t('list')}
             >
               <RiListUnordered size={20} />
             </button>
@@ -192,8 +235,9 @@ const Home = () => {
                 listAndGrid === 2
                   ? 'btn-primary text-white'
                   : 'btn-ghost border border-primary text-primary'
-              } w-[36px] h-[36px] min-h-0 p-2`}
+              } w-[36px] h-[36px] min-h-0 p-2 tooltip tooltip-top`}
               onClick={() => changListAndGrid(2)}
+              data-tip={t('grid')}
             >
               <RiLayoutGridLine size={20} />
             </button>
@@ -201,7 +245,7 @@ const Home = () => {
         </div>
       </div>
       {listAndGrid === 1 ? (
-        <div className='dataTableWrapper rounded-btn p-3'>
+        <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300'>
           <DataTable
             responsive
             fixedHeader
