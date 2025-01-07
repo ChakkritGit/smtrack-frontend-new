@@ -39,4 +39,10 @@ interface DeviceLogsType extends DevicesType {
   repair: []
 }
 
-export type { DevicesType, DeviceType, DeviceLogsType }
+type DeviceListType = {
+  id: string
+  name: string
+  ward: string
+}
+
+export type { DevicesType, DeviceType, DeviceLogsType, DeviceListType }

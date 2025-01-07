@@ -1,24 +1,25 @@
+import HospitalAndWard from '../../components/filter/hospitalAndWard'
+import DataTableNoData from '../../components/skeleton/table/noData'
+import axiosInstance from '../../constants/axios/axiosInstance'
+import HomeCount from '../../components/pages/home/homeCount'
+import DataTable, { TableColumn } from 'react-data-table-component'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { setDeviceId, setSearch } from '../../redux/actions/utilsActions'
 import { DeviceCountType } from '../../types/smtrack/devices/deviceCount'
 import { AxiosError } from 'axios'
-import axiosInstance from '../../constants/axios/axiosInstance'
-import HomeCount from '../../components/pages/home/homeCount'
 import { useTranslation } from 'react-i18next'
 import { RiLayoutGridLine, RiListUnordered } from 'react-icons/ri'
-import DataTable, { TableColumn } from 'react-data-table-component'
 import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
 import { useNavigate } from 'react-router-dom'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
 import { DeviceResponseType } from '../../types/global/deviceResponseType'
 import { DeviceType } from '../../types/smtrack/devices/deviceType'
-import DataTableLoading from '../../components/skeleton/table/loading'
-import HospitalAndWard from '../../components/filter/hospitalAndWard'
 import { columnData } from '../../components/pages/home/column'
 import { GlobalContext } from '../../contexts/globalContext'
 import { GlobalContextType } from '../../types/global/globalContext'
+import Loading from '../../components/skeleton/table/loading'
 
 const Home = () => {
   const { t } = useTranslation()
@@ -257,8 +258,8 @@ const Home = () => {
             paginationTotalRows={totalRows}
             paginationDefaultPage={currentPage}
             progressPending={loading}
-            progressComponent={<DataTableLoading />}
-            noDataComponent={<div>No data!</div>}
+            progressComponent={<Loading />}
+            noDataComponent={<DataTableNoData />}
             onChangeRowsPerPage={handlePerRowsChange}
             onChangePage={handlePageChange}
             onRowClicked={handleRowClicked}

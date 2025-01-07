@@ -33,98 +33,55 @@
 
 @layer components {
   .dataTableWrapper {
-    & > div:nth-child(1) {
+    &>div:nth-child(1) {
       border-radius: unset;
     }
 
-    & > div > div > div > div {
-      background-color: var(
-        --fallback-b1,
-        oklch(var(--b1) / var(--tw-bg-opacity, 1))
-      );
+    &>div>div>div>div {
+      background-color: var(--fallback-b1,
+          oklch(var(--b1) / var(--tw-bg-opacity, 1)));
       transition-duration: 300ms;
     }
-    & > div > div > div > div > div {
+
+    &>div>div>div>div>div {
       background-color: unset;
       color: var(--fallback-bc, oklch(var(--bc) / 1));
-      border-bottom-color: var(
-        --fallback-bc,
-        oklch(var(--bc) / 0.15)
-      ) !important;
+      border-bottom-color: var(--fallback-bc,
+          oklch(var(--bc) / 0.15)) !important;
       transition-duration: 300ms;
 
-      & > div {
+      &>div {
         transition-duration: 300ms;
       }
     }
 
-    & > div > div > div > div:nth-child(2) > div:hover {
+    &>div>div>div>div:nth-child(2)>div:hover {
       background-color: var(--fallback-bc, oklch(var(--bc) / 0.15));
       transition: 0.3s;
     }
 
-    & > div:nth-child(2) > nav {
+    &>div:nth-child(2)>nav {
       background-color: unset;
       color: var(--fallback-bc, oklch(var(--bc) / 1));
       border-top-color: var(--fallback-bc, oklch(var(--bc) / 0.15));
       transition-duration: 300ms;
 
-      & > div:nth-child(4) > button:disabled {
+      &>div:nth-child(4)>button:disabled {
         color: var(--fallback-bc, oklch(var(--bc) / 0.15));
         fill: var(--fallback-bc, oklch(var(--bc) / 0.15));
         cursor: not-allowed;
       }
 
-      & > div:nth-child(4) > button {
+      &>div:nth-child(4)>button {
         color: var(--fallback-bc, oklch(var(--bc) / 1));
         fill: var(--fallback-bc, oklch(var(--bc) / 1));
-      }
-    }
-  }
-
-  .skeletonTableHead {
-    & > span {
-      display: flex;
-      align-items: center;
-
-      & > span:nth-child(1) {
-        margin: 0;
-      }
-
-      & > span {
-        margin: 0 0 0 12px;
-      }
-    }
-  }
-
-  .skeletonTableBody {
-    margin-top: 16px;
-
-    & > span > span {
-      margin-bottom: 14px;
-    }
-  }
-
-  .skeletonTableFooter {
-    margin-top: 16px;
-    display: flex;
-    justify-content: end;
-
-    & > span {
-      display: flex;
-      align-items: center;
-      justify-content: end;
-      width: 30%;
-
-      & > span {
-        margin: 0 0 0 12px;
       }
     }
   }
 }
 
 .react-select__control {
-  @apply !bg-transparent !border-gray-500 !rounded-btn;
+  @apply !bg-transparent !border-gray-400 !rounded-btn;
 }
 
 .react-select__control--is-focused {
@@ -133,7 +90,7 @@
 
 .react-select__single-value,
 .react-select__input-container {
-  @apply !text-gray-500 ;
+  @apply !text-gray-500;
 }
 
 .react-select__indicator-separator {
@@ -143,13 +100,13 @@
 
 .react-select__indicator,
 .react-select__dropdown-indicator {
-  & > svg {
+  &>svg {
     fill: var(--fallback-bc, oklch(var(--bc) / 0.25)) !important;
   }
 }
 
 .react-select__menu {
-  @apply !bg-base-100 !rounded-box !overflow-hidden !p-2 !w-auto;
+  @apply !bg-base-100 !rounded-box !overflow-hidden !p-2 !w-max;
 }
 
 .react-select__menu-list {
@@ -166,4 +123,8 @@
 
 .react-select__option--is-selected {
   @apply !bg-primary;
+}
+
+.loading-hieght-full {
+  height: calc(100dvh - 150px);
 }
