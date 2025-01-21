@@ -5,11 +5,13 @@ import {
   RiCollageLine,
   RiDoorClosedLine,
   RiDoorOpenLine,
+  RiErrorWarningLine,
   RiFolderSettingsLine,
   RiPlugLine,
   RiShieldCheckLine,
   RiSignalWifi1Line,
-  RiSignalWifiOffLine
+  RiSignalWifiOffLine,
+  RiTempColdLine
 } from 'react-icons/ri'
 import { MdOutlineSdCard } from 'react-icons/md'
 import { HiOutlineArrowsUpDown } from 'react-icons/hi2'
@@ -68,11 +70,25 @@ const CardStatus = (props: PropsType) => {
             return (
               <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
                 <div className='flex items-center gap-2 h-[30%]'>
-                  <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
+                  <div className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${probeLimitIcon(
+                      item.tempMin,
+                      item.tempMax,
+                      findItem?.tempDisplay,
+                      item.humiMin,
+                      item.humiMax,
+                      findItem?.humidityDisplay
+                    ) ? 'text-red-500 bg-opacity-50 bg-red-300' : ''}`}>
                     {probeLimitIcon(
                       item.tempMin,
                       item.tempMax,
-                      findItem?.tempDisplay
+                      findItem?.tempDisplay,
+                      item.humiMin,
+                      item.humiMax,
+                      findItem?.humidityDisplay
+                    ) ? (
+                      <RiErrorWarningLine />
+                    ) : (
+                      <RiTempColdLine />
                     )}
                   </div>
                   <span>{t('dashProbe')}</span>
@@ -118,7 +134,7 @@ const CardStatus = (props: PropsType) => {
           <SwiperSlide className='p-3 h-full bg-base-100' key={2}>
             <div className='flex items-center gap-2 h-[30%]'>
               <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-                {probeLimitIcon(0, 0, 0)}
+                {probeLimitIcon(0, 0, 0, 0, 0, 0)}
               </div>
               <span>{t('dashProbe')}</span>
               <span className='badge badge-primary badge-outline'>2</span>
@@ -139,7 +155,7 @@ const CardStatus = (props: PropsType) => {
           <SwiperSlide className='p-3 h-full bg-base-100' key={3}>
             <div className='flex items-center gap-2 h-[30%]'>
               <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-                {probeLimitIcon(0, 0, 0)}
+                {probeLimitIcon(0, 0, 0, 0, 0, 0)}
               </div>
               <span>{t('dashProbe')}</span>
               <span className='badge badge-primary badge-outline'>3</span>
@@ -186,7 +202,9 @@ const CardStatus = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              doorOpen(deviceData) ? 'text-red-500 bg-opacity-50 bg-red-300' : ''
+              doorOpen(deviceData)
+                ? 'text-red-500 bg-opacity-50 bg-red-300'
+                : ''
             }`}
           >
             {doorOpen(deviceData) ? <RiDoorOpenLine /> : <RiDoorClosedLine />}
@@ -214,7 +232,7 @@ const CardStatus = (props: PropsType) => {
         </div>
         <div
           className={`flex items-center justify-center text-[18px] font-bold h-full ${
-            unPlug(deviceData) ? 'text-red-400' : ''
+            unPlug(deviceData) ? 'text-red-500' : ''
           }`}
         >
           {unPlug(deviceData) ? t('stateProblem') : t('stateNormal')}

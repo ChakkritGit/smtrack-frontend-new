@@ -1,18 +1,22 @@
-import { RiErrorWarningLine, RiTempColdLine } from 'react-icons/ri'
 import { DeviceLogsType } from '../../types/smtrack/devices/deviceType'
 
 const probeLimitIcon = (
   tempMin: number,
   tempMax: number,
-  tempDisplay: number | undefined
+  tempDisplay: number | undefined,
+  humiMin: number,
+  humiMax: number,
+  humiDisplay: number | undefined
 ) => {
   if (
     (tempDisplay && tempDisplay <= tempMin) ||
-    (tempDisplay && tempDisplay >= tempMax)
+    (tempDisplay && tempDisplay >= tempMax) ||
+    (humiDisplay && humiDisplay <= humiMin) ||
+    (humiDisplay && humiDisplay >= humiMax)
   ) {
-    return <RiErrorWarningLine />
+    return true
   } else {
-    return <RiTempColdLine />
+    return false
   }
 }
 
