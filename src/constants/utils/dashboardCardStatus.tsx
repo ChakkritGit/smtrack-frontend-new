@@ -1,4 +1,5 @@
 import { RiErrorWarningLine, RiTempColdLine } from 'react-icons/ri'
+import { DeviceLogsType } from '../../types/smtrack/devices/deviceType'
 
 const probeLimitIcon = (
   tempMin: number,
@@ -45,4 +46,24 @@ const humiLimit = (
   }
 }
 
-export { probeLimitIcon, tempLimit, humiLimit }
+const doorOpen = (deviceData: DeviceLogsType | undefined) => {
+  if (
+    deviceData?.log[0]?.door1 ||
+    deviceData?.log[0]?.door2 ||
+    deviceData?.log[0]?.door3
+  ) {
+    return true
+  } else {
+    return false
+  }
+}
+
+const unPlug = (deviceData: DeviceLogsType | undefined) => {
+  if (deviceData?.log[0]?.plug) {
+    return true
+  } else {
+    return false
+  }
+}
+
+export { probeLimitIcon, tempLimit, humiLimit, doorOpen, unPlug }
