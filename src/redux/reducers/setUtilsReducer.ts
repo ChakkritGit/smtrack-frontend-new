@@ -9,7 +9,7 @@ const initialState: UtilsState = {
   userProfile: undefined,
   globalSearch: '',
   themeMode: localStorage.getItem("theme") ?? "light",
-  tmsMode: false,
+  tmsMode: cookies.get('tmsMode') ?? false,
   isExpand: localStorage.getItem('expandaside') === 'true',
   hosId: cookies.get('hosId'),
   wardId: cookies.get('wardId'),

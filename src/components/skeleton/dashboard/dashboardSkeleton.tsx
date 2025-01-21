@@ -8,16 +8,16 @@ const DashboardSkeleton = () => {
       <div className='flex items-center gap-4 mt-4 flex-wrap lg:flex-wrap xl:flex-nowrap'>
         <div className='skeleton w-full xl:w-[40%] h-[295px]'></div>
         <div className='grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4 w-full xl:w-[60%] justify-items-center'>
-          <div className='skeleton w-[170px] h-[140px]'></div>
-          <div className='skeleton w-[170px] h-[140px]'></div>
-          <div className='skeleton w-[170px] h-[140px]'></div>
-          <div className='skeleton w-[170px] h-[140px]'></div>
-          <div className='skeleton w-[170px] h-[140px]'></div>
-          <div className='skeleton w-[170px] h-[140px]'></div>
-          <div className='skeleton w-[170px] h-[140px]'></div>
-          <div className='skeleton w-[170px] h-[140px]'></div>
-          <div className='skeleton w-[170px] h-[140px]'></div>
-          <div className='skeleton w-[170px] h-[140px]'></div>
+          <div className='skeleton w-[170px] lg:w-[185px] h-[140px]'></div>
+          <div className='skeleton w-[170px] lg:w-[185px] h-[140px]'></div>
+          <div className='skeleton w-[170px] lg:w-[185px] h-[140px]'></div>
+          <div className='skeleton w-[170px] lg:w-[185px] h-[140px]'></div>
+          <div className='skeleton w-[170px] lg:w-[185px] h-[140px]'></div>
+          <div className='skeleton w-[170px] lg:w-[185px] h-[140px]'></div>
+          <div className='skeleton w-[170px] lg:w-[185px] h-[140px]'></div>
+          <div className='skeleton w-[170px] lg:w-[185px] h-[140px]'></div>
+          <div className='skeleton w-[170px] lg:w-[185px] h-[140px]'></div>
+          <div className='skeleton w-[170px] lg:w-[185px] h-[140px]'></div>
         </div>
       </div>
       <div className='flex items-center flex-wrap xl:flex-nowrap gap-4 mt-4'>

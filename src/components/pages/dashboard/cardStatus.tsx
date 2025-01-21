@@ -1,115 +1,255 @@
-import { RiTempColdLine } from 'react-icons/ri'
+import { useTranslation } from 'react-i18next'
+import {
+  RiBatteryChargeLine,
+  RiCollageLine,
+  RiDoorClosedLine,
+  RiFolderSettingsLine,
+  RiPlugLine,
+  RiShieldCheckLine,
+  RiSignalWifi1Line
+} from 'react-icons/ri'
+import { MdOutlineSdCard } from 'react-icons/md'
+import { HiOutlineArrowsUpDown } from 'react-icons/hi2'
+import {
+  humiLimit,
+  probeLimitIcon,
+  tempLimit
+} from '../../../constants/utils/dashboardCardStatus'
+import { DeviceLogsType } from '../../../types/smtrack/devices/deviceType'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay, Pagination, EffectCreative } from 'swiper/modules'
 
-const CardStatus = () => {
+type PropsType = {
+  deviceData: DeviceLogsType | undefined
+}
+
+const CardStatus = (props: PropsType) => {
+  const { t } = useTranslation()
+  const { deviceData } = props
+
   return (
     <>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] h-[140px]'>
+      <div className='bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px] overflow-hidden'>
+        <Swiper
+          slidesPerView={'auto'}
+          spaceBetween={30}
+          centeredSlides={true}
+          loop={true}
+          autoplay={{
+            delay: 8000,
+            disableOnInteraction: false
+          }}
+          pagination={{
+            clickable: true
+          }}
+          effect={'creative'}
+          creativeEffect={{
+            prev: {
+              shadow: false,
+              translate: ['-120%', 0, -500]
+            },
+            next: {
+              shadow: false,
+              translate: ['120%', 0, -500]
+            }
+          }}
+          modules={[Autoplay, Pagination, EffectCreative]}
+          className='mySwiper h-full'
+        >
+          {deviceData?.probe.map((item, index) => {
+            const findItem = deviceData.log.find(itemTwo =>
+              itemTwo.probe.includes(item.channel)
+            )
+            return (
+              <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
+                <div className='flex items-center gap-2 h-[30%]'>
+                  <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
+                    {probeLimitIcon(
+                      item.tempMin,
+                      item.tempMax,
+                      findItem?.tempDisplay
+                    )}
+                  </div>
+                  <span>{t('dashProbe')}</span>
+                  <span className='badge badge-primary badge-outline'>
+                    {item.channel}
+                  </span>
+                </div>
+                <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
+                  <div
+                    className={
+                      tempLimit(
+                        item.tempMin,
+                        item.tempMax,
+                        findItem?.tempDisplay
+                      )
+                        ? 'text-red-500'
+                        : ''
+                    }
+                  >
+                    <span>Temp: </span>
+                    <span>{findItem?.tempDisplay.toFixed(2) ?? '—'}</span>
+                    <sub> °C</sub>
+                  </div>
+                  <div
+                    className={
+                      humiLimit(
+                        item.humiMin,
+                        item.humiMax,
+                        findItem?.humidityDisplay
+                      )
+                        ? 'text-red-500'
+                        : ''
+                    }
+                  >
+                    <span>Humi: </span>
+                    <span>{findItem?.humidityDisplay.toFixed(2) ?? '—'}</span>
+                    <sub> %RH</sub>
+                  </div>
+                </div>
+              </SwiperSlide>
+            )
+          })}
+          <SwiperSlide className='p-3 h-full bg-base-100' key={2}>
+            <div className='flex items-center gap-2 h-[30%]'>
+              <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
+                {probeLimitIcon(0, 0, 0)}
+              </div>
+              <span>{t('dashProbe')}</span>
+              <span className='badge badge-primary badge-outline'>2</span>
+            </div>
+            <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
+              <div>
+                <span>Temp: </span>
+                <span>0.00</span>
+                <sub> °C</sub>
+              </div>
+              <div>
+                <span>Humi: </span>
+                <span>0.00</span>
+                <sub> %RH</sub>
+              </div>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide className='p-3 h-full bg-base-100' key={3}>
+            <div className='flex items-center gap-2 h-[30%]'>
+              <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
+                {probeLimitIcon(0, 0, 0)}
+              </div>
+              <span>{t('dashProbe')}</span>
+              <span className='badge badge-primary badge-outline'>3</span>
+            </div>
+            <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
+              <div>
+                <span>Temp: </span>
+                <span>—</span>
+                <sub> °C</sub>
+              </div>
+              <div>
+                <span>Humi: </span>
+                <span>—</span>
+                <sub> %RH</sub>
+              </div>
+            </div>
+          </SwiperSlide>
+        </Swiper>
+      </div>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            <RiTempColdLine />
+            <RiSignalWifi1Line />
           </div>
-          <span>Probe</span>
+          <span>{t('dashConnect')}</span>
         </div>
-        <div className='flex items-center justify-center text-[28px] font-bold h-full'>
+        <div className={`flex items-center justify-center text-[18px] font-bold h-full ${deviceData?.online ? 'text-red-500' : ''}`}>
+          {deviceData?.online ? t('stateDisconnect') : t('stateConnect')}
+        </div>
+      </div>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
+        <div className='flex items-center gap-2'>
+          <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
+            <RiDoorClosedLine />
+          </div>
+          <span>{t('dashDoor')}</span>
+        </div>
+        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
           0
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            icn
+            <RiPlugLine />
           </div>
-          <span>-</span>
+          <span>{t('dashPlug')}</span>
         </div>
-        <div className='flex items-center justify-center text-[28px] font-bold h-full'>
+        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
           0
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            icn
+            <RiBatteryChargeLine />
           </div>
-          <span>-</span>
+          <span>{t('dashBattery')}</span>
         </div>
-        <div className='flex items-center justify-center text-[28px] font-bold h-full'>
+        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
           0
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            icn
+            <HiOutlineArrowsUpDown />
           </div>
-          <span>-</span>
+          <span>{t('dashTempofDay')}</span>
         </div>
-        <div className='flex items-center justify-center text-[28px] font-bold h-full'>
+        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
           0
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            icn
+            <MdOutlineSdCard />
           </div>
-          <span>-</span>
+          <span>{t('dashSdCard')}</span>
         </div>
-        <div className='flex items-center justify-center text-[28px] font-bold h-full'>
+        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
           0
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            icn
+            <RiCollageLine />
           </div>
-          <span>-</span>
+          <span>{t('dashProbeandDoor')}</span>
         </div>
-        <div className='flex items-center justify-center text-[28px] font-bold h-full'>
+        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
           0
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            icn
+            <RiShieldCheckLine />
           </div>
-          <span>-</span>
+          <span>{t('dashWarranty')}</span>
         </div>
-        <div className='flex items-center justify-center text-[28px] font-bold h-full'>
+        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
           0
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            icn
+            <RiFolderSettingsLine />
           </div>
-          <span>-</span>
+          <span>{t('dashRepair')}</span>
         </div>
-        <div className='flex items-center justify-center text-[28px] font-bold h-full'>
-          0
-        </div>
-      </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] h-[140px]'>
-        <div className='flex items-center gap-2'>
-          <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            icn
-          </div>
-          <span>-</span>
-        </div>
-        <div className='flex items-center justify-center text-[28px] font-bold h-full'>
-          0
-        </div>
-      </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] h-[140px]'>
-        <div className='flex items-center gap-2'>
-          <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            icn
-          </div>
-          <span>-</span>
-        </div>
-        <div className='flex items-center justify-center text-[28px] font-bold h-full'>
+        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
           0
         </div>
       </div>

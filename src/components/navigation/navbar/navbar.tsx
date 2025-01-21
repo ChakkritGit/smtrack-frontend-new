@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react'
 import {
-  RiMenuFoldLine,
-  RiMenuUnfoldLine,
   RiNotification4Line,
   RiSearchLine,
-  RiArrowDownSLine
+  RiArrowDownSLine,
+  RiLayoutLeftLine,
+  RiLayoutRightLine
 } from 'react-icons/ri'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
@@ -58,7 +58,7 @@ function Navbar () {
             htmlFor='my-drawer-2'
             className='btn btn-ghost drawer-button lg:hidden'
           >
-            <RiMenuUnfoldLine size={24} />
+            <RiLayoutLeftLine size={24} />
           </label>
           <label
             htmlFor='my-drawer-2'
@@ -67,9 +67,9 @@ function Navbar () {
             data-tip={t('expandSide')}
           >
             {isExpand ? (
-              <RiMenuUnfoldLine size={24} />
+              <RiLayoutRightLine size={24} />
             ) : (
-              <RiMenuFoldLine size={24} />
+              <RiLayoutLeftLine size={24} />
             )}
           </label>
           <div className='form-control'>

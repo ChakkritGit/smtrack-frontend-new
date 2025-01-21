@@ -344,6 +344,7 @@ export default {
     editButton: 'Edit',
     closeDialogButton: 'Close',
     continueButton: 'Continue',
+    loginButton: 'Login',
 
     // dropdown
     selectDeviceDrop: 'Select Devices',

@@ -39,10 +39,14 @@ const Dashboard = () => {
     fetchDeviceLogs()
   }, [deviceId])
 
-  const CardInfo = useMemo(
-    () => <CardInFoComponent deviceData={deviceLogs} />,
-    [deviceId, deviceLogs]
-  )
+  const CardInfoComponent = useMemo(() => {
+    if (!deviceLogs?.probe) return
+    return <CardInFoComponent deviceData={deviceLogs} />
+  }, [deviceId, deviceLogs])
+
+  const CardStatusComponent = useMemo(() => {
+    return <CardStatus deviceData={deviceLogs} />
+  }, [deviceId, deviceLogs])
 
   useEffect(() => {
     if (!deviceId) {
@@ -74,10 +78,10 @@ const Dashboard = () => {
             <>
               <div className='flex items-center gap-4 mt-4 flex-wrap lg:flex-wrap xl:flex-nowrap'>
                 <div className='w-full xl:w-[40%] h-[295px] bg-base-100 rounded-btn'>
-                  {CardInfo}
+                  {CardInfoComponent}
                 </div>
                 <div className='grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4 w-full xl:w-[60%] justify-items-center'>
-                  <CardStatus />
+                  {CardStatusComponent}
                 </div>
               </div>
               <div className='flex items-center flex-wrap xl:flex-nowrap gap-4 mt-4'>

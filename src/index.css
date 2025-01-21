@@ -128,3 +128,11 @@
 .loading-hieght-full {
   height: calc(100dvh - 150px);
 }
+
+.swiper-pagination-bullet {
+  @apply !bg-base-300 !opacity-100 !rounded-btn !w-[10px] !h-[10px]
+}
+
+.swiper-pagination-bullet-active {
+  @apply !bg-primary
+}

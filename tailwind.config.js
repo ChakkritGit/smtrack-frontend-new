@@ -5,7 +5,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        'transition-pop': 'button-pop var(--animation-btn, 0.25s) ease-out',
+      }
+    },
   },
   plugins: [
     require('daisyui'),

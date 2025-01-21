@@ -343,6 +343,7 @@ export default {
     editButton: 'แก้ไข',
     closeDialogButton: 'ปิดหน้าต่าง',
     continueButton: 'ดำเนินการต่อ',
+    loginButton: 'เข้าสู่ระบบ',
 
     // dropdown
     selectDeviceDrop: 'เลือกอุปกรณ์',

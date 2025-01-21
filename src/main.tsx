@@ -1,5 +1,8 @@
 import './index.css'
 import 'react-loading-skeleton/dist/skeleton.css'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
