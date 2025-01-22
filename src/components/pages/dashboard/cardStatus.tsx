@@ -259,7 +259,7 @@ const CardStatus = (props: PropsType) => {
           <span>{t('dashPlug')}</span>
         </div>
         <div
-          className={`flex items-center justify-center text-[18px] font-bold h-full ${
+          className={`flex items-center justify-center text-[20px] font-bold h-full ${
             unPlug(deviceData) ? 'text-red-500' : ''
           }`}
         >
@@ -284,7 +284,7 @@ const CardStatus = (props: PropsType) => {
           <span>{t('dashBattery')}</span>
         </div>
         <div
-          className={`flex items-center justify-center text-[18px] font-bold h-full ${
+          className={`flex items-center justify-center text-[20px] font-bold h-full ${
             deviceData?.log
               ? deviceData?.log[0]?.battery <= 20
                 ? 'text-yellow-500'
@@ -512,7 +512,7 @@ const CardStatus = (props: PropsType) => {
           <span>{t('dashSdCard')}</span>
         </div>
         <div
-          className={`flex items-center justify-center text-[18px] font-bold h-full ${
+          className={`flex items-center justify-center text-[20px] font-bold h-full ${
             sdCard(deviceData) ? 'text-red-500' : ''
           }`}
         >
@@ -526,7 +526,7 @@ const CardStatus = (props: PropsType) => {
           </div>
           <span>{t('dashProbeandDoor')}</span>
         </div>
-        <div className='flex items-center justify-center gap-3 text-[18px] font-bold h-full'>
+        <div className='flex items-center justify-center gap-3 text-[20px] font-bold h-full'>
           <span>
             {[...new Set(deviceData?.probe.map(item => item.channel))].length ??
               '—'}
@@ -544,8 +544,8 @@ const CardStatus = (props: PropsType) => {
           </div>
           <span>{t('dashWarranty')}</span>
         </div>
-        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
-          0
+        <div className='flex items-center justify-center text-[20px] font-bold h-full'>
+          <span>{deviceData?.repair.length ?? '—'}</span>
         </div>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
@@ -555,8 +555,8 @@ const CardStatus = (props: PropsType) => {
           </div>
           <span>{t('dashRepair')}</span>
         </div>
-        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
-          0
+        <div className='flex items-center justify-center text-[20px] font-bold h-full'>
+          <span>{deviceData?.warranty.length ?? '—'}</span>
         </div>
       </div>
     </>
