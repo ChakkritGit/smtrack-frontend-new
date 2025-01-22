@@ -351,7 +351,7 @@ const CardStatus = (props: PropsType) => {
                   </div>
                   <span
                     title={t('dashTempofDay')}
-                    className='truncate max-w-[80px]'
+                    className='truncate max-w-[55px] lg:max-w-[80px]'
                   >
                     {t('dashTempofDay')}
                   </span>
@@ -407,7 +407,7 @@ const CardStatus = (props: PropsType) => {
                   </div>
                   <span
                     title={t('dashTempofDay')}
-                    className='truncate max-w-[80px]'
+                    className='truncate max-w-[55px] lg:max-w-[80px]'
                   >
                     {t('dashTempofDay')}
                   </span>
@@ -463,7 +463,7 @@ const CardStatus = (props: PropsType) => {
                   </div>
                   <span
                     title={t('dashTempofDay')}
-                    className='truncate max-w-[80px]'
+                    className='truncate max-w-[55px] lg:max-w-[80px]'
                   >
                     {t('dashTempofDay')}
                   </span>
