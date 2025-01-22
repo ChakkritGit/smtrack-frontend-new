@@ -1,3 +1,10 @@
+import {
+  RiAlertLine,
+  RiBatteryChargeLine,
+  RiBatteryFill,
+  RiBatteryLine,
+  RiBatteryLowLine
+} from 'react-icons/ri'
 import { DeviceLogsType } from '../../types/smtrack/devices/deviceType'
 
 const probeLimitIcon = (
@@ -70,4 +77,22 @@ const unPlug = (deviceData: DeviceLogsType | undefined) => {
   }
 }
 
-export { probeLimitIcon, tempLimit, humiLimit, doorOpen, unPlug }
+const battertyLevel = (deviceData: DeviceLogsType | undefined) => {
+  const plugIn = deviceData?.log[0]?.plug
+  const level = deviceData?.log[0]?.battery
+  if (plugIn) {
+    return <RiBatteryChargeLine />
+  } else if (level === 0) {
+    return <RiBatteryLine />
+  } else if (level && level <= 50) {
+    return <RiBatteryLowLine />
+  } else if (level && level <= 100) {
+    return <RiBatteryFill />
+  } else {
+    return <RiAlertLine />
+  }
+}
+
+// const
+
+export { probeLimitIcon, tempLimit, humiLimit, doorOpen, unPlug, battertyLevel }

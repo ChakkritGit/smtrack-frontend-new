@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 // import dotenv from 'dotenv'
 
@@ -51,106 +51,107 @@ export default defineConfig({
         short_name: 'SMTrack+',
         icons: [
           {
-            "src": "pwa-64x64.png",
-            "sizes": "64x64",
-            "type": "image/png"
+            src: 'pwa-64x64.png',
+            sizes: '64x64',
+            type: 'image/png'
           },
           {
-            "src": "pwa-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
           },
           {
-            "src": "pwa-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
           },
           {
-            "src": "maskable-icon-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
+            src: 'maskable-icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           }
         ],
         screenshots: [
           {
-            "src": "desktop01.png",
-            "sizes": "3840x2160",
-            "type": "image/png",
-            "form_factor": "wide",
-            "label": "Login",
+            src: 'desktop01.png',
+            sizes: '3840x2160',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Login'
           },
           {
-            "src": "desktop02.png",
-            "sizes": "3840x2160",
-            "type": "image/png",
-            "form_factor": "wide",
-            "label": "Home",
+            src: 'desktop02.png',
+            sizes: '3840x2160',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Home'
           },
           {
-            "src": "desktop03.png",
-            "sizes": "3840x2160",
-            "type": "image/png",
-            "form_factor": "wide",
-            "label": "Dashboard",
+            src: 'desktop03.png',
+            sizes: '3840x2160',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Dashboard'
           },
           {
-            "src": "desktop04.png",
-            "sizes": "3840x2160",
-            "type": "image/png",
-            "form_factor": "wide",
-            "label": "Chart",
+            src: 'desktop04.png',
+            sizes: '3840x2160',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Chart'
           },
           {
-            "src": "desktop05.png",
-            "sizes": "3840x2160",
-            "type": "image/png",
-            "form_factor": "wide",
-            "label": "Table",
+            src: 'desktop05.png',
+            sizes: '3840x2160',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Table'
           },
           {
-            "src": "mobile01.png",
-            "sizes": "1125x2436",
-            "type": "image/png",
-            "form_factor": "narrow",
-            "label": "Login",
+            src: 'mobile01.png',
+            sizes: '1125x2436',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'Login'
           },
           {
-            "src": "mobile02.png",
-            "sizes": "1125x2436",
-            "type": "image/png",
-            "form_factor": "narrow",
-            "label": "Home",
+            src: 'mobile02.png',
+            sizes: '1125x2436',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'Home'
           },
           {
-            "src": "mobile03.png",
-            "sizes": "1125x2436",
-            "type": "image/png",
-            "form_factor": "narrow",
-            "label": "Dashboard",
+            src: 'mobile03.png',
+            sizes: '1125x2436',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'Dashboard'
           }
         ],
         prefer_related_applications: true,
         related_applications: [
           {
-            platform: "play",
-            url: "https://play.google.com/store/apps/details?id=com.thanes.temp_noti",
-            id: "com.thanes.temp_noti"
+            platform: 'play',
+            url: 'https://play.google.com/store/apps/details?id=com.thanes.temp_noti',
+            id: 'com.thanes.temp_noti'
           },
           {
-            platform: "ios",
-            url: "https://apps.apple.com/th/app/smtrack/id6670781090",
-            id: "id6670781090"
+            platform: 'ios',
+            url: 'https://apps.apple.com/th/app/smtrack/id6670781090',
+            id: 'id6670781090'
           }
         ],
-        description: "The system show all smtrack box detect temperature realtime and nofi when temperture higher then limit.",
+        description:
+          'The system show all smtrack box detect temperature realtime and nofi when temperture higher then limit.',
         theme_color: '#fdfdfd',
         background_color: '#fdfdfd',
         start_url: '/',
         display: 'standalone',
         orientation: 'portrait'
       }
-    }),
+    })
   ],
   build: {
     chunkSizeWarningLimit: 100000, // Unit is in KB => 100MB
@@ -169,9 +170,7 @@ export default defineConfig({
     cors: true,
     fs: {
       strict: true,
-      deny: [
-        '.env', '.env.*', '*.{crt,pem}', 'custom.secret'
-      ]
+      deny: ['.env', '.env.*', '*.{crt,pem}', 'custom.secret']
     }
   },
   optimizeDeps: {

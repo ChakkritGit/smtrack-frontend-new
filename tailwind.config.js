@@ -1,19 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
+    content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {
-      animation: {
-        'transition-pop': 'button-pop var(--animation-btn, 0.25s) ease-out',
-      }
-    },
+  	extend: {
+  		animation: {
+  			'transition-pop': 'button-pop var(--animation-btn, 0.25s) ease-out'
+  		},
+		}
   },
   plugins: [
     require('daisyui'),
-  ],
+],
   daisyui: {
     themes: true, // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]
     darkTheme: "dark", // name of one of the included themes for dark mode

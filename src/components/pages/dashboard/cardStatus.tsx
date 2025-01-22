@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import {
   RiAlertLine,
-  RiBatteryChargeLine,
   RiCollageLine,
   RiDoorClosedLine,
   RiDoorOpenLine,
@@ -16,6 +15,7 @@ import {
 import { MdOutlineSdCard } from 'react-icons/md'
 import { HiOutlineArrowsUpDown } from 'react-icons/hi2'
 import {
+  battertyLevel,
   doorOpen,
   humiLimit,
   probeLimitIcon,
@@ -70,14 +70,20 @@ const CardStatus = (props: PropsType) => {
             return (
               <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
                 <div className='flex items-center gap-2 h-[30%]'>
-                  <div className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${probeLimitIcon(
-                      item.tempMin,
-                      item.tempMax,
-                      findItem?.tempDisplay,
-                      item.humiMin,
-                      item.humiMax,
-                      findItem?.humidityDisplay
-                    ) ? 'text-red-500 bg-opacity-50 bg-red-300' : ''}`}>
+                  <div
+                    className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
+                      probeLimitIcon(
+                        item.tempMin,
+                        item.tempMax,
+                        findItem?.tempDisplay,
+                        item.humiMin,
+                        item.humiMax,
+                        findItem?.humidityDisplay
+                      )
+                        ? 'text-red-500 bg-opacity-50 bg-red-300'
+                        : ''
+                    }`}
+                  >
                     {probeLimitIcon(
                       item.tempMin,
                       item.tempMax,
@@ -134,7 +140,11 @@ const CardStatus = (props: PropsType) => {
           <SwiperSlide className='p-3 h-full bg-base-100' key={2}>
             <div className='flex items-center gap-2 h-[30%]'>
               <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-                {probeLimitIcon(0, 0, 0, 0, 0, 0)}
+                {probeLimitIcon(0, 0, 0, 0, 0, 0) ? (
+                  <RiErrorWarningLine />
+                ) : (
+                  <RiTempColdLine />
+                )}
               </div>
               <span>{t('dashProbe')}</span>
               <span className='badge badge-primary badge-outline'>2</span>
@@ -155,7 +165,11 @@ const CardStatus = (props: PropsType) => {
           <SwiperSlide className='p-3 h-full bg-base-100' key={3}>
             <div className='flex items-center gap-2 h-[30%]'>
               <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-                {probeLimitIcon(0, 0, 0, 0, 0, 0)}
+                {probeLimitIcon(0, 0, 0, 0, 0, 0) ? (
+                  <RiErrorWarningLine />
+                ) : (
+                  <RiTempColdLine />
+                )}
               </div>
               <span>{t('dashProbe')}</span>
               <span className='badge badge-primary badge-outline'>3</span>
@@ -240,13 +254,35 @@ const CardStatus = (props: PropsType) => {
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
         <div className='flex items-center gap-2'>
-          <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            <RiBatteryChargeLine />
+          <div
+            className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
+              deviceData?.log
+                ? deviceData?.log[0]?.battery <= 20
+                  ? 'text-yellow-500 bg-opacity-50 bg-yellow-300'
+                  : deviceData?.log[0]?.battery <= 0
+                  ? 'text-red-500 bg-opacity-50 bg-red-300'
+                  : ''
+                : ''
+            }`}
+          >
+            {battertyLevel(deviceData)}
           </div>
           <span>{t('dashBattery')}</span>
         </div>
-        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
-          0
+        <div
+          className={`flex items-center justify-center text-[18px] font-bold h-full ${
+            deviceData?.log
+              ? deviceData?.log[0]?.battery <= 20
+                ? 'text-yellow-500'
+                : deviceData?.log[0]?.battery <= 0
+                ? 'text-red-500'
+                : ''
+              : ''
+          }`}
+        >
+          {deviceData?.log[0]?.battery
+            ? `${deviceData?.log[0]?.battery} %`
+            : '—'}
         </div>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>

@@ -9,8 +9,8 @@ type PropsType = {
 
 const CardInFoComponent = (props: PropsType) => {
   const { t } = useTranslation()
-
   const { deviceData } = props
+
   return (
     <div className='p-5 h-full'>
       <div className='flex items-center justify-between'>

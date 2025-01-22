@@ -10,6 +10,7 @@ import CardInFoComponent from '../../components/pages/dashboard/cardInfo'
 import CardStatus from '../../components/pages/dashboard/cardStatus'
 import DeviceList from '../../components/filter/deviceList'
 import Loading from '../../components/skeleton/table/loading'
+import { BottomSheet } from 'react-spring-bottom-sheet'
 
 const Dashboard = () => {
   const { deviceId } = useSelector((state: RootState) => state.utils)
