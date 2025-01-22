@@ -15,16 +15,12 @@ const probeLimitIcon = (
   humiMax: number,
   humiDisplay: number | undefined
 ) => {
-  if (
+  return (
     (tempDisplay && tempDisplay <= tempMin) ||
     (tempDisplay && tempDisplay >= tempMax) ||
     (humiDisplay && humiDisplay <= humiMin) ||
     (humiDisplay && humiDisplay >= humiMax)
-  ) {
-    return true
-  } else {
-    return false
-  }
+  )
 }
 
 const tempLimit = (
@@ -32,14 +28,10 @@ const tempLimit = (
   tempMax: number,
   tempDisplay: number | undefined
 ) => {
-  if (
+  return (
     (tempDisplay && tempDisplay <= tempMin) ||
     (tempDisplay && tempDisplay >= tempMax)
-  ) {
-    return true
-  } else {
-    return false
-  }
+  )
 }
 
 const humiLimit = (
@@ -47,52 +39,65 @@ const humiLimit = (
   humiMax: number,
   humiDisplay: number | undefined
 ) => {
-  if (
+  return (
     (humiDisplay && humiDisplay <= humiMin) ||
     (humiDisplay && humiDisplay >= humiMax)
-  ) {
-    return true
-  } else {
-    return false
-  }
+  )
 }
 
 const doorOpen = (deviceData: DeviceLogsType | undefined) => {
-  if (
+  return (
     deviceData?.log[0]?.door1 ||
     deviceData?.log[0]?.door2 ||
     deviceData?.log[0]?.door3
-  ) {
-    return true
-  } else {
-    return false
-  }
+  )
 }
 
 const unPlug = (deviceData: DeviceLogsType | undefined) => {
-  if (deviceData?.log[0]?.plug) {
-    return true
-  } else {
-    return false
-  }
+  return deviceData?.log[0]?.plug
 }
 
 const battertyLevel = (deviceData: DeviceLogsType | undefined) => {
   const plugIn = deviceData?.log[0]?.plug
   const level = deviceData?.log[0]?.battery
   if (plugIn) {
-    return <RiBatteryChargeLine />
+    return <RiBatteryChargeLine size={20} />
   } else if (level === 0) {
-    return <RiBatteryLine />
+    return <RiBatteryLine size={20}  />
   } else if (level && level <= 50) {
-    return <RiBatteryLowLine />
+    return <RiBatteryLowLine size={20}  />
   } else if (level && level <= 100) {
-    return <RiBatteryFill />
+    return <RiBatteryFill size={20}  />
   } else {
-    return <RiAlertLine />
+    return <RiAlertLine size={20}  />
   }
 }
 
-// const
+const tempOfDay = (deviceData: DeviceLogsType | undefined, channel: string) => {
+  const max =
+    deviceData?.log?.length &&
+    Number(Math.max(...deviceData.log.filter(filter => filter.probe.includes(channel)).map(item => item.tempDisplay))).toFixed(2)
+  const min =
+    deviceData?.log?.length &&
+    Number(Math.min(...deviceData.log.filter(filter => filter.probe.includes(channel)).map(item => item.tempDisplay))).toFixed(2)
 
-export { probeLimitIcon, tempLimit, humiLimit, doorOpen, unPlug, battertyLevel }
+  return {
+    min,
+    max
+  }
+}
+
+const sdCard = (deviceData: DeviceLogsType | undefined) => {
+  return deviceData?.log[0]?.extMemory ?? false
+}
+
+export {
+  probeLimitIcon,
+  tempLimit,
+  humiLimit,
+  doorOpen,
+  unPlug,
+  battertyLevel,
+  tempOfDay,
+  sdCard
+}

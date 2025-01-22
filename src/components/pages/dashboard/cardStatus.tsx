@@ -12,14 +12,16 @@ import {
   RiSignalWifiOffLine,
   RiTempColdLine
 } from 'react-icons/ri'
-import { MdOutlineSdCard } from 'react-icons/md'
+import { MdOutlineSdCard, MdOutlineSdCardAlert } from 'react-icons/md'
 import { HiOutlineArrowsUpDown } from 'react-icons/hi2'
 import {
   battertyLevel,
   doorOpen,
   humiLimit,
   probeLimitIcon,
+  sdCard,
   tempLimit,
+  tempOfDay,
   unPlug
 } from '../../../constants/utils/dashboardCardStatus'
 import { DeviceLogsType } from '../../../types/smtrack/devices/deviceType'
@@ -92,14 +94,14 @@ const CardStatus = (props: PropsType) => {
                       item.humiMax,
                       findItem?.humidityDisplay
                     ) ? (
-                      <RiErrorWarningLine />
+                      <RiErrorWarningLine size={20} />
                     ) : (
-                      <RiTempColdLine />
+                      <RiTempColdLine size={20} />
                     )}
                   </div>
                   <span>{t('dashProbe')}</span>
-                  <span className='badge badge-primary badge-outline'>
-                    {item.channel}
+                  <span className='badge badge-primary badge-outline font-bold border-2'>
+                    P{item.channel}
                   </span>
                 </div>
                 <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
@@ -141,13 +143,15 @@ const CardStatus = (props: PropsType) => {
             <div className='flex items-center gap-2 h-[30%]'>
               <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
                 {probeLimitIcon(0, 0, 0, 0, 0, 0) ? (
-                  <RiErrorWarningLine />
+                  <RiErrorWarningLine size={20} />
                 ) : (
-                  <RiTempColdLine />
+                  <RiTempColdLine size={20} />
                 )}
               </div>
               <span>{t('dashProbe')}</span>
-              <span className='badge badge-primary badge-outline'>2</span>
+              <span className='badge badge-primary badge-outline font-bold border-2'>
+                P2
+              </span>
             </div>
             <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
               <div>
@@ -166,13 +170,15 @@ const CardStatus = (props: PropsType) => {
             <div className='flex items-center gap-2 h-[30%]'>
               <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
                 {probeLimitIcon(0, 0, 0, 0, 0, 0) ? (
-                  <RiErrorWarningLine />
+                  <RiErrorWarningLine size={20} />
                 ) : (
-                  <RiTempColdLine />
+                  <RiTempColdLine size={20} />
                 )}
               </div>
               <span>{t('dashProbe')}</span>
-              <span className='badge badge-primary badge-outline'>3</span>
+              <span className='badge badge-primary badge-outline font-bold border-2'>
+                P3
+              </span>
             </div>
             <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
               <div>
@@ -197,9 +203,9 @@ const CardStatus = (props: PropsType) => {
             }`}
           >
             {deviceData?.online ? (
-              <RiSignalWifiOffLine />
+              <RiSignalWifiOffLine size={20} />
             ) : (
-              <RiSignalWifi1Line />
+              <RiSignalWifi1Line size={20} />
             )}
           </div>
           <span>{t('dashConnect')}</span>
@@ -221,7 +227,11 @@ const CardStatus = (props: PropsType) => {
                 : ''
             }`}
           >
-            {doorOpen(deviceData) ? <RiDoorOpenLine /> : <RiDoorClosedLine />}
+            {doorOpen(deviceData) ? (
+              <RiDoorOpenLine size={20} />
+            ) : (
+              <RiDoorClosedLine size={20} />
+            )}
           </div>
           <span>{t('dashDoor')}</span>
         </div>
@@ -240,7 +250,11 @@ const CardStatus = (props: PropsType) => {
               unPlug(deviceData) ? 'text-red-500 bg-opacity-50 bg-red-300' : ''
             }`}
           >
-            {unPlug(deviceData) ? <RiAlertLine /> : <RiPlugLine />}
+            {unPlug(deviceData) ? (
+              <RiAlertLine size={20} />
+            ) : (
+              <RiPlugLine size={20} />
+            )}
           </div>
           <span>{t('dashPlug')}</span>
         </div>
@@ -285,43 +299,248 @@ const CardStatus = (props: PropsType) => {
             : '—'}
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
-        <div className='flex items-center gap-2'>
-          <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            <HiOutlineArrowsUpDown />
-          </div>
-          <span>{t('dashTempofDay')}</span>
-        </div>
-        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
-          0
-        </div>
+      <div className='bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px] overflow-hidden'>
+        <Swiper
+          slidesPerView={'auto'}
+          spaceBetween={30}
+          centeredSlides={true}
+          loop={true}
+          autoplay={{
+            delay: 8000,
+            disableOnInteraction: false
+          }}
+          pagination={{
+            clickable: true
+          }}
+          effect={'creative'}
+          creativeEffect={{
+            prev: {
+              shadow: false,
+              translate: ['-120%', 0, -500]
+            },
+            next: {
+              shadow: false,
+              translate: ['120%', 0, -500]
+            }
+          }}
+          modules={[Autoplay, Pagination, EffectCreative]}
+          className='mySwiper h-full'
+        >
+          {deviceData?.probe.map((item, index) => {
+            const findItem = deviceData.log.find(itemTwo =>
+              itemTwo.probe.includes(item.channel)
+            )
+            return (
+              <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
+                <div className='flex items-center gap-2 h-[30%]'>
+                  <div
+                    className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
+                      probeLimitIcon(
+                        item.tempMin,
+                        item.tempMax,
+                        findItem?.tempDisplay,
+                        item.humiMin,
+                        item.humiMax,
+                        findItem?.humidityDisplay
+                      )
+                        ? 'text-red-500 bg-opacity-50 bg-red-300'
+                        : ''
+                    }`}
+                  >
+                    <HiOutlineArrowsUpDown size={20} />
+                  </div>
+                  <span
+                    title={t('dashTempofDay')}
+                    className='truncate max-w-[80px]'
+                  >
+                    {t('dashTempofDay')}
+                  </span>
+                  <span className='badge badge-primary badge-outline font-bold border-2'>
+                    P{item.channel}
+                  </span>
+                </div>
+                <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
+                  <div>
+                    <span>↑ </span>
+                    <span>
+                      {deviceData?.log
+                        ? tempOfDay(deviceData, item.channel).max
+                        : '—'}{' '}
+                      °C
+                    </span>
+                  </div>
+                  <div>
+                    <span>↓</span>
+                    <span>
+                      {deviceData?.log
+                        ? tempOfDay(deviceData, item.channel).max
+                        : '—'}{' '}
+                      °C
+                    </span>
+                  </div>
+                </div>
+              </SwiperSlide>
+            )
+          })}
+          {deviceData?.probe.map((item, index) => {
+            const findItem = deviceData.log.find(itemTwo =>
+              itemTwo.probe.includes(item.channel)
+            )
+            return (
+              <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
+                <div className='flex items-center gap-2 h-[30%]'>
+                  <div
+                    className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
+                      probeLimitIcon(
+                        item.tempMin,
+                        item.tempMax,
+                        findItem?.tempDisplay,
+                        item.humiMin,
+                        item.humiMax,
+                        findItem?.humidityDisplay
+                      )
+                        ? 'text-red-500 bg-opacity-50 bg-red-300'
+                        : ''
+                    }`}
+                  >
+                    <HiOutlineArrowsUpDown size={20} />
+                  </div>
+                  <span
+                    title={t('dashTempofDay')}
+                    className='truncate max-w-[80px]'
+                  >
+                    {t('dashTempofDay')}
+                  </span>
+                  <span className='badge badge-primary badge-outline font-bold border-2'>
+                    P2
+                  </span>
+                </div>
+                <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
+                  <div>
+                    <span>↑ </span>
+                    <span>
+                      {deviceData?.log
+                        ? tempOfDay(deviceData, item.channel).max
+                        : '—'}{' '}
+                      °C
+                    </span>
+                  </div>
+                  <div>
+                    <span>↓</span>
+                    <span>
+                      {deviceData?.log
+                        ? tempOfDay(deviceData, item.channel).max
+                        : '—'}{' '}
+                      °C
+                    </span>
+                  </div>
+                </div>
+              </SwiperSlide>
+            )
+          })}
+          {deviceData?.probe.map((item, index) => {
+            const findItem = deviceData.log.find(itemTwo =>
+              itemTwo.probe.includes(item.channel)
+            )
+            return (
+              <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
+                <div className='flex items-center gap-2 h-[30%]'>
+                  <div
+                    className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
+                      probeLimitIcon(
+                        item.tempMin,
+                        item.tempMax,
+                        findItem?.tempDisplay,
+                        item.humiMin,
+                        item.humiMax,
+                        findItem?.humidityDisplay
+                      )
+                        ? 'text-red-500 bg-opacity-50 bg-red-300'
+                        : ''
+                    }`}
+                  >
+                    <HiOutlineArrowsUpDown size={20} />
+                  </div>
+                  <span
+                    title={t('dashTempofDay')}
+                    className='truncate max-w-[80px]'
+                  >
+                    {t('dashTempofDay')}
+                  </span>
+                  <span className='badge badge-primary badge-outline font-bold border-2'>
+                    P3
+                  </span>
+                </div>
+                <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
+                  <div>
+                    <span>↑ </span>
+                    <span>
+                      {deviceData?.log
+                        ? tempOfDay(deviceData, item.channel).max
+                        : '—'}{' '}
+                      °C
+                    </span>
+                  </div>
+                  <div>
+                    <span>↓</span>
+                    <span>
+                      {deviceData?.log
+                        ? tempOfDay(deviceData, item.channel).max
+                        : '—'}{' '}
+                      °C
+                    </span>
+                  </div>
+                </div>
+              </SwiperSlide>
+            )
+          })}
+        </Swiper>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
         <div className='flex items-center gap-2'>
-          <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            <MdOutlineSdCard />
+          <div
+            className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
+              sdCard(deviceData) ? 'text-red-500 bg-opacity-50 bg-red-300' : ''
+            }`}
+          >
+            {sdCard(deviceData) ? (
+              <MdOutlineSdCardAlert size={20} />
+            ) : (
+              <MdOutlineSdCard size={20} />
+            )}
           </div>
           <span>{t('dashSdCard')}</span>
         </div>
-        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
-          0
+        <div
+          className={`flex items-center justify-center text-[18px] font-bold h-full ${
+            sdCard(deviceData) ? 'text-red-500' : ''
+          }`}
+        >
+          {sdCard(deviceData) ? t('stateProblem') : t('stateNormal')}
         </div>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            <RiCollageLine />
+            <RiCollageLine size={20} />
           </div>
           <span>{t('dashProbeandDoor')}</span>
         </div>
-        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
-          0
+        <div className='flex items-center justify-center gap-3 text-[18px] font-bold h-full'>
+          <span>
+            {[...new Set(deviceData?.probe.map(item => item.channel))].length ??
+              '—'}
+          </span>
+          <div className='w-[3px] h-7 py-2 bg-primary rounded-btn'></div>
+          <span>
+            {deviceData?.probe.find(item => item.doorQty)?.doorQty ?? '—'}
+          </span>
         </div>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            <RiShieldCheckLine />
+            <RiShieldCheckLine size={20} />
           </div>
           <span>{t('dashWarranty')}</span>
         </div>
@@ -332,7 +551,7 @@ const CardStatus = (props: PropsType) => {
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-            <RiFolderSettingsLine />
+            <RiFolderSettingsLine size={20} />
           </div>
           <span>{t('dashRepair')}</span>
         </div>

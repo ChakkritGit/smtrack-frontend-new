@@ -1,6 +1,5 @@
 import './index.css'
 import 'react-loading-skeleton/dist/skeleton.css'
-import 'react-spring-bottom-sheet/dist/style.css'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'

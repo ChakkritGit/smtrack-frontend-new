@@ -51,7 +51,7 @@ function Navbar () {
   }, [])
 
   return (
-    <div className='bg-base-100 text-base-content sticky top-0 z-[80] flex h-16 w-full justify-center bg-opacity-90 backdrop-blur transition-shadow duration-300 [transform:translate3d(0,0,0)] shadow-sm'>
+    <div className='bg-base-100 text-base-content sticky top-0 z-[80] flex h-16 w-full justify-center bg-opacity-80 backdrop-blur transition-shadow duration-300 [transform:translate3d(0,0,0)] shadow-sm'>
       <div className='navbar'>
         <div className='flex-1 lg:gap-3'>
           <label
