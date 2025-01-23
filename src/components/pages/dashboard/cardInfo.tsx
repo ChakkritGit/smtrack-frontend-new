@@ -2,6 +2,8 @@ import { useTranslation } from 'react-i18next'
 import { DeviceLogsType } from '../../../types/smtrack/devices/deviceType'
 import { RiSettings3Line } from 'react-icons/ri'
 import DefaultPic from '../../../assets/images/default-pic.png'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay, EffectCreative, Pagination } from 'swiper/modules'
 
 type PropsType = {
   deviceData: DeviceLogsType | undefined
@@ -41,35 +43,107 @@ const CardInFoComponent = (props: PropsType) => {
           />
         </div>
       </div>
-      <div className='flex justify-between gap-3 mt-4 h-full'>
-        <div className='flex justify-center items-center w-[35%] h-3/4'>
+      <div className='flex justify-between flex-col lg:flex-row gap-3 mt-4 h-full'>
+        <div className='flex justify-center items-center w-full lg:w-[35%] h-3/4'>
           <img
             src={deviceData?.positionPic ?? DefaultPic}
             alt='Device-image'
             className='rounded-btn w-max h-[85%] object-contain cursor-pointer hover:scale-95 duration-300'
           />
         </div>
-        <div className='w-[60%] h-3/4 p-1'>
-          <div className='divider mb-1 mt-0 text-[14px] text-base-content/70'>
-            {t('deviceActionTb')}
-          </div>
-          <div className='flex items-center gap-3'>
-            <p className='font-bold'>• {t('tempValueUnit')}:</p>
-            <p className='truncate max-w-[150px] lg:max-w-[300px]'>
-              {deviceData?.probe[0]?.tempMin ?? '—'} -{' '}
-              {deviceData?.probe[0]?.tempMax ?? '—'} °C
-            </p>
-          </div>
-          <div className='flex items-center gap-3'>
-            <p className='font-bold'>• {t('humValueUnit')}:</p>
-            <p className='truncate max-w-[150px] lg:max-w-[300px]'>
-              {deviceData?.probe[0]?.humiMin ?? '—'} -{' '}
-              {deviceData?.probe[0]?.humiMax ?? '—'} %
-            </p>
-          </div>
-          <div className='divider mt-2 mb-1 text-[14px] text-base-content/70'>
-            {t('deviceDetail')}
-          </div>
+        <div className='w-full lg:w-[60%] h-3/4 p-1'>
+          <Swiper
+            slidesPerView={'auto'}
+            spaceBetween={100}
+            centeredSlides={true}
+            loop={true}
+            autoplay={{
+              delay: 8000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true
+            }}
+            // pagination={{
+            //   dynamicBullets: true,
+            //   clickable: true
+            // }}
+            effect={'creative'}
+            creativeEffect={{
+              prev: {
+                shadow: false,
+                translate: ['-120%', 0, -500]
+              },
+              next: {
+                shadow: false,
+                translate: ['120%', 0, -500]
+              }
+            }}
+            modules={[Autoplay, Pagination, EffectCreative]}
+            className='mySwiper'
+          >
+            {deviceData?.probe.map((item, index) => {
+              return (
+                <SwiperSlide key={index}>
+                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 mb-2'>
+                    P{item.channel}
+                  </span>
+                  <div className='flex items-center gap-3'>
+                    <p className='font-bold'>• {t('tempValueUnit')}:</p>
+                    <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+                      {item.tempMin ?? '—'} - {item.tempMax ?? '—'} °C
+                    </p>
+                  </div>
+                  <div className='flex items-center gap-3'>
+                    <p className='font-bold'>• {t('humValueUnit')}:</p>
+                    <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+                      {item.humiMin ?? '—'} - {item.humiMax ?? '—'} %
+                    </p>
+                  </div>
+                </SwiperSlide>
+              )
+            })}
+            {deviceData?.probe.map((item, index) => {
+              return (
+                <SwiperSlide key={index}>
+                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 mb-2'>
+                    P2
+                  </span>
+                  <div className='flex items-center gap-3'>
+                    <p className='font-bold'>• {t('tempValueUnit')}:</p>
+                    <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+                      {item.tempMin ?? '—'} - {item.tempMax ?? '—'} °C
+                    </p>
+                  </div>
+                  <div className='flex items-center gap-3'>
+                    <p className='font-bold'>• {t('humValueUnit')}:</p>
+                    <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+                      {item.humiMin ?? '—'} - {item.humiMax ?? '—'} %
+                    </p>
+                  </div>
+                </SwiperSlide>
+              )
+            })}
+            {deviceData?.probe.map((item, index) => {
+              return (
+                <SwiperSlide key={index}>
+                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 mb-2'>
+                    P3
+                  </span>
+                  <div className='flex items-center gap-3'>
+                    <p className='font-bold'>• {t('tempValueUnit')}:</p>
+                    <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+                      {item.tempMin ?? '—'} - {item.tempMax ?? '—'} °C
+                    </p>
+                  </div>
+                  <div className='flex items-center gap-3'>
+                    <p className='font-bold'>• {t('humValueUnit')}:</p>
+                    <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+                      {item.humiMin ?? '—'} - {item.humiMax ?? '—'} %
+                    </p>
+                  </div>
+                </SwiperSlide>
+              )
+            })}
+          </Swiper>
           <div className='flex items-center gap-3'>
             <p className='font-bold'>•</p>
             <p className='truncate max-w-[150px] lg:max-w-[300px]'>
