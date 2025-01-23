@@ -49,6 +49,7 @@ const CardStatus = (props: PropsType) => {
             disableOnInteraction: false
           }}
           pagination={{
+            dynamicBullets: true,
             clickable: true
           }}
           effect={'creative'}
@@ -82,7 +83,7 @@ const CardStatus = (props: PropsType) => {
                         item.humiMax,
                         findItem?.humidityDisplay
                       )
-                        ? 'text-red-500 bg-opacity-50 bg-red-300'
+                        ? 'text-base-content bg-opacity-80 bg-red-500'
                         : ''
                     }`}
                   >
@@ -100,7 +101,7 @@ const CardStatus = (props: PropsType) => {
                     )}
                   </div>
                   <span>{t('dashProbe')}</span>
-                  <span className='badge badge-primary badge-outline font-bold border-2'>
+                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
                     P{item.channel}
                   </span>
                 </div>
@@ -149,7 +150,7 @@ const CardStatus = (props: PropsType) => {
                 )}
               </div>
               <span>{t('dashProbe')}</span>
-              <span className='badge badge-primary badge-outline font-bold border-2'>
+              <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
                 P2
               </span>
             </div>
@@ -176,7 +177,7 @@ const CardStatus = (props: PropsType) => {
                 )}
               </div>
               <span>{t('dashProbe')}</span>
-              <span className='badge badge-primary badge-outline font-bold border-2'>
+              <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
                 P3
               </span>
             </div>
@@ -199,7 +200,7 @@ const CardStatus = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              deviceData?.online ? 'text-red-500 bg-opacity-50 bg-red-300' : ''
+              deviceData?.online ? 'text-base-content bg-opacity-80 bg-red-500' : ''
             }`}
           >
             {deviceData?.online ? (
@@ -223,7 +224,7 @@ const CardStatus = (props: PropsType) => {
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
               doorOpen(deviceData)
-                ? 'text-red-500 bg-opacity-50 bg-red-300'
+                ? 'text-base-content bg-opacity-80 bg-red-500'
                 : ''
             }`}
           >
@@ -247,7 +248,7 @@ const CardStatus = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              unPlug(deviceData) ? 'text-red-500 bg-opacity-50 bg-red-300' : ''
+              unPlug(deviceData) ? 'text-base-content bg-opacity-80 bg-red-500' : ''
             }`}
           >
             {unPlug(deviceData) ? (
@@ -272,9 +273,9 @@ const CardStatus = (props: PropsType) => {
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
               deviceData?.log
                 ? deviceData?.log[0]?.battery <= 20
-                  ? 'text-yellow-500 bg-opacity-50 bg-yellow-300'
+                  ? 'text-yellow-500 bg-opacity-80 bg-yellow-300'
                   : deviceData?.log[0]?.battery <= 0
-                  ? 'text-red-500 bg-opacity-50 bg-red-300'
+                  ? 'text-base-content bg-opacity-80 bg-red-500'
                   : ''
                 : ''
             }`}
@@ -310,6 +311,7 @@ const CardStatus = (props: PropsType) => {
             disableOnInteraction: false
           }}
           pagination={{
+            dynamicBullets: true,
             clickable: true
           }}
           effect={'creative'}
@@ -343,7 +345,7 @@ const CardStatus = (props: PropsType) => {
                         item.humiMax,
                         findItem?.humidityDisplay
                       )
-                        ? 'text-red-500 bg-opacity-50 bg-red-300'
+                        ? 'text-base-content bg-opacity-80 bg-red-500'
                         : ''
                     }`}
                   >
@@ -355,7 +357,7 @@ const CardStatus = (props: PropsType) => {
                   >
                     {t('dashTempofDay')}
                   </span>
-                  <span className='badge badge-primary badge-outline font-bold border-2'>
+                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
                     P{item.channel}
                   </span>
                 </div>
@@ -399,7 +401,7 @@ const CardStatus = (props: PropsType) => {
                         item.humiMax,
                         findItem?.humidityDisplay
                       )
-                        ? 'text-red-500 bg-opacity-50 bg-red-300'
+                        ? 'text-base-content bg-opacity-80 bg-red-500'
                         : ''
                     }`}
                   >
@@ -411,7 +413,7 @@ const CardStatus = (props: PropsType) => {
                   >
                     {t('dashTempofDay')}
                   </span>
-                  <span className='badge badge-primary badge-outline font-bold border-2'>
+                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
                     P2
                   </span>
                 </div>
@@ -455,7 +457,7 @@ const CardStatus = (props: PropsType) => {
                         item.humiMax,
                         findItem?.humidityDisplay
                       )
-                        ? 'text-red-500 bg-opacity-50 bg-red-300'
+                        ? 'text-base-content bg-opacity-80 bg-red-500'
                         : ''
                     }`}
                   >
@@ -467,7 +469,7 @@ const CardStatus = (props: PropsType) => {
                   >
                     {t('dashTempofDay')}
                   </span>
-                  <span className='badge badge-primary badge-outline font-bold border-2'>
+                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
                     P3
                   </span>
                 </div>
@@ -500,7 +502,7 @@ const CardStatus = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              sdCard(deviceData) ? 'text-red-500 bg-opacity-50 bg-red-300' : ''
+              sdCard(deviceData) ? 'text-base-content bg-opacity-80 bg-red-500' : ''
             }`}
           >
             {sdCard(deviceData) ? (

@@ -56,7 +56,7 @@ export default {
     probeChannelSubTb: 'ชานแนลโพรบ',
     probeTypeSubTb: 'ประเภทโพรบ',
     probeNameSubTb: 'ชื่อโพรบ',
-    probsmtrackSubTb: 'อุณหภูมิ',
+    probeTempSubTb: 'อุณหภูมิ',
     probeHumiSubTb: 'ความชื้น',
     probeProbeSubTb: 'สถานะโพรบ',
     probeDoorSubTb: 'ประตู',

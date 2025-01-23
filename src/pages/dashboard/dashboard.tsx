@@ -10,6 +10,8 @@ import CardInFoComponent from '../../components/pages/dashboard/cardInfo'
 import CardStatus from '../../components/pages/dashboard/cardStatus'
 import DeviceList from '../../components/filter/deviceList'
 import Loading from '../../components/skeleton/table/loading'
+import ChartSwiperWrapper from '../../components/pages/dashboard/chartSwiperWrapper'
+import DataTableWrapper from '../../components/pages/dashboard/dataTableWrapper'
 
 const Dashboard = () => {
   const { deviceId } = useSelector((state: RootState) => state.utils)
@@ -85,8 +87,12 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className='flex items-center flex-wrap xl:flex-nowrap gap-4 mt-4'>
-                <div className='w-full xl:w-[50%] h-[400px]'>chart</div>
-                <div className='w-full xl:w-[50%] h-[400px]'>table</div>
+                <div className='w-full xl:w-[50%] h-[435px]'>
+                  <ChartSwiperWrapper deviceLogs={deviceLogs} />
+                </div>
+                <div className='w-full xl:w-[50%] h-[435px]'>
+                  <DataTableWrapper deviceLogs={deviceLogs} />
+                </div>
               </div>
             </>
           )}

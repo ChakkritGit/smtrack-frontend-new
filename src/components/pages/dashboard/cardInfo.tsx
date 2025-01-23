@@ -50,11 +50,8 @@ const CardInFoComponent = (props: PropsType) => {
           />
         </div>
         <div className='w-[60%] h-3/4 p-1'>
-          <div className='flex items-center gap-3'>
-            <p className='font-bold'>•</p>
-            <p className='truncate max-w-[150px] lg:max-w-[300px]'>
-              {deviceData?.location ?? '—'}
-            </p>
+          <div className='divider mb-1 mt-0 text-[14px] text-base-content/70'>
+            {t('deviceActionTb')}
           </div>
           <div className='flex items-center gap-3'>
             <p className='font-bold'>• {t('tempValueUnit')}:</p>
@@ -68,6 +65,15 @@ const CardInFoComponent = (props: PropsType) => {
             <p className='truncate max-w-[150px] lg:max-w-[300px]'>
               {deviceData?.probe[0]?.humiMin ?? '—'} -{' '}
               {deviceData?.probe[0]?.humiMax ?? '—'} %
+            </p>
+          </div>
+          <div className='divider mt-2 mb-1 text-[14px] text-base-content/70'>
+            {t('deviceDetail')}
+          </div>
+          <div className='flex items-center gap-3'>
+            <p className='font-bold'>•</p>
+            <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+              {deviceData?.location ?? '—'}
             </p>
           </div>
           <div className='flex items-center gap-3'>

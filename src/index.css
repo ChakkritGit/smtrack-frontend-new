@@ -31,57 +31,8 @@
   -webkit-user-select: none;
 }
 
-@layer components {
-  .dataTableWrapper {
-    &>div:nth-child(1) {
-      border-radius: unset;
-    }
-
-    &>div>div>div>div {
-      background-color: var(--fallback-b1,
-          oklch(var(--b1) / var(--tw-bg-opacity, 1)));
-      transition-duration: 300ms;
-    }
-
-    &>div>div>div>div>div {
-      background-color: unset;
-      color: var(--fallback-bc, oklch(var(--bc) / 1));
-      border-bottom-color: var(--fallback-bc,
-          oklch(var(--bc) / 0.15)) !important;
-      transition-duration: 300ms;
-
-      &>div {
-        transition-duration: 300ms;
-      }
-    }
-
-    &>div>div>div>div:nth-child(2)>div:hover {
-      background-color: var(--fallback-bc, oklch(var(--bc) / 0.15));
-      transition: 0.3s;
-    }
-
-    &>div:nth-child(2)>nav {
-      background-color: unset;
-      color: var(--fallback-bc, oklch(var(--bc) / 1));
-      border-top-color: var(--fallback-bc, oklch(var(--bc) / 0.15));
-      transition-duration: 300ms;
-
-      &>div:nth-child(4)>button:disabled {
-        color: var(--fallback-bc, oklch(var(--bc) / 0.15));
-        fill: var(--fallback-bc, oklch(var(--bc) / 0.15));
-        cursor: not-allowed;
-      }
-
-      &>div:nth-child(4)>button {
-        color: var(--fallback-bc, oklch(var(--bc) / 1));
-        fill: var(--fallback-bc, oklch(var(--bc) / 1));
-      }
-    }
-  }
-}
-
 .react-select__control {
-  @apply !bg-transparent !border-gray-400 !rounded-btn;
+  @apply !bg-transparent !border-base-content/35 !rounded-btn;
 }
 
 .react-select__control--is-focused {
@@ -90,7 +41,7 @@
 
 .react-select__single-value,
 .react-select__input-container {
-  @apply !text-gray-500;
+  @apply !text-base-content;
 }
 
 .react-select__indicator-separator {
@@ -122,17 +73,75 @@
 }
 
 .react-select__option--is-selected {
-  @apply !bg-primary;
+  @apply !bg-primary !text-primary-content;
 }
 
 .loading-hieght-full {
   height: calc(100dvh - 150px);
 }
 
+.swiper-pagination {
+  @apply !z-[5];
+}
+
 .swiper-pagination-bullet {
-  @apply !bg-base-300 !opacity-100 !rounded-btn !w-[10px] !h-[10px]
+  @apply !bg-base-300 !opacity-100 !rounded-btn !w-[10px] !h-[10px];
 }
 
 .swiper-pagination-bullet-active {
-  @apply !bg-primary
+  @apply !bg-primary;
+}
+
+.apexcharts-text tspan {
+  @apply !fill-base-content;
+}
+
+.apexcharts-legend-text {
+  @apply !text-base-content !font-[anuphan] !text-[12px];
+}
+
+.apexcharts-tooltip.apexcharts-active {
+  @apply !bg-base-200 !shadow-sm p-2 !z-20;
+}
+
+.chart-h>div:nth-child(1)>.swiper-wrapper {
+  @apply !h-[300px];
+}
+
+.apexcharts-grid>*>line, .apexcharts-grid-borders>line {
+  @apply !stroke-base-content !stroke-2 opacity-20;
+}
+
+.dataTableWrapper {
+  &>div:nth-child(1) {
+    @apply rounded-none;
+  }
+
+  &>div>div>div>div {
+    @apply bg-base-100 duration-300;
+  }
+
+  &>div>div>div>div>div {
+    @apply bg-transparent !text-base-content !border-b-base-content/10 duration-300;
+
+    &>div {
+      @apply duration-300;
+    }
+  }
+
+  &>div>div>div>div:nth-child(2)>div:hover {
+    @apply duration-300 bg-base-300;
+  }
+
+  &>div:nth-child(2)>nav {
+    @apply bg-transparent text-base-content border-t-base-content/10 duration-300;
+
+    &>div:nth-child(4)>button:disabled {
+      @apply !cursor-not-allowed text-base-content/30 fill-base-content/30;
+    }
+
+    &>div:nth-child(4)>button {
+      @apply text-base-content fill-base-content;
+    }
+  }
 }

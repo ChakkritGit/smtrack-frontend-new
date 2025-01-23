@@ -56,7 +56,7 @@ export default {
     probeChannelSubTb: 'Channels',
     probeTypeSubTb: 'Probe Types',
     probeNameSubTb: 'Probe Name',
-    probsmtrackSubTb: 'Temperature',
+    probeTempSubTb: 'Temperature',
     probeHumiSubTb: 'Humidity',
     probeProbeSubTb: 'Probe Status',
     probeDoorSubTb: 'Doors',

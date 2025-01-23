@@ -21,8 +21,8 @@ const DashboardSkeleton = () => {
         </div>
       </div>
       <div className='flex items-center flex-wrap xl:flex-nowrap gap-4 mt-4'>
-        <div className='skeleton w-full xl:w-[50%] h-[400px]'></div>
-        <div className='skeleton w-full xl:w-[50%] h-[400px]'></div>
+        <div className='skeleton w-full xl:w-[50%] h-[435px]'></div>
+        <div className='skeleton w-full xl:w-[50%] h-[435px]'></div>
       </div>
     </div>
   )
