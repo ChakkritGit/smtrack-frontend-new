@@ -190,9 +190,9 @@ const Home = () => {
         countFilter={countFilter}
         setCountFilter={setCountFilter}
       />
-      <div className='flex items-center justify-between my-4'>
+      <div className='flex lg:items-center justify-between flex-col lg:flex-row gap-3 lg:gap-0 my-4'>
         <span className='font-bold text-[20px]'>{t('detailAllBox')}</span>
-        <div className='flex items-center gap-3 h-[40px]'>
+        <div className='flex items-end lg:items-center gap-3 flex-col lg:flex-row lg:h-[40px]'>
           <div className='flex items-center gap-3'>
             <button
               className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
@@ -217,7 +217,7 @@ const Home = () => {
               <span>{t('deviceOffline')}</span>
             </button>
           </div>
-          <div className='divider divider-horizontal mx-0 py-2'></div>
+          <div className='divider divider-horizontal mx-0 py-2 hidden lg:flex'></div>
           <HospitalAndWard />
           <div className='flex items-center gap-2'>
             <button

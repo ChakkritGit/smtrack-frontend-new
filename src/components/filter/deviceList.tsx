@@ -12,8 +12,9 @@ import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
 
 const DeviceList = () => {
   const dispatch = useDispatch()
-  const { deviceId } = useSelector((state: RootState) => state.utils)
+  const { deviceId, wardId } = useSelector((state: RootState) => state.utils)
   const [deviceList, setDeviceList] = useState<DeviceListType[]>([])
+  const [deviceListFilter, setDeviceListFilter] = useState<DeviceListType[]>([])
   const fetchDeviceList = useCallback(async () => {
     try {
       const response = await axiosInstance.get<responseType<DeviceListType[]>>(
@@ -56,15 +57,22 @@ const DeviceList = () => {
     fetchDeviceList()
   }, [])
 
+  useEffect(() => {
+    const filter = deviceList.filter(item =>
+      wardId ? item.ward?.toLowerCase().includes(wardId?.toLowerCase()) : item
+    )
+    setDeviceListFilter(filter)
+  }, [deviceList, wardId])
+
   return (
     <Select
       options={mapOptions<DeviceListType, keyof DeviceListType>(
-        deviceList,
+        deviceListFilter,
         'id',
         'name'
       )}
       value={mapDefaultValue<DeviceListType, keyof DeviceListType>(
-        deviceList,
+        deviceListFilter,
         deviceId,
         'id',
         'name'

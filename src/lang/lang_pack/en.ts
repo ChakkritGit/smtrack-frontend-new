@@ -117,6 +117,10 @@ export default {
     // device tool tip
     deviceToolDashboard: 'Dashboard',
     deviceToolAdjust: 'Adjust',
+    fullChart: 'Full Chart',
+    fullTable: 'Full Table',
+    stopSlide: 'Stop Slide',
+    startSlide: 'Start Slide',
 
     // dashboard
     temperatureName: 'Temperature',
@@ -342,9 +346,11 @@ export default {
     addWarrantyButton: 'Add Warranty',
     reloadButton: 'Reload',
     editButton: 'Edit',
+    deleteButton: 'Delete',
     closeDialogButton: 'Close',
     continueButton: 'Continue',
     loginButton: 'Login',
+    menuButton: 'Menu',
 
     // dropdown
     selectDeviceDrop: 'Select Devices',
@@ -414,6 +420,7 @@ export default {
     lightMode: 'Light',
     darkMode: 'Dark',
     systemMode: 'System',
+    themeMode: 'Theme',
     reportText: 'Report',
     switchModeMain: '*Switch mode smtrack and TMS',
     readAll: 'Read All',
@@ -421,6 +428,8 @@ export default {
     list: 'Table',
     grid: 'Card',
     expandSide: 'Collapse sidebar',
+    selectPerPage: 'Per Page',
+    selectValue: 'Select',
 
     // connect
     ipAddress: 'IP',

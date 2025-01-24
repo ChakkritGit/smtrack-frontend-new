@@ -38,7 +38,7 @@ const CardStatus = (props: PropsType) => {
 
   return (
     <>
-      <div className='bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px] overflow-hidden'>
+      <div className='bg-base-100 rounded-btn w-full h-[140px] overflow-hidden'>
         <Swiper
           slidesPerView={'auto'}
           spaceBetween={30}
@@ -196,11 +196,13 @@ const CardStatus = (props: PropsType) => {
           </SwiperSlide>
         </Swiper>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              deviceData?.online ? 'text-base-content bg-opacity-80 bg-red-500' : ''
+              deviceData?.online
+                ? 'text-base-content bg-opacity-80 bg-red-500'
+                : ''
             }`}
           >
             {deviceData?.online ? (
@@ -219,7 +221,7 @@ const CardStatus = (props: PropsType) => {
           {deviceData?.online ? t('stateDisconnect') : t('stateConnect')}
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
@@ -244,11 +246,13 @@ const CardStatus = (props: PropsType) => {
           {doorOpen(deviceData) ? t('doorOpen') : t('doorClose')}
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              unPlug(deviceData) ? 'text-base-content bg-opacity-80 bg-red-500' : ''
+              unPlug(deviceData)
+                ? 'text-base-content bg-opacity-80 bg-red-500'
+                : ''
             }`}
           >
             {unPlug(deviceData) ? (
@@ -267,7 +271,7 @@ const CardStatus = (props: PropsType) => {
           {unPlug(deviceData) ? t('stateProblem') : t('stateNormal')}
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
@@ -300,7 +304,7 @@ const CardStatus = (props: PropsType) => {
             : '—'}
         </div>
       </div>
-      <div className='bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px] overflow-hidden'>
+      <div className='bg-base-100 rounded-btn w-full h-[140px] overflow-hidden'>
         <Swiper
           slidesPerView={'auto'}
           spaceBetween={30}
@@ -351,12 +355,15 @@ const CardStatus = (props: PropsType) => {
                   >
                     <HiOutlineArrowsUpDown size={20} />
                   </div>
-                  <span
-                    title={t('dashTempofDay')}
-                    className='truncate max-w-[55px] lg:max-w-[70px]'
+                  <label
+                    htmlFor='span'
+                    className='tooltip tooltip-bottom'
+                    data-tip={t('dashTempofDay')}
                   >
-                    {t('dashTempofDay')}
-                  </span>
+                    <span className='truncate block max-w-[55px] lg:max-w-[70px]'>
+                      {t('dashTempofDay')}
+                    </span>
+                  </label>
                   <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
                     P{item.channel}
                   </span>
@@ -407,12 +414,15 @@ const CardStatus = (props: PropsType) => {
                   >
                     <HiOutlineArrowsUpDown size={20} />
                   </div>
-                  <span
-                    title={t('dashTempofDay')}
-                    className='truncate max-w-[55px] lg:max-w-[70px]'
+                  <label
+                    htmlFor='span'
+                    className='tooltip tooltip-bottom'
+                    data-tip={t('dashTempofDay')}
                   >
-                    {t('dashTempofDay')}
-                  </span>
+                    <span className='truncate block max-w-[55px] lg:max-w-[70px]'>
+                      {t('dashTempofDay')}
+                    </span>
+                  </label>
                   <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
                     P2
                   </span>
@@ -463,12 +473,15 @@ const CardStatus = (props: PropsType) => {
                   >
                     <HiOutlineArrowsUpDown size={20} />
                   </div>
-                  <span
-                    title={t('dashTempofDay')}
-                    className='truncate max-w-[55px] lg:max-w-[70px]'
+                  <label
+                    htmlFor='span'
+                    className='tooltip tooltip-bottom'
+                    data-tip={t('dashTempofDay')}
                   >
-                    {t('dashTempofDay')}
-                  </span>
+                    <span className='truncate block max-w-[55px] lg:max-w-[70px]'>
+                      {t('dashTempofDay')}
+                    </span>
+                  </label>
                   <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
                     P3
                   </span>
@@ -498,11 +511,13 @@ const CardStatus = (props: PropsType) => {
           })}
         </Swiper>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              sdCard(deviceData) ? 'text-base-content bg-opacity-80 bg-red-500' : ''
+              sdCard(deviceData)
+                ? 'text-base-content bg-opacity-80 bg-red-500'
+                : ''
             }`}
           >
             {sdCard(deviceData) ? (
@@ -521,7 +536,7 @@ const CardStatus = (props: PropsType) => {
           {sdCard(deviceData) ? t('stateProblem') : t('stateNormal')}
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
             <RiCollageLine size={20} />
@@ -539,7 +554,7 @@ const CardStatus = (props: PropsType) => {
           </span>
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
             <RiShieldCheckLine size={20} />
@@ -550,7 +565,7 @@ const CardStatus = (props: PropsType) => {
           <span>{deviceData?.repair.length ?? '—'}</span>
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-[170px] lg:w-[185px] h-[140px]'>
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
         <div className='flex items-center gap-2'>
           <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
             <RiFolderSettingsLine size={20} />

@@ -196,7 +196,7 @@ const ChartMini = (props: ChartMiniProps) => {
         },
         axisBorder: {
           show: false,
-          color: 'rgba(255, 76, 60 , 1)'
+          color: 'oklch(0.7 0.2 27 / 1)'
         },
         min: minTempAvg,
         max: maxTempAvg
@@ -209,7 +209,7 @@ const ChartMini = (props: ChartMiniProps) => {
         },
         axisBorder: {
           show: false,
-          color: 'rgba(52, 152, 219, 1)'
+          color: 'oklch(0.8 0.15 230 / 1)'
         },
         min: 0,
         max: 100
@@ -243,11 +243,11 @@ const ChartMini = (props: ChartMiniProps) => {
       }
     },
     colors: [
-      'rgba(241 148 138 / var(--tw-text-opacity, 1))',
-      'rgba(133 193 233 / var(--tw-text-opacity, 1))',
-      'rgba(118 215 196 / var(--tw-text-opacity, 1))',
-      'rgba(118 215 196 / var(--tw-text-opacity, 1))',
-      'rgba(247 220 111 / var(--tw-text-opacity, 1))'
+      'oklch(0.7 0.15 27 / var(--tw-text-opacity, 1))',
+      'oklch(0.8 0.2 230 / var(--tw-text-opacity, 1))',
+      'oklch(0.75 0.18 190 / var(--tw-text-opacity, 1))',
+      'oklch(0.75 0.18 190 / var(--tw-text-opacity, 1))',
+      'oklch(0.85 0.3 90 / var(--tw-text-opacity, 1))'
     ]
   }
 

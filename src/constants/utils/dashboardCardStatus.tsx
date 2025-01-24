@@ -6,6 +6,7 @@ import {
   RiBatteryLowLine
 } from 'react-icons/ri'
 import { DeviceLogsType } from '../../types/smtrack/devices/deviceType'
+import { DeviceLogType } from '../../types/smtrack/logs/deviceLog'
 
 const probeLimitIcon = (
   tempMin: number,
@@ -63,23 +64,35 @@ const battertyLevel = (deviceData: DeviceLogsType | undefined) => {
   if (plugIn) {
     return <RiBatteryChargeLine size={20} />
   } else if (level === 0) {
-    return <RiBatteryLine size={20}  />
+    return <RiBatteryLine size={20} />
   } else if (level && level <= 50) {
-    return <RiBatteryLowLine size={20}  />
+    return <RiBatteryLowLine size={20} />
   } else if (level && level <= 100) {
-    return <RiBatteryFill size={20}  />
+    return <RiBatteryFill size={20} />
   } else {
-    return <RiAlertLine size={20}  />
+    return <RiAlertLine size={20} />
   }
 }
 
 const tempOfDay = (deviceData: DeviceLogsType | undefined, channel: string) => {
   const max =
     deviceData?.log?.length &&
-    Number(Math.max(...deviceData.log.filter(filter => filter.probe.includes(channel)).map(item => item.tempDisplay))).toFixed(2)
+    Number(
+      Math.max(
+        ...deviceData.log
+          .filter(filter => filter.probe.includes(channel))
+          .map(item => item.tempDisplay)
+      )
+    ).toFixed(2)
   const min =
     deviceData?.log?.length &&
-    Number(Math.min(...deviceData.log.filter(filter => filter.probe.includes(channel)).map(item => item.tempDisplay))).toFixed(2)
+    Number(
+      Math.min(
+        ...deviceData.log
+          .filter(filter => filter.probe.includes(channel))
+          .map(item => item.tempDisplay)
+      )
+    ).toFixed(2)
 
   return {
     min,
@@ -91,148 +104,33 @@ const sdCard = (deviceData: DeviceLogsType | undefined) => {
   return deviceData?.log[0]?.extMemory ?? false
 }
 
-const test = [
-  {
-    battery: 100,
-    createAt: '2025-01-03T17:50:32.000Z',
-    door1: true,
-    door2: false,
-    door3: false,
-    extMemory: false,
-    humidity: Math.floor(Math.random() * 100),
-    humidityDisplay: Math.floor(Math.random() * 100),
-    id: '6777c0f86f441029ff9c31be',
-    internet: true,
-    plug: true,
-    probe: '1',
-    sendTime: '2025-01-03T17:50:25.000Z',
-    serial: 'eTPV1-1P-L0167-0267-002',
-    temp: Math.floor(Math.random() * 32),
-    tempDisplay: Math.floor(Math.random() * 32),
-    tempInternal: 31.75,
-    updateAt: '2025-01-03T17:50:32.000Z'
-  },
-  {
-    battery: 100,
-    createAt: '2025-01-03T17:55:03.000Z',
-    door1: true,
-    door2: false,
-    door3: false,
-    extMemory: false,
-    humidity: Math.floor(Math.random() * 100),
-    humidityDisplay: Math.floor(Math.random() * 100),
-    id: '6777c2076f441029ff9c31bf',
-    internet: true,
-    plug: false,
-    probe: '1',
-    sendTime: '2025-01-03T17:55:00.000Z',
-    serial: 'eTPV1-1P-L0167-0267-002',
-    temp: Math.floor(Math.random() * 32),
-    tempDisplay: Math.floor(Math.random() * 32),
-    tempInternal: 33.25,
-    updateAt: '2025-01-03T17:55:03.000Z'
-  },
-  {
-    battery: 100,
-    createAt: '2025-01-03T18:00:04.000Z',
-    door1: true,
-    door2: false,
-    door3: false,
-    extMemory: false,
-    humidity: Math.floor(Math.random() * 100),
-    humidityDisplay: Math.floor(Math.random() * 100),
-    id: '6777c3346f441029ff9c31c1',
-    internet: true,
-    plug: false,
-    probe: '1',
-    sendTime: '2025-01-03T18:00:00.000Z',
-    serial: 'eTPV1-1P-L0167-0267-002',
-    temp: Math.floor(Math.random() * 32),
-    tempDisplay: Math.floor(Math.random() * 32),
-    tempInternal: 36.75,
-    updateAt: '2025-01-03T18:00:04.000Z'
-  },
-  {
-    battery: 100,
-    createAt: '2025-01-03T18:05:03.000Z',
-    door1: true,
-    door2: false,
-    door3: false,
-    extMemory: false,
-    humidity: Math.floor(Math.random() * 100),
-    humidityDisplay: Math.floor(Math.random() * 100),
-    id: '6777c45f6f441029ff9c31c3',
-    internet: true,
-    plug: false,
-    probe: '1',
-    sendTime: '2025-01-03T18:05:00.000Z',
-    serial: 'eTPV1-1P-L0167-0267-002',
-    temp: Math.floor(Math.random() * 32),
-    tempDisplay: Math.floor(Math.random() * 32),
-    tempInternal: 38,
-    updateAt: '2025-01-03T18:05:03.000Z'
-  },
-  {
-    battery: 100,
-    createAt: '2025-01-03T18:09:04.000Z',
-    door1: true,
-    door2: false,
-    door3: false,
-    extMemory: false,
-    humidity: Math.floor(Math.random() * 100),
-    humidityDisplay: Math.floor(Math.random() * 100),
-    id: '6777c5506f441029ff9c31c7',
-    internet: true,
-    plug: true,
-    probe: '1',
-    sendTime: '2025-01-03T18:09:01.000Z',
-    serial: 'eTPV1-1P-L0167-0267-002',
-    temp: Math.floor(Math.random() * 32),
-    tempDisplay: Math.floor(Math.random() * 32),
-    tempInternal: 38.5,
-    updateAt: '2025-01-03T18:09:04.000Z'
-  },
-  {
-    battery: 100,
-    createAt: '2025-01-03T18:09:12.000Z',
-    door1: true,
-    door2: false,
-    door3: false,
-    extMemory: false,
-    humidity: Math.floor(Math.random() * 100),
-    humidityDisplay: Math.floor(Math.random() * 100),
-    id: '6777c5586f441029ff9c31c8',
-    internet: true,
-    plug: false,
-    probe: '1',
-    sendTime: '2025-01-03T18:09:05.000Z',
-    serial: 'eTPV1-1P-L0167-0267-002',
-    temp: Math.floor(Math.random() * 32),
-    tempDisplay: Math.floor(Math.random() * 32),
-    tempInternal: 38.5,
-    updateAt: '2025-01-03T18:09:12.000Z'
-  },
-  {
-    battery: 100,
-    createAt: '2025-01-03T18:10:03.000Z',
-    door1: true,
-    door2: false,
-    door3: false,
-    extMemory: false,
-    humidity: Math.floor(Math.random() * 100),
-    humidityDisplay: Math.floor(Math.random() * 100),
-    id: '6777c58b6f441029ff9c31c9',
-    internet: true,
-    plug: false,
-    probe: '1',
-    sendTime: '2025-01-03T18:10:00.000Z',
-    serial: 'eTPV1-1P-L0167-0267-002',
-    temp: Math.floor(Math.random() * 32),
-    tempDisplay: Math.floor(Math.random() * 32),
-    tempInternal: 38.5,
-    updateAt: '2025-01-03T18:10:03.000Z'
+const test = (count: number) => {
+  const data = []
+  for (let i = 0; i < count; i++) {
+    data.push({
+      battery: 100,
+      createAt: new Date(Date.now() - i * 300000).toISOString(), // ลดเวลาทีละ 5 นาที
+      door1: true,
+      door2: false,
+      door3: false,
+      extMemory: false,
+      humidity: Math.floor(Math.random() * 100),
+      humidityDisplay: Math.floor(Math.random() * 100),
+      id: `6777c${(i + 1000).toString(16)}6f441029ff9c31${i.toString(16)}`,
+      internet: true,
+      plug: Math.random() > 0.5,
+      probe: '1',
+      sendTime: new Date(Date.now() - i * 300000 - 5000).toISOString(), // ลดเวลาทีละ 5 นาที + 5 วินาที
+      serial: 'eTPV1-1P-L0167-0267-002',
+      temp: Math.floor(Math.random() * 32),
+      tempDisplay: Math.floor(Math.random() * 32),
+      tempInternal: (31 + Math.random() * 10).toFixed(2),
+      updateAt: new Date(Date.now() - i * 300000).toISOString()
+    })
   }
-]
+
+  return data as unknown as DeviceLogType[]
+}
 
 export {
   probeLimitIcon,

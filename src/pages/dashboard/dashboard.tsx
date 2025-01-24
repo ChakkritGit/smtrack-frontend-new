@@ -47,6 +47,7 @@ const Dashboard = () => {
   }, [deviceId, deviceLogs])
 
   const CardStatusComponent = useMemo(() => {
+    if (!deviceLogs?.probe) return
     return <CardStatus deviceData={deviceLogs} />
   }, [deviceId, deviceLogs])
 
@@ -79,18 +80,18 @@ const Dashboard = () => {
           ) : (
             <>
               <div className='flex items-center gap-4 mt-4 flex-wrap lg:flex-wrap xl:flex-nowrap'>
-                <div className='w-full xl:w-[40%] lg:h-[295px] bg-base-100 rounded-btn overflow-hidden'>
+                <div className='w-full xl:w-[35%] lg:h-[295px] bg-base-100 rounded-btn overflow-hidden'>
                   {CardInfoComponent}
                 </div>
-                <div className='grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4 w-full xl:w-[60%] justify-items-center'>
+                <div className='grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4 w-full xl:w-[65%] justify-items-center'>
                   {CardStatusComponent}
                 </div>
               </div>
-              <div className='flex items-center flex-wrap xl:flex-nowrap gap-4 mt-4'>
-                <div className='w-full xl:w-[50%] h-[435px]'>
+              <div className='grid grid-cols-1 lg:grid-cols-2 mt-4 gap-3'>
+                <div className='w-full h-[435px]'>
                   <ChartSwiperWrapper deviceLogs={deviceLogs} />
                 </div>
-                <div className='w-full xl:w-[50%] h-[435px]'>
+                <div className='w-full h-[435px]'>
                   <DataTableWrapper deviceLogs={deviceLogs} />
                 </div>
               </div>

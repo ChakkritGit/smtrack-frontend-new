@@ -127,6 +127,10 @@ export default {
     // device tool tip
     deviceToolDashboard: 'แดชบอร์ด',
     deviceToolAdjust: 'ปรับค่า',
+    fullChart: 'กราฟแบบเต็ม',
+    fullTable: 'ตารางแบบเต็ม',
+    stopSlide: 'หยุดสไลด์',
+    startSlide: 'เริ่มสไลด์',
 
     // dashboard
     temperatureName: 'อุณหภูมิ',
@@ -341,9 +345,11 @@ export default {
     addWarrantyButton: 'เพิ่มการรับประกัน',
     reloadButton: 'รีโหลด',
     editButton: 'แก้ไข',
+    deleteButton: 'ลบ',
     closeDialogButton: 'ปิดหน้าต่าง',
     continueButton: 'ดำเนินการต่อ',
     loginButton: 'เข้าสู่ระบบ',
+    menuButton: 'เมนู',
 
     // dropdown
     selectDeviceDrop: 'เลือกอุปกรณ์',
@@ -413,6 +419,7 @@ export default {
     lightMode: 'สว่าง',
     darkMode: 'มืด',
     systemMode: 'ระบบ',
+    themeMode: 'ธีม',
     reportText: 'รายงาน',
     switchModeMain: '*สลับโหมด smtrack และ TMS',
     readAll: 'อ่านทั้งหมด',
@@ -420,6 +427,8 @@ export default {
     list: 'ตาราง',
     grid: 'การ์ด',
     expandSide: 'ย่อแถบเมนู',
+    selectPerPage: 'จำนวนต่อหน้า',
+    selectValue: 'เลือก',
 
     // connect
     ipAddress: 'IP',

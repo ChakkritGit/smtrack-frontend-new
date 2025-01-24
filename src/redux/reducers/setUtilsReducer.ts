@@ -8,7 +8,7 @@ const initialState: UtilsState = {
   tokenDecode: undefined,
   userProfile: undefined,
   globalSearch: '',
-  themeMode: localStorage.getItem("theme") ?? "light",
+  themeMode: localStorage.getItem("theme") ?? "",
   tmsMode: cookies.get('tmsMode') ?? false,
   isExpand: localStorage.getItem('expandaside') === 'true',
   hosId: cookies.get('hosId'),

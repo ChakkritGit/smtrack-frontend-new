@@ -66,7 +66,6 @@ const MainSmtrack = () => {
     }
   }, [location, token, tokenDecode])
 
-
   return (
     <main className='h-full bg-base-200 duration-300'>
       <div className='drawer lg:drawer-open w-auto'>

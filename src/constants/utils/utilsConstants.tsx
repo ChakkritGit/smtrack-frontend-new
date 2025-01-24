@@ -33,7 +33,7 @@ export const cookieOptions: CookieSetOptions = {
 }
 
 const getRoleLabel = (
-  role: UserRole | undefined,
+  role: UserRole | undefined | String,
   t: (key: string) => string
 ): string => {
   switch (role) {

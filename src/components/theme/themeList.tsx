@@ -1,14 +1,21 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { setTheme } from '../../redux/actions/utilsActions'
+import { useTranslation } from 'react-i18next'
 
 const ThemeList = () => {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
   const { themeMode } = useSelector((state: RootState) => state.utils)
 
-  const changTheme = (themeName: string) => {
+  const changeTheme = (themeName: string) => {
     dispatch(setTheme(themeName))
     localStorage.setItem('theme', themeName)
+  }
+
+  const changeToSystem = () => {
+    dispatch(setTheme(''))
+    localStorage.removeItem('theme')
   }
 
   return (
@@ -44,8 +51,60 @@ const ThemeList = () => {
         className='dropdown-content z-[80] bg-base-200 text-base-content rounded-box top-px h-[28.6rem] max-h-[calc(100vh-10rem)] w-56 overflow-y-auto border border-white/5 shadow-2xl outline outline-1 outline-black/5 mt-16'
       >
         <div className='grid grid-cols-1 gap-3 p-3 z-[80]'>
+          <div className='divider mt-0 mb-2 h-3 text-base-content/50 text-[16px]'>
+            {t('systemMode')}
+          </div>
           <button
-            onClick={() => changTheme('light')}
+            onClick={changeToSystem}
+            className='outline-base-content text-start outline-offset-4'
+            data-set-theme='system'
+          >
+            <span
+              className='relative grid grid-cols-2 rounded-btn text-base-content h-[44px] w-full cursor-pointer'
+              data-theme='system'
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                width='18'
+                height='18'
+                viewBox='0 0 24 24'
+                className={`${
+                  themeMode === '' ? 'visible' : 'invisible'
+                } fill-white shrink-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-btn bg-primary w-[20px] h-[20px] p-1`}
+              >
+                <path d='M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z'></path>
+              </svg>
+              <span
+                className='bg-white text-black rounded-l-btn h-[44px] flex flex-col items-center justify-center gap-1 p-4'
+                data-theme='light'
+              >
+                <span className='text-sm font-medium'>Light</span>
+                <div className='flex gap-1'>
+                  <span className='bg-primary rounded-badge w-2 h-2'></span>
+                  <span className='bg-secondary rounded-badge w-2 h-2'></span>
+                  <span className='bg-accent rounded-badge w-2 h-2'></span>
+                  <span className='bg-neutral rounded-badge w-2 h-2'></span>
+                </div>
+              </span>
+              <span
+                className='bg-black text-white rounded-r-btn h-[44px] flex flex-col items-center justify-center gap-1 p-4'
+                data-theme='dark'
+              >
+                <span className='text-sm font-medium'>Dark</span>
+                <div className='flex gap-1'>
+                  <span className='bg-primary rounded-badge w-2 h-2'></span>
+                  <span className='bg-secondary rounded-badge w-2 h-2'></span>
+                  <span className='bg-accent rounded-badge w-2 h-2'></span>
+                  <span className='bg-neutral rounded-badge w-2 h-2'></span>
+                </div>
+              </span>
+            </span>
+          </button>
+          <div className='divider my-2 h-3 text-base-content/50 text-[16px]'>
+            {t('themeMode')}
+          </div>
+          <button
+            onClick={() => changeTheme('light')}
             className='outline-base-content text-start outline-offset-4 '
             data-set-theme='light'
           >
@@ -79,7 +138,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('dark')}
+            onClick={() => changeTheme('dark')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='dark'
           >
@@ -113,7 +172,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('cupcake')}
+            onClick={() => changeTheme('cupcake')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='cupcake'
           >
@@ -147,7 +206,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('bumblebee')}
+            onClick={() => changeTheme('bumblebee')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='bumblebee'
           >
@@ -181,7 +240,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('emerald')}
+            onClick={() => changeTheme('emerald')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='emerald'
           >
@@ -215,7 +274,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('corporate')}
+            onClick={() => changeTheme('corporate')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='corporate'
           >
@@ -249,7 +308,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('synthwave')}
+            onClick={() => changeTheme('synthwave')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='synthwave'
           >
@@ -283,7 +342,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('retro')}
+            onClick={() => changeTheme('retro')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='retro'
           >
@@ -317,7 +376,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('cyberpunk')}
+            onClick={() => changeTheme('cyberpunk')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='cyberpunk'
           >
@@ -351,7 +410,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('valentine')}
+            onClick={() => changeTheme('valentine')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='valentine'
           >
@@ -385,7 +444,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('halloween')}
+            onClick={() => changeTheme('halloween')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='halloween'
           >
@@ -419,7 +478,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('garden')}
+            onClick={() => changeTheme('garden')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='garden'
           >
@@ -453,7 +512,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('forest')}
+            onClick={() => changeTheme('forest')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='forest'
           >
@@ -487,7 +546,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('aqua')}
+            onClick={() => changeTheme('aqua')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='aqua'
           >
@@ -521,7 +580,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('lofi')}
+            onClick={() => changeTheme('lofi')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='lofi'
           >
@@ -555,7 +614,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('pastel')}
+            onClick={() => changeTheme('pastel')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='pastel'
           >
@@ -589,7 +648,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('fantasy')}
+            onClick={() => changeTheme('fantasy')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='fantasy'
           >
@@ -623,7 +682,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('wireframe')}
+            onClick={() => changeTheme('wireframe')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='wireframe'
           >
@@ -657,7 +716,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('black')}
+            onClick={() => changeTheme('black')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='black'
           >
@@ -691,7 +750,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('luxury')}
+            onClick={() => changeTheme('luxury')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='luxury'
           >
@@ -725,7 +784,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('dracula')}
+            onClick={() => changeTheme('dracula')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='dracula'
           >
@@ -759,7 +818,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('cmyk')}
+            onClick={() => changeTheme('cmyk')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='cmyk'
           >
@@ -793,7 +852,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('autumn')}
+            onClick={() => changeTheme('autumn')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='autumn'
           >
@@ -827,7 +886,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('business')}
+            onClick={() => changeTheme('business')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='business'
           >
@@ -861,7 +920,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('acid')}
+            onClick={() => changeTheme('acid')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='acid'
           >
@@ -895,7 +954,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('lemonade')}
+            onClick={() => changeTheme('lemonade')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='lemonade'
           >
@@ -929,7 +988,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('night')}
+            onClick={() => changeTheme('night')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='night'
           >
@@ -963,7 +1022,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('coffee')}
+            onClick={() => changeTheme('coffee')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='coffee'
           >
@@ -997,7 +1056,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('winter')}
+            onClick={() => changeTheme('winter')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='winter'
           >
@@ -1031,7 +1090,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('dim')}
+            onClick={() => changeTheme('dim')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='dim'
           >
@@ -1065,7 +1124,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('nord')}
+            onClick={() => changeTheme('nord')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='nord'
           >
@@ -1099,7 +1158,7 @@ const ThemeList = () => {
             </span>
           </button>
           <button
-            onClick={() => changTheme('sunset')}
+            onClick={() => changeTheme('sunset')}
             className='outline-base-content text-start outline-offset-4'
             data-set-theme='sunset'
           >

@@ -36,12 +36,9 @@ const CardInFoComponent = (props: PropsType) => {
             </p>
           </div>
         </div>
-        <div>
-          <RiSettings3Line
-            size={24}
-            className='cursor-pointer hover:fill-primary duration-300'
-          />
-        </div>
+        <button className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 tooltip tooltip-left' data-tip={t('adjustMents')}>
+          <RiSettings3Line size={24} />
+        </button>
       </div>
       <div className='flex justify-between flex-col lg:flex-row gap-3 mt-4 h-full'>
         <div className='flex justify-center items-center w-full lg:w-[35%] h-3/4'>

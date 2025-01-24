@@ -30,6 +30,7 @@ const DataTableWrapper = (props: DataTableWrapperProps) => {
   }, [isPause])
 
   const DataTableFragment = useMemo(() => {
+    if (!deviceLogs?.probe) return
     return (
       <Swiper
         onSwiper={swiper => (swiperRef.current = swiper)}
@@ -77,13 +78,13 @@ const DataTableWrapper = (props: DataTableWrapperProps) => {
           <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
             P{2}
           </span>
-          <DataTableMini logData={test} />
+          <DataTableMini logData={test(80)} />
         </SwiperSlide>
         <SwiperSlide key={3}>
           <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
             P{3}
           </span>
-          <DataTableMini logData={test} />
+          <DataTableMini logData={test(80)} />
         </SwiperSlide>
       </Swiper>
     )
@@ -94,14 +95,23 @@ const DataTableWrapper = (props: DataTableWrapperProps) => {
       <div className='flex items-center justify-between px-3'>
         <div className='flex items-center gap-3'>
           <span className='text-[20px] font-bold'>{t('pageChart')}</span>
-          <button
-            className='btn btn-primary bg-opacity-15 text-primary border-primary border-2 p-0 hover:opacity-50 hover:border-primary hover:bg-transparent duration-300 max-h-[28px] min-h-[28px] max-w-[28px] min-w-[28px]'
-            onClick={togglePause}
+          <label
+            htmlFor='button'
+            className='tooltip tooltip-right'
+            data-tip={isPause ? t('startSlide') : t('stopSlide')}
           >
-            {isPause ? <RiPlayLine size={20} /> : <RiStopLine size={20} />}
-          </button>
+            <button
+              className='btn btn-primary bg-opacity-15 text-primary border-primary border-2 p-0 hover:opacity-50 hover:border-primary hover:bg-transparent duration-300 max-h-[28px] min-h-[28px] max-w-[28px] min-w-[28px]'
+              onClick={togglePause}
+            >
+              {isPause ? <RiPlayLine size={20} /> : <RiStopLine size={20} />}
+            </button>
+          </label>
         </div>
-        <button className='btn btn-ghost p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px]'>
+        <button
+          className='btn btn-ghost flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
+          data-tip={t('fullTable')}
+        >
           <RiFullscreenLine size={20} />
         </button>
       </div>

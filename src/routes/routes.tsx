@@ -68,7 +68,6 @@ const Routes = () => {
   useEffect(() => {
     const htmlElement = document.documentElement
     htmlElement.setAttribute('data-theme', themeMode)
-    // htmlElement.classList.add("bg-base-200")
   }, [themeMode])
 
   useEffect(() => {

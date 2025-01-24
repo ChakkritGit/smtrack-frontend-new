@@ -30,7 +30,7 @@ const LanguageList = () => {
         </svg>
       </div>
       <div tabIndex={0}
-        className="dropdown-content bg-base-200 text-base-content rounded-box top-px mt-16 max-h-[calc(100vh-10rem)] w-40 overflow-y-auto border border-white/5 shadow-2xl outline outline-1 outline-black/5">
+        className="dropdown-content bg-base-100 text-base-content rounded-box top-px mt-16 max-h-[calc(100vh-10rem)] w-40 overflow-y-auto border border-white/5 shadow-2xl outline outline-1 outline-black/5">
         <ul className="menu menu-sm gap-1">
           <li onClick={() => changeLanguage('th')}>
             <button className={`${langs === "th" ? "active" : ""} flex items-center justify-start h-9`}>

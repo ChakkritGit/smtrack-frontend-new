@@ -1,9 +1,14 @@
 import { lazy, Suspense } from 'react'
 import { RouteObject } from 'react-router-dom'
-import { HomeSkeleton, DashboardSkeleton } from '../components/skeleton'
+import {
+  HomeSkeleton,
+  DashboardSkeleton,
+  UserSkeleton
+} from '../components/skeleton'
 import { HideFlashFW, HideSetting } from '../middleware/Auth'
 const Home = lazy(() => import('../pages/home/home'))
 const Dashboard = lazy(() => import('../pages/dashboard/dashboard'))
+const Users = lazy(() => import('../pages/users/users'))
 
 const smtrackChildren: RouteObject[] = [
   {
@@ -30,8 +35,12 @@ const smtrackChildren: RouteObject[] = [
     children: [
       {
         path: 'permission',
-        element: <>permission</>,
-        errorElement: <></>
+        element: (
+          <Suspense fallback={<UserSkeleton />}>
+            <Users />
+          </Suspense>
+        ),
+        errorElement: <>error</>
       },
       {
         path: 'management',
