@@ -4,6 +4,7 @@ import DataTable, { TableColumn } from 'react-data-table-component'
 import { useEffect, useState } from 'react'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import { useSelector } from 'react-redux'
+import DataTableNoData from '../../skeleton/table/noData'
 
 interface TableMiniProps {
   logData: DeviceLogType[]
@@ -74,14 +75,15 @@ const DataTableMini = (props: TableMiniProps) => {
   return (
     <div className='dataTableWrapper mb-5'>
       <DataTable
+        dense
+        pagination
+        fixedHeader
         responsive={true}
         columns={columns}
         data={tableData}
-        pagination
-        paginationRowsPerPageOptions={[12, 30, 50, 100]}
+        noDataComponent={<DataTableNoData />}
         paginationPerPage={12}
-        dense
-        fixedHeader
+        paginationRowsPerPageOptions={[12, 30, 50, 100]}
         fixedHeaderScrollHeight='270px'
       />
     </div>
