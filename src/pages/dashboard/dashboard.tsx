@@ -42,12 +42,10 @@ const Dashboard = () => {
   }, [deviceId])
 
   const CardInfoComponent = useMemo(() => {
-    if (!deviceLogs?.probe) return
     return <CardInFoComponent deviceData={deviceLogs} />
   }, [deviceId, deviceLogs])
 
   const CardStatusComponent = useMemo(() => {
-    if (!deviceLogs?.probe) return
     return <CardStatus deviceData={deviceLogs} />
   }, [deviceId, deviceLogs])
 

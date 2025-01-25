@@ -28,6 +28,8 @@ const ChartMini = (props: ChartMiniProps) => {
 
   const series: ApexAxisChartSeries = [
     {
+      type: 'area',
+      zIndex: 50,
       name: t('temperatureName'),
       data: mappedData.map(data => ({
         x: data.time,
@@ -35,6 +37,8 @@ const ChartMini = (props: ChartMiniProps) => {
       }))
     },
     {
+      type: 'area',
+      zIndex: 40,
       name: t('humidityName'),
       data: mappedData.map(data => ({
         x: data.time,
@@ -42,31 +46,36 @@ const ChartMini = (props: ChartMiniProps) => {
       }))
     },
     {
+      type: 'area',
       name: t('tempMin'),
+      zIndex: 60,
       data: mappedData.map(data => ({
         x: data.time,
         y: tempMin
       }))
     },
     {
+      type: 'area',
       name: t('tempMax'),
+      zIndex: 60,
       data: mappedData.map(data => ({
         x: data.time,
         y: tempMax
       }))
     },
     {
+      type: 'area',
       name: t('dashDoor'),
+      zIndex: 30,
       data: mappedData.map(data => ({
         x: data.time,
         y: data.door
-      }))
+      })),
     }
   ]
 
   const options: ApexCharts.ApexOptions = {
     chart: {
-      type: 'line',
       animations: {
         enabled: true,
         animateGradually: {
@@ -159,10 +168,6 @@ const ChartMini = (props: ChartMiniProps) => {
     },
     grid: {
       show: true,
-      // borderColor:
-      //   theme.mode === 'dark'
-      //     ? 'var(--grid-line-dark)'
-      //     : 'var(--grid-line-light)',
       strokeDashArray: 5,
       xaxis: {
         lines: {
@@ -195,7 +200,7 @@ const ChartMini = (props: ChartMiniProps) => {
           show: true
         },
         axisBorder: {
-          show: false,
+          show: true,
           color: 'oklch(72% 0.1938 31 / 1)'
         },
         min: minTempAvg,
@@ -208,7 +213,7 @@ const ChartMini = (props: ChartMiniProps) => {
           show: true
         },
         axisBorder: {
-          show: false,
+          show: true,
           color: 'oklch(79% 0.1305 238 / 1)'
         },
         min: 0,
@@ -248,12 +253,35 @@ const ChartMini = (props: ChartMiniProps) => {
       'oklch(81% 0.1696 175 / var(--tw-text-opacity, 1))',
       'oklch(81% 0.1696 175 / var(--tw-text-opacity, 1))',
       'oklch(90% 0.1378 90 / var(--tw-text-opacity, 1))'
-    ]
+    ],
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shade: 'light',
+        type: 'vertical',
+        shadeIntensity: 0.5,
+        gradientToColors: [
+          'oklch(79.71% 0.1332 31 / var(--tw-text-opacity, 1))',
+          'oklch(84.41% 0.0937 238 / var(--tw-text-opacity, 1))',
+          'oklch(0% 0 0 / var(--tw-text-opacity, 0))',
+          'oklch(0% 0 0 / var(--tw-text-opacity, 0))',
+          'oklch(0% 0 0 / var(--tw-text-opacity, 0))',
+        ],
+        inverseColors: true,
+        opacityFrom: 0.45,
+        opacityTo: 0,
+        stops: [0, 100]
+      }
+    },
+    legend: {
+      position: 'bottom',
+      horizontalAlign: 'right'
+    },
   }
 
   return (
     <div className='mb-5'>
-      <Chart type='line' options={options} series={series} height={300} />
+      <Chart options={options} series={series} height={310} />
     </div>
   )
 }

@@ -6,7 +6,6 @@ import {
   RiBatteryLowLine
 } from 'react-icons/ri'
 import { DeviceLogsType } from '../../types/smtrack/devices/deviceType'
-import { DeviceLogType } from '../../types/smtrack/logs/deviceLog'
 
 const probeLimitIcon = (
   tempMin: number,
@@ -104,34 +103,6 @@ const sdCard = (deviceData: DeviceLogsType | undefined) => {
   return deviceData?.log[0]?.extMemory ?? false
 }
 
-const test = (count: number) => {
-  const data = []
-  for (let i = 0; i < count; i++) {
-    data.push({
-      battery: 100,
-      createAt: new Date(Date.now() - i * 300000).toISOString(), // ลดเวลาทีละ 5 นาที
-      door1: true,
-      door2: false,
-      door3: false,
-      extMemory: false,
-      humidity: Math.floor(Math.random() * 100),
-      humidityDisplay: Math.floor(Math.random() * 100),
-      id: `6777c${(i + 1000).toString(16)}6f441029ff9c31${i.toString(16)}`,
-      internet: true,
-      plug: Math.random() > 0.5,
-      probe: '1',
-      sendTime: new Date(Date.now() - i * 300000 - 5000).toISOString(), // ลดเวลาทีละ 5 นาที + 5 วินาที
-      serial: 'eTPV1-1P-L0167-0267-002',
-      temp: Math.floor(Math.random() * 32),
-      tempDisplay: Math.floor(Math.random() * 32),
-      tempInternal: (31 + Math.random() * 10).toFixed(2),
-      updateAt: new Date(Date.now() - i * 300000).toISOString()
-    })
-  }
-
-  return data as unknown as DeviceLogType[]
-}
-
 export {
   probeLimitIcon,
   tempLimit,
@@ -141,5 +112,4 @@ export {
   battertyLevel,
   tempOfDay,
   sdCard,
-  test
 }

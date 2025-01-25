@@ -80,8 +80,8 @@ const Home = () => {
             wardId ? `ward=${wardId}&` : ''
           }page=${page}&perpage=${size}`
         )
-        setDevices(response.data.data.devices)
-        setTotalRows(response.data.data.total)
+        setDevices(response.data.data?.devices)
+        setTotalRows(response.data.data?.total)
       } catch (error) {
         if (error instanceof AxiosError) {
           console.error(error.message)
@@ -132,7 +132,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    const filter = devices.filter(f => {
+    const filter = devices?.filter(f => {
       const matchesSearch =
         f.id?.toLocaleLowerCase().includes(globalSearch.toLocaleLowerCase()) ||
         f.name
@@ -177,8 +177,8 @@ const Home = () => {
         {role === 'SUPER' && (
           <span className='bg-base-300 p-2 px-3 rounded-btn'>
             {`${
-              hospital.filter(f => f.id?.includes(hosId))[0]?.hosName ??
-              userProfile?.ward.hospital.hosName
+              hospital?.filter(f => f.id?.includes(hosId))[0]?.hosName ??
+              userProfile?.ward?.hospital?.hosName
             } - ${
               ward?.filter(w => w.id?.includes(wardId))[0]?.wardName ?? 'ALL'
             }`}

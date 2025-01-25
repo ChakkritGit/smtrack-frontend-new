@@ -66,134 +66,97 @@ const CardStatus = (props: PropsType) => {
           modules={[Autoplay, Pagination, EffectCreative]}
           className='mySwiper h-full'
         >
-          {deviceData?.probe.map((item, index) => {
-            const findItem = deviceData.log.find(itemTwo =>
-              itemTwo.probe.includes(item.channel)
-            )
-            return (
-              <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
-                <div className='flex items-center gap-2 h-[30%]'>
-                  <div
-                    className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-                      probeLimitIcon(
+          {deviceData ? (
+            deviceData?.probe?.map((item, index) => {
+              const findItem = deviceData.log.find(itemTwo =>
+                itemTwo.probe.includes(item.channel)
+              )
+              return (
+                <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
+                  <div className='flex items-center gap-2 h-[30%]'>
+                    <div
+                      className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
+                        probeLimitIcon(
+                          item.tempMin,
+                          item.tempMax,
+                          findItem?.tempDisplay,
+                          item.humiMin,
+                          item.humiMax,
+                          findItem?.humidityDisplay
+                        )
+                          ? 'text-base-content bg-opacity-80 bg-red-500'
+                          : ''
+                      }`}
+                    >
+                      {probeLimitIcon(
                         item.tempMin,
                         item.tempMax,
                         findItem?.tempDisplay,
                         item.humiMin,
                         item.humiMax,
                         findItem?.humidityDisplay
-                      )
-                        ? 'text-base-content bg-opacity-80 bg-red-500'
-                        : ''
-                    }`}
-                  >
-                    {probeLimitIcon(
-                      item.tempMin,
-                      item.tempMax,
-                      findItem?.tempDisplay,
-                      item.humiMin,
-                      item.humiMax,
-                      findItem?.humidityDisplay
-                    ) ? (
-                      <RiErrorWarningLine size={20} />
-                    ) : (
-                      <RiTempColdLine size={20} />
-                    )}
+                      ) ? (
+                        <RiErrorWarningLine size={20} />
+                      ) : (
+                        <RiTempColdLine size={20} />
+                      )}
+                    </div>
+                    <span>{t('dashProbe')}</span>
+                    <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
+                      P{item.channel}
+                    </span>
                   </div>
-                  <span>{t('dashProbe')}</span>
-                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
-                    P{item.channel}
-                  </span>
-                </div>
-                <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
-                  <div
-                    className={
-                      tempLimit(
-                        item.tempMin,
-                        item.tempMax,
-                        findItem?.tempDisplay
-                      )
-                        ? 'text-red-500'
-                        : ''
-                    }
-                  >
-                    <span>Temp: </span>
-                    <span>{findItem?.tempDisplay.toFixed(2) ?? '—'}</span>
-                    <sub> °C</sub>
+                  <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
+                    <div
+                      className={
+                        tempLimit(
+                          item.tempMin,
+                          item.tempMax,
+                          findItem?.tempDisplay
+                        )
+                          ? 'text-red-500'
+                          : ''
+                      }
+                    >
+                      <span>Temp: </span>
+                      <span>{findItem?.tempDisplay.toFixed(2) ?? '—'}</span>
+                      <sub> °C</sub>
+                    </div>
+                    <div
+                      className={
+                        humiLimit(
+                          item.humiMin,
+                          item.humiMax,
+                          findItem?.humidityDisplay
+                        )
+                          ? 'text-red-500'
+                          : ''
+                      }
+                    >
+                      <span>Humi: </span>
+                      <span>{findItem?.humidityDisplay.toFixed(2) ?? '—'}</span>
+                      <sub> %RH</sub>
+                    </div>
                   </div>
-                  <div
-                    className={
-                      humiLimit(
-                        item.humiMin,
-                        item.humiMax,
-                        findItem?.humidityDisplay
-                      )
-                        ? 'text-red-500'
-                        : ''
-                    }
-                  >
-                    <span>Humi: </span>
-                    <span>{findItem?.humidityDisplay.toFixed(2) ?? '—'}</span>
-                    <sub> %RH</sub>
-                  </div>
-                </div>
-              </SwiperSlide>
-            )
-          })}
-          <SwiperSlide className='p-3 h-full bg-base-100' key={2}>
-            <div className='flex items-center gap-2 h-[30%]'>
-              <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-                {probeLimitIcon(0, 0, 0, 0, 0, 0) ? (
-                  <RiErrorWarningLine size={20} />
-                ) : (
+                </SwiperSlide>
+              )
+            })
+          ) : (
+            <SwiperSlide className='p-3 h-full bg-base-100'>
+              <div className='flex items-center gap-2 h-[30%]'>
+                <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
                   <RiTempColdLine size={20} />
-                )}
+                </div>
+                <span>{t('dashProbe')}</span>
+                <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
+                  P—
+                </span>
               </div>
-              <span>{t('dashProbe')}</span>
-              <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
-                P2
-              </span>
-            </div>
-            <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
-              <div>
-                <span>Temp: </span>
-                <span>0.00</span>
-                <sub> °C</sub>
+              <div className='flex items-center justify-center text-[18px] mt-1 font-bold h-[70%]'>
+                —
               </div>
-              <div>
-                <span>Humi: </span>
-                <span>0.00</span>
-                <sub> %RH</sub>
-              </div>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide className='p-3 h-full bg-base-100' key={3}>
-            <div className='flex items-center gap-2 h-[30%]'>
-              <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
-                {probeLimitIcon(0, 0, 0, 0, 0, 0) ? (
-                  <RiErrorWarningLine size={20} />
-                ) : (
-                  <RiTempColdLine size={20} />
-                )}
-              </div>
-              <span>{t('dashProbe')}</span>
-              <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
-                P3
-              </span>
-            </div>
-            <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
-              <div>
-                <span>Temp: </span>
-                <span>—</span>
-                <sub> °C</sub>
-              </div>
-              <div>
-                <span>Humi: </span>
-                <span>—</span>
-                <sub> %RH</sub>
-              </div>
-            </div>
-          </SwiperSlide>
+            </SwiperSlide>
+          )}
         </Swiper>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
@@ -218,7 +181,11 @@ const CardStatus = (props: PropsType) => {
             deviceData?.online ? 'text-red-500' : ''
           }`}
         >
-          {deviceData?.online ? t('stateDisconnect') : t('stateConnect')}
+          {deviceData
+            ? deviceData?.online
+              ? t('stateDisconnect')
+              : t('stateConnect')
+            : '—'}
         </div>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
@@ -243,7 +210,11 @@ const CardStatus = (props: PropsType) => {
             doorOpen(deviceData) ? 'text-red-500' : ''
           }`}
         >
-          {doorOpen(deviceData) ? t('doorOpen') : t('doorClose')}
+          {deviceData
+            ? doorOpen(deviceData)
+              ? t('doorOpen')
+              : t('doorClose')
+            : '—'}
         </div>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
@@ -268,7 +239,11 @@ const CardStatus = (props: PropsType) => {
             unPlug(deviceData) ? 'text-red-500' : ''
           }`}
         >
-          {unPlug(deviceData) ? t('stateProblem') : t('stateNormal')}
+          {deviceData
+            ? unPlug(deviceData)
+              ? t('stateProblem')
+              : t('stateNormal')
+            : '—'}
         </div>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
@@ -332,183 +307,90 @@ const CardStatus = (props: PropsType) => {
           modules={[Autoplay, Pagination, EffectCreative]}
           className='mySwiper h-full'
         >
-          {deviceData?.probe.map((item, index) => {
-            const findItem = deviceData.log.find(itemTwo =>
-              itemTwo.probe.includes(item.channel)
-            )
-            return (
-              <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
-                <div className='flex items-center gap-2 h-[30%]'>
-                  <div
-                    className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-                      probeLimitIcon(
-                        item.tempMin,
-                        item.tempMax,
-                        findItem?.tempDisplay,
-                        item.humiMin,
-                        item.humiMax,
-                        findItem?.humidityDisplay
-                      )
-                        ? 'text-base-content bg-opacity-80 bg-red-500'
-                        : ''
-                    }`}
-                  >
-                    <HiOutlineArrowsUpDown size={20} />
-                  </div>
-                  <label
-                    htmlFor='span'
-                    className='tooltip tooltip-bottom'
-                    data-tip={t('dashTempofDay')}
-                  >
-                    <span className='truncate block max-w-[55px] lg:max-w-[70px]'>
-                      {t('dashTempofDay')}
+          {deviceData ? (
+            deviceData?.probe?.map((item, index) => {
+              const findItem = deviceData.log.find(itemTwo =>
+                itemTwo.probe.includes(item.channel)
+              )
+              return (
+                <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
+                  <div className='flex items-center gap-2 h-[30%]'>
+                    <div
+                      className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
+                        probeLimitIcon(
+                          item.tempMin,
+                          item.tempMax,
+                          findItem?.tempDisplay,
+                          item.humiMin,
+                          item.humiMax,
+                          findItem?.humidityDisplay
+                        )
+                          ? 'text-base-content bg-opacity-80 bg-red-500'
+                          : ''
+                      }`}
+                    >
+                      <HiOutlineArrowsUpDown size={20} />
+                    </div>
+                    <label
+                      htmlFor='span'
+                      className='tooltip tooltip-bottom'
+                      data-tip={t('dashTempofDay')}
+                    >
+                      <span className='truncate block max-w-[55px] lg:max-w-[70px]'>
+                        {t('dashTempofDay')}
+                      </span>
+                    </label>
+                    <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
+                      P{item.channel}
                     </span>
-                  </label>
-                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
-                    P{item.channel}
+                  </div>
+                  <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
+                    <div>
+                      <span>↑ </span>
+                      <span>
+                        {deviceData?.log
+                          ? tempOfDay(deviceData, item.channel).max
+                          : '—'}{' '}
+                        °C
+                      </span>
+                    </div>
+                    <div>
+                      <span>↓</span>
+                      <span>
+                        {deviceData?.log
+                          ? tempOfDay(deviceData, item.channel).max
+                          : '—'}{' '}
+                        °C
+                      </span>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              )
+            })
+          ) : (
+            <SwiperSlide className='p-3 h-full bg-base-100'>
+              <div className='flex items-center gap-2 h-[30%]'>
+                <div className='flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px]'>
+                  <HiOutlineArrowsUpDown size={20} />
+                </div>
+                <label
+                  htmlFor='span'
+                  className='tooltip tooltip-bottom'
+                  data-tip={t('dashTempofDay')}
+                >
+                  <span className='truncate block max-w-[55px] lg:max-w-[70px]'>
+                    {t('dashTempofDay')}
                   </span>
-                </div>
-                <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
-                  <div>
-                    <span>↑ </span>
-                    <span>
-                      {deviceData?.log
-                        ? tempOfDay(deviceData, item.channel).max
-                        : '—'}{' '}
-                      °C
-                    </span>
-                  </div>
-                  <div>
-                    <span>↓</span>
-                    <span>
-                      {deviceData?.log
-                        ? tempOfDay(deviceData, item.channel).max
-                        : '—'}{' '}
-                      °C
-                    </span>
-                  </div>
-                </div>
-              </SwiperSlide>
-            )
-          })}
-          {deviceData?.probe.map((item, index) => {
-            const findItem = deviceData.log.find(itemTwo =>
-              itemTwo.probe.includes(item.channel)
-            )
-            return (
-              <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
-                <div className='flex items-center gap-2 h-[30%]'>
-                  <div
-                    className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-                      probeLimitIcon(
-                        item.tempMin,
-                        item.tempMax,
-                        findItem?.tempDisplay,
-                        item.humiMin,
-                        item.humiMax,
-                        findItem?.humidityDisplay
-                      )
-                        ? 'text-base-content bg-opacity-80 bg-red-500'
-                        : ''
-                    }`}
-                  >
-                    <HiOutlineArrowsUpDown size={20} />
-                  </div>
-                  <label
-                    htmlFor='span'
-                    className='tooltip tooltip-bottom'
-                    data-tip={t('dashTempofDay')}
-                  >
-                    <span className='truncate block max-w-[55px] lg:max-w-[70px]'>
-                      {t('dashTempofDay')}
-                    </span>
-                  </label>
-                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
-                    P2
-                  </span>
-                </div>
-                <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
-                  <div>
-                    <span>↑ </span>
-                    <span>
-                      {deviceData?.log
-                        ? tempOfDay(deviceData, item.channel).max
-                        : '—'}{' '}
-                      °C
-                    </span>
-                  </div>
-                  <div>
-                    <span>↓</span>
-                    <span>
-                      {deviceData?.log
-                        ? tempOfDay(deviceData, item.channel).max
-                        : '—'}{' '}
-                      °C
-                    </span>
-                  </div>
-                </div>
-              </SwiperSlide>
-            )
-          })}
-          {deviceData?.probe.map((item, index) => {
-            const findItem = deviceData.log.find(itemTwo =>
-              itemTwo.probe.includes(item.channel)
-            )
-            return (
-              <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
-                <div className='flex items-center gap-2 h-[30%]'>
-                  <div
-                    className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-                      probeLimitIcon(
-                        item.tempMin,
-                        item.tempMax,
-                        findItem?.tempDisplay,
-                        item.humiMin,
-                        item.humiMax,
-                        findItem?.humidityDisplay
-                      )
-                        ? 'text-base-content bg-opacity-80 bg-red-500'
-                        : ''
-                    }`}
-                  >
-                    <HiOutlineArrowsUpDown size={20} />
-                  </div>
-                  <label
-                    htmlFor='span'
-                    className='tooltip tooltip-bottom'
-                    data-tip={t('dashTempofDay')}
-                  >
-                    <span className='truncate block max-w-[55px] lg:max-w-[70px]'>
-                      {t('dashTempofDay')}
-                    </span>
-                  </label>
-                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
-                    P3
-                  </span>
-                </div>
-                <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
-                  <div>
-                    <span>↑ </span>
-                    <span>
-                      {deviceData?.log
-                        ? tempOfDay(deviceData, item.channel).max
-                        : '—'}{' '}
-                      °C
-                    </span>
-                  </div>
-                  <div>
-                    <span>↓</span>
-                    <span>
-                      {deviceData?.log
-                        ? tempOfDay(deviceData, item.channel).max
-                        : '—'}{' '}
-                      °C
-                    </span>
-                  </div>
-                </div>
-              </SwiperSlide>
-            )
-          })}
+                </label>
+                <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2'>
+                  P—
+                </span>
+              </div>
+              <div className='flex items-center justify-center text-[18px] mt-1 font-bold h-[70%]'>
+                —
+              </div>
+            </SwiperSlide>
+          )}
         </Swiper>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
@@ -533,7 +415,11 @@ const CardStatus = (props: PropsType) => {
             sdCard(deviceData) ? 'text-red-500' : ''
           }`}
         >
-          {sdCard(deviceData) ? t('stateProblem') : t('stateNormal')}
+          {deviceData
+            ? sdCard(deviceData)
+              ? t('stateProblem')
+              : t('stateNormal')
+            : '—'}
         </div>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
@@ -545,12 +431,14 @@ const CardStatus = (props: PropsType) => {
         </div>
         <div className='flex items-center justify-center gap-3 text-[20px] font-bold h-full'>
           <span>
-            {[...new Set(deviceData?.probe.map(item => item.channel))].length ??
-              '—'}
+            {deviceData
+              ? [...new Set(deviceData?.probe?.map(item => item.channel))]
+                  .length ?? '—'
+              : '—'}
           </span>
           <div className='w-[3px] h-7 py-2 bg-primary rounded-btn'></div>
           <span>
-            {deviceData?.probe.find(item => item.doorQty)?.doorQty ?? '—'}
+            {deviceData?.probe?.find(item => item.doorQty)?.doorQty ?? '—'}
           </span>
         </div>
       </div>
@@ -562,7 +450,7 @@ const CardStatus = (props: PropsType) => {
           <span>{t('dashWarranty')}</span>
         </div>
         <div className='flex items-center justify-center text-[20px] font-bold h-full'>
-          <span>{deviceData?.repair.length ?? '—'}</span>
+          <span>{deviceData?.repair?.length ?? '—'}</span>
         </div>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
@@ -573,7 +461,7 @@ const CardStatus = (props: PropsType) => {
           <span>{t('dashRepair')}</span>
         </div>
         <div className='flex items-center justify-center text-[20px] font-bold h-full'>
-          <span>{deviceData?.warranty.length ?? '—'}</span>
+          <span>{deviceData?.warranty?.length ?? '—'}</span>
         </div>
       </div>
     </>

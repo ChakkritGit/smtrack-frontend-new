@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { RiFullscreenLine, RiPlayLine, RiStopLine } from 'react-icons/ri'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { Swiper as SwiperType } from 'swiper/types'
-import { test } from '../../../constants/utils/dashboardCardStatus'
 
 interface ChartSwiperWrapperProps {
   deviceLogs: DeviceLogsType | undefined
@@ -30,7 +29,6 @@ const ChartSwiperWrapper = (props: ChartSwiperWrapperProps) => {
   }, [isPause])
 
   const SwiperFragment = useMemo(() => {
-    if (!deviceLogs?.probe) return
     return (
       <Swiper
         onSwiper={swiper => (swiperRef.current = swiper)}
@@ -61,35 +59,32 @@ const ChartSwiperWrapper = (props: ChartSwiperWrapperProps) => {
         modules={[Autoplay, Pagination, EffectCreative]}
         className='mySwiper h-full'
       >
-        {deviceLogs?.probe.map((item, index) => {
-          const filterItem = deviceLogs.log.filter(itemTwo =>
-            itemTwo.probe.includes(item.channel)
-          )
-          return (
-            <SwiperSlide key={index}>
-              <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
-                P{item.channel}
-              </span>
-              <ChartMini
-                logData={filterItem.slice(0, 80)}
-                tempMin={item.tempMin}
-                tempMax={item.tempMax}
-              />
-            </SwiperSlide>
-          )
-        })}
-        <SwiperSlide key={2}>
-          <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
-            P{2}
-          </span>
-          <ChartMini logData={test(80)} tempMin={-5} tempMax={38} />
-        </SwiperSlide>
-        <SwiperSlide key={3}>
-          <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
-            P{3}
-          </span>
-          <ChartMini logData={test(80)} tempMin={-3} tempMax={37} />
-        </SwiperSlide>
+        {deviceLogs ? (
+          deviceLogs?.probe?.map((item, index) => {
+            const filterItem = deviceLogs.log.filter(itemTwo =>
+              itemTwo.probe.includes(item.channel)
+            )
+            return (
+              <SwiperSlide key={index}>
+                <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
+                  P{item.channel}
+                </span>
+                <ChartMini
+                  logData={filterItem.slice(0, 80)}
+                  tempMin={item.tempMin}
+                  tempMax={item.tempMax}
+                />
+              </SwiperSlide>
+            )
+          })
+        ) : (
+          <SwiperSlide>
+            <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
+              P—
+            </span>
+            <div className='flex items-center justify-center h-full'>—</div>
+          </SwiperSlide>
+        )}
       </Swiper>
     )
   }, [isPause, deviceLogs])

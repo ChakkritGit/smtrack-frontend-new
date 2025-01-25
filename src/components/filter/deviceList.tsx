@@ -35,7 +35,7 @@ const DeviceList = () => {
     valueKey: K,
     labelKey: K
   ): Option[] =>
-    data.map(item => ({
+    data?.map(item => ({
       value: item[valueKey] as unknown as string,
       label: item[labelKey] as unknown as string
     }))
@@ -47,7 +47,7 @@ const DeviceList = () => {
     labelKey: K
   ): Option | undefined =>
     data
-      .filter(item => item[valueKey] === id)
+      ?.filter(item => item[valueKey] === id)
       .map(item => ({
         value: item[valueKey] as unknown as string,
         label: item[labelKey] as unknown as string
@@ -58,7 +58,7 @@ const DeviceList = () => {
   }, [])
 
   useEffect(() => {
-    const filter = deviceList.filter(item =>
+    const filter = deviceList?.filter(item =>
       wardId ? item.ward?.toLowerCase().includes(wardId?.toLowerCase()) : item
     )
     setDeviceListFilter(filter)

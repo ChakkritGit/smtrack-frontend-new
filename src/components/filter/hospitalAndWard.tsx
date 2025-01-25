@@ -80,7 +80,7 @@ const HospitalAndWard = () => {
 
   useEffect(() => {
     setWardname(
-      ward.filter(items => (hosId ? items.hospital.id.includes(hosId) : items))
+      ward?.filter(items => (hosId ? items.hospital.id.includes(hosId) : items))
     )
   }, [ward, hosId])
 
@@ -101,11 +101,14 @@ const HospitalAndWard = () => {
     hospital: {} as WardType
   }
 
-  const updatedHosData = [allHos, ...hospital]
-  const updatedWardData = [allWard, ...wardName]
+  const updatedHosData = [allHos, ...(Array.isArray(hospital) ? hospital : [])]
+  const updatedWardData = [
+    allWard,
+    ...(Array.isArray(wardName) ? wardName : [])
+  ]
 
   return (
-    <div className='flex items-center justify-end w-full gap-3 h-[35px]'>
+    <div className='flex items-center justify-center gap-3 h-[35px]'>
       {showFilter ? (
         <>
           {role !== 'ADMIN' && (

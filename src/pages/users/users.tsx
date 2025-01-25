@@ -53,7 +53,7 @@ const Users = () => {
   }, [])
 
   useEffect(() => {
-    const filer = users.filter(item =>
+    const filer = users?.filter(item =>
       wardId
         ? (item.ward?.id?.toLowerCase().includes(wardId.toLowerCase()) &&
             item.display?.toLowerCase().includes(globalSearch.toLowerCase())) ||
@@ -65,7 +65,7 @@ const Users = () => {
   }, [users, globalSearch, wardId])
 
   const UserCard = useMemo(() => {
-    if (usersFilter.length > 0) {
+    if (usersFilter?.length > 0) {
       return (
         <UserPagination
           data={usersFilter}
@@ -152,7 +152,7 @@ const Users = () => {
     } else {
       return (
         <div className='flex items-center justify-center loading-hieght-full'>
-          <div>No Data!</div>
+          <div>{t('nodata')}</div>
         </div>
       )
     }

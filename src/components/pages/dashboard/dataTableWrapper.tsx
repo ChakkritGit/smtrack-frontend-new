@@ -6,7 +6,6 @@ import { Swiper as SwiperType } from 'swiper/types'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, EffectCreative, Pagination } from 'swiper/modules'
 import DataTableMini from './dataTableMini'
-import { test } from '../../../constants/utils/dashboardCardStatus'
 
 interface DataTableWrapperProps {
   deviceLogs: DeviceLogsType | undefined
@@ -30,7 +29,6 @@ const DataTableWrapper = (props: DataTableWrapperProps) => {
   }, [isPause])
 
   const DataTableFragment = useMemo(() => {
-    if (!deviceLogs?.probe) return
     return (
       <Swiper
         onSwiper={swiper => (swiperRef.current = swiper)}
@@ -61,31 +59,28 @@ const DataTableWrapper = (props: DataTableWrapperProps) => {
         modules={[Autoplay, Pagination, EffectCreative]}
         className='mySwiper h-full'
       >
-        {deviceLogs?.probe.map((item, index) => {
-          const filterItem = deviceLogs.log.filter(itemTwo =>
-            itemTwo.probe.includes(item.channel)
-          )
-          return (
-            <SwiperSlide key={index}>
-              <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
-                P{item.channel}
-              </span>
-              <DataTableMini logData={filterItem.slice(0, 80)} />
-            </SwiperSlide>
-          )
-        })}
-        <SwiperSlide key={2}>
-          <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
-            P{2}
-          </span>
-          <DataTableMini logData={test(80)} />
-        </SwiperSlide>
-        <SwiperSlide key={3}>
-          <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
-            P{3}
-          </span>
-          <DataTableMini logData={test(80)} />
-        </SwiperSlide>
+        {deviceLogs ? (
+          deviceLogs?.probe?.map((item, index) => {
+            const filterItem = deviceLogs.log.filter(itemTwo =>
+              itemTwo.probe.includes(item.channel)
+            )
+            return (
+              <SwiperSlide key={index}>
+                <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
+                  P{item.channel}
+                </span>
+                <DataTableMini logData={filterItem.slice(0, 80)} />
+              </SwiperSlide>
+            )
+          })
+        ) : (
+          <SwiperSlide>
+            <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
+              P—
+            </span>
+            <div className='flex items-center justify-center h-full'>—</div>
+          </SwiperSlide>
+        )}
       </Swiper>
     )
   }, [isPause, deviceLogs])

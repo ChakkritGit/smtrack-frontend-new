@@ -133,11 +133,11 @@
 }
 
 .chart-h>div:nth-child(1)>.swiper-wrapper {
-  @apply !h-[300px];
+  @apply !h-[310px];
 }
 
 .apexcharts-grid>*>line, .apexcharts-grid-borders>line {
-  @apply !stroke-base-content !stroke-2 opacity-20;
+  @apply !stroke-base-content !stroke-2 opacity-10;
 }
 
 .dataTableWrapper {

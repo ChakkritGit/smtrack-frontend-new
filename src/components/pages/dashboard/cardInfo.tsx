@@ -36,7 +36,10 @@ const CardInFoComponent = (props: PropsType) => {
             </p>
           </div>
         </div>
-        <button className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 tooltip tooltip-left' data-tip={t('adjustMents')}>
+        <button
+          className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 tooltip tooltip-left'
+          data-tip={t('adjustMents')}
+        >
           <RiSettings3Line size={24} />
         </button>
       </div>
@@ -77,69 +80,47 @@ const CardInFoComponent = (props: PropsType) => {
             modules={[Autoplay, Pagination, EffectCreative]}
             className='mySwiper'
           >
-            {deviceData?.probe.map((item, index) => {
-              return (
-                <SwiperSlide key={index}>
-                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 mb-2'>
-                    P{item.channel}
-                  </span>
-                  <div className='flex items-center gap-3'>
-                    <p className='font-bold'>• {t('tempValueUnit')}:</p>
-                    <p className='truncate max-w-[150px] lg:max-w-[300px]'>
-                      {item.tempMin ?? '—'} - {item.tempMax ?? '—'} °C
-                    </p>
-                  </div>
-                  <div className='flex items-center gap-3'>
-                    <p className='font-bold'>• {t('humValueUnit')}:</p>
-                    <p className='truncate max-w-[150px] lg:max-w-[300px]'>
-                      {item.humiMin ?? '—'} - {item.humiMax ?? '—'} %
-                    </p>
-                  </div>
-                </SwiperSlide>
-              )
-            })}
-            {deviceData?.probe.map((item, index) => {
-              return (
-                <SwiperSlide key={index}>
-                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 mb-2'>
-                    P2
-                  </span>
-                  <div className='flex items-center gap-3'>
-                    <p className='font-bold'>• {t('tempValueUnit')}:</p>
-                    <p className='truncate max-w-[150px] lg:max-w-[300px]'>
-                      {item.tempMin ?? '—'} - {item.tempMax ?? '—'} °C
-                    </p>
-                  </div>
-                  <div className='flex items-center gap-3'>
-                    <p className='font-bold'>• {t('humValueUnit')}:</p>
-                    <p className='truncate max-w-[150px] lg:max-w-[300px]'>
-                      {item.humiMin ?? '—'} - {item.humiMax ?? '—'} %
-                    </p>
-                  </div>
-                </SwiperSlide>
-              )
-            })}
-            {deviceData?.probe.map((item, index) => {
-              return (
-                <SwiperSlide key={index}>
-                  <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 mb-2'>
-                    P3
-                  </span>
-                  <div className='flex items-center gap-3'>
-                    <p className='font-bold'>• {t('tempValueUnit')}:</p>
-                    <p className='truncate max-w-[150px] lg:max-w-[300px]'>
-                      {item.tempMin ?? '—'} - {item.tempMax ?? '—'} °C
-                    </p>
-                  </div>
-                  <div className='flex items-center gap-3'>
-                    <p className='font-bold'>• {t('humValueUnit')}:</p>
-                    <p className='truncate max-w-[150px] lg:max-w-[300px]'>
-                      {item.humiMin ?? '—'} - {item.humiMax ?? '—'} %
-                    </p>
-                  </div>
-                </SwiperSlide>
-              )
-            })}
+            {deviceData ? (
+              deviceData?.probe?.map((item, index) => {
+                return (
+                  <SwiperSlide key={index}>
+                    <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 mb-2'>
+                      P{item.channel}
+                    </span>
+                    <div className='flex items-center gap-3'>
+                      <p className='font-bold'>• {t('tempValueUnit')}:</p>
+                      <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+                        {item.tempMin ?? '—'} / {item.tempMax ?? '—'} °C
+                      </p>
+                    </div>
+                    <div className='flex items-center gap-3'>
+                      <p className='font-bold'>• {t('humValueUnit')}:</p>
+                      <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+                        {item.humiMin ?? '—'} / {item.humiMax ?? '—'} %
+                      </p>
+                    </div>
+                  </SwiperSlide>
+                )
+              })
+            ) : (
+              <SwiperSlide>
+                <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 mb-2'>
+                  P—
+                </span>
+                <div className='flex items-center gap-3'>
+                  <p className='font-bold'>• {t('tempValueUnit')}:</p>
+                  <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+                    — / — °C
+                  </p>
+                </div>
+                <div className='flex items-center gap-3'>
+                  <p className='font-bold'>• {t('humValueUnit')}:</p>
+                  <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+                    — / — %
+                  </p>
+                </div>
+              </SwiperSlide>
+            )}
           </Swiper>
           <div className='flex items-center gap-3'>
             <p className='font-bold'>•</p>
@@ -150,13 +131,13 @@ const CardInFoComponent = (props: PropsType) => {
           <div className='flex items-center gap-3'>
             <p className='font-bold'>• {t('ipAddress')}:</p>
             <p className='truncate max-w-[150px] lg:max-w-[300px]'>
-              {deviceData?.config.ip ?? '—'}
+              {deviceData?.config?.ip ?? '—'}
             </p>
           </div>
           <div className='flex items-center gap-3'>
             <p className='font-bold'>• {t('macAddress')}:</p>
             <p className='truncate max-w-[150px] lg:max-w-[300px]'>
-              {deviceData?.config.mac ?? '—'}
+              {deviceData?.config?.mac ?? '—'}
             </p>
           </div>
           <div className='flex items-center gap-3'>
