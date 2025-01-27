@@ -184,7 +184,6 @@ const Users = () => {
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
     dispatch(setSubmitLoading())
-    await new Promise(resolve => setTimeout(resolve, 5000))
     try {
       const formDataObj = createFormData()
       await axiosInstance.put(`/auth/user/${formData.id}`, formDataObj, {
@@ -583,130 +582,142 @@ const Users = () => {
 
       {/* Edit User Modal */}
       <dialog ref={editModalRef} className='modal'>
-        <div className='modal-box'>
+        <form onSubmit={handleUpdate} className='modal-box w-11/12 max-w-5xl'>
           <h3 className='font-bold text-lg'>{t('editUser')}</h3>
-          <form onSubmit={handleUpdate}>
-            <div className='form-control'>
-              <label className='label'>
-                <span className='label-text'>{t('userPicture')}</span>
-              </label>
-              <label className='cursor-pointer image-hover flex justify-center'>
-                <input
-                  ref={fileInputRef}
-                  type='file'
-                  accept='image/*'
-                  onChange={handleImageChange}
-                  className='hidden'
-                />
-                {imageProcessing ? (
-                  <div className='mt-4 flex justify-center'>
-                    <span className='loading loading-ring loading-md'></span>
-                  </div>
-                ) : (
-                  <div className='mt-4 relative'>
-                    <img
-                      src={formData.imagePreview || defaultPic}
-                      alt='Preview'
-                      className={`w-32 h-32 md:w-48 md:h-48 rounded-btn object-cover border-2 border-dashed border-base-300 ${
-                        formData.imagePreview || defaultPic ? 'border-none' : ''
-                      }`}
-                    />
-                    <div className='absolute edit-icon bottom-1 right-1 bg-base-100/50 backdrop-blur rounded-full p-2 shadow-sm'>
-                      <RiEditLine size={20} />
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
+            {/* Image Upload - Left Column (30%) */}
+            <div className='col-span-1 flex justify-center items-center'>
+              <div className='form-control'>
+                <label className='label cursor-pointer image-hover flex flex-col justify-center'>
+                  <span className='label-text'>{t('userPicture')}</span>
+                  <input
+                    ref={fileInputRef}
+                    type='file'
+                    accept='image/*'
+                    onChange={handleImageChange}
+                    className='hidden'
+                  />
+                  {imageProcessing ? (
+                    <div className='mt-4 flex justify-center'>
+                      <span className='loading loading-ring loading-md'></span>
                     </div>
-                  </div>
-                )}
-              </label>
+                  ) : (
+                    <div className='mt-4 relative'>
+                      <img
+                        src={formData.imagePreview || defaultPic}
+                        alt='Preview'
+                        className={`w-32 h-32 md:w-48 md:h-48 rounded-btn object-cover border-2 border-dashed border-base-300 ${
+                          formData.imagePreview || defaultPic
+                            ? 'border-none'
+                            : ''
+                        }`}
+                      />
+                      <div className='absolute edit-icon bottom-1 right-1 bg-base-100/50 backdrop-blur rounded-full p-2 shadow-sm'>
+                        <RiEditLine size={20} />
+                      </div>
+                    </div>
+                  )}
+                </label>
+              </div>
             </div>
 
-            <div className='form-control w-full mt-4'>
-              <label className='label'>
-                <span className='label-text'>{t('displayName')}</span>
-              </label>
-              <input
-                type='text'
-                name='display'
-                value={formData.display}
-                onChange={handleChange}
-                className='input input-bordered'
-              />
-            </div>
+            {/* Right Column - Form Fields (70%) */}
+            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
+              {/* Display Name */}
+              <div className='form-control w-full col-span-2'>
+                <label className='label'>
+                  <span className='label-text'>{t('displayName')}</span>
+                </label>
+                <input
+                  type='text'
+                  name='display'
+                  value={formData.display}
+                  onChange={handleChange}
+                  className='input input-bordered input-sm md:input-md'
+                />
+              </div>
 
-            <div className='form-control w-full mt-4'>
-              <label className='label'>
-                <span className='label-text'>{t('username')}</span>
-              </label>
-              <input
-                type='text'
-                name='username'
-                required
-                value={formData.username}
-                onChange={handleChange}
-                className='input input-bordered'
-              />
-            </div>
+              {/* Username */}
+              <div className='form-control w-full col-span-2'>
+                <label className='label'>
+                  <span className='label-text'>{t('username')}</span>
+                </label>
+                <input
+                  type='text'
+                  name='username'
+                  required
+                  value={formData.username}
+                  onChange={handleChange}
+                  className='input input-bordered input-sm md:input-md'
+                />
+              </div>
 
-            <div className='form-control w-full mt-4'>
-              <label className='label'>
-                <span className='label-text'>{t('role')}</span>
-              </label>
-              <select
-                name='role'
-                className='select select-bordered'
-                value={formData.role}
-                onChange={handleChange}
-              >
-                <option value='SUPER'>Super Admin</option>
-                <option value='ADMIN'>Admin</option>
-                <option value='USER'>User</option>
-              </select>
-            </div>
+              {/* Role */}
+              <div className='form-control w-full col-span-2 md:col-span-1'>
+                <label className='label'>
+                  <span className='label-text'>{t('role')}</span>
+                </label>
+                <select
+                  name='role'
+                  className='select select-bordered select-sm md:select-md'
+                  value={formData.role}
+                  onChange={handleChange}
+                >
+                  <option value='SUPER'>Super Admin</option>
+                  <option value='ADMIN'>Admin</option>
+                  <option value='USER'>User</option>
+                </select>
+              </div>
 
-            <div className='form-control w-full mt-4'>
-              <label className='label'>
-                <span className='label-text'>{t('status')}</span>
-              </label>
-              <select
-                name='status'
-                className='select select-bordered'
-                value={formData.status.toString()}
-                onChange={handleChange}
-              >
-                <option value='true'>{t('active')}</option>
-                <option value='false'>{t('inactive')}</option>
-              </select>
-            </div>
+              {/* Status */}
+              <div className='form-control w-full col-span-2 md:col-span-1'>
+                <label className='label'>
+                  <span className='label-text'>{t('status')}</span>
+                </label>
+                <select
+                  name='status'
+                  className='select select-bordered select-sm md:select-md'
+                  value={formData.status.toString()}
+                  onChange={handleChange}
+                >
+                  <option value='true'>{t('active')}</option>
+                  <option value='false'>{t('inactive')}</option>
+                </select>
+              </div>
 
-            <div className='form-control w-full mt-4'>
-              <label className='label'>
-                <span className='label-text'>{t('ward')}</span>
-              </label>
-              <input
-                type='text'
-                name='wardId'
-                className='input input-bordered'
-                value={formData.wardId}
-                onChange={handleChange}
-              />
+              {/* Ward */}
+              <div className='form-control w-full col-span-2'>
+                <label className='label'>
+                  <span className='label-text'>{t('ward')}</span>
+                </label>
+                <input
+                  type='text'
+                  name='wardId'
+                  className='input input-bordered input-sm md:input-md'
+                  value={formData.wardId}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
+          </div>
 
-            <div className='modal-action'>
-              <button
-                type='button'
-                className='btn'
-                onClick={() => {
-                  editModalRef.current?.close()
-                  resetForm()
-                }}
-              >
-                {t('cancel')}
-              </button>
-              <button type='submit' className='btn btn-primary'>
-                {t('submit')}
-              </button>
-            </div>
-          </form>
-        </div>
+          {/* Modal Actions */}
+          <div className='modal-action mt-4 md:mt-6'>
+            <button
+              type='button'
+              className='btn btn-sm md:btn-md'
+              onClick={() => {
+                editModalRef.current?.close()
+                resetForm()
+              }}
+            >
+              {t('cancel')}
+            </button>
+            <button type='submit' className='btn btn-primary btn-sm md:btn-md'>
+              {t('submit')}
+            </button>
+          </div>
+        </form>
       </dialog>
     </div>
   )
