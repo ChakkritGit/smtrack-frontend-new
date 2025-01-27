@@ -7,10 +7,12 @@ export const resizeImage = (
 ): Promise<File> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
+    const finalMimeString = 'image/jpeg'
     reader.onload = async (e: ProgressEvent<FileReader>) => {
       try {
         let imageSrc = e.target?.result as string
 
+        // Handle SVG format separately
         if (file.type === 'image/svg+xml') {
           const svgContent = imageSrc
           const parser = new DOMParser()
@@ -30,12 +32,13 @@ export const resizeImage = (
 
           const svgBlob = new Blob([updatedSvg], { type: 'image/svg+xml' })
           const resizedFile = new File([svgBlob], file.name, {
-            type: file.type
+            type: finalMimeString
           })
           resolve(resizedFile)
           return
         }
 
+        // Handle HEIC/HEIF format
         if (file.type === 'image/heic' || file.type === 'image/heif') {
           const heicBlob = await heic2any({ blob: file, toType: 'image/jpeg' })
           const singleBlob = Array.isArray(heicBlob) ? heicBlob[0] : heicBlob
@@ -63,53 +66,29 @@ export const resizeImage = (
           context?.scale(dpiScale, dpiScale)
           context?.drawImage(image, 0, 0, originalWidth, originalHeight)
 
-          const mimeString =
-            file.type === 'image/heic' || file.type === 'image/heif'
-              ? 'image/jpeg'
-              : file.type
+          // Always convert to JPEG
+          const dataUrl = canvas.toDataURL(finalMimeString)
 
-          if (mimeString === 'image/jpeg') {
-            const originalData = e.target?.result as string
-            const exifObj = piexif.load(originalData)
-            exifObj['0th'] = exifObj['0th'] || {}
-            exifObj['0th'][piexif.ImageIFD.Copyright] =
-              'SMTrack+ Copyright - Thanes Development Co., Ltd.'
-            const exifStr = piexif.dump(exifObj)
-            const newImageData = piexif.insert(
-              exifStr,
-              canvas.toDataURL(mimeString)
-            )
-            const byteString = atob(newImageData.split(',')[1])
-            const ab = new ArrayBuffer(byteString.length)
-            const ia = new Uint8Array(ab)
-            for (let i = 0; i < byteString.length; i++) {
-              ia[i] = byteString.charCodeAt(i)
-            }
-            const blob = new Blob([ab], { type: mimeString })
-            const resizedFile = new File([blob], file.name, {
-              type: mimeString
-            })
-            resolve(resizedFile)
-          } else if (
-            mimeString === 'image/png' ||
-            mimeString === 'image/gif' ||
-            mimeString === 'image/webp'
-          ) {
-            canvas.toBlob(blob => {
-              if (blob) {
-                const resizedFile = new File([blob], file.name, {
-                  type: mimeString
-                })
-                resolve(resizedFile)
-              } else {
-                reject(
-                  new Error('Failed to convert canvas to Blob for PNG/GIF/WebP')
-                )
-              }
-            }, mimeString)
-          } else {
-            reject(new Error('Unsupported file format'))
+          // Add EXIF metadata
+          const exifObj = piexif.load(dataUrl)
+          exifObj['0th'] = exifObj['0th'] || {}
+          exifObj['0th'][piexif.ImageIFD.Copyright] =
+            'SMTrack+ Copyright - Thanes Development Co., Ltd.'
+          const exifStr = piexif.dump(exifObj)
+          const newImageData = piexif.insert(exifStr, dataUrl)
+
+          // Convert the EXIF-inserted base64 string back to a Blob
+          const byteString = atob(newImageData.split(',')[1])
+          const ab = new ArrayBuffer(byteString.length)
+          const ia = new Uint8Array(ab)
+          for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i)
           }
+          const blob = new Blob([ab], { type: finalMimeString })
+          const resizedFile = new File([blob], file.name, {
+            type: finalMimeString
+          })
+          resolve(resizedFile)
         }
       } catch (error) {
         reject(error)
@@ -120,6 +99,6 @@ export const resizeImage = (
       reject(error)
     }
 
-    reader.readAsDataURL(file)
+    reader.readAsDataURL(file) // Ensure base64 encoding
   })
 }

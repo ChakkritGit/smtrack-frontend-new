@@ -120,6 +120,7 @@ const Users = () => {
     if (file) {
       setImageProcessing(true)
       const reSized = await resizeImage(file)
+      console.log('type: ', reSized.type)
       setFormData(prev => ({
         ...prev,
         imageFile: reSized,
