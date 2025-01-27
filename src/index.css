@@ -281,3 +281,10 @@ div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line] {
     @apply bg-base-200/30 duration-300;
   }
 }
+
+.modal:not(dialog:not(.modal-open)),
+.modal::backdrop,
+div:where(.swal2-container).swal2-backdrop-show,
+div:where(.swal2-container).swal2-noanimation {
+  @apply !bg-black/30 backdrop-blur;
+}
