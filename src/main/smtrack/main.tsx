@@ -11,11 +11,12 @@ import {
 } from '../../types/smtrack/utilsRedux/utilsReduxType'
 import { setUserProfile } from '../../redux/actions/utilsActions'
 import { AxiosError } from 'axios'
+import { SubmitLoading } from '../../components/loading/submitLoading'
 
 const MainSmtrack = () => {
   const dispatch = useDispatch()
   const location = useLocation()
-  const { cookieDecode, tokenDecode } = useSelector(
+  const { cookieDecode, tokenDecode, submitLoading } = useSelector(
     (state: RootState) => state.utils
   )
   const { token } = cookieDecode || {}
@@ -76,6 +77,7 @@ const MainSmtrack = () => {
         </div>
         <Sidebar />
       </div>
+      {submitLoading && <SubmitLoading submitLoading={submitLoading} />}
     </main>
   )
 }

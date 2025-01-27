@@ -1,6 +1,6 @@
 // redux/reducers/toggleReducer.js
 import { cookies } from '../../constants/utils/utilsConstants'
-import { COOKIE_ENCODE, COOKIE_DECODE, TOKEN_DECODE, TMS_MODE, UtilsState, UtilsAction, IS_EXPAND, USER_PROFILE, GLOBAL_SEARCH, THEME_MODE, WARD_ID, DEVICE_ID, HOS_ID } from '../types/utilsTypes'
+import { COOKIE_ENCODE, COOKIE_DECODE, TOKEN_DECODE, TMS_MODE, UtilsState, UtilsAction, IS_EXPAND, USER_PROFILE, GLOBAL_SEARCH, THEME_MODE, WARD_ID, DEVICE_ID, HOS_ID, SUBMIT_LOADING } from '../types/utilsTypes'
 
 const initialState: UtilsState = {
   cookieEncode: cookies.get('tokenObject'),
@@ -13,7 +13,8 @@ const initialState: UtilsState = {
   isExpand: localStorage.getItem('expandaside') === 'true',
   hosId: cookies.get('hosId'),
   wardId: cookies.get('wardId'),
-  deviceId: cookies.get('deviceId')
+  deviceId: cookies.get('deviceId'),
+  submitLoading: false
 }
 
 const utilsReducer = (state = initialState, action: UtilsAction): UtilsState => {
@@ -30,6 +31,8 @@ const utilsReducer = (state = initialState, action: UtilsAction): UtilsState => 
       return { ...state, tmsMode: !state.tmsMode }
     case IS_EXPAND:
       return { ...state, isExpand: !state.isExpand }
+    case SUBMIT_LOADING:
+      return { ...state, submitLoading: !state.submitLoading }
     case GLOBAL_SEARCH:
       return { ...state, globalSearch: action.payload }
     case THEME_MODE:

@@ -15,7 +15,8 @@ import {
   THEME_MODE,
   WARD_ID,
   DEVICE_ID,
-  HOS_ID
+  HOS_ID,
+  SUBMIT_LOADING
 } from '../types/utilsTypes'
 
 const setCookieEncode = (dataEncode: string) => ({
@@ -44,6 +45,10 @@ const setTmsMode = () => ({
 
 const setIsExpand = () => ({
   type: IS_EXPAND
+})
+
+const setSubmitLoading = () => ({
+  type: SUBMIT_LOADING
 })
 
 const setSearch = (search: string) => ({
@@ -82,5 +87,6 @@ export {
   setTheme,
   setHosId,
   setWardId,
-  setDeviceId
+  setDeviceId,
+  setSubmitLoading
 }

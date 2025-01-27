@@ -16,6 +16,7 @@ const THEME_MODE = 'THEME_MODE'
 const HOS_ID = 'HOS_ID'
 const WARD_ID = 'WARD_ID'
 const DEVICE_ID = 'DEVICE_ID'
+const SUBMIT_LOADING = 'SUBMIT_LOADING'
 
 interface UtilsState {
   cookieEncode?: string
@@ -29,6 +30,7 @@ interface UtilsState {
   hosId: string
   wardId: string
   deviceId: string
+  submitLoading: boolean
 }
 
 type UtilsAction =
@@ -40,6 +42,7 @@ type UtilsAction =
   | { type: typeof THEME_MODE; payload: string }
   | { type: typeof TMS_MODE }
   | { type: typeof IS_EXPAND }
+  | { type: typeof SUBMIT_LOADING }
   | { type: typeof HOS_ID; payload: string }
   | { type: typeof WARD_ID; payload: string }
   | { type: typeof DEVICE_ID; payload: string }
@@ -55,6 +58,7 @@ export {
   THEME_MODE,
   HOS_ID,
   WARD_ID,
-  DEVICE_ID
+  DEVICE_ID,
+  SUBMIT_LOADING
 }
 export type { UtilsState, UtilsAction }

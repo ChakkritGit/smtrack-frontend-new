@@ -136,7 +136,8 @@
   @apply !h-[310px];
 }
 
-.apexcharts-grid>*>line, .apexcharts-grid-borders>line {
+.apexcharts-grid>*>line,
+.apexcharts-grid-borders>line {
   @apply !stroke-base-content !stroke-2 opacity-10;
 }
 
@@ -172,4 +173,34 @@
       @apply text-base-content fill-base-content;
     }
   }
+}
+
+.badge-super {
+  background-color: oklch(52.06% 0.259 320.82 / 15%);
+  border-color: oklch(52.06% 0.259 320.82);
+  color: oklch(52.06% 0.259 320.82);
+}
+
+.badge-service {
+  background-color: oklch(76.18% 0.1677 80.47 /15%);
+  border-color: oklch(76.18% 0.1677 80.47);
+  color: oklch(76.18% 0.1677 80.47);
+}
+
+.badge-admin {
+  background-color: oklch(66.76% 0.1406 219.18 /15%);
+  border-color: oklch(66.76% 0.1406 219.18);
+  color: oklch(66.76% 0.1406 219.18);
+}
+
+.badge-user {
+  background-color: oklch(75.88% 0.2195 156.71 /15%);
+  border-color: oklch(75.88% 0.2195 156.71);
+  color: oklch(75.88% 0.2195 156.71);
+}
+
+.badge-guest {
+  background-color: oklch(70.18% 0 42.35 /15%);
+  border-color: oklch(70.18% 0 42.35);
+  color: oklch(70.18% 0 42.35);
 }
