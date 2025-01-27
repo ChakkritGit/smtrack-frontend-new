@@ -21,6 +21,8 @@ import UserPagination from '../../components/pagination/userPagination'
 import { setSubmitLoading } from '../../redux/actions/utilsActions'
 import Swal from 'sweetalert2'
 import { resizeImage } from '../../constants/utils/image'
+import HopitalSelect from '../../components/selects/hopitalSelect'
+import WardSelect from '../../components/selects/wardSelect'
 
 type FormState = {
   id?: string
@@ -120,7 +122,6 @@ const Users = () => {
     if (file) {
       setImageProcessing(true)
       const reSized = await resizeImage(file)
-      console.log('type: ', reSized.type)
       setFormData(prev => ({
         ...prev,
         imageFile: reSized,
@@ -201,14 +202,12 @@ const Users = () => {
 
   const deleteUser = async (id: string) => {
     const result = await Swal.fire({
-      title: t('deleteConfirmation'),
-      text: t('deleteConfirmationText'),
+      title: t('alertHeaderWarning'),
+      text: t('deleteUserTitle'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: 'oklch(79% 0.1305 238 / var(--tw-text-opacity, 1))',
-      cancelButtonColor: 'oklch(72% 0.1938 31 / var(--tw-text-opacity, 1))',
-      confirmButtonText: t('confirmDelete'),
-      cancelButtonText: t('cancel')
+      confirmButtonText: t('confirmButton'),
+      cancelButtonText: t('cancelButton')
     })
 
     if (result.isConfirmed) {
@@ -376,93 +375,186 @@ const Users = () => {
 
       {UserCard}
 
+      <span>
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore quas
+        deleniti illum ea, dolorem sed fugit consectetur laboriosam consequatur
+        quos nulla ipsam veritatis culpa sequi. Dignissimos ex quos nihil, error
+        maxime vitae eaque tempore fuga, eveniet iure velit modi excepturi!
+        Laboriosam aspernatur quis dicta architecto iure at temporibus dolorum
+        dolor veniam saepe ullam fuga velit aliquid nostrum, perspiciatis
+        eveniet voluptate delectus libero dolorem doloribus! Fugiat explicabo
+        voluptate libero itaque quidem rem? Nostrum dignissimos atque laudantium
+        fuga quisquam ea nulla accusamus suscipit voluptas? Omnis dicta neque
+        delectus nihil? Nam corrupti explicabo ratione dolores aspernatur nulla
+        sit. Totam accusantium eligendi, officiis laudantium quo aspernatur
+        libero voluptatum nulla earum nisi soluta culpa iure placeat,
+        necessitatibus minima consectetur corrupti ea nemo nobis nesciunt
+        aperiam sapiente quisquam exercitationem facere. Eos, deserunt ipsum.
+        Perspiciatis fuga eligendi ut similique id sint eaque iste ab
+        accusantium magnam repellendus, deleniti nemo. Nisi, voluptate placeat,
+        porro animi tempore nam architecto repellendus tempora sed illum velit
+        incidunt cupiditate sequi maxime hic. Ipsum omnis assumenda autem enim!
+        Magni veniam quaerat consequuntur omnis minus, suscipit neque
+        consequatur. Pariatur totam doloribus harum quas maiores nisi illo
+        beatae sit, magni accusamus possimus non mollitia laborum eum libero
+        deleniti suscipit officiis? Dolor amet aspernatur at earum praesentium
+        dicta illo, possimus maxime ad quasi neque eum eaque animi repellat
+        velit itaque. Rerum voluptate asperiores, blanditiis repudiandae quod
+        corrupti! Maiores odit est quidem consequatur recusandae reiciendis
+        exercitationem, itaque doloribus adipisci eos debitis assumenda incidunt
+        laudantium, aliquam, animi unde nostrum molestiae quia et quod ullam eum
+        ratione. Corporis, ut neque error magni cumque molestiae earum eveniet
+        pariatur voluptate quas officia veritatis tempora quia reprehenderit
+        alias ullam facilis facere laboriosam vitae fuga libero ratione
+        quibusdam. Dignissimos vero ipsa assumenda nesciunt fuga, quam fugiat
+        dolore provident ullam nobis dicta magnam exercitationem. In iusto
+        inventore ea dolor tenetur quod cum nam incidunt.
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore quas
+        deleniti illum ea, dolorem sed fugit consectetur laboriosam consequatur
+        quos nulla ipsam veritatis culpa sequi. Dignissimos ex quos nihil, error
+        maxime vitae eaque tempore fuga, eveniet iure velit modi excepturi!
+        Laboriosam aspernatur quis dicta architecto iure at temporibus dolorum
+        dolor veniam saepe ullam fuga velit aliquid nostrum, perspiciatis
+        eveniet voluptate delectus libero dolorem doloribus! Fugiat explicabo
+        voluptate libero itaque quidem rem? Nostrum dignissimos atque laudantium
+        fuga quisquam ea nulla accusamus suscipit voluptas? Omnis dicta neque
+        delectus nihil? Nam corrupti explicabo ratione dolores aspernatur nulla
+        sit. Totam accusantium eligendi, officiis laudantium quo aspernatur
+        libero voluptatum nulla earum nisi soluta culpa iure placeat,
+        necessitatibus minima consectetur corrupti ea nemo nobis nesciunt
+        aperiam sapiente quisquam exercitationem facere. Eos, deserunt ipsum.
+        Perspiciatis fuga eligendi ut similique id sint eaque iste ab
+        accusantium magnam repellendus, deleniti nemo. Nisi, voluptate placeat,
+        porro animi tempore nam architecto repellendus tempora sed illum velit
+        incidunt cupiditate sequi maxime hic. Ipsum omnis assumenda autem enim!
+        Magni veniam quaerat consequuntur omnis minus, suscipit neque
+        consequatur. Pariatur totam doloribus harum quas maiores nisi illo
+        beatae sit, magni accusamus possimus non mollitia laborum eum libero
+        deleniti suscipit officiis? Dolor amet aspernatur at earum praesentium
+        dicta illo, possimus maxime ad quasi neque eum eaque animi repellat
+        velit itaque. Rerum voluptate asperiores, blanditiis repudiandae quod
+        corrupti! Maiores odit est quidem consequatur recusandae reiciendis
+        exercitationem, itaque doloribus adipisci eos debitis assumenda incidunt
+        laudantium, aliquam, animi unde nostrum molestiae quia et quod ullam eum
+        ratione. Corporis, ut neque error magni cumque molestiae earum eveniet
+        pariatur voluptate quas officia veritatis tempora quia reprehenderit
+        alias ullam facilis facere laboriosam vitae fuga libero ratione
+        quibusdam. Dignissimos vero ipsa assumenda nesciunt fuga, quam fugiat
+        dolore provident ullam nobis dicta magnam exercitationem. In iusto
+        inventore ea dolor tenetur quod cum nam incidunt.
+      </span>
+
       {/* Add User Modal */}
       <dialog ref={addModalRef} className='modal'>
-        <div className='modal-box'>
+        <form onSubmit={handleSubmit} className='modal-box w-11/12 max-w-5xl'>
           <h3 className='font-bold text-lg'>{t('addUserButton')}</h3>
-          <form onSubmit={handleSubmit}>
-            {/* Image Upload */}
-            <div className='form-control w-full mt-4'>
-              <label className='label'>
-                <span className='label-text'>{t('image')}</span>
-              </label>
-              <label className='cursor-pointer flex justify-center'>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
+            {/* Image Upload - Left Column (30%) */}
+            <div className='col-span-1 flex justify-center items-center'>
+              <div className='form-control'>
+                <label className='label'>
+                  <span className='label-text'>{t('image')}</span>
+                </label>
+                <label className='cursor-pointer flex justify-center'>
+                  <input
+                    ref={fileInputRef}
+                    type='file'
+                    accept='image/*'
+                    onChange={handleImageChange}
+                    className='hidden'
+                  />
+                  {imageProcessing ? (
+                    <div className='mt-4 flex justify-center'>
+                      <span className='loading loading-ring loading-md'></span>
+                    </div>
+                  ) : (
+                    <div className='mt-4 relative'>
+                      <img
+                        src={formData.imagePreview || defaultPic}
+                        alt='Preview'
+                        className={`w-32 h-32 md:w-48 md:h-48 rounded-btn object-cover border-2 border-dashed border-base-300 ${
+                          formData.imagePreview || defaultPic
+                            ? 'border-none'
+                            : ''
+                        }`}
+                      />
+                      <div className='absolute bottom-1 right-1 bg-base-100 rounded-full p-2 shadow-sm hover:bg-base-200 duration-300'>
+                        <RiEditLine size={20} />
+                      </div>
+                    </div>
+                  )}
+                </label>
+              </div>
+            </div>
+
+            {/* Right Column - 2/3 of the grid (70%) */}
+            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4'>
+              {/* Hospital */}
+              <div className='form-control w-full'>
+                <label className='label'>
+                  <span className='label-text'>{t('hospital')}</span>
+                </label>
+                <HopitalSelect />
+              </div>
+
+              {/* Ward */}
+              <div className='form-control w-full'>
+                <label className='label'>
+                  <span className='label-text'>{t('ward')}</span>
+                </label>
+                <WardSelect />
+              </div>
+
+              {/* Username */}
+              <div className='form-control w-full'>
+                <label className='label'>
+                  <span className='label-text'>{t('username')}</span>
+                </label>
                 <input
-                  ref={fileInputRef}
-                  type='file'
-                  accept='image/*'
-                  onChange={handleImageChange}
-                  className='hidden'
+                  name='username'
+                  type='text'
+                  required
+                  value={formData.username}
+                  onChange={handleChange}
+                  className='input input-bordered'
                 />
-                {imageProcessing ? (
-                  <div className='mt-4 flex justify-center'>
-                    <span className='loading loading-ring loading-md'></span>
-                  </div>
-                ) : (
-                  <div className='mt-4'>
-                    <img
-                      src={formData.imagePreview || defaultPic}
-                      alt='Preview'
-                      className={`w-32 h-32 rounded-btn object-cover border-2 border-dashed border-base-300 ${
-                        formData.imagePreview || defaultPic
-                          ? ' border-none'
-                          : ''
-                      }`}
-                    />
-                  </div>
-                )}
-              </label>
-            </div>
+              </div>
 
-            {/* Username */}
-            <div className='form-control w-full mt-4'>
-              <label className='label'>
-                <span className='label-text'>{t('username')}</span>
-              </label>
-              <input
-                name='username'
-                type='text'
-                required
-                value={formData.username}
-                onChange={handleChange}
-                className='input input-bordered'
-              />
+              {/* Password */}
+              <div className='form-control w-full'>
+                <label className='label'>
+                  <span className='label-text'>{t('password')}</span>
+                </label>
+                <input
+                  name='password'
+                  type='password'
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  className='input input-bordered'
+                />
+              </div>
             </div>
+          </div>
 
-            {/* Password */}
-            <div className='form-control w-full mt-4'>
-              <label className='label'>
-                <span className='label-text'>{t('password')}</span>
-              </label>
-              <input
-                name='password'
-                type='password'
-                required
-                value={formData.password}
-                onChange={handleChange}
-                className='input input-bordered'
-              />
-            </div>
-
-            {/* Modal Actions */}
-            <div className='modal-action'>
-              <button
-                type='button'
-                className='btn'
-                onClick={() => {
-                  addModalRef.current?.close()
-                  resetForm()
-                  if (fileInputRef.current) fileInputRef.current.value = ''
-                }}
-              >
-                {t('cancel')}
-              </button>
-              <button type='submit' className='btn btn-primary'>
-                {t('submit')}
-              </button>
-            </div>
-          </form>
-        </div>
+          {/* Modal Actions */}
+          <div className='modal-action mt-6'>
+            <button
+              type='button'
+              className='btn'
+              onClick={() => {
+                addModalRef.current?.close()
+                resetForm()
+                if (fileInputRef.current) fileInputRef.current.value = ''
+              }}
+            >
+              {t('cancel')}
+            </button>
+            <button type='submit' className='btn btn-primary'>
+              {t('submit')}
+            </button>
+          </div>
+        </form>
       </dialog>
 
       {/* Edit User Modal */}
@@ -487,7 +579,7 @@ const Users = () => {
                     <span className='loading loading-ring loading-md'></span>
                   </div>
                 ) : (
-                  <div className='mt-4'>
+                  <div className='mt-4 relative'>
                     <img
                       src={formData.imagePreview || defaultPic}
                       alt='Preview'
@@ -497,6 +589,9 @@ const Users = () => {
                           : ''
                       }`}
                     />
+                    <div className='absolute bottom-1 right-1 bg-base-100 rounded-full p-2 shadow-sm hover:bg-base-200 duration-300'>
+                      <RiEditLine size={20} />
+                    </div>
                   </div>
                 )}
               </label>

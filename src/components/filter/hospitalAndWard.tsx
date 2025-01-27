@@ -1,16 +1,20 @@
 import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RiCloseLine, RiFilter3Line } from 'react-icons/ri'
-import Select from 'react-select'
 import { Hospital, Option, Ward } from '../../types/global/hospitalAndWard'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { HospitalType } from '../../types/smtrack/hospitals/hospitalType'
 import { WardType } from '../../types/smtrack/wards/wardType'
-import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
+import {
+  cookieOptions,
+  cookies,
+  updateLocalStorageAndDispatch
+} from '../../constants/utils/utilsConstants'
 import { setHosId, setWardId } from '../../redux/actions/utilsActions'
 import { GlobalContext } from '../../contexts/globalContext'
 import { GlobalContextType } from '../../types/global/globalContext'
+import Select from 'react-select'
 
 const HospitalAndWard = () => {
   const dispatch = useDispatch()
@@ -48,7 +52,7 @@ const HospitalAndWard = () => {
 
   const getHospital = (hospitalID: string | undefined) => {
     if (hospitalID !== '') {
-      updateLocalStorageAndDispatch('hosId', hospitalID, setHosId)
+      updateLocalStorageAndDispatch('hosId', hospitalID, setHosId, dispatch)
       setWardname(
         ward.filter(items =>
           hospitalID ? items.hospital.id.includes(hospitalID) : items
@@ -62,20 +66,11 @@ const HospitalAndWard = () => {
 
   const getWard = (wardID: string | undefined) => {
     if (wardID !== '') {
-      updateLocalStorageAndDispatch('wardId', wardID, setWardId)
+      updateLocalStorageAndDispatch('wardId', wardID, setWardId, dispatch)
     } else {
       cookies.remove('wardId', cookieOptions)
       dispatch(setWardId(''))
     }
-  }
-
-  const updateLocalStorageAndDispatch = (
-    key: string,
-    id: string | undefined,
-    action: Function
-  ) => {
-    cookies.set(key, String(id), cookieOptions)
-    dispatch(action(String(id)))
   }
 
   useEffect(() => {

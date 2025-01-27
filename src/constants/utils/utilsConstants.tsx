@@ -3,6 +3,7 @@ import Cookies, { CookieSetOptions } from 'universal-cookie'
 import CryptoJS from 'crypto-js'
 import { UserRole } from '../../types/global/users/usersType'
 import { DeviceType } from '../../types/smtrack/devices/deviceType'
+import { Dispatch } from 'redux'
 
 const accessToken = (tokenObject: TokenDecodeType) =>
   CryptoJS.AES.encrypt(
@@ -55,7 +56,7 @@ const getRoleLabel = (
 }
 
 const isLeapYear = (year: number): boolean => {
-  return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0)
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
 }
 
 const calulateDate = (devicesData: DeviceType) => {
@@ -110,4 +111,21 @@ const calulateDate = (devicesData: DeviceType) => {
   }
 }
 
-export { accessToken, cookieDecodeObject, getRoleLabel, calulateDate, cookies }
+const updateLocalStorageAndDispatch = (
+  key: string,
+  id: string | undefined,
+  action: Function,
+  dispatch: Dispatch
+) => {
+  cookies.set(key, String(id), cookieOptions)
+  dispatch(action(String(id)))
+}
+
+export {
+  accessToken,
+  cookieDecodeObject,
+  getRoleLabel,
+  calulateDate,
+  cookies,
+  updateLocalStorageAndDispatch
+}

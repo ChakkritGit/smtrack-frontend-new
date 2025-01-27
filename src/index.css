@@ -204,3 +204,72 @@
   border-color: oklch(70.18% 0 42.35);
   color: oklch(70.18% 0 42.35);
 }
+
+:root:has(:is(.modal-open, .modal:target, .modal-toggle:checked + .modal, .modal[open])) {
+  scrollbar-gutter: unset;
+}
+
+div:where(.swal2-container) div:where(.swal2-popup) {
+  @apply !bg-base-100 !text-base-content !rounded-btn;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm),
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel) {
+  @apply !rounded-btn;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
+  @apply !btn !btn-primary;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel) {
+  @apply !btn;
+}
+
+div:where(.swal2-container) div:where(.swal2-actions) {
+  @apply flex-row-reverse;
+}
+
+div:where(.swal2-icon).swal2-warning {
+  @apply !text-amber-500 !border-amber-500;
+}
+
+div:where(.swal2-icon).swal2-success {
+  @apply !text-green-500 !border-green-500;
+}
+
+div:where(.swal2-icon).swal2-success [class^=swal2-success-line] {
+  @apply !bg-green-500;
+}
+
+div:where(.swal2-icon).swal2-success .swal2-success-ring {
+  @apply !border-green-500/30;
+}
+
+div:where(.swal2-icon).swal2-question.swal2-icon-show {
+  @apply !text-blue-500 !border-blue-500;
+}
+
+div:where(.swal2-icon).swal2-info {
+  @apply !text-cyan-500 !border-cyan-500;
+}
+
+div:where(.swal2-icon).swal2-error {
+  @apply !text-red-500 !border-red-500;
+}
+
+div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line] {
+  @apply !bg-red-500;
+}
+
+.swal2-show {
+  @apply !animate-transition-pop;
+}
+
+.swal2-shown {
+  @apply !pr-0;
+}
+
+html:has(.lg\:drawer-open.lg\:drawer-open) {
+  overflow-y: hidden !important;
+}
