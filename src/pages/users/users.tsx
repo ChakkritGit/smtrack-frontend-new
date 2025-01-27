@@ -121,6 +121,7 @@ const Users = () => {
     const file = e.target.files?.[0]
     if (file) {
       setImageProcessing(true)
+      await new Promise(resolve => setTimeout(resolve, 500))
       const reSized = await resizeImage(file)
       setFormData(prev => ({
         ...prev,
@@ -408,40 +409,40 @@ const Users = () => {
         alias ullam facilis facere laboriosam vitae fuga libero ratione
         quibusdam. Dignissimos vero ipsa assumenda nesciunt fuga, quam fugiat
         dolore provident ullam nobis dicta magnam exercitationem. In iusto
-        inventore ea dolor tenetur quod cum nam incidunt.
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore quas
-        deleniti illum ea, dolorem sed fugit consectetur laboriosam consequatur
-        quos nulla ipsam veritatis culpa sequi. Dignissimos ex quos nihil, error
-        maxime vitae eaque tempore fuga, eveniet iure velit modi excepturi!
-        Laboriosam aspernatur quis dicta architecto iure at temporibus dolorum
-        dolor veniam saepe ullam fuga velit aliquid nostrum, perspiciatis
-        eveniet voluptate delectus libero dolorem doloribus! Fugiat explicabo
-        voluptate libero itaque quidem rem? Nostrum dignissimos atque laudantium
-        fuga quisquam ea nulla accusamus suscipit voluptas? Omnis dicta neque
-        delectus nihil? Nam corrupti explicabo ratione dolores aspernatur nulla
-        sit. Totam accusantium eligendi, officiis laudantium quo aspernatur
-        libero voluptatum nulla earum nisi soluta culpa iure placeat,
-        necessitatibus minima consectetur corrupti ea nemo nobis nesciunt
-        aperiam sapiente quisquam exercitationem facere. Eos, deserunt ipsum.
-        Perspiciatis fuga eligendi ut similique id sint eaque iste ab
-        accusantium magnam repellendus, deleniti nemo. Nisi, voluptate placeat,
-        porro animi tempore nam architecto repellendus tempora sed illum velit
-        incidunt cupiditate sequi maxime hic. Ipsum omnis assumenda autem enim!
-        Magni veniam quaerat consequuntur omnis minus, suscipit neque
-        consequatur. Pariatur totam doloribus harum quas maiores nisi illo
-        beatae sit, magni accusamus possimus non mollitia laborum eum libero
-        deleniti suscipit officiis? Dolor amet aspernatur at earum praesentium
-        dicta illo, possimus maxime ad quasi neque eum eaque animi repellat
-        velit itaque. Rerum voluptate asperiores, blanditiis repudiandae quod
-        corrupti! Maiores odit est quidem consequatur recusandae reiciendis
-        exercitationem, itaque doloribus adipisci eos debitis assumenda incidunt
-        laudantium, aliquam, animi unde nostrum molestiae quia et quod ullam eum
-        ratione. Corporis, ut neque error magni cumque molestiae earum eveniet
-        pariatur voluptate quas officia veritatis tempora quia reprehenderit
-        alias ullam facilis facere laboriosam vitae fuga libero ratione
-        quibusdam. Dignissimos vero ipsa assumenda nesciunt fuga, quam fugiat
-        dolore provident ullam nobis dicta magnam exercitationem. In iusto
-        inventore ea dolor tenetur quod cum nam incidunt.
+        inventore ea dolor tenetur quod cum nam incidunt. Lorem, ipsum dolor sit
+        amet consectetur adipisicing elit. Dolore quas deleniti illum ea,
+        dolorem sed fugit consectetur laboriosam consequatur quos nulla ipsam
+        veritatis culpa sequi. Dignissimos ex quos nihil, error maxime vitae
+        eaque tempore fuga, eveniet iure velit modi excepturi! Laboriosam
+        aspernatur quis dicta architecto iure at temporibus dolorum dolor veniam
+        saepe ullam fuga velit aliquid nostrum, perspiciatis eveniet voluptate
+        delectus libero dolorem doloribus! Fugiat explicabo voluptate libero
+        itaque quidem rem? Nostrum dignissimos atque laudantium fuga quisquam ea
+        nulla accusamus suscipit voluptas? Omnis dicta neque delectus nihil? Nam
+        corrupti explicabo ratione dolores aspernatur nulla sit. Totam
+        accusantium eligendi, officiis laudantium quo aspernatur libero
+        voluptatum nulla earum nisi soluta culpa iure placeat, necessitatibus
+        minima consectetur corrupti ea nemo nobis nesciunt aperiam sapiente
+        quisquam exercitationem facere. Eos, deserunt ipsum. Perspiciatis fuga
+        eligendi ut similique id sint eaque iste ab accusantium magnam
+        repellendus, deleniti nemo. Nisi, voluptate placeat, porro animi tempore
+        nam architecto repellendus tempora sed illum velit incidunt cupiditate
+        sequi maxime hic. Ipsum omnis assumenda autem enim! Magni veniam quaerat
+        consequuntur omnis minus, suscipit neque consequatur. Pariatur totam
+        doloribus harum quas maiores nisi illo beatae sit, magni accusamus
+        possimus non mollitia laborum eum libero deleniti suscipit officiis?
+        Dolor amet aspernatur at earum praesentium dicta illo, possimus maxime
+        ad quasi neque eum eaque animi repellat velit itaque. Rerum voluptate
+        asperiores, blanditiis repudiandae quod corrupti! Maiores odit est
+        quidem consequatur recusandae reiciendis exercitationem, itaque
+        doloribus adipisci eos debitis assumenda incidunt laudantium, aliquam,
+        animi unde nostrum molestiae quia et quod ullam eum ratione. Corporis,
+        ut neque error magni cumque molestiae earum eveniet pariatur voluptate
+        quas officia veritatis tempora quia reprehenderit alias ullam facilis
+        facere laboriosam vitae fuga libero ratione quibusdam. Dignissimos vero
+        ipsa assumenda nesciunt fuga, quam fugiat dolore provident ullam nobis
+        dicta magnam exercitationem. In iusto inventore ea dolor tenetur quod
+        cum nam incidunt.
       </span>
 
       {/* Add User Modal */}
@@ -452,10 +453,8 @@ const Users = () => {
             {/* Image Upload - Left Column (30%) */}
             <div className='col-span-1 flex justify-center items-center'>
               <div className='form-control'>
-                <label className='label'>
-                  <span className='label-text'>{t('image')}</span>
-                </label>
-                <label className='cursor-pointer flex justify-center'>
+                <label className='label cursor-pointer image-hover flex flex-col justify-center'>
+                  <span className='label-text'>{t('userPicture')}</span>
                   <input
                     ref={fileInputRef}
                     type='file'
@@ -478,7 +477,7 @@ const Users = () => {
                             : ''
                         }`}
                       />
-                      <div className='absolute bottom-1 right-1 bg-base-100 rounded-full p-2 shadow-sm hover:bg-base-200 duration-300'>
+                      <div className='absolute edit-icon bottom-1 right-1 bg-base-100/50 backdrop-blur rounded-full p-2 shadow-sm'>
                         <RiEditLine size={20} />
                       </div>
                     </div>
@@ -488,51 +487,76 @@ const Users = () => {
             </div>
 
             {/* Right Column - 2/3 of the grid (70%) */}
-            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
               {/* Hospital */}
               <div className='form-control w-full'>
-                <label className='label'>
-                  <span className='label-text'>{t('hospital')}</span>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('userHospitals')}</span>
+                  <HopitalSelect />
                 </label>
-                <HopitalSelect />
               </div>
 
               {/* Ward */}
               <div className='form-control w-full'>
-                <label className='label'>
-                  <span className='label-text'>{t('ward')}</span>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('userWard')}</span>
+                  <WardSelect />
                 </label>
-                <WardSelect />
               </div>
 
               {/* Username */}
               <div className='form-control w-full'>
-                <label className='label'>
-                  <span className='label-text'>{t('username')}</span>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('userNameForm')}</span>
+                  <input
+                    name='username'
+                    type='text'
+                    required
+                    value={formData.username}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                  />
                 </label>
-                <input
-                  name='username'
-                  type='text'
-                  required
-                  value={formData.username}
-                  onChange={handleChange}
-                  className='input input-bordered'
-                />
               </div>
 
               {/* Password */}
               <div className='form-control w-full'>
-                <label className='label'>
-                  <span className='label-text'>{t('password')}</span>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('userPassword')}</span>
+                  <input
+                    name='password'
+                    type='password'
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                  />
                 </label>
-                <input
-                  name='password'
-                  type='password'
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                  className='input input-bordered'
-                />
+              </div>
+
+              {/* DisplayName */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    {t('userDisplayName')}
+                  </span>
+                  <input
+                    name='display'
+                    type='text'
+                    required
+                    value={formData.display}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                  />
+                </label>
+              </div>
+
+              {/* Role */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('userRole')}</span>
+                  {/* Select Role */}
+                </label>
               </div>
             </div>
           </div>
@@ -548,10 +572,10 @@ const Users = () => {
                 if (fileInputRef.current) fileInputRef.current.value = ''
               }}
             >
-              {t('cancel')}
+              {t('cancelButton')}
             </button>
             <button type='submit' className='btn btn-primary'>
-              {t('submit')}
+              {t('submitButton')}
             </button>
           </div>
         </form>
@@ -562,11 +586,11 @@ const Users = () => {
         <div className='modal-box'>
           <h3 className='font-bold text-lg'>{t('editUser')}</h3>
           <form onSubmit={handleUpdate}>
-            <div className='form-control w-full mt-4'>
+            <div className='form-control'>
               <label className='label'>
-                <span className='label-text'>{t('image')}</span>
+                <span className='label-text'>{t('userPicture')}</span>
               </label>
-              <label className='cursor-pointer flex justify-center'>
+              <label className='cursor-pointer image-hover flex justify-center'>
                 <input
                   ref={fileInputRef}
                   type='file'
@@ -583,13 +607,11 @@ const Users = () => {
                     <img
                       src={formData.imagePreview || defaultPic}
                       alt='Preview'
-                      className={`w-32 h-32 rounded-btn object-cover border-2 border-dashed border-base-300 ${
-                        formData.imagePreview || defaultPic
-                          ? ' border-none'
-                          : ''
+                      className={`w-32 h-32 md:w-48 md:h-48 rounded-btn object-cover border-2 border-dashed border-base-300 ${
+                        formData.imagePreview || defaultPic ? 'border-none' : ''
                       }`}
                     />
-                    <div className='absolute bottom-1 right-1 bg-base-100 rounded-full p-2 shadow-sm hover:bg-base-200 duration-300'>
+                    <div className='absolute edit-icon bottom-1 right-1 bg-base-100/50 backdrop-blur rounded-full p-2 shadow-sm'>
                       <RiEditLine size={20} />
                     </div>
                   </div>

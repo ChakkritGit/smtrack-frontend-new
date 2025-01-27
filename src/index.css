@@ -60,7 +60,7 @@
 }
 
 .react-select__control {
-  @apply !border-base-content/15 !bg-base-100 !rounded-btn;
+  @apply !border-base-content/20 !bg-base-100 !rounded-btn h-[48px];
 }
 
 .react-select__control--is-focused {
@@ -270,6 +270,14 @@ div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line] {
   @apply !pr-0;
 }
 
-html:has(.lg\:drawer-open.lg\:drawer-open) {
+.swal2-shown:has(.lg\:drawer-open.lg\:drawer-open) {
   overflow-y: hidden !important;
+}
+
+
+
+.image-hover:hover {
+  .edit-icon {
+    @apply bg-base-200/30 duration-300;
+  }
 }
