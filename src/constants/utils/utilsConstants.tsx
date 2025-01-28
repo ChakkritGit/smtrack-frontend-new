@@ -4,6 +4,7 @@ import CryptoJS from 'crypto-js'
 import { UserRole } from '../../types/global/users/usersType'
 import { DeviceType } from '../../types/smtrack/devices/deviceType'
 import { Dispatch } from 'redux'
+import { AxiosError } from 'axios'
 
 const accessToken = (tokenObject: TokenDecodeType) =>
   CryptoJS.AES.encrypt(
@@ -121,11 +122,20 @@ const updateLocalStorageAndDispatch = (
   dispatch(action(String(id)))
 }
 
+const handleApiError = (error: unknown) => {
+  if (error instanceof AxiosError) {
+    console.error(error.response?.data.message)
+  } else {
+    console.error(error)
+  }
+}
+
 export {
   accessToken,
   cookieDecodeObject,
   getRoleLabel,
   calulateDate,
   cookies,
-  updateLocalStorageAndDispatch
+  updateLocalStorageAndDispatch,
+  handleApiError
 }

@@ -104,6 +104,13 @@
   @apply !bg-primary !text-primary-content;
 }
 
+.custom-role-select {
+  &>.react-select__menu>div:nth-child(1) {
+    justify-content: unset !important;
+    max-height: 250px;
+  }
+}
+
 .loading-hieght-full {
   height: calc(100dvh - 150px);
 }
@@ -134,11 +141,6 @@
 
 .chart-h>div:nth-child(1)>.swiper-wrapper {
   @apply !h-[310px];
-}
-
-.apexcharts-grid>*>line,
-.apexcharts-grid-borders>line {
-  @apply !stroke-base-content !stroke-2 opacity-10;
 }
 
 .dataTableWrapper {
@@ -207,6 +209,10 @@
 
 :root:has(:is(.modal-open, .modal:target, .modal-toggle:checked + .modal, .modal[open])) {
   scrollbar-gutter: unset;
+}
+
+.swal2-container {
+  z-index: 99999 !important;
 }
 
 div:where(.swal2-container) div:where(.swal2-popup) {

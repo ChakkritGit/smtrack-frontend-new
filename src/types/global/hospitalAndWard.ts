@@ -8,9 +8,14 @@ interface Ward {
   wardName: string
 }
 
+interface Role {
+  key: string
+  value: string
+}
+
 type Option = {
   value: string
   label: string
 }
 
-export type { Hospital, Ward, Option }
+export type { Hospital, Ward, Option, Role }

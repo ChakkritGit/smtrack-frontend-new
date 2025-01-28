@@ -163,7 +163,7 @@ export default {
 
     // user
     addUserButton: 'เพิ่มผู้ใช้',
-    editUserButton: 'แก้ผู้ใช้',
+    editUserButton: 'แก้ไขผู้ใช้',
 
     userActive: 'ใช้งาน',
     userInactive: 'ปิดการใช้งาน',
@@ -477,6 +477,7 @@ export default {
     sendingFirmware: 'กรุณารอสักครู่ขณะที่เรากำลังส่งเฟิร์มแวร์ไปยังอุปกรณ์',
     sendingFirmwareSuccess: 'อุปกรณ์ทั้งหมดได้รับการอัปเดตเรียบร้อยแล้ว!',
     sendingFirmwareError: 'ไม่สามารถอัปเดตอุปกรณ์บางอย่างได้!',
+    submitSuccess: 'บันทึกสำเร็จ',
 
     // time
     thTime: 'th-TH',

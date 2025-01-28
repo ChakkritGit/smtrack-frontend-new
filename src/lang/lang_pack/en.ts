@@ -481,6 +481,7 @@ export default {
     sendingFirmware: 'Please wait while we are sending firmware to device',
     sendingFirmwareSuccess: 'All devices have been updated successfully!',
     sendingFirmwareError: 'Failed to update some devices!',
+    submitSuccess: 'Submit Completed',
 
     // time
     thTime: 'en-EN',

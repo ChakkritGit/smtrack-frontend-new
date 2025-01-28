@@ -8,33 +8,31 @@ import {
   useRef,
   ChangeEvent
 } from 'react'
-import { AxiosError } from 'axios'
-import { UsersType } from '../../types/smtrack/users/usersType'
+import { FormState, UsersType } from '../../types/smtrack/users/usersType'
 import axiosInstance from '../../constants/axios/axiosInstance'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
-import { RiDeleteBin7Line, RiEditLine, RiMore2Line } from 'react-icons/ri'
+import {
+  RiDeleteBin7Line,
+  RiEditLine,
+  RiKey2Line,
+  RiMore2Line
+} from 'react-icons/ri'
 import defaultPic from '../../assets/images/default-user.jpg'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { getRoleLabel } from '../../constants/utils/utilsConstants'
+import {
+  getRoleLabel,
+  handleApiError
+} from '../../constants/utils/utilsConstants'
 import UserPagination from '../../components/pagination/userPagination'
 import { setSubmitLoading } from '../../redux/actions/utilsActions'
 import Swal from 'sweetalert2'
 import { resizeImage } from '../../constants/utils/image'
 import HopitalSelect from '../../components/selects/hopitalSelect'
 import WardSelect from '../../components/selects/wardSelect'
-
-type FormState = {
-  id?: string
-  username: string
-  password?: string
-  display: string
-  role: string
-  status: boolean
-  wardId: string
-  imageFile: File | null
-  imagePreview: string | null
-}
+import RoleSelect from '../../components/selects/roleSelect'
+import { UserRole } from '../../types/global/users/usersType'
+import { AxiosError } from 'axios'
 
 const Users = () => {
   const dispatch = useDispatch()
@@ -51,7 +49,7 @@ const Users = () => {
     username: '',
     password: '',
     display: '',
-    role: 'USER',
+    role: 'GUEST' as UserRole,
     status: true,
     wardId: '',
     imageFile: null,
@@ -95,8 +93,8 @@ const Users = () => {
     const keyMapping: Record<string, string> = {
       imageFile: 'image',
       username: 'username',
-      role: 'userLevel',
-      display: 'displayName'
+      role: 'role',
+      display: 'display'
     }
 
     Object.entries(formData).forEach(([key, value]) => {
@@ -137,7 +135,7 @@ const Users = () => {
       username: '',
       password: '',
       display: '',
-      role: 'USER',
+      role: 'GUEST' as UserRole,
       status: true,
       wardId: '',
       imageFile: null,
@@ -150,19 +148,58 @@ const Users = () => {
     e.preventDefault()
     dispatch(setSubmitLoading())
 
-    try {
-      const formDataObj = createFormData()
+    if (
+      formData.username !== '' &&
+      formData.password !== '' &&
+      formData.display !== '' &&
+      formData.wardId !== '' &&
+      formData.role !== undefined
+    ) {
+      try {
+        const formDataObj = createFormData()
+        await axiosInstance.post<responseType<UsersType>>(
+          '/auth/register',
+          formDataObj,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          }
+        )
 
-      await axiosInstance.post('/auth/register', formDataObj, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-
+        addModalRef.current?.close()
+        resetForm()
+        await fetchUsers()
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: t('submitSuccess'),
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } catch (error) {
+        addModalRef.current?.close()
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          }).finally(() => addModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    } else {
       addModalRef.current?.close()
-      resetForm()
-      await fetchUsers()
-    } catch (error) {
-      handleApiError(error)
-    } finally {
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => addModalRef.current?.showModal())
       dispatch(setSubmitLoading())
     }
   }
@@ -172,7 +209,7 @@ const Users = () => {
       id: user.id,
       username: user.username,
       display: user.display || '',
-      role: user.role,
+      role: user.role as UserRole,
       status: user.status,
       wardId: user.ward?.id || '',
       imageFile: null,
@@ -186,15 +223,36 @@ const Users = () => {
     dispatch(setSubmitLoading())
     try {
       const formDataObj = createFormData()
-      await axiosInstance.put(`/auth/user/${formData.id}`, formDataObj, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
+      await axiosInstance.put<responseType<UsersType>>(
+        `/auth/user/${formData.id}`,
+        formDataObj,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }
+      )
 
       editModalRef.current?.close()
       resetForm()
       await fetchUsers()
+      Swal.fire({
+        title: t('alertHeaderError'),
+        text: t('submitSuccess'),
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2500
+      })
     } catch (error) {
-      handleApiError(error)
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: error.response?.data.message,
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } else {
+        console.error(error)
+      }
     } finally {
       dispatch(setSubmitLoading())
     }
@@ -213,23 +271,32 @@ const Users = () => {
     if (result.isConfirmed) {
       dispatch(setSubmitLoading())
       try {
-        await axiosInstance.delete(`/auth/user/${id}`)
+        const response = await axiosInstance.delete<responseType<UsersType>>(
+          `/auth/user/${id}`
+        )
         await fetchUsers()
-        Swal.fire(t('deleteSuccess'), '', 'success')
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: response.data.message,
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        })
       } catch (error) {
-        handleApiError(error)
-        Swal.fire(t('error'), t('deleteError'), 'error')
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          })
+        } else {
+          console.error(error)
+        }
       } finally {
         dispatch(setSubmitLoading())
       }
-    }
-  }
-
-  const handleApiError = (error: unknown) => {
-    if (error instanceof AxiosError) {
-      console.error(error.response?.data.message)
-    } else {
-      console.error(error)
     }
   }
 
@@ -375,82 +442,37 @@ const Users = () => {
 
       {UserCard}
 
-      <span>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore quas
-        deleniti illum ea, dolorem sed fugit consectetur laboriosam consequatur
-        quos nulla ipsam veritatis culpa sequi. Dignissimos ex quos nihil, error
-        maxime vitae eaque tempore fuga, eveniet iure velit modi excepturi!
-        Laboriosam aspernatur quis dicta architecto iure at temporibus dolorum
-        dolor veniam saepe ullam fuga velit aliquid nostrum, perspiciatis
-        eveniet voluptate delectus libero dolorem doloribus! Fugiat explicabo
-        voluptate libero itaque quidem rem? Nostrum dignissimos atque laudantium
-        fuga quisquam ea nulla accusamus suscipit voluptas? Omnis dicta neque
-        delectus nihil? Nam corrupti explicabo ratione dolores aspernatur nulla
-        sit. Totam accusantium eligendi, officiis laudantium quo aspernatur
-        libero voluptatum nulla earum nisi soluta culpa iure placeat,
-        necessitatibus minima consectetur corrupti ea nemo nobis nesciunt
-        aperiam sapiente quisquam exercitationem facere. Eos, deserunt ipsum.
-        Perspiciatis fuga eligendi ut similique id sint eaque iste ab
-        accusantium magnam repellendus, deleniti nemo. Nisi, voluptate placeat,
-        porro animi tempore nam architecto repellendus tempora sed illum velit
-        incidunt cupiditate sequi maxime hic. Ipsum omnis assumenda autem enim!
-        Magni veniam quaerat consequuntur omnis minus, suscipit neque
-        consequatur. Pariatur totam doloribus harum quas maiores nisi illo
-        beatae sit, magni accusamus possimus non mollitia laborum eum libero
-        deleniti suscipit officiis? Dolor amet aspernatur at earum praesentium
-        dicta illo, possimus maxime ad quasi neque eum eaque animi repellat
-        velit itaque. Rerum voluptate asperiores, blanditiis repudiandae quod
-        corrupti! Maiores odit est quidem consequatur recusandae reiciendis
-        exercitationem, itaque doloribus adipisci eos debitis assumenda incidunt
-        laudantium, aliquam, animi unde nostrum molestiae quia et quod ullam eum
-        ratione. Corporis, ut neque error magni cumque molestiae earum eveniet
-        pariatur voluptate quas officia veritatis tempora quia reprehenderit
-        alias ullam facilis facere laboriosam vitae fuga libero ratione
-        quibusdam. Dignissimos vero ipsa assumenda nesciunt fuga, quam fugiat
-        dolore provident ullam nobis dicta magnam exercitationem. In iusto
-        inventore ea dolor tenetur quod cum nam incidunt. Lorem, ipsum dolor sit
-        amet consectetur adipisicing elit. Dolore quas deleniti illum ea,
-        dolorem sed fugit consectetur laboriosam consequatur quos nulla ipsam
-        veritatis culpa sequi. Dignissimos ex quos nihil, error maxime vitae
-        eaque tempore fuga, eveniet iure velit modi excepturi! Laboriosam
-        aspernatur quis dicta architecto iure at temporibus dolorum dolor veniam
-        saepe ullam fuga velit aliquid nostrum, perspiciatis eveniet voluptate
-        delectus libero dolorem doloribus! Fugiat explicabo voluptate libero
-        itaque quidem rem? Nostrum dignissimos atque laudantium fuga quisquam ea
-        nulla accusamus suscipit voluptas? Omnis dicta neque delectus nihil? Nam
-        corrupti explicabo ratione dolores aspernatur nulla sit. Totam
-        accusantium eligendi, officiis laudantium quo aspernatur libero
-        voluptatum nulla earum nisi soluta culpa iure placeat, necessitatibus
-        minima consectetur corrupti ea nemo nobis nesciunt aperiam sapiente
-        quisquam exercitationem facere. Eos, deserunt ipsum. Perspiciatis fuga
-        eligendi ut similique id sint eaque iste ab accusantium magnam
-        repellendus, deleniti nemo. Nisi, voluptate placeat, porro animi tempore
-        nam architecto repellendus tempora sed illum velit incidunt cupiditate
-        sequi maxime hic. Ipsum omnis assumenda autem enim! Magni veniam quaerat
-        consequuntur omnis minus, suscipit neque consequatur. Pariatur totam
-        doloribus harum quas maiores nisi illo beatae sit, magni accusamus
-        possimus non mollitia laborum eum libero deleniti suscipit officiis?
-        Dolor amet aspernatur at earum praesentium dicta illo, possimus maxime
-        ad quasi neque eum eaque animi repellat velit itaque. Rerum voluptate
-        asperiores, blanditiis repudiandae quod corrupti! Maiores odit est
-        quidem consequatur recusandae reiciendis exercitationem, itaque
-        doloribus adipisci eos debitis assumenda incidunt laudantium, aliquam,
-        animi unde nostrum molestiae quia et quod ullam eum ratione. Corporis,
-        ut neque error magni cumque molestiae earum eveniet pariatur voluptate
-        quas officia veritatis tempora quia reprehenderit alias ullam facilis
-        facere laboriosam vitae fuga libero ratione quibusdam. Dignissimos vero
-        ipsa assumenda nesciunt fuga, quam fugiat dolore provident ullam nobis
-        dicta magnam exercitationem. In iusto inventore ea dolor tenetur quod
-        cum nam incidunt.
-      </span>
-
       {/* Add User Modal */}
       <dialog ref={addModalRef} className='modal'>
-        <form onSubmit={handleSubmit} className='modal-box w-11/12 max-w-5xl'>
+        <form
+          onSubmit={handleSubmit}
+          className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
+        >
           <h3 className='font-bold text-lg'>{t('addUserButton')}</h3>
+          <div
+            role='alert-warning'
+            className={`alert alert-warning mt-4 hidden animate-transition-pop`}
+          >
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              className='h-6 w-6 shrink-0 stroke-current'
+              fill='none'
+              viewBox='0 0 24 24'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth='2'
+                d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
+              />
+            </svg>
+            <div>
+              <span>{`${t('alertHeaderWarning')} ${t('completeField')}`}</span>
+            </div>
+          </div>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
             {/* Image Upload - Left Column (30%) */}
-            <div className='col-span-1 flex justify-center items-center'>
+            <div className='col-span-1 flex justify-center'>
               <div className='form-control'>
                 <label className='label cursor-pointer image-hover flex flex-col justify-center'>
                   <span className='label-text'>{t('userPicture')}</span>
@@ -462,7 +484,7 @@ const Users = () => {
                     className='hidden'
                   />
                   {imageProcessing ? (
-                    <div className='mt-4 flex justify-center'>
+                    <div className='mt-4 flex justify-center w-32 h-32 md:w-48 md:h-48'>
                       <span className='loading loading-ring loading-md'></span>
                     </div>
                   ) : (
@@ -499,7 +521,7 @@ const Users = () => {
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
                   <span className='label-text mb-2'>{t('userWard')}</span>
-                  <WardSelect />
+                  <WardSelect formData={formData} setFormData={setFormData} />
                 </label>
               </div>
 
@@ -510,7 +532,6 @@ const Users = () => {
                   <input
                     name='username'
                     type='text'
-                    required
                     value={formData.username}
                     onChange={handleChange}
                     className='input input-bordered w-full'
@@ -525,7 +546,6 @@ const Users = () => {
                   <input
                     name='password'
                     type='password'
-                    required
                     value={formData.password}
                     onChange={handleChange}
                     className='input input-bordered w-full'
@@ -542,7 +562,6 @@ const Users = () => {
                   <input
                     name='display'
                     type='text'
-                    required
                     value={formData.display}
                     onChange={handleChange}
                     className='input input-bordered w-full'
@@ -554,7 +573,11 @@ const Users = () => {
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
                   <span className='label-text mb-2'>{t('userRole')}</span>
-                  {/* Select Role */}
+                  <RoleSelect
+                    formData={formData}
+                    roleToken={role}
+                    setFormData={setFormData}
+                  />
                 </label>
               </div>
             </div>
@@ -582,11 +605,14 @@ const Users = () => {
 
       {/* Edit User Modal */}
       <dialog ref={editModalRef} className='modal'>
-        <form onSubmit={handleUpdate} className='modal-box w-11/12 max-w-5xl'>
-          <h3 className='font-bold text-lg'>{t('editUser')}</h3>
+        <form
+          onSubmit={handleUpdate}
+          className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
+        >
+          <h3 className='font-bold text-lg'>{t('editUserButton')}</h3>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
             {/* Image Upload - Left Column (30%) */}
-            <div className='col-span-1 flex justify-center items-center'>
+            <div className='col-span-1 flex justify-center'>
               <div className='form-control'>
                 <label className='label cursor-pointer image-hover flex flex-col justify-center'>
                   <span className='label-text'>{t('userPicture')}</span>
@@ -598,7 +624,7 @@ const Users = () => {
                     className='hidden'
                   />
                   {imageProcessing ? (
-                    <div className='mt-4 flex justify-center'>
+                    <div className='mt-4 flex justify-center w-32 h-32 md:w-48 md:h-48'>
                       <span className='loading loading-ring loading-md'></span>
                     </div>
                   ) : (
@@ -623,80 +649,81 @@ const Users = () => {
 
             {/* Right Column - Form Fields (70%) */}
             <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
-              {/* Display Name */}
-              <div className='form-control w-full col-span-2'>
-                <label className='label'>
-                  <span className='label-text'>{t('displayName')}</span>
+              {/* Ward */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('ward')}</span>
+                  <WardSelect formData={formData} setFormData={setFormData} />
                 </label>
-                <input
-                  type='text'
-                  name='display'
-                  value={formData.display}
-                  onChange={handleChange}
-                  className='input input-bordered input-sm md:input-md'
-                />
-              </div>
-
-              {/* Username */}
-              <div className='form-control w-full col-span-2'>
-                <label className='label'>
-                  <span className='label-text'>{t('username')}</span>
-                </label>
-                <input
-                  type='text'
-                  name='username'
-                  required
-                  value={formData.username}
-                  onChange={handleChange}
-                  className='input input-bordered input-sm md:input-md'
-                />
-              </div>
-
-              {/* Role */}
-              <div className='form-control w-full col-span-2 md:col-span-1'>
-                <label className='label'>
-                  <span className='label-text'>{t('role')}</span>
-                </label>
-                <select
-                  name='role'
-                  className='select select-bordered select-sm md:select-md'
-                  value={formData.role}
-                  onChange={handleChange}
-                >
-                  <option value='SUPER'>Super Admin</option>
-                  <option value='ADMIN'>Admin</option>
-                  <option value='USER'>User</option>
-                </select>
               </div>
 
               {/* Status */}
-              <div className='form-control w-full col-span-2 md:col-span-1'>
-                <label className='label'>
-                  <span className='label-text'>{t('status')}</span>
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('userStatus')}</span>
+                  <select
+                    name='status'
+                    className='select select-bordered w-full'
+                    value={formData.status.toString()}
+                    onChange={handleChange}
+                  >
+                    <option value='true'>{t('active')}</option>
+                    <option value='false'>{t('inactive')}</option>
+                  </select>
                 </label>
-                <select
-                  name='status'
-                  className='select select-bordered select-sm md:select-md'
-                  value={formData.status.toString()}
-                  onChange={handleChange}
-                >
-                  <option value='true'>{t('active')}</option>
-                  <option value='false'>{t('inactive')}</option>
-                </select>
               </div>
 
-              {/* Ward */}
-              <div className='form-control w-full col-span-2'>
-                <label className='label'>
-                  <span className='label-text'>{t('ward')}</span>
+              {/* Username */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('userNameForm')}</span>
+                  <input
+                    type='text'
+                    name='username'
+                    value={formData.username}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                  />
                 </label>
-                <input
-                  type='text'
-                  name='wardId'
-                  className='input input-bordered input-sm md:input-md'
-                  value={formData.wardId}
-                  onChange={handleChange}
-                />
+              </div>
+
+              {/* Display Name */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    {t('userDisplayName')}
+                  </span>
+                  <input
+                    type='text'
+                    name='display'
+                    value={formData.display}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                  />
+                </label>
+              </div>
+
+              {/* Role */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('userRole')}</span>
+                  <RoleSelect
+                    formData={formData}
+                    roleToken={role}
+                    setFormData={setFormData}
+                  />
+                </label>
+              </div>
+
+              {/* Password reset */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('titleSecurity')}</span>
+                  <button type='button' className='btn btn-primary w-full'>
+                    <RiKey2Line size={20} />
+                    {t('userPassword')}
+                  </button>
+                </label>
               </div>
             </div>
           </div>
@@ -705,16 +732,16 @@ const Users = () => {
           <div className='modal-action mt-4 md:mt-6'>
             <button
               type='button'
-              className='btn btn-sm md:btn-md'
+              className='btn'
               onClick={() => {
                 editModalRef.current?.close()
                 resetForm()
               }}
             >
-              {t('cancel')}
+              {t('cancelButton')}
             </button>
-            <button type='submit' className='btn btn-primary btn-sm md:btn-md'>
-              {t('submit')}
+            <button type='submit' className='btn btn-primary'>
+              {t('submitButton')}
             </button>
           </div>
         </form>

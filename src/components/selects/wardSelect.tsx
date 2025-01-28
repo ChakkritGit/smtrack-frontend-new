@@ -1,16 +1,27 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { GlobalContextType } from '../../types/global/globalContext'
 import { GlobalContext } from '../../contexts/globalContext'
-import { useContext, useEffect, useState } from 'react'
-import { setWardId } from '../../redux/actions/utilsActions'
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 import { Option, Ward } from '../../types/global/hospitalAndWard'
 import Select from 'react-select'
 import { WardType } from '../../types/smtrack/wards/wardType'
+import { FormState } from '../../types/smtrack/users/usersType'
 
-const WardSelect = () => {
-  const dispatch = useDispatch()
-  const { hosId, wardId } = useSelector((state: RootState) => state.utils)
+interface WardSelectType {
+  formData: FormState
+  setFormData: Dispatch<SetStateAction<FormState>>
+}
+
+const WardSelect = (props: WardSelectType) => {
+  const { hosId } = useSelector((state: RootState) => state.utils)
+  const { formData, setFormData } = props
   const { ward } = useContext(GlobalContext) as GlobalContextType
   const [filterWard, setFilterWard] = useState<WardType[]>([])
 
@@ -39,17 +50,15 @@ const WardSelect = () => {
 
   const getWard = (wardID: string | undefined) => {
     if (wardID !== '') {
-      dispatch(setWardId(String(wardID)))
-    } else {
-      dispatch(setWardId(''))
+      setFormData({ ...formData, wardId: String(wardID) })
     }
   }
 
   useEffect(() => {
-    const filterWard = ward.filter(item =>
-      item?.hosId?.toLowerCase().includes(hosId?.toLowerCase())
+    const filteredWard = ward.filter(item =>
+      hosId ? item?.hosId?.toLowerCase().includes(hosId?.toLowerCase()) : item
     )
-    setFilterWard(filterWard)
+    setFilterWard(filteredWard)
   }, [ward, hosId])
 
   return (
@@ -57,7 +66,7 @@ const WardSelect = () => {
       options={mapOptions<Ward, keyof Ward>(ward, 'id', 'wardName')}
       value={mapDefaultValue<Ward, keyof Ward>(
         filterWard,
-        wardId ? wardId : '',
+        formData.wardId,
         'id',
         'wardName'
       )}

@@ -70,7 +70,7 @@ const ChartMini = (props: ChartMiniProps) => {
       data: mappedData.map(data => ({
         x: data.time,
         y: data.door
-      })),
+      }))
     }
   ]
 
@@ -169,6 +169,7 @@ const ChartMini = (props: ChartMiniProps) => {
     grid: {
       show: true,
       strokeDashArray: 5,
+      borderColor: 'oklch(61% 0 238 / var(--tw-text-opacity, .15))',
       xaxis: {
         lines: {
           show: true
@@ -200,7 +201,7 @@ const ChartMini = (props: ChartMiniProps) => {
           show: true
         },
         axisBorder: {
-          show: true,
+          show: false,
           color: 'oklch(72% 0.1938 31 / 1)'
         },
         min: minTempAvg,
@@ -213,7 +214,7 @@ const ChartMini = (props: ChartMiniProps) => {
           show: true
         },
         axisBorder: {
-          show: true,
+          show: false,
           color: 'oklch(79% 0.1305 238 / 1)'
         },
         min: 0,
@@ -236,15 +237,15 @@ const ChartMini = (props: ChartMiniProps) => {
       }
     ],
     noData: {
-      text: undefined,
+      text: t('nodata'),
       align: 'center',
       verticalAlign: 'middle',
       offsetX: 0,
       offsetY: 0,
       style: {
-        color: undefined,
+        color: 'oklch(61% 0 238 / var(--tw-text-opacity, 1))',
         fontSize: '14px',
-        fontFamily: undefined
+        fontFamily: 'anuphan'
       }
     },
     colors: [
@@ -265,18 +266,18 @@ const ChartMini = (props: ChartMiniProps) => {
           'oklch(84.41% 0.0937 238 / var(--tw-text-opacity, 1))',
           'oklch(0% 0 0 / var(--tw-text-opacity, 0))',
           'oklch(0% 0 0 / var(--tw-text-opacity, 0))',
-          'oklch(0% 0 0 / var(--tw-text-opacity, 0))',
+          'oklch(0% 0 0 / var(--tw-text-opacity, 0))'
         ],
         inverseColors: true,
         opacityFrom: 0.45,
         opacityTo: 0,
-        stops: [0, 100]
+        stops: [0, 85]
       }
     },
     legend: {
       position: 'bottom',
       horizontalAlign: 'right'
-    },
+    }
   }
 
   return (
