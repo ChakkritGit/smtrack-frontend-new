@@ -1,6 +1,5 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import Navbar from '../../components/navigation/navbar/navbar'
-import Sidebar from '../../components/navigation/sidebar/sidebar'
 import { useEffect } from 'react'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,6 +11,7 @@ import {
 import { setUserProfile } from '../../redux/actions/utilsActions'
 import { AxiosError } from 'axios'
 import { SubmitLoading } from '../../components/loading/submitLoading'
+import Sidebar from '../../components/navigation/sidebar/smtrack/sidebar'
 
 const MainSmtrack = () => {
   const dispatch = useDispatch()
@@ -37,7 +37,6 @@ const MainSmtrack = () => {
       } catch (error) {
         if (error instanceof AxiosError) {
           if (error.response?.status === 401) {
-            // dispatch(setShowAlert(true))
           } else {
             console.error('Something wrong' + error)
           }

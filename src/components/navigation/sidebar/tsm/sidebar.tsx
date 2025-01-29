@@ -1,36 +1,36 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../../redux/reducers/rootReducer'
+import { RootState } from '../../../../redux/reducers/rootReducer'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   RiDashboardFill,
   RiDashboardLine,
-  RiFileSettingsFill,
-  RiFileSettingsLine,
   RiHome3Fill,
   RiHome3Line,
   RiListSettingsFill,
   RiListSettingsLine,
   RiSettings3Fill,
   RiSettings3Line,
-  RiShieldCheckFill,
-  RiShieldCheckLine,
   RiUser6Fill,
   RiUser6Line
 } from 'react-icons/ri'
-import { setTmsMode } from '../../../redux/actions/utilsActions'
-import DefaultPic from '../../../assets/images/default-pic.png'
+import { setTmsMode } from '../../../../redux/actions/utilsActions'
+import DefaultPic from '../../../../assets/images/default-pic.png'
 import { useTranslation } from 'react-i18next'
-import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
+import {
+  cookieOptions,
+  cookies
+} from '../../../../constants/utils/utilsConstants'
 
 const Sidebar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { t } = useTranslation()
   const location = useLocation()
-  const { isExpand, userProfile, tmsMode } = useSelector(
+  const { isExpand, userProfile, tmsMode, tokenDecode } = useSelector(
     (state: RootState) => state.utils
   )
   const { ward } = userProfile || {}
+  const { role } = tokenDecode || {}
 
   return (
     <div
@@ -112,85 +112,56 @@ const Sidebar = () => {
                 </span>
               )}
             </Link>
-            <Link
-              to={'/permission'}
-              className={`btn font-normal flex-nowrap justify-start w-full ${
-                location.pathname === '/permission'
-                  ? 'btn-primary'
-                  : 'btn-ghost'
-              } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
-              data-tip={t('sidePermission')}
-            >
-              {location.pathname === '/permission' ? (
-                <RiUser6Fill size={24} />
-              ) : (
-                <RiUser6Line size={24} />
-              )}
-              {!isExpand && (
-                <span className='text-[16px] truncate'>
-                  {t('sidePermission')}
-                </span>
-              )}
-            </Link>
-            <Link
-              to={'/management'}
-              className={`btn font-normal flex-nowrap justify-start w-full ${
-                location.pathname === '/management' ||
-                location.pathname === '/management/logadjust' ||
-                location.pathname === '/management/flasher'
-                  ? 'btn-primary'
-                  : 'btn-ghost'
-              } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
-              data-tip={t('sideManage')}
-            >
-              {location.pathname === '/management' ||
-              location.pathname === '/management/logadjust' ||
-              location.pathname === '/management/flasher' ? (
-                <RiListSettingsFill size={24} />
-              ) : (
-                <RiListSettingsLine size={24} />
-              )}
-              {!isExpand && (
-                <span className='text-[16px] truncate'>{t('sideManage')}</span>
-              )}
-            </Link>
-          </div>
-          <div className='divider mb-0'></div>
-          <div className='flex items-center justify-center flex-col gap-2 p-3'>
-            <Link
-              to={'/repair'}
-              className={`btn font-normal flex-nowrap justify-start w-full ${
-                location.pathname === '/repair' ? 'btn-primary' : 'btn-ghost'
-              } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
-              data-tip={t('sideRepair')}
-            >
-              {location.pathname === '/repair' ? (
-                <RiFileSettingsFill size={24} />
-              ) : (
-                <RiFileSettingsLine size={24} />
-              )}
-              {!isExpand && (
-                <span className='text-[16px] truncate'>{t('sideRepair')}</span>
-              )}
-            </Link>
-            <Link
-              to={'/warranty'}
-              className={`btn font-normal flex-nowrap justify-start w-full ${
-                location.pathname === '/warranty' ? 'btn-primary' : 'btn-ghost'
-              } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
-              data-tip={t('sideWarranty')}
-            >
-              {location.pathname === '/warranty' ? (
-                <RiShieldCheckFill size={24} />
-              ) : (
-                <RiShieldCheckLine size={24} />
-              )}
-              {!isExpand && (
-                <span className='text-[16px] truncate'>
-                  {t('sideWarranty')}
-                </span>
-              )}
-            </Link>
+            {(role === 'LEGACY_ADMIN' ||
+              role === 'SUPER' ||
+              role === 'SERVICE') && (
+              <>
+                <Link
+                  to={'/permission'}
+                  className={`btn font-normal flex-nowrap justify-start w-full ${
+                    location.pathname === '/permission'
+                      ? 'btn-primary'
+                      : 'btn-ghost'
+                  } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
+                  data-tip={t('sidePermission')}
+                >
+                  {location.pathname === '/permission' ? (
+                    <RiUser6Fill size={24} />
+                  ) : (
+                    <RiUser6Line size={24} />
+                  )}
+                  {!isExpand && (
+                    <span className='text-[16px] truncate'>
+                      {t('sidePermission')}
+                    </span>
+                  )}
+                </Link>
+                <Link
+                  to={'/management'}
+                  className={`btn font-normal flex-nowrap justify-start w-full ${
+                    location.pathname === '/management' ||
+                    location.pathname === '/management/logadjust' ||
+                    location.pathname === '/management/flasher'
+                      ? 'btn-primary'
+                      : 'btn-ghost'
+                  } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
+                  data-tip={t('sideManage')}
+                >
+                  {location.pathname === '/management' ||
+                  location.pathname === '/management/logadjust' ||
+                  location.pathname === '/management/flasher' ? (
+                    <RiListSettingsFill size={24} />
+                  ) : (
+                    <RiListSettingsLine size={24} />
+                  )}
+                  {!isExpand && (
+                    <span className='text-[16px] truncate'>
+                      {t('sideManage')}
+                    </span>
+                  )}
+                </Link>
+              </>
+            )}
           </div>
         </div>
         <div className='w-full'>

@@ -52,7 +52,7 @@ const Home = () => {
   const fetchDeviceCount = useCallback(
     async (page: number, size = perPage) => {
       try {
-        const response = await axiosInstance(
+        const response = await axiosInstance.get(
           `/dashboard/count?${
             wardId ? `ward=${wardId}&` : ''
           }page=${page}&perpage=${size}`

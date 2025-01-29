@@ -9,6 +9,7 @@ import { HideFlashFW, HideSetting } from '../middleware/Auth'
 const Home = lazy(() => import('../pages/home/home'))
 const Dashboard = lazy(() => import('../pages/dashboard/dashboard'))
 const Users = lazy(() => import('../pages/users/users'))
+const Management = lazy(() => import('../pages/management/management'))
 
 const smtrackChildren: RouteObject[] = [
   {
@@ -44,7 +45,11 @@ const smtrackChildren: RouteObject[] = [
       },
       {
         path: 'management',
-        element: <>management</>,
+        element: (
+          <Suspense fallback={<UserSkeleton />}>
+            <Management />
+          </Suspense>
+        ),
         errorElement: <></>
       },
       {

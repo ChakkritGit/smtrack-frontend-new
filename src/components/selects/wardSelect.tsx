@@ -10,9 +10,9 @@ import {
   useState
 } from 'react'
 import { Option, Ward } from '../../types/global/hospitalAndWard'
-import Select from 'react-select'
 import { WardType } from '../../types/smtrack/wards/wardType'
 import { FormState } from '../../types/smtrack/users/usersType'
+import Select from 'react-select'
 
 interface WardSelectType {
   formData: FormState
@@ -63,7 +63,7 @@ const WardSelect = (props: WardSelectType) => {
 
   return (
     <Select
-      options={mapOptions<Ward, keyof Ward>(ward, 'id', 'wardName')}
+      options={mapOptions<Ward, keyof Ward>(filterWard, 'id', 'wardName')}
       value={mapDefaultValue<Ward, keyof Ward>(
         filterWard,
         formData.wardId,

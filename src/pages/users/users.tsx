@@ -33,6 +33,7 @@ import WardSelect from '../../components/selects/wardSelect'
 import RoleSelect from '../../components/selects/roleSelect'
 import { UserRole } from '../../types/global/users/usersType'
 import { AxiosError } from 'axios'
+import StatusSelect from '../../components/selects/statusSelect'
 
 const Users = () => {
   const dispatch = useDispatch()
@@ -221,39 +222,58 @@ const Users = () => {
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
     dispatch(setSubmitLoading())
-    try {
-      const formDataObj = createFormData()
-      await axiosInstance.put<responseType<UsersType>>(
-        `/auth/user/${formData.id}`,
-        formDataObj,
-        {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        }
-      )
+    if (
+      formData.username !== '' &&
+      formData.password !== '' &&
+      formData.display !== '' &&
+      formData.wardId !== '' &&
+      formData.role !== undefined
+    ) {
+      try {
+        const formDataObj = createFormData()
+        await axiosInstance.put<responseType<UsersType>>(
+          `/auth/user/${formData.id}`,
+          formDataObj,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          }
+        )
 
-      editModalRef.current?.close()
-      resetForm()
-      await fetchUsers()
-      Swal.fire({
-        title: t('alertHeaderError'),
-        text: t('submitSuccess'),
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 2500
-      })
-    } catch (error) {
-      if (error instanceof AxiosError) {
+        editModalRef.current?.close()
+        resetForm()
+        await fetchUsers()
         Swal.fire({
           title: t('alertHeaderError'),
-          text: error.response?.data.message,
-          icon: 'error',
+          text: t('submitSuccess'),
+          icon: 'success',
           showConfirmButton: false,
           timer: 2500
         })
-      } else {
-        console.error(error)
+      } catch (error) {
+        editModalRef.current?.close()
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          }).finally(() => editModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
       }
-    } finally {
+    } else {
+      editModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => editModalRef.current?.showModal())
       dispatch(setSubmitLoading())
     }
   }
@@ -325,7 +345,7 @@ const Users = () => {
           itemPerPage={[10, 30, 50, 100]}
           renderItem={(item, index) => (
             <div
-              className='min-h-[240px] max-h-[270px] sm:w-[300px] lg:w-full w-full bg-base-100 rounded-btn'
+              className={`min-h-[240px] max-h-[270px] sm:w-[300px] lg:w-full w-full bg-base-100 rounded-btn`}
               key={index}
             >
               <div
@@ -333,23 +353,31 @@ const Users = () => {
                 key={item.id}
               >
                 <div className='flex items-center justify-between w-full'>
-                  <span
-                    className={`badge bg-opacity-15 border-1 font-bold h-[25px] ${
-                      item.role
-                        ? item.role === 'SUPER'
-                          ? 'badge-super'
-                          : item.role === 'SERVICE'
-                          ? 'badge-service'
-                          : item.role === 'ADMIN'
-                          ? 'badge-admin'
-                          : item.role === 'USER'
-                          ? 'badge-user'
-                          : 'badge-guest'
-                        : ''
-                    }`}
-                  >
-                    {item.role ? getRoleLabel(item.role, t) : '—'}
-                  </span>
+                  {item.status ? (
+                    <span
+                      className={`badge bg-opacity-15 border-1 font-bold h-[25px] ${
+                        item.role
+                          ? item.role === 'SUPER'
+                            ? 'badge-super'
+                            : item.role === 'SERVICE'
+                            ? 'badge-service'
+                            : item.role === 'ADMIN'
+                            ? 'badge-admin'
+                            : item.role === 'USER'
+                            ? 'badge-user'
+                            : 'badge-guest'
+                          : ''
+                      }`}
+                    >
+                      {item.role ? getRoleLabel(item.role, t) : '—'}
+                    </span>
+                  ) : (
+                    <span
+                      className={`badge bg-red-500/15 border-red-500 text-red-500 bg-opacity-15 border-1 font-bold h-[25px]`}
+                    >
+                      {!item.status ? t('userInactive') : t('userActive')}
+                    </span>
+                  )}
                   <div className='dropdown dropdown-end'>
                     <button
                       tabIndex={0}
@@ -383,7 +411,11 @@ const Users = () => {
                     </ul>
                   </div>
                 </div>
-                <div className='flex items-center justify-center'>
+                <div
+                  className={`flex items-center justify-center ${
+                    !item.status ? 'grayscale' : ''
+                  }`}
+                >
                   <div className='avatar'>
                     <div className='w-24 rounded-btn'>
                       <img src={item.pic ? item.pic : defaultPic} alt='user' />
@@ -661,15 +693,7 @@ const Users = () => {
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
                   <span className='label-text mb-2'>{t('userStatus')}</span>
-                  <select
-                    name='status'
-                    className='select select-bordered w-full'
-                    value={formData.status.toString()}
-                    onChange={handleChange}
-                  >
-                    <option value='true'>{t('active')}</option>
-                    <option value='false'>{t('inactive')}</option>
-                  </select>
+                  <StatusSelect formData={formData} setFormData={setFormData} />
                 </label>
               </div>
 

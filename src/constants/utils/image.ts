@@ -32,7 +32,7 @@ export const resizeImage = (
 
           const svgBlob = new Blob([updatedSvg], { type: 'image/svg+xml' })
           const resizedFile = new File([svgBlob], file.name, {
-            type: finalMimeString
+            type: 'image/svg+xml'
           })
           resolve(resizedFile)
           return

@@ -13,9 +13,14 @@ interface Role {
   value: string
 }
 
+interface Status {
+  key: string
+  value: string
+}
+
 type Option = {
   value: string
   label: string
 }
 
-export type { Hospital, Ward, Option, Role }
+export type { Hospital, Ward, Option, Role, Status }
