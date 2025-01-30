@@ -177,7 +177,7 @@ const Sidebar = () => {
                 <div className='flex items-center justify-center gap-2'>
                   <input
                     type='checkbox'
-                    className='toggle toggle-md !h-[1.7rem]'
+                    className='toggle toggle-md'
                     defaultChecked={tmsMode}
                     onClick={() => {
                       dispatch(setTmsMode())
