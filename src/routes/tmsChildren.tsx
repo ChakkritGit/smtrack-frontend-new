@@ -1,8 +1,15 @@
 import { lazy, Suspense } from 'react'
 import { HideSettingTms } from '../middleware/Auth'
-import { HomeSkeletonTms } from '../components/skeleton'
+import {
+  DashboardSkeletonTms,
+  HomeSkeletonTms,
+  UserSkeleton
+} from '../components/skeleton'
 import { RouteObject } from 'react-router-dom'
-const HomeTms = lazy(() => import('../pages/home/home.tms'))
+import ManagementTms from '../pages/management/managementTms'
+const HomeTms = lazy(() => import('../pages/home/homeTms'))
+const DashboardTms = lazy(() => import('../pages/dashboard/dashboardTms'))
+const Users = lazy(() => import('../pages/users/users'))
 
 const tmsChildren: RouteObject[] = [
   {
@@ -17,8 +24,8 @@ const tmsChildren: RouteObject[] = [
   {
     path: 'dashboard',
     element: (
-      <Suspense fallback={<span>Loading...</span>}>
-        <>Dashboard</>
+      <Suspense fallback={<DashboardSkeletonTms />}>
+        <DashboardTms />
       </Suspense>
     ),
     errorElement: <></>
@@ -30,8 +37,8 @@ const tmsChildren: RouteObject[] = [
       {
         path: 'permission',
         element: (
-          <Suspense fallback={<span>Loading...</span>}>
-            <>Permission</>
+          <Suspense fallback={<UserSkeleton />}>
+            <Users />
           </Suspense>
         ),
         errorElement: <></>
@@ -40,7 +47,7 @@ const tmsChildren: RouteObject[] = [
         path: 'management',
         element: (
           <Suspense fallback={<span>Loading...</span>}>
-            <>Management</>
+            <ManagementTms />
           </Suspense>
         ),
         errorElement: <></>

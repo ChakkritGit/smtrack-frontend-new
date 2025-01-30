@@ -8,10 +8,18 @@ import {
 } from 'react-icons/ri'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
-import { setIsExpand, setSearch } from '../../../redux/actions/utilsActions'
+import {
+  setCookieEncode,
+  setIsExpand,
+  setSearch
+} from '../../../redux/actions/utilsActions'
 import DefaultPic from '../../../assets/images/default-pic.png'
 import { UAParser } from 'ua-parser-js'
-import { getRoleLabel } from '../../../constants/utils/utilsConstants'
+import {
+  cookieOptions,
+  cookies,
+  getRoleLabel
+} from '../../../constants/utils/utilsConstants'
 import { useTranslation } from 'react-i18next'
 import ThemeList from '../../theme/themeList'
 import LanguageList from '../../language/languageList'
@@ -73,7 +81,7 @@ function Navbar () {
             )}
           </label>
           <div className='form-control'>
-            <label className='input input-bordered bg-base-200 hidden border-none h-10 w-[250px] items-center gap-2 lg:flex duration-300'>
+            <label className='input input-bordered bg-base-200/50 hidden border-none h-10 w-[250px] items-center gap-2 lg:flex duration-300'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 viewBox='0 0 16 16'
@@ -129,11 +137,11 @@ function Navbar () {
               role='button'
               className='btn btn-ghost gap-3 px-2'
             >
-              <img
-                src={pic ? pic : DefaultPic}
-                alt='User-img'
-                className='w-10 rounded-full'
-              />
+              <div className='avatar'>
+                <div className='w-10 rounded-btn'>
+                  <img src={pic ? pic : DefaultPic} alt='User-img' />
+                </div>
+              </div>
               <div className='flex flex-col items-start gap-1'>
                 <span className='font-normal text-[17px]'>
                   {display ? display : '—'}
@@ -157,7 +165,12 @@ function Navbar () {
               <li>
                 <a>Settings</a>
               </li>
-              <li>
+              <li
+                onClick={() => {
+                  cookies.remove('tokenObject', cookieOptions)
+                  dispatch(setCookieEncode(undefined))
+                }}
+              >
                 <a>Logout</a>
               </li>
             </ul>

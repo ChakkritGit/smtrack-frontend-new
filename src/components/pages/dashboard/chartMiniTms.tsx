@@ -1,30 +1,33 @@
 import Chart from 'react-apexcharts'
-import { DeviceLogType } from '../../../types/smtrack/logs/deviceLog'
 import { useTranslation } from 'react-i18next'
+import { DeviceLogTms } from '../../../types/tms/devices/deviceType'
 
 interface ChartMiniProps {
-  logData: DeviceLogType[]
-  tempMin: number
-  tempMax: number
+  deviceLogs: DeviceLogTms | undefined
+  minTemp: number | undefined
+  maxTemp: number | undefined
 }
 
-const ChartMini = (props: ChartMiniProps) => {
+const ChartMiniTms = (props: ChartMiniProps) => {
   const { t } = useTranslation()
-  const { logData, tempMin, tempMax } = props
+  const { deviceLogs, minTemp, maxTemp } = props
 
-  const tempAvgValues = logData.map(item => item.temp)
+  const tempAvgValues = deviceLogs?.log
+    ? deviceLogs?.log.map(item => item.tempValue)
+    : [0]
   const minTempAvg = Math.min(...tempAvgValues) - 2
   const maxTempAvg = Math.max(...tempAvgValues) + 2
 
-  const mappedData = logData.map(item => {
-    const time = new Date(item.sendTime).getTime()
-    return {
-      time,
-      tempAvg: item.tempDisplay,
-      humidityAvg: item.humidityDisplay,
-      door: item.door1 || item.door2 || item.door3 ? 1 : 0
-    }
-  })
+  const mappedData = deviceLogs?.log
+    ? deviceLogs?.log.map(item => {
+        const time = new Date(item.createdAt).getTime()
+        return {
+          time,
+          tempAvg: item.tempValue,
+          door: item.door ? 1 : 0
+        }
+      })
+    : [{ time: '', tempAvg: 0, door: 0 }]
 
   const series: ApexAxisChartSeries = [
     {
@@ -38,20 +41,11 @@ const ChartMini = (props: ChartMiniProps) => {
     },
     {
       type: 'area',
-      zIndex: 40,
-      name: t('humidityName'),
-      data: mappedData.map(data => ({
-        x: data.time,
-        y: data.humidityAvg
-      }))
-    },
-    {
-      type: 'area',
       name: t('tempMin'),
       zIndex: 60,
       data: mappedData.map(data => ({
         x: data.time,
-        y: tempMin
+        y: minTemp
       }))
     },
     {
@@ -60,7 +54,7 @@ const ChartMini = (props: ChartMiniProps) => {
       zIndex: 60,
       data: mappedData.map(data => ({
         x: data.time,
-        y: tempMax
+        y: maxTemp
       }))
     },
     {
@@ -189,8 +183,8 @@ const ChartMini = (props: ChartMiniProps) => {
     },
     stroke: {
       lineCap: 'round',
-      curve: ['smooth', 'smooth', 'smooth', 'smooth', 'stepline'],
-      width: [3, 3, 1, 1, 2]
+      curve: ['smooth', 'smooth', 'smooth', 'stepline'],
+      width: [2.5, 0.8, 0.8, 1.5]
     },
     xaxis: {
       type: 'datetime'
@@ -206,19 +200,6 @@ const ChartMini = (props: ChartMiniProps) => {
         },
         min: minTempAvg,
         max: maxTempAvg
-      },
-      {
-        show: true,
-        opposite: false,
-        axisTicks: {
-          show: true
-        },
-        axisBorder: {
-          show: false,
-          color: 'oklch(79% 0.1305 238 / 1)'
-        },
-        min: 0,
-        max: 100
       },
       {
         show: false,
@@ -250,7 +231,6 @@ const ChartMini = (props: ChartMiniProps) => {
     },
     colors: [
       'oklch(72% 0.1938 31 / var(--tw-text-opacity, 1))',
-      'oklch(79% 0.1305 238 / var(--tw-text-opacity, 1))',
       'oklch(81% 0.1696 175 / var(--tw-text-opacity, 1))',
       'oklch(81% 0.1696 175 / var(--tw-text-opacity, 1))',
       'oklch(90% 0.1378 90 / var(--tw-text-opacity, 1))'
@@ -263,7 +243,6 @@ const ChartMini = (props: ChartMiniProps) => {
         shadeIntensity: 0.5,
         gradientToColors: [
           'oklch(79.71% 0.1332 31 / var(--tw-text-opacity, 1))',
-          'oklch(84.41% 0.0937 238 / var(--tw-text-opacity, 1))',
           'oklch(0% 0 0 / var(--tw-text-opacity, 0))',
           'oklch(0% 0 0 / var(--tw-text-opacity, 0))',
           'oklch(0% 0 0 / var(--tw-text-opacity, 0))'
@@ -287,4 +266,4 @@ const ChartMini = (props: ChartMiniProps) => {
   )
 }
 
-export default ChartMini
+export default ChartMiniTms

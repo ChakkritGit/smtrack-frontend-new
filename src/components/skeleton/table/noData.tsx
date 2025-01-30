@@ -4,9 +4,9 @@ const DataTableNoData = () => {
   const { t } = useTranslation()
 
   return (
-    <div className='w-full p-3'>
-      <div className='flex items-center justify-center gap-3'>
-        <span>{t('nodata')}</span>
+    <div className='w-full p-3 h-full'>
+      <div className='flex items-center justify-center gap-3 h-full'>
+        <span className='text-[14px] text-base-content/65'>{t('nodata')}</span>
       </div>
     </div>
   )

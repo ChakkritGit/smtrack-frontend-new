@@ -1,29 +1,29 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import HospitalAndWard from '../../components/filter/hospitalAndWard'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
-import { AxiosError } from 'axios'
-import { DeviceLogsType } from '../../types/smtrack/devices/deviceType'
-import axiosInstance from '../../constants/axios/axiosInstance'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
-import CardInFoComponent from '../../components/pages/dashboard/cardInfo'
-import CardStatus from '../../components/pages/dashboard/cardStatus'
-import DeviceList from '../../components/filter/deviceList'
+import { AxiosError } from 'axios'
+import axiosInstance from '../../constants/axios/axiosInstance'
+import HospitalAndWard from '../../components/filter/hospitalAndWard'
 import Loading from '../../components/skeleton/table/loading'
-import ChartSwiperWrapper from '../../components/pages/dashboard/chartSwiperWrapper'
-import DataTableWrapper from '../../components/pages/dashboard/dataTableWrapper'
+import { DeviceLogTms } from '../../types/tms/devices/deviceType'
+import CardInfoTms from '../../components/pages/dashboard/cardInfoTms'
+import CardStatusTms from '../../components/pages/dashboard/cardStatusTms'
+import ChartSwiperWrapperTms from '../../components/pages/dashboard/chartSwiperWrapperTms'
+import DataTableWrapperTms from '../../components/pages/dashboard/dataTableWrapperTms'
+import DeviceTmsList from '../../components/filter/deviceListTms'
 
-const Dashboard = () => {
+const DashboardTms = () => {
   const { deviceKey } = useSelector((state: RootState) => state.utils)
-  const [deviceLogs, setDeviceLogs] = useState<DeviceLogsType>()
+  const [deviceLogs, setDeviceLogs] = useState<DeviceLogTms>()
   const [loading, setLoading] = useState(false)
   const modalRef = useRef<HTMLDialogElement>(null)
 
   const fetchDeviceLogs = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await axiosInstance.get<responseType<DeviceLogsType>>(
-        `/devices/device/${deviceKey}`
+      const response = await axiosInstance.get<responseType<DeviceLogTms>>(
+        `/legacy/device/${deviceKey}`
       )
       setDeviceLogs(response.data.data)
     } catch (error) {
@@ -42,11 +42,11 @@ const Dashboard = () => {
   }, [deviceKey])
 
   const CardInfoComponent = useMemo(() => {
-    return <CardInFoComponent deviceData={deviceLogs} />
+    return <CardInfoTms deviceData={deviceLogs} />
   }, [deviceKey, deviceLogs])
 
   const CardStatusComponent = useMemo(() => {
-    return <CardStatus deviceData={deviceLogs} />
+    return <CardStatusTms deviceData={deviceLogs} />
   }, [deviceKey, deviceLogs])
 
   useEffect(() => {
@@ -62,13 +62,13 @@ const Dashboard = () => {
       <dialog ref={modalRef} className='modal'>
         <div className='modal-box h-[500px]'>
           <h2 className='text-xl mb-4'>Select a Device</h2>
-          <DeviceList />
+          <DeviceTmsList />
         </div>
       </dialog>
       {deviceKey && (
         <>
           <div className='flex items-center justify-between flex-wrap lg:flex-nowrap xl:flex-nowrap gap-3 mt-[16px]'>
-            <DeviceList />
+            <DeviceTmsList />
             <HospitalAndWard />
           </div>
           {loading ? (
@@ -77,20 +77,20 @@ const Dashboard = () => {
             </div>
           ) : (
             <>
-              <div className='flex items-center gap-4 mt-4 flex-wrap lg:flex-wrap xl:flex-nowrap'>
+              <div className='flex items-start gap-4 mt-4 flex-wrap lg:flex-wrap xl:flex-nowrap'>
                 <div className='w-full xl:w-[35%] lg:h-[295px] bg-base-100 rounded-btn overflow-hidden'>
                   {CardInfoComponent}
                 </div>
-                <div className='grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4 w-full xl:w-[65%] justify-items-center'>
+                <div className='grid grid-cols-2 md:grid-cols-4 xl:grid-cols-12 gap-4 w-full xl:w-[65%]'>
                   {CardStatusComponent}
                 </div>
               </div>
               <div className='grid grid-cols-1 lg:grid-cols-2 mt-4 gap-3'>
                 <div className='w-full h-[435px]'>
-                  <ChartSwiperWrapper deviceLogs={deviceLogs} />
+                  <ChartSwiperWrapperTms deviceLogs={deviceLogs} />
                 </div>
                 <div className='w-full h-[435px]'>
-                  <DataTableWrapper deviceLogs={deviceLogs} />
+                  <DataTableWrapperTms deviceLogs={deviceLogs} />
                 </div>
               </div>
             </>
@@ -101,4 +101,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default DashboardTms

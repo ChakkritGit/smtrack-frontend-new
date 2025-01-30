@@ -20,17 +20,21 @@ import {
 import { setTmsMode } from '../../../../redux/actions/utilsActions'
 import DefaultPic from '../../../../assets/images/default-pic.png'
 import { useTranslation } from 'react-i18next'
-import { cookieOptions, cookies } from '../../../../constants/utils/utilsConstants'
+import {
+  cookieOptions,
+  cookies
+} from '../../../../constants/utils/utilsConstants'
 
 const Sidebar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { t } = useTranslation()
   const location = useLocation()
-  const { isExpand, userProfile, tmsMode } = useSelector(
+  const { isExpand, userProfile, tmsMode, tokenDecode } = useSelector(
     (state: RootState) => state.utils
   )
   const { ward } = userProfile || {}
+  const { role } = tokenDecode || {}
 
   return (
     <div
@@ -196,24 +200,26 @@ const Sidebar = () => {
         <div className='w-full'>
           <div className='divider mb-0'></div>
           <div className='flex justify-center flex-col gap-3 p-3'>
-            <div className='flex flex-col items-center gap-2'>
-              {!isExpand && (
-                <span className='text-[12px] truncate'>
-                  *Switch mode eTEMP and TMS
-                </span>
-              )}
-              <div className='flex items-center justify-center gap-2'>
-                <input
-                  type='checkbox'
-                  className='toggle toggle-md !h-[1.7rem]'
-                  defaultChecked={tmsMode}
-                  onClick={() => {
-                    dispatch(setTmsMode())
-                    cookies.set('tmsMode', !tmsMode, cookieOptions)
-                  }}
-                />
+            {(role === 'SUPER' || role === 'SERVICE') && (
+              <div className='flex flex-col items-center gap-2'>
+                {!isExpand && (
+                  <span className='text-[12px] truncate'>
+                    *Switch mode eTEMP and TMS
+                  </span>
+                )}
+                <div className='flex items-center justify-center gap-2'>
+                  <input
+                    type='checkbox'
+                    className='toggle toggle-md !h-[1.7rem]'
+                    defaultChecked={tmsMode}
+                    onClick={() => {
+                      dispatch(setTmsMode())
+                      cookies.set('tmsMode', !tmsMode, cookieOptions)
+                    }}
+                  />
+                </div>
               </div>
-            </div>
+            )}
             <Link
               to={'/settings'}
               className={`btn font-normal flex-nowrap justify-start w-full ${

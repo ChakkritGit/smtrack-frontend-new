@@ -15,7 +15,7 @@ const GLOBAL_SEARCH = 'GLOBAL_SEARCH'
 const THEME_MODE = 'THEME_MODE'
 const HOS_ID = 'HOS_ID'
 const WARD_ID = 'WARD_ID'
-const DEVICE_ID = 'DEVICE_ID'
+const DEVICE_KEY = 'DEVICE_KEY'
 const SUBMIT_LOADING = 'SUBMIT_LOADING'
 
 interface UtilsState {
@@ -29,7 +29,7 @@ interface UtilsState {
   isExpand: boolean
   hosId: string
   wardId: string
-  deviceId: string
+  deviceKey: string
   submitLoading: boolean
 }
 
@@ -45,7 +45,7 @@ type UtilsAction =
   | { type: typeof SUBMIT_LOADING }
   | { type: typeof HOS_ID; payload: string }
   | { type: typeof WARD_ID; payload: string }
-  | { type: typeof DEVICE_ID; payload: string }
+  | { type: typeof DEVICE_KEY; payload: string }
 
 export {
   COOKIE_ENCODE,
@@ -58,7 +58,7 @@ export {
   THEME_MODE,
   HOS_ID,
   WARD_ID,
-  DEVICE_ID,
+  DEVICE_KEY,
   SUBMIT_LOADING
 }
 export type { UtilsState, UtilsAction }

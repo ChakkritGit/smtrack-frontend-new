@@ -37,7 +37,7 @@ import StatusSelect from '../../components/selects/statusSelect'
 
 const Users = () => {
   const dispatch = useDispatch()
-  const { globalSearch, wardId, tokenDecode } = useSelector(
+  const { globalSearch, wardId, tokenDecode, tmsMode } = useSelector(
     (state: RootState) => state.utils
   )
   const { t } = useTranslation()
@@ -50,7 +50,10 @@ const Users = () => {
     username: '',
     password: '',
     display: '',
-    role: 'GUEST' as UserRole,
+    role:
+      role === 'LEGACY_ADMIN'
+        ? ('LEGACY_USER' as UserRole)
+        : ('GUEST' as UserRole),
     status: true,
     wardId: '',
     imageFile: null,
@@ -333,8 +336,15 @@ const Users = () => {
         : item.display?.toLowerCase().includes(globalSearch.toLowerCase()) ||
           item.username?.toLowerCase().includes(globalSearch.toLowerCase())
     )
-    setUsersFilter(filterUsers)
-  }, [users, globalSearch, wardId])
+    const newFilter = tmsMode
+      ? filterUsers.filter(
+          item =>
+            item.role?.includes('LEGACY_ADMIN') ||
+            item.role?.includes('LEGACY_USER')
+        )
+      : filterUsers
+    setUsersFilter(newFilter)
+  }, [users, globalSearch, wardId, tmsMode])
 
   const UserCard = useMemo(() => {
     if (usersFilter?.length > 0) {
@@ -345,7 +355,7 @@ const Users = () => {
           itemPerPage={[10, 30, 50, 100]}
           renderItem={(item, index) => (
             <div
-              className={`min-h-[240px] max-h-[270px] sm:w-[300px] lg:w-full w-full bg-base-100 rounded-btn`}
+              className={`min-h-[240px] max-h-[270px] sm:w-[300px] lg:w-full w-full ${!item.status ? 'bg-base-100/40' : 'bg-base-100'} rounded-btn`}
               key={index}
             >
               <div
@@ -397,7 +407,9 @@ const Users = () => {
                           <a>{t('editButton')}</a>
                         </div>
                       </li>
-                      {(role === 'SUPER' || role === 'ADMIN') && (
+                      {(role === 'SUPER' ||
+                        role === 'ADMIN' ||
+                        role === 'LEGACY_ADMIN') && (
                         <>
                           <div className='divider my-1 h-2 before:h-[1px] after:h-[1px]'></div>
                           <li onClick={() => deleteUser(item.id)}>
@@ -460,7 +472,7 @@ const Users = () => {
     <div className='p-3 px-[16px]'>
       {/* Header Section */}
       <div className='flex flex-col lg:flex-row lg:items-center justify-between mt-3'>
-        <span className='text-[28px] font-medium'>{t('sidePermission')}</span>
+        <span className='text-[20px] font-medium'>{t('sidePermission')}</span>
         <div className='flex flex-col lg:flex-row mt-3 lg:mt-0 lg:items-center items-end gap-4'>
           <HospitalAndWard />
           <button

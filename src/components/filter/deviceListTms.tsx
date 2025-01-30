@@ -1,26 +1,45 @@
-import Select from 'react-select'
-import axiosInstance from '../../constants/axios/axiosInstance'
-import { AxiosError } from 'axios'
-import { useCallback, useEffect, useState } from 'react'
-import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
-import { DeviceListType } from '../../types/smtrack/devices/deviceType'
-import { Option } from '../../types/global/hospitalAndWard'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../redux/reducers/rootReducer'
-import { setDeviceKey } from '../../redux/actions/utilsActions'
+import Select from 'react-select'
+import { Option } from '../../types/global/hospitalAndWard'
 import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
+import { setDeviceKey } from '../../redux/actions/utilsActions'
+import { RootState } from '../../redux/reducers/rootReducer'
+import { useCallback, useEffect, useState } from 'react'
+import axiosInstance from '../../constants/axios/axiosInstance'
+import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
+import { AxiosError } from 'axios'
+import { DeviceListTmsType } from '../../types/tms/devices/deviceType'
 
-const DeviceList = () => {
+const DeviceTmsList = () => {
   const dispatch = useDispatch()
   const { deviceKey, wardId } = useSelector((state: RootState) => state.utils)
-  const [deviceList, setDeviceList] = useState<DeviceListType[]>([])
-  const [deviceListFilter, setDeviceListFilter] = useState<DeviceListType[]>([])
+  const [deviceList, setDeviceList] = useState<DeviceListTmsType[]>([])
+  const [deviceListFilter, setDeviceListFilter] = useState<DeviceListTmsType[]>(
+    []
+  )
+  // const fetchDeviceList = useCallback(async () => {
+  //   try {
+  //     const response = await axiosInstance.get<
+  //       responseType<DeviceListTmsType[]>
+  //     >(`/legacy/device/devices/list`)
+  //     setNumber((number += 1))
+  //     if (response.data.data && response.data.data.length > 0) {
+  //       setDeviceList(response.data.data)
+  //     }
+  //   } catch (error) {
+  //     if (error instanceof AxiosError) {
+  //       console.error(error.response?.data.message)
+  //     } else {
+  //       console.error(error)
+  //     }
+  //   }
+  // }, [])
 
   const fetchDeviceList = useCallback(async () => {
     try {
-      const response = await axiosInstance.get<responseType<DeviceListType[]>>(
-        '/devices/dashboard/device'
-      )
+      const response = await axiosInstance.get<
+        responseType<DeviceListTmsType[]>
+      >('/legacy/device/devices/list')
       setDeviceList(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -67,15 +86,15 @@ const DeviceList = () => {
 
   return (
     <Select
-      options={mapOptions<DeviceListType, keyof DeviceListType>(
+      options={mapOptions<DeviceListTmsType, keyof DeviceListTmsType>(
         deviceListFilter,
-        'id',
+        'sn',
         'name'
       )}
-      value={mapDefaultValue<DeviceListType, keyof DeviceListType>(
+      value={mapDefaultValue<DeviceListTmsType, keyof DeviceListTmsType>(
         deviceListFilter,
         deviceKey,
-        'id',
+        'sn',
         'name'
       )}
       onChange={e => {
@@ -89,4 +108,4 @@ const DeviceList = () => {
   )
 }
 
-export default DeviceList
+export default DeviceTmsList

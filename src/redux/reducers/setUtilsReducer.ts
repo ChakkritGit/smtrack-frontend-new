@@ -1,6 +1,21 @@
 // redux/reducers/toggleReducer.js
 import { cookies } from '../../constants/utils/utilsConstants'
-import { COOKIE_ENCODE, COOKIE_DECODE, TOKEN_DECODE, TMS_MODE, UtilsState, UtilsAction, IS_EXPAND, USER_PROFILE, GLOBAL_SEARCH, THEME_MODE, WARD_ID, DEVICE_ID, HOS_ID, SUBMIT_LOADING } from '../types/utilsTypes'
+import {
+  COOKIE_ENCODE,
+  COOKIE_DECODE,
+  TOKEN_DECODE,
+  TMS_MODE,
+  UtilsState,
+  UtilsAction,
+  IS_EXPAND,
+  USER_PROFILE,
+  GLOBAL_SEARCH,
+  THEME_MODE,
+  WARD_ID,
+  HOS_ID,
+  SUBMIT_LOADING,
+  DEVICE_KEY
+} from '../types/utilsTypes'
 
 const initialState: UtilsState = {
   cookieEncode: cookies.get('tokenObject'),
@@ -8,16 +23,19 @@ const initialState: UtilsState = {
   tokenDecode: undefined,
   userProfile: undefined,
   globalSearch: '',
-  themeMode: localStorage.getItem("theme") ?? "",
+  themeMode: localStorage.getItem('theme') ?? '',
   tmsMode: cookies.get('tmsMode') ?? false,
   isExpand: localStorage.getItem('expandaside') === 'true',
   hosId: cookies.get('hosId'),
   wardId: cookies.get('wardId'),
-  deviceId: cookies.get('deviceId'),
+  deviceKey: cookies.get('deviceKey'),
   submitLoading: false
 }
 
-const utilsReducer = (state = initialState, action: UtilsAction): UtilsState => {
+const utilsReducer = (
+  state = initialState,
+  action: UtilsAction
+): UtilsState => {
   switch (action.type) {
     case COOKIE_ENCODE:
       return { ...state, cookieEncode: action.payload }
@@ -41,8 +59,8 @@ const utilsReducer = (state = initialState, action: UtilsAction): UtilsState => 
       return { ...state, hosId: action.payload }
     case WARD_ID:
       return { ...state, wardId: action.payload }
-    case DEVICE_ID:
-      return { ...state, deviceId: action.payload }
+    case DEVICE_KEY:
+      return { ...state, deviceKey: action.payload }
     default:
       return state
   }

@@ -106,7 +106,7 @@ const HospitalAndWard = () => {
     <div className='flex items-center justify-center gap-3 h-[35px]'>
       {showFilter ? (
         <>
-          {role !== 'ADMIN' && (
+          {(role === 'SUPER' || role === 'SERVICE') && (
             <Select
               options={mapOptions<Hospital, keyof Hospital>(
                 updatedHosData,

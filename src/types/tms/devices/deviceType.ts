@@ -31,4 +31,41 @@ type CountTms = {
   temp: number
 }
 
-export type { CountTms, DeviceTmsType }
+type DeviceListTmsType = {
+  hospital: string
+  id: string
+  name: string
+  sn: string
+  ward: string
+}
+
+type DeviceLogTms = {
+  adjTemp: number
+  hospital: string
+  id: string
+  maxTemp: number
+  minTemp: number
+  name: string
+  record: number
+  sn: string
+  ward: string
+  log: DeviceLogsTms[]
+}
+
+type DeviceLogsTms = {
+  createdAt: string
+  date: string
+  door: boolean
+  id: string
+  internet: boolean
+  isAlert: boolean
+  mcuId: string
+  message?: string
+  plugin: boolean
+  realValue: number
+  tempValue: number
+  time: string
+  updatedAt: string
+}
+
+export type { CountTms, DeviceTmsType, DeviceListTmsType, DeviceLogTms, DeviceLogsTms }

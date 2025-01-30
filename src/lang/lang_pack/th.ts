@@ -429,6 +429,8 @@ export default {
     expandSide: 'ย่อแถบเมนู',
     selectPerPage: 'จำนวนต่อหน้า',
     selectValue: 'เลือก',
+    hospitalsName: 'โรงพยาบาล',
+    wardsName: 'วอร์ด',
 
     // connect
     ipAddress: 'IP',

@@ -136,11 +136,26 @@
 }
 
 .apexcharts-tooltip.apexcharts-active {
-  @apply !bg-base-200 !shadow-sm p-2 !z-20;
+  @apply !bg-base-200/95 backdrop-blur !shadow-sm p-2 !z-20 !rounded-btn;
 }
 
 .chart-h>div:nth-child(1)>.swiper-wrapper {
   @apply !h-[310px];
+}
+
+.dataTableWrapperWithNoData {
+  height: calc(100% - 1.25rem
+      /* 20px */
+    );
+
+  &>div {
+    max-height: unset;
+    height: 100%;
+
+    &>div {
+      height: 100%;
+    }
+  }
 }
 
 .dataTableWrapper {
@@ -149,15 +164,15 @@
   }
 
   &>div>div>div>div {
-    @apply bg-base-100 duration-300;
+    @apply bg-base-100 duration-300 h-full;
   }
 
   &>div>div>div>div>div {
-    @apply bg-transparent !text-base-content !border-b-base-content/10 duration-300;
-
     &>div {
       @apply duration-300;
     }
+
+    @apply bg-transparent !text-base-content !border-b-base-content/10 duration-300;
   }
 
   &>div>div>div>div:nth-child(2)>div:hover {

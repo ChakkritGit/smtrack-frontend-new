@@ -6,6 +6,7 @@ import {
   RiBatteryLowLine
 } from 'react-icons/ri'
 import { DeviceLogsType } from '../../types/smtrack/devices/deviceType'
+import { DeviceLogTms } from '../../types/tms/devices/deviceType'
 
 const probeLimitIcon = (
   tempMin: number,
@@ -99,6 +100,20 @@ const tempOfDay = (deviceData: DeviceLogsType | undefined, channel: string) => {
   }
 }
 
+const tempOfDayTms = (deviceData: DeviceLogTms | undefined) => {
+  const max =
+    deviceData?.log?.length &&
+    Number(Math.max(...deviceData.log.map(item => item.tempValue))).toFixed(2)
+  const min =
+    deviceData?.log?.length &&
+    Number(Math.min(...deviceData.log.map(item => item.tempValue))).toFixed(2)
+
+  return {
+    min,
+    max
+  }
+}
+
 const sdCard = (deviceData: DeviceLogsType | undefined) => {
   return deviceData?.log[0]?.extMemory ?? false
 }
@@ -112,4 +127,5 @@ export {
   battertyLevel,
   tempOfDay,
   sdCard,
+  tempOfDayTms
 }

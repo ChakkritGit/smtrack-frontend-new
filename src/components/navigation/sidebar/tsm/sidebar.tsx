@@ -167,24 +167,26 @@ const Sidebar = () => {
         <div className='w-full'>
           <div className='divider mb-0'></div>
           <div className='flex justify-center flex-col gap-3 p-3'>
-            <div className='flex flex-col items-center gap-2'>
-              {!isExpand && (
-                <span className='text-[12px] truncate'>
-                  *Switch mode eTEMP and TMS
-                </span>
-              )}
-              <div className='flex items-center justify-center gap-2'>
-                <input
-                  type='checkbox'
-                  className='toggle toggle-md !h-[1.7rem]'
-                  defaultChecked={tmsMode}
-                  onClick={() => {
-                    dispatch(setTmsMode())
-                    cookies.set('tmsMode', !tmsMode, cookieOptions)
-                  }}
-                />
+            {(role === 'SUPER' || role === 'SERVICE') && (
+              <div className='flex flex-col items-center gap-2'>
+                {!isExpand && (
+                  <span className='text-[12px] truncate'>
+                    *Switch mode eTEMP and TMS
+                  </span>
+                )}
+                <div className='flex items-center justify-center gap-2'>
+                  <input
+                    type='checkbox'
+                    className='toggle toggle-md !h-[1.7rem]'
+                    defaultChecked={tmsMode}
+                    onClick={() => {
+                      dispatch(setTmsMode())
+                      cookies.set('tmsMode', !tmsMode, cookieOptions)
+                    }}
+                  />
+                </div>
               </div>
-            </div>
+            )}
             <Link
               to={'/settings'}
               className={`btn font-normal flex-nowrap justify-start w-full ${

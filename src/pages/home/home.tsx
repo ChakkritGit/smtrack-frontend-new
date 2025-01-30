@@ -6,7 +6,7 @@ import DataTable, { TableColumn } from 'react-data-table-component'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { setDeviceId, setSearch } from '../../redux/actions/utilsActions'
+import { setDeviceKey, setSearch } from '../../redux/actions/utilsActions'
 import { DeviceCountType } from '../../types/smtrack/devices/deviceCount'
 import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
@@ -113,8 +113,8 @@ const Home = () => {
   }
 
   const handleRowClicked = (row: DeviceType) => {
-    cookies.set('deviceId', row.id, cookieOptions) // it's mean setSerial
-    dispatch(setDeviceId(row.id))
+    cookies.set('deviceKey', row.id, cookieOptions) // it's mean setSerial
+    dispatch(setDeviceKey(row.id))
     navigate('/dashboard')
     window.scrollTo(0, 0)
   }

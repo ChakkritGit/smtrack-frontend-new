@@ -14,17 +14,17 @@ import {
   GLOBAL_SEARCH,
   THEME_MODE,
   WARD_ID,
-  DEVICE_ID,
   HOS_ID,
-  SUBMIT_LOADING
+  SUBMIT_LOADING,
+  DEVICE_KEY
 } from '../types/utilsTypes'
 
-const setCookieEncode = (dataEncode: string) => ({
+const setCookieEncode = (dataEncode?: string) => ({
   type: COOKIE_ENCODE,
   payload: dataEncode
 })
 
-const setCookieDecode = (dataDecode: TokenDecodeType) => ({
+const setCookieDecode = (dataDecode?: TokenDecodeType) => ({
   type: COOKIE_DECODE,
   payload: dataDecode
 })
@@ -71,8 +71,8 @@ const setWardId = (id: string) => ({
   payload: id
 })
 
-const setDeviceId = (id: string) => ({
-  type: DEVICE_ID,
+const setDeviceKey = (id: string) => ({
+  type: DEVICE_KEY,
   payload: id
 })
 
@@ -87,6 +87,6 @@ export {
   setTheme,
   setHosId,
   setWardId,
-  setDeviceId,
+  setDeviceKey,
   setSubmitLoading
 }

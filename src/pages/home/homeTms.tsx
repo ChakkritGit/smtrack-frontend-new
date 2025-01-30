@@ -6,10 +6,9 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import axiosInstance from '../../constants/axios/axiosInstance'
 import { AxiosError } from 'axios'
-import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import { useNavigate } from 'react-router-dom'
-import { setDeviceId, setSearch } from '../../redux/actions/utilsActions'
+import { setDeviceKey, setSearch } from '../../redux/actions/utilsActions'
 import HospitalAndWard from '../../components/filter/hospitalAndWard'
 import Loading from '../../components/skeleton/table/loading'
 import DataTableNoData from '../../components/skeleton/table/noData'
@@ -61,7 +60,7 @@ const HomeTms = () => {
     async (page: number, size = perPage) => {
       try {
         setLoading(true)
-        const response = await axiosInstance.get<responseType<any>>(
+        const response = await axiosInstance.get(
           `/legacy/device?${
             wardId ? `ward=${wardId}&` : ''
           }page=${page}&perpage=${size}`
@@ -93,9 +92,9 @@ const HomeTms = () => {
     fetchDevices(page, newPerPage)
   }
 
-  const handleRowClicked = (row: any) => {
-    cookies.set('deviceId', row.id, cookieOptions) // it's mean setSerial
-    dispatch(setDeviceId(row.id))
+  const handleRowClicked = (row: DeviceTmsType) => {
+    cookies.set('deviceKey', row.sn, cookieOptions) // it's mean setSerial
+    dispatch(setDeviceKey(row.sn))
     navigate('/dashboard')
     window.scrollTo(0, 0)
   }

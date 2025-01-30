@@ -35,7 +35,7 @@ const HomeCountTms = (props: DeviceCountPropType) => {
     <div className='flex items-center justify-center flex-wrap gap-4 mt-4 p-4'>
       {card.map((card, index) => (
         <div
-          className={`cardbg-base-100 w-[145px] h-[125px] overflow-hidden shadow-xl`}
+          className={`card bg-base-100 w-[145px] h-[125px] overflow-hidden shadow-xl`}
           key={index}
         >
           <div className='card-body justify-between p-3'>

@@ -430,6 +430,8 @@ export default {
     expandSide: 'Collapse sidebar',
     selectPerPage: 'Per Page',
     selectValue: 'Select',
+    hospitalsName: 'Hospital',
+    wardsName: 'Ward',
 
     // connect
     ipAddress: 'IP',
