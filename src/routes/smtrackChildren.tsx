@@ -7,7 +7,7 @@ import {
 } from '../components/skeleton'
 import { HideFlashFW, HideSetting } from '../middleware/Auth'
 const Home = lazy(() => import('../pages/home/home'))
-const Dashboard = lazy(() => import('../pages/dashboard/dashboard'))
+const Dashboard = lazy(() => import('../pages/dashboard/smtrack/dashboard'))
 const Users = lazy(() => import('../pages/users/users'))
 const Management = lazy(() => import('../pages/management/management'))
 

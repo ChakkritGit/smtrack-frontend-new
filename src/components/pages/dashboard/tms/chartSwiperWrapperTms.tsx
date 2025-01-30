@@ -1,13 +1,12 @@
 import { useTranslation } from 'react-i18next'
-import { DeviceLogTms } from '../../../types/tms/devices/deviceType'
+import { DeviceLogTms } from '../../../../types/tms/devices/deviceType'
 import { RiFullscreenLine } from 'react-icons/ri'
-import DataTableMiniTms from './dataTableMiniTms'
-
-interface DataTableWrapperProps {
+import ChartMiniTms from './chartMiniTms'
+interface ChartSwiperWrapperProps {
   deviceLogs: DeviceLogTms | undefined
 }
 
-const DataTableWrapperTms = (props: DataTableWrapperProps) => {
+const ChartSwiperWrapperTms = (props: ChartSwiperWrapperProps) => {
   const { t } = useTranslation()
   const { deviceLogs } = props
 
@@ -19,16 +18,20 @@ const DataTableWrapperTms = (props: DataTableWrapperProps) => {
         </div>
         <button
           className='btn btn-ghost flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
-          data-tip={t('fullTable')}
+          data-tip={t('fullChart')}
         >
           <RiFullscreenLine size={20} />
         </button>
       </div>
       <div className='h-full chart-h'>
-        <DataTableMiniTms deviceLogs={deviceLogs} />
+        <ChartMiniTms
+          deviceLogs={deviceLogs}
+          minTemp={deviceLogs?.minTemp}
+          maxTemp={deviceLogs?.maxTemp}
+        />
       </div>
     </div>
   )
 }
 
-export default DataTableWrapperTms
+export default ChartSwiperWrapperTms

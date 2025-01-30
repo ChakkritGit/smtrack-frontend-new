@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import { DeviceLogTms } from '../../../types/tms/devices/deviceType'
-import DefaultPic from '../../../assets/images/default-pic.png'
+import { DeviceLogTms } from '../../../../types/tms/devices/deviceType'
+import DefaultPic from '../../../../assets/images/default-pic.png'
 
 type PropsType = {
   deviceData: DeviceLogTms | undefined

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { DeviceLogTms } from '../../../types/tms/devices/deviceType'
+import { DeviceLogTms } from '../../../../types/tms/devices/deviceType'
 import {
   RiAlertLine,
   RiDoorClosedLine,
@@ -11,7 +11,7 @@ import {
   RiTempColdLine
 } from 'react-icons/ri'
 import { HiOutlineArrowsUpDown } from 'react-icons/hi2'
-import { tempOfDayTms } from '../../../constants/utils/dashboardCardStatus'
+import { tempOfDayTms } from '../../../../constants/utils/dashboardCardStatus'
 
 type PropsType = {
   deviceData: DeviceLogTms | undefined

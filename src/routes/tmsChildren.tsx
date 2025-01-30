@@ -8,7 +8,7 @@ import {
 import { RouteObject } from 'react-router-dom'
 import ManagementTms from '../pages/management/managementTms'
 const HomeTms = lazy(() => import('../pages/home/homeTms'))
-const DashboardTms = lazy(() => import('../pages/dashboard/dashboardTms'))
+const DashboardTms = lazy(() => import('../pages/dashboard/tms/dashboardTms'))
 const Users = lazy(() => import('../pages/users/users'))
 
 const tmsChildren: RouteObject[] = [

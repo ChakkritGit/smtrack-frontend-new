@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
-import { DeviceLogsType } from '../../../types/smtrack/devices/deviceType'
+import { DeviceLogsType } from '../../../../types/smtrack/devices/deviceType'
 import { RiSettings3Line } from 'react-icons/ri'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, EffectCreative, Pagination } from 'swiper/modules'
-import DefaultPic from '../../../assets/images/default-pic.png'
+import DefaultPic from '../../../../assets/images/default-pic.png'
 
 type PropsType = {
   deviceData: DeviceLogsType | undefined

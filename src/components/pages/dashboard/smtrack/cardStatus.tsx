@@ -14,19 +14,10 @@ import {
 } from 'react-icons/ri'
 import { MdOutlineSdCard, MdOutlineSdCardAlert } from 'react-icons/md'
 import { HiOutlineArrowsUpDown } from 'react-icons/hi2'
-import {
-  battertyLevel,
-  doorOpen,
-  humiLimit,
-  probeLimitIcon,
-  sdCard,
-  tempLimit,
-  tempOfDay,
-  unPlug
-} from '../../../constants/utils/dashboardCardStatus'
-import { DeviceLogsType } from '../../../types/smtrack/devices/deviceType'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination, EffectCreative } from 'swiper/modules'
+import { DeviceLogsType } from '../../../../types/smtrack/devices/deviceType'
+import { battertyLevel, doorOpen, humiLimit, probeLimitIcon, sdCard, tempLimit, tempOfDay, unPlug } from '../../../../constants/utils/dashboardCardStatus'
 
 type PropsType = {
   deviceData: DeviceLogsType | undefined

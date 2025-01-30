@@ -1,39 +1,44 @@
 import { useTranslation } from 'react-i18next'
-import { DeviceLogType } from '../../../types/smtrack/logs/deviceLog'
-import DataTable, { TableColumn } from 'react-data-table-component'
+import {
+  DeviceLogsTms,
+  DeviceLogTms
+} from '../../../../types/tms/devices/deviceType'
 import { useEffect, useState } from 'react'
-import { RootState } from '../../../redux/reducers/rootReducer'
 import { useSelector } from 'react-redux'
-import DataTableNoData from '../../skeleton/table/noData'
+import { RootState } from '../../../../redux/reducers/rootReducer'
+import DataTable, { TableColumn } from 'react-data-table-component'
+import DataTableNoData from '../../../skeleton/table/noData'
 
 interface TableMiniProps {
-  logData: DeviceLogType[]
+  deviceLogs: DeviceLogTms | undefined
 }
 
-const DataTableMini = (props: TableMiniProps) => {
+const DataTableMiniTms = (props: TableMiniProps) => {
   const { t } = useTranslation()
-  const { logData } = props
   const { globalSearch } = useSelector((state: RootState) => state.utils)
-  const [tableData, setTableData] = useState<DeviceLogType[]>([])
+  const { deviceLogs } = props
+  const [tableData, setTableData] = useState<DeviceLogsTms[]>([])
 
   useEffect(() => {
-    const filtered = logData.filter(
-      item =>
-        item.sendTime &&
-        item.sendTime
-          .substring(11, 16)
-          .toLowerCase()
-          .includes(globalSearch.toLowerCase())
-    )
+    const filtered = deviceLogs?.log
+      ? deviceLogs?.log.filter(
+          item =>
+            item.createdAt &&
+            item.createdAt
+              .substring(11, 16)
+              .toLowerCase()
+              .includes(globalSearch.toLowerCase())
+        )
+      : []
 
     setTableData(filtered)
-  }, [globalSearch, logData])
+  }, [globalSearch, deviceLogs])
 
-  const columns: TableColumn<DeviceLogType>[] = [
+  const columns: TableColumn<DeviceLogsTms>[] = [
     {
       name: t('deviceNoTb'),
       cell: (_, index) => {
-        return <div>{logData.length - index}</div>
+        return <div>{tableData.length - index}</div>
       },
       sortable: false,
       center: true
@@ -41,26 +46,20 @@ const DataTableMini = (props: TableMiniProps) => {
     {
       name: t('deviceSerialTb'),
       cell: item => (
-        <span title={item.serial}>...{item.serial.substring(15)}</span>
+        <span title={item.mcuId}>...{item.mcuId.substring(15)}</span>
       ),
       sortable: false,
       center: true
     },
     {
       name: t('deviceTime'),
-      cell: item => item.sendTime.substring(11, 16),
+      cell: item => item.createdAt.substring(11, 16),
       sortable: false,
       center: true
     },
     {
       name: t('probeTempSubTb'),
-      cell: item => item.tempDisplay.toFixed(2) + '°C',
-      sortable: false,
-      center: true
-    },
-    {
-      name: t('probeHumiSubTb'),
-      cell: item => item.humidityDisplay.toFixed(2) + '%',
+      cell: item => item.tempValue.toFixed(2) + '°C',
       sortable: false,
       center: true
     },
@@ -73,7 +72,7 @@ const DataTableMini = (props: TableMiniProps) => {
   ]
 
   return (
-    <div className='dataTableWrapper mb-5'>
+    <div className={`dataTableWrapper mb-5 ${tableData.length <= 0 ? 'dataTableWrapperWithNoData' : ''}`}>
       <DataTable
         dense
         pagination
@@ -90,4 +89,4 @@ const DataTableMini = (props: TableMiniProps) => {
   )
 }
 
-export default DataTableMini
+export default DataTableMiniTms

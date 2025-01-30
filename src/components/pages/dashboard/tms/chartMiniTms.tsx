@@ -1,6 +1,6 @@
 import Chart from 'react-apexcharts'
 import { useTranslation } from 'react-i18next'
-import { DeviceLogTms } from '../../../types/tms/devices/deviceType'
+import { DeviceLogTms } from '../../../../types/tms/devices/deviceType'
 
 interface ChartMiniProps {
   deviceLogs: DeviceLogTms | undefined
