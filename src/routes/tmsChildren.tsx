@@ -10,6 +10,8 @@ import ManagementTms from '../pages/management/managementTms'
 const HomeTms = lazy(() => import('../pages/home/homeTms'))
 const DashboardTms = lazy(() => import('../pages/dashboard/tms/dashboardTms'))
 const Users = lazy(() => import('../pages/users/users'))
+const FullChartTms = lazy(() => import('../pages/dashboard/tms/fullChartTms'))
+const FullTableTms = lazy(() => import('../pages/dashboard/tms/fullTableTms'))
 
 const tmsChildren: RouteObject[] = [
   {
@@ -55,22 +57,13 @@ const tmsChildren: RouteObject[] = [
     ]
   },
   {
-    path: 'settings',
-    element: (
-      <Suspense fallback={<span>Loading...</span>}>
-        <>Setting</>
-      </Suspense>
-    ),
-    errorElement: <></>
-  },
-  {
     path: 'dashboard/chart',
     element: (
       <Suspense fallback={<span>Loading...</span>}>
-        <></>
+        <FullChartTms />
       </Suspense>
     ),
-    errorElement: <></>
+    errorElement: <>err</>
   },
   {
     path: 'dashboard/chart/preview',
@@ -85,7 +78,16 @@ const tmsChildren: RouteObject[] = [
     path: 'dashboard/table',
     element: (
       <Suspense fallback={<span>Loading...</span>}>
-        <></>
+        <FullTableTms />
+      </Suspense>
+    ),
+    errorElement: <></>
+  },
+  {
+    path: 'settings',
+    element: (
+      <Suspense fallback={<span>Loading...</span>}>
+        <>Setting</>
       </Suspense>
     ),
     errorElement: <></>

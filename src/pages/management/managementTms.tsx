@@ -9,7 +9,7 @@ const ManagementTms = () => {
 
   return (
     <div className='p-3 px-[16px]'>
-      <div role='tablist' className='tabs tabs-bordered w-72 md:w-max'>
+      <div role='tablist' className='tabs tabs-bordered w-72 md:w-max mt-5'>
         <a
           role='tab'
           className={`tab text-sm md:text-lg ${tab === 1 ? 'tab-active' : ''}`}

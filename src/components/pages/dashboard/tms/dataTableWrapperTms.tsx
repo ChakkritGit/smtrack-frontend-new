@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { DeviceLogTms } from '../../../../types/tms/devices/deviceType'
 import { RiFullscreenLine } from 'react-icons/ri'
 import DataTableMiniTms from './dataTableMiniTms'
+import { useNavigate } from 'react-router-dom'
 
 interface DataTableWrapperProps {
   deviceLogs: DeviceLogTms | undefined
@@ -9,6 +10,7 @@ interface DataTableWrapperProps {
 
 const DataTableWrapperTms = (props: DataTableWrapperProps) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const { deviceLogs } = props
 
   return (
@@ -20,6 +22,11 @@ const DataTableWrapperTms = (props: DataTableWrapperProps) => {
         <button
           className='btn btn-ghost flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
           data-tip={t('fullTable')}
+          onClick={() =>
+            navigate('/dashboard/table', {
+              state: { deviceLogs: deviceLogs }
+            })
+          }
         >
           <RiFullscreenLine size={20} />
         </button>

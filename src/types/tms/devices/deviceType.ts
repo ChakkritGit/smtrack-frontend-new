@@ -68,4 +68,23 @@ type DeviceLogsTms = {
   updatedAt: string
 }
 
-export type { CountTms, DeviceTmsType, DeviceListTmsType, DeviceLogTms, DeviceLogsTms }
+type LogChartTms = {
+  result: string
+  sn: string
+  table: number
+  _field: string
+  _measurement: string
+  _start: string
+  _stop: string
+  _time: string
+  _value: number
+}
+
+export type {
+  CountTms,
+  DeviceTmsType,
+  DeviceListTmsType,
+  DeviceLogTms,
+  DeviceLogsTms,
+  LogChartTms
+}
