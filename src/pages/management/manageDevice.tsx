@@ -1,22 +1,35 @@
 import { useTranslation } from 'react-i18next'
 import HospitalAndWard from '../../components/filter/hospitalAndWard'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { DeviceTmsType } from '../../types/tms/devices/deviceType'
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from 'react'
+import {
+  AddDeviceType,
+  DeviceTmsType
+} from '../../types/tms/devices/deviceType'
 import axiosInstance from '../../constants/axios/axiosInstance'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { AxiosError } from 'axios'
-import { setSearch } from '../../redux/actions/utilsActions'
+import { setSearch, setSubmitLoading } from '../../redux/actions/utilsActions'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import Loading from '../../components/skeleton/table/loading'
 import DataTableNoData from '../../components/skeleton/table/noData'
-import { useNavigate } from 'react-router-dom'
+import HopitalSelect from '../../components/selects/hopitalSelect'
+import WardSelectTms from '../../components/selects/tms/wardSelect'
+import Swal from 'sweetalert2'
+import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
+import { RiDeleteBin7Line } from 'react-icons/ri'
 
 const ManageDevice = () => {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const { t } = useTranslation()
-  const { wardId, globalSearch, cookieDecode } = useSelector(
+  const { wardId, globalSearch, cookieDecode, hosId } = useSelector(
     (state: RootState) => state.utils
   )
   const [devices, setDevices] = useState<DeviceTmsType[]>([])
@@ -26,6 +39,14 @@ const ManageDevice = () => {
   const [perPage, setPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
   const { token } = cookieDecode || {}
+  const [formData, setFormData] = useState<AddDeviceType>({
+    ward: '',
+    hospital: '',
+    sn: '',
+    name: ''
+  })
+
+  const addModalRef = useRef<HTMLDialogElement>(null)
 
   const fetchDevices = useCallback(
     async (page: number, size = perPage) => {
@@ -61,6 +82,87 @@ const ManageDevice = () => {
     fetchDevices(page, newPerPage)
   }
 
+  const resetForm = () => {
+    setFormData({
+      ward: '',
+      hospital: '',
+      sn: '',
+      name: ''
+    })
+  }
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    dispatch(setSubmitLoading())
+
+    if (
+      formData.ward !== '' &&
+      hosId !== '' &&
+      formData.sn !== '' &&
+      formData.name !== ''
+    ) {
+      const body = {
+        ward: formData.ward,
+        hospital: hosId,
+        sn: formData.sn,
+        name: formData.name
+      }
+      try {
+        await axiosInstance.post<responseType<DeviceTmsType>>(
+          '/legacy/device',
+          body
+        )
+
+        addModalRef.current?.close()
+        resetForm()
+        await fetchDevices(1)
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: t('submitSuccess'),
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } catch (error) {
+        addModalRef.current?.close()
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          }).finally(() => addModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    } else {
+      addModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => addModalRef.current?.showModal())
+      dispatch(setSubmitLoading())
+    }
+  }
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target
+
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
   useEffect(() => {
     const filter = devices?.filter(f => {
       const matchesSearch =
@@ -84,7 +186,47 @@ const ManageDevice = () => {
     }
   }, [])
 
-  // const columns: TableColumn<DeviceTmsType>[] = useMemo(() => [], [t, navigate])
+  const deleteDevice = async (id: string) => {
+    const result = await Swal.fire({
+      title: t('alertHeaderWarning'),
+      text: t('deleteUserTitle'),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: t('confirmButton'),
+      cancelButtonText: t('cancelButton')
+    })
+
+    if (result.isConfirmed) {
+      dispatch(setSubmitLoading())
+      try {
+        const response = await axiosInstance.delete<
+          responseType<DeviceTmsType>
+        >(`/legacy/device/${id}`)
+        await fetchDevices(1)
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: response.data.message,
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          })
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    }
+  }
 
   const columns: TableColumn<DeviceTmsType>[] = [
     {
@@ -110,6 +252,21 @@ const ManageDevice = () => {
       cell: item => item.ward,
       sortable: false,
       center: true
+    },
+    {
+      name: t('action'),
+      cell: item => (
+        <div className='p-3'>
+          <button
+            className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
+            onClick={() => deleteDevice(item.id)}
+          >
+            <RiDeleteBin7Line size={20} />
+          </button>
+        </div>
+      ),
+      sortable: false,
+      center: true
     }
   ]
 
@@ -121,7 +278,10 @@ const ManageDevice = () => {
         </span>
         <div className='flex flex-col lg:flex-row mt-3 lg:mt-0 lg:items-center items-end gap-4'>
           <HospitalAndWard />
-          <button className='btn btn-primary max-w-[130px]'>
+          <button
+            className='btn btn-primary max-w-[130px]'
+            onClick={() => addModalRef.current?.showModal()}
+          >
             {t('addDeviceButton')}
           </button>
         </div>
@@ -146,6 +306,83 @@ const ManageDevice = () => {
           fixedHeaderScrollHeight='calc(100dvh - 490px)'
         />
       </div>
+
+      <dialog ref={addModalRef} className='modal'>
+        <form
+          onSubmit={handleSubmit}
+          className='modal-box w-5/6 max-w-2xl md:overflow-y-visible'
+        >
+          <h3 className='font-bold text-lg'>{t('addDeviceButton')}</h3>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
+            {/* Right Column - 2/3 of the grid (70%) */}
+            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
+              {/* Hospital */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('userHospitals')}</span>
+                  <HopitalSelect />
+                </label>
+              </div>
+
+              {/* Ward */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('userWard')}</span>
+                  <WardSelectTms
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
+                </label>
+              </div>
+
+              {/* sn */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('deviceSerialTb')}</span>
+                  <input
+                    name='sn'
+                    type='text'
+                    value={formData.sn}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                  />
+                </label>
+              </div>
+
+              {/* name */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('deviceNameTb')}</span>
+                  <input
+                    name='name'
+                    type='text'
+                    value={formData.name}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Actions */}
+          <div className='modal-action mt-6'>
+            <button
+              type='button'
+              className='btn'
+              onClick={() => {
+                addModalRef.current?.close()
+                resetForm()
+              }}
+            >
+              {t('cancelButton')}
+            </button>
+            <button type='submit' className='btn btn-primary'>
+              {t('submitButton')}
+            </button>
+          </div>
+        </form>
+      </dialog>
     </div>
   )
 }

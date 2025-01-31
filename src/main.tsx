@@ -10,6 +10,7 @@ import { I18nextProvider } from 'react-i18next'
 import Routes from './routes/routes.tsx'
 import i18n from './lang/i18n.ts'
 import store from './redux/store/index.ts'
+import { Toaster } from 'react-hot-toast'
 
 const renderApp = () => {
   if (import.meta.env.VITE_APP_NODE_ENV === 'production') {
@@ -21,6 +22,7 @@ const renderApp = () => {
       <Provider store={store}>
         <I18nextProvider i18n={i18n}>
           <Routes />
+          <Toaster position='bottom-right' reverseOrder={false} />
         </I18nextProvider>
       </Provider>
     </StrictMode>

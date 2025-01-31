@@ -1,3 +1,4 @@
+import { SocketResponseType } from '../../types/global/socketType'
 import { TokenDecodeType } from '../../types/smtrack/constants/constantsType'
 import {
   TokenType,
@@ -17,6 +18,9 @@ const HOS_ID = 'HOS_ID'
 const WARD_ID = 'WARD_ID'
 const DEVICE_KEY = 'DEVICE_KEY'
 const SUBMIT_LOADING = 'SUBMIT_LOADING'
+const SOCKET_DATA = 'SOCKET_DATA'
+const POPUP_MODE = 'POPUP_MODE'
+const SOUND_MODE = 'SOUND_MODE'
 
 interface UtilsState {
   cookieEncode?: string
@@ -31,6 +35,9 @@ interface UtilsState {
   wardId: string
   deviceKey: string
   submitLoading: boolean
+  socketData: SocketResponseType | null
+  popUpMode: boolean
+  soundMode: boolean
 }
 
 type UtilsAction =
@@ -46,6 +53,9 @@ type UtilsAction =
   | { type: typeof HOS_ID; payload: string }
   | { type: typeof WARD_ID; payload: string }
   | { type: typeof DEVICE_KEY; payload: string }
+  | { type: typeof SOCKET_DATA; payload: SocketResponseType }
+  | { type: typeof POPUP_MODE }
+  | { type: typeof SOUND_MODE }
 
 export {
   COOKIE_ENCODE,
@@ -59,6 +69,9 @@ export {
   HOS_ID,
   WARD_ID,
   DEVICE_KEY,
-  SUBMIT_LOADING
+  SUBMIT_LOADING,
+  SOCKET_DATA,
+  POPUP_MODE,
+  SOUND_MODE
 }
 export type { UtilsState, UtilsAction }

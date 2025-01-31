@@ -1,4 +1,5 @@
 // redux/actions/toggleActions.js
+import { SocketResponseType } from '../../types/global/socketType'
 import { TokenDecodeType } from '../../types/smtrack/constants/constantsType'
 import {
   TokenType,
@@ -16,7 +17,10 @@ import {
   WARD_ID,
   HOS_ID,
   SUBMIT_LOADING,
-  DEVICE_KEY
+  DEVICE_KEY,
+  SOCKET_DATA,
+  SOUND_MODE,
+  POPUP_MODE
 } from '../types/utilsTypes'
 
 const setCookieEncode = (dataEncode?: string) => ({
@@ -76,6 +80,19 @@ const setDeviceKey = (id: string) => ({
   payload: id
 })
 
+const setSocketData = (data: SocketResponseType) => ({
+  type: SOCKET_DATA,
+  payload: data
+})
+
+const setPopUpMode = () => ({
+  type: POPUP_MODE
+})
+
+const setSoundMode = () => ({
+  type: SOUND_MODE
+})
+
 export {
   setCookieEncode,
   setCookieDecode,
@@ -88,5 +105,8 @@ export {
   setHosId,
   setWardId,
   setDeviceKey,
-  setSubmitLoading
+  setSubmitLoading,
+  setSocketData,
+  setPopUpMode,
+  setSoundMode
 }

@@ -6,7 +6,8 @@ import {
   useMemo,
   useState,
   useRef,
-  ChangeEvent
+  ChangeEvent,
+  FormEvent
 } from 'react'
 import { FormState, UsersType } from '../../types/smtrack/users/usersType'
 import axiosInstance from '../../constants/axios/axiosInstance'
@@ -148,7 +149,7 @@ const Users = () => {
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     dispatch(setSubmitLoading())
 
@@ -355,7 +356,9 @@ const Users = () => {
           itemPerPage={[10, 30, 50, 100]}
           renderItem={(item, index) => (
             <div
-              className={`min-h-[240px] max-h-[270px] sm:w-[300px] lg:w-full w-full ${!item.status ? 'bg-base-100/40' : 'bg-base-100'} rounded-btn`}
+              className={`min-h-[240px] max-h-[270px] sm:w-[300px] lg:w-full w-full ${
+                !item.status ? 'bg-base-100/40' : 'bg-base-100'
+              } rounded-btn`}
               key={index}
             >
               <div
@@ -493,27 +496,6 @@ const Users = () => {
           className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
         >
           <h3 className='font-bold text-lg'>{t('addUserButton')}</h3>
-          <div
-            role='alert-warning'
-            className={`alert alert-warning mt-4 hidden animate-transition-pop`}
-          >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='h-6 w-6 shrink-0 stroke-current'
-              fill='none'
-              viewBox='0 0 24 24'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-                d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
-              />
-            </svg>
-            <div>
-              <span>{`${t('alertHeaderWarning')} ${t('completeField')}`}</span>
-            </div>
-          </div>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
             {/* Image Upload - Left Column (30%) */}
             <div className='col-span-1 flex justify-center'>

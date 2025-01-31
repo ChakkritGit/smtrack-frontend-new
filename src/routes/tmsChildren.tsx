@@ -81,7 +81,7 @@ const tmsChildren: RouteObject[] = [
         <FullTableTms />
       </Suspense>
     ),
-    errorElement: <></>
+    errorElement: <>err</>
   },
   {
     path: 'settings',

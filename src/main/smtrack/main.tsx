@@ -67,7 +67,7 @@ const MainSmtrack = () => {
   }, [location, token, tokenDecode])
 
   return (
-    <main className='h-full bg-base-200 duration-300'>
+    <main>
       <div className='drawer lg:drawer-open w-auto'>
         <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content'>

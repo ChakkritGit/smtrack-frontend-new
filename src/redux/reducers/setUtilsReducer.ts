@@ -14,7 +14,10 @@ import {
   WARD_ID,
   HOS_ID,
   SUBMIT_LOADING,
-  DEVICE_KEY
+  DEVICE_KEY,
+  SOCKET_DATA,
+  SOUND_MODE,
+  POPUP_MODE
 } from '../types/utilsTypes'
 
 const initialState: UtilsState = {
@@ -29,7 +32,10 @@ const initialState: UtilsState = {
   hosId: cookies.get('hosId'),
   wardId: cookies.get('wardId'),
   deviceKey: cookies.get('deviceKey'),
-  submitLoading: false
+  submitLoading: false,
+  socketData: null,
+  popUpMode: false,
+  soundMode: false
 }
 
 const utilsReducer = (
@@ -61,6 +67,12 @@ const utilsReducer = (
       return { ...state, wardId: action.payload }
     case DEVICE_KEY:
       return { ...state, deviceKey: action.payload }
+    case SOCKET_DATA:
+      return { ...state, socketData: action.payload }
+    case POPUP_MODE:
+      return { ...state, popUpMode: !state.popUpMode }
+    case SOUND_MODE:
+      return { ...state, soundMode: !state.soundMode }
     default:
       return state
   }

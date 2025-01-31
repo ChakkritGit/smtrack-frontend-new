@@ -17,7 +17,9 @@ const FullChartTms = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation() as Location<{ deviceLogs: DeviceLogTms }>
-  const { deviceLogs } = location.state
+  const { deviceLogs } = location.state ?? {
+    deviceLogs: { sn: '', minTemp: 0, maxTemp: 0 }
+  }
   const { sn, minTemp, maxTemp } = deviceLogs
   const [pageNumber, setPagenumber] = useState(1)
   const [dataLog, setDataLog] = useState<LogChartTms[]>([])
@@ -131,10 +133,10 @@ const FullChartTms = () => {
   }, [])
 
   useEffect(() => {
-    if (deviceLogs === undefined) {
+    if (sn === '') {
       navigate('/dashboard')
     }
-  }, [deviceLogs])
+  }, [sn])
 
   return (
     <div className='container mx-auto p-3'>

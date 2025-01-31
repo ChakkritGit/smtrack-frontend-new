@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { DeviceLogTms } from '../../../../types/tms/devices/deviceType'
-import { RiFullscreenLine } from 'react-icons/ri'
+import { RiArrowRightUpLine } from 'react-icons/ri'
 import DataTableMiniTms from './dataTableMiniTms'
 import { useNavigate } from 'react-router-dom'
 
@@ -20,7 +20,7 @@ const DataTableWrapperTms = (props: DataTableWrapperProps) => {
           <span className='text-[20px] font-bold'>{t('pageChart')}</span>
         </div>
         <button
-          className='btn btn-ghost flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
+          className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
           data-tip={t('fullTable')}
           onClick={() =>
             navigate('/dashboard/table', {
@@ -28,7 +28,7 @@ const DataTableWrapperTms = (props: DataTableWrapperProps) => {
             })
           }
         >
-          <RiFullscreenLine size={20} />
+          <RiArrowRightUpLine size={20} />
         </button>
       </div>
       <div className='h-full chart-h'>

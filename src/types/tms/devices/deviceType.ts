@@ -80,11 +80,20 @@ type LogChartTms = {
   _value: number
 }
 
+type AddDeviceType = {
+  id?: string
+  ward: string
+  hospital: string
+  sn: string
+  name: string
+}
+
 export type {
   CountTms,
   DeviceTmsType,
   DeviceListTmsType,
   DeviceLogTms,
   DeviceLogsTms,
-  LogChartTms
+  LogChartTms,
+  AddDeviceType
 }

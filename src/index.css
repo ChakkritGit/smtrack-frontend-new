@@ -309,3 +309,8 @@ div:where(.swal2-container).swal2-backdrop-show,
 div:where(.swal2-container).swal2-noanimation {
   @apply !bg-black/30 backdrop-blur;
 }
+
+
+body {
+  @apply bg-base-200 h-full duration-300;
+}
