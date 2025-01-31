@@ -26,7 +26,7 @@ import {
   handleApiError
 } from '../../constants/utils/utilsConstants'
 import UserPagination from '../../components/pagination/userPagination'
-import { setSubmitLoading } from '../../redux/actions/utilsActions'
+import { setSearch, setSubmitLoading } from '../../redux/actions/utilsActions'
 import Swal from 'sweetalert2'
 import { resizeImage } from '../../constants/utils/image'
 import HopitalSelect from '../../components/selects/hopitalSelect'
@@ -247,7 +247,7 @@ const Users = () => {
         resetForm()
         await fetchUsers()
         Swal.fire({
-          title: t('alertHeaderError'),
+          title: t('alertHeaderSuccess'),
           text: t('submitSuccess'),
           icon: 'success',
           showConfirmButton: false,
@@ -470,6 +470,12 @@ const Users = () => {
       )
     }
   }, [usersFilter, role, t])
+
+  useEffect(() => {
+    return () => {
+      dispatch(setSearch(''))
+    }
+  }, [])
 
   return (
     <div className='p-3 px-[16px]'>

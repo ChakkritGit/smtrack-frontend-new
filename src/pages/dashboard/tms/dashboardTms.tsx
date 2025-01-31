@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import { AxiosError } from 'axios'
@@ -12,8 +12,10 @@ import CardStatusTms from '../../../components/pages/dashboard/tms/cardStatusTms
 import ChartSwiperWrapperTms from '../../../components/pages/dashboard/tms/chartSwiperWrapperTms'
 import DataTableWrapperTms from '../../../components/pages/dashboard/tms/dataTableWrapperTms'
 import DeviceTmsList from '../../../components/filter/deviceListTms'
+import { setSearch } from '../../../redux/actions/utilsActions'
 
 const DashboardTms = () => {
+  const dispatch = useDispatch()
   const { deviceKey } = useSelector((state: RootState) => state.utils)
   const [deviceLogs, setDeviceLogs] = useState<DeviceLogTms>()
   const [loading, setLoading] = useState(false)
@@ -56,6 +58,12 @@ const DashboardTms = () => {
       modalRef.current?.close()
     }
   }, [deviceKey])
+
+  useEffect(() => {
+    return () => {
+      dispatch(setSearch(''))
+    }
+  }, [])
 
   return (
     <div className='p-3 px-[16px]'>

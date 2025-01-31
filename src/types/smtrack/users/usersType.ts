@@ -1,4 +1,4 @@
-import { UserRole } from "../../global/users/usersType"
+import { UserRole } from '../../global/users/usersType'
 
 type UsersType = {
   display: string
@@ -26,4 +26,17 @@ type FormState = {
   imagePreview: string | null
 }
 
-export type { UsersType, FormState }
+type FormAddHospitalState = {
+  id?: string
+  hosAddress: string
+  hosLatitude: string
+  hosLongitude: string
+  hosName: string
+  hosPic: File | null
+  hosTel: string
+  userContact: string
+  userTel: string
+  imagePreview: string | null
+}
+
+export type { UsersType, FormState, FormAddHospitalState }

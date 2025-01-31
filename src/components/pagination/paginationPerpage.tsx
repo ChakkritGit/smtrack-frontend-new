@@ -41,6 +41,7 @@ const PaginationPerpage = (props: PaginationPerpageProps) => {
 
   return (
     <Select
+      menuPlacement='top'
       options={mapOptions<PiginationParpageType, keyof PiginationParpageType>(
         perPageOptions,
         'number',

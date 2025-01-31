@@ -136,30 +136,32 @@ const Sidebar = () => {
                     </span>
                   )}
                 </Link>
-                <Link
-                  to={'/management'}
-                  className={`btn font-normal flex-nowrap justify-start w-full ${
-                    location.pathname === '/management' ||
+                {(role === 'SUPER' || role === 'SERVICE') && (
+                  <Link
+                    to={'/management'}
+                    className={`btn font-normal flex-nowrap justify-start w-full ${
+                      location.pathname === '/management' ||
+                      location.pathname === '/management/logadjust' ||
+                      location.pathname === '/management/flasher'
+                        ? 'btn-primary'
+                        : 'btn-ghost'
+                    } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
+                    data-tip={t('sideManage')}
+                  >
+                    {location.pathname === '/management' ||
                     location.pathname === '/management/logadjust' ||
-                    location.pathname === '/management/flasher'
-                      ? 'btn-primary'
-                      : 'btn-ghost'
-                  } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
-                  data-tip={t('sideManage')}
-                >
-                  {location.pathname === '/management' ||
-                  location.pathname === '/management/logadjust' ||
-                  location.pathname === '/management/flasher' ? (
-                    <RiListSettingsFill size={24} />
-                  ) : (
-                    <RiListSettingsLine size={24} />
-                  )}
-                  {!isExpand && (
-                    <span className='text-[16px] truncate'>
-                      {t('sideManage')}
-                    </span>
-                  )}
-                </Link>
+                    location.pathname === '/management/flasher' ? (
+                      <RiListSettingsFill size={24} />
+                    ) : (
+                      <RiListSettingsLine size={24} />
+                    )}
+                    {!isExpand && (
+                      <span className='text-[16px] truncate'>
+                        {t('sideManage')}
+                      </span>
+                    )}
+                  </Link>
+                )}
               </>
             )}
           </div>

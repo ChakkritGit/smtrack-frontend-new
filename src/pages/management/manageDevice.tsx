@@ -16,7 +16,10 @@ import axiosInstance from '../../constants/axios/axiosInstance'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { AxiosError } from 'axios'
-import { setSearch, setSubmitLoading } from '../../redux/actions/utilsActions'
+import {
+  setHosId,
+  setSubmitLoading
+} from '../../redux/actions/utilsActions'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import Loading from '../../components/skeleton/table/loading'
 import DataTableNoData from '../../components/skeleton/table/noData'
@@ -24,7 +27,7 @@ import HopitalSelect from '../../components/selects/hopitalSelect'
 import WardSelectTms from '../../components/selects/tms/wardSelect'
 import Swal from 'sweetalert2'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
-import { RiDeleteBin7Line } from 'react-icons/ri'
+import { RiDeleteBin7Line, RiEditLine } from 'react-icons/ri'
 
 const ManageDevice = () => {
   const dispatch = useDispatch()
@@ -47,6 +50,7 @@ const ManageDevice = () => {
   })
 
   const addModalRef = useRef<HTMLDialogElement>(null)
+  const editModalRef = useRef<HTMLDialogElement>(null)
 
   const fetchDevices = useCallback(
     async (page: number, size = perPage) => {
@@ -115,13 +119,14 @@ const ManageDevice = () => {
 
         addModalRef.current?.close()
         resetForm()
-        await fetchDevices(1)
         Swal.fire({
           title: t('alertHeaderError'),
           text: t('submitSuccess'),
           icon: 'success',
           showConfirmButton: false,
           timer: 2500
+        }).finally(async () => {
+          await fetchDevices(1)
         })
       } catch (error) {
         addModalRef.current?.close()
@@ -180,12 +185,6 @@ const ManageDevice = () => {
     fetchDevices(1)
   }, [token, wardId])
 
-  useEffect(() => {
-    return () => {
-      dispatch(setSearch(''))
-    }
-  }, [])
-
   const deleteDevice = async (id: string) => {
     const result = await Swal.fire({
       title: t('alertHeaderWarning'),
@@ -202,13 +201,14 @@ const ManageDevice = () => {
         const response = await axiosInstance.delete<
           responseType<DeviceTmsType>
         >(`/legacy/device/${id}`)
-        await fetchDevices(1)
         Swal.fire({
           title: t('alertHeaderSuccess'),
           text: response.data.message,
           icon: 'success',
           showConfirmButton: false,
           timer: 2500
+        }).finally(async () => {
+          await fetchDevices(1)
         })
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -225,6 +225,78 @@ const ManageDevice = () => {
       } finally {
         dispatch(setSubmitLoading())
       }
+    }
+  }
+
+  const openEditModal = (device: DeviceTmsType) => {
+    dispatch(setHosId(device.hospital))
+    setFormData({
+      id: device.id,
+      hospital: device.hospital,
+      ward: device.ward,
+      name: device.name,
+      sn: device.sn
+    })
+    editModalRef.current?.showModal()
+  }
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault()
+    dispatch(setSubmitLoading())
+    if (
+      formData.ward !== '' &&
+      hosId !== '' &&
+      formData.sn !== '' &&
+      formData.name !== ''
+    ) {
+      try {
+        const body = {
+          ward: formData.ward,
+          hospital: hosId,
+          sn: formData.sn,
+          name: formData.name
+        }
+        await axiosInstance.put<responseType<DeviceTmsType>>(
+          `/legacy/device/${formData.id}`,
+          body
+        )
+        editModalRef.current?.close()
+        resetForm()
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: t('submitSuccess'),
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        }).finally(async () => {
+          await fetchDevices(1)
+        })
+      } catch (error) {
+        editModalRef.current?.close()
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          }).finally(() => editModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    } else {
+      editModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => editModalRef.current?.showModal())
+      dispatch(setSubmitLoading())
     }
   }
 
@@ -256,12 +328,18 @@ const ManageDevice = () => {
     {
       name: t('action'),
       cell: item => (
-        <div className='p-3'>
+        <div className='flex items-center justify-center gap-3 p-3'>
           <button
             className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
-            onClick={() => deleteDevice(item.id)}
+            onClick={() => deleteDevice(item.sn)}
           >
             <RiDeleteBin7Line size={20} />
+          </button>
+          <button
+            className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
+            onClick={() => openEditModal(item)}
+          >
+            <RiEditLine size={20} />
           </button>
         </div>
       ),
@@ -372,6 +450,83 @@ const ManageDevice = () => {
               className='btn'
               onClick={() => {
                 addModalRef.current?.close()
+                resetForm()
+              }}
+            >
+              {t('cancelButton')}
+            </button>
+            <button type='submit' className='btn btn-primary'>
+              {t('submitButton')}
+            </button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog ref={editModalRef} className='modal'>
+        <form
+          onSubmit={handleUpdate}
+          className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
+        >
+          <h3 className='font-bold text-lg'>{t('editUserButton')}</h3>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
+            {/* Right Column - 2/3 of the grid (70%) */}
+            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
+              {/* Hospital */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('userHospitals')}</span>
+                  <HopitalSelect />
+                </label>
+              </div>
+
+              {/* Ward */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('userWard')}</span>
+                  <WardSelectTms
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
+                </label>
+              </div>
+
+              {/* sn */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('deviceSerialTb')}</span>
+                  <input
+                    name='sn'
+                    type='text'
+                    value={formData.sn}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                  />
+                </label>
+              </div>
+
+              {/* name */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('deviceNameTb')}</span>
+                  <input
+                    name='name'
+                    type='text'
+                    value={formData.name}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Actions */}
+          <div className='modal-action mt-4 md:mt-6'>
+            <button
+              type='button'
+              className='btn'
+              onClick={() => {
+                editModalRef.current?.close()
                 resetForm()
               }}
             >

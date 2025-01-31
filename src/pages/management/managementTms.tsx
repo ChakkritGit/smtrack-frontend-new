@@ -1,11 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ManageHospital from './manageHospital'
 import ManageDevice from './manageDevice'
+import { setSearch } from '../../redux/actions/utilsActions'
+import { useDispatch } from 'react-redux'
 
 const ManagementTms = () => {
+  const dispatch = useDispatch()
   const { t } = useTranslation()
   const [tab, setTab] = useState(1)
+
+    useEffect(() => {
+      return () => {
+        dispatch(setSearch(''))
+      }
+    }, [])
 
   return (
     <div className='p-3 px-[16px]'>
