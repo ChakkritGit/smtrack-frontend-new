@@ -284,8 +284,8 @@ const Users = () => {
 
   const deleteUser = async (id: string) => {
     const result = await Swal.fire({
-      title: t('alertHeaderWarning'),
-      text: t('deleteUserTitle'),
+      title: t('deleteUserTitle'),
+      text: t('notReverseText'),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: t('confirmButton'),
@@ -544,7 +544,10 @@ const Users = () => {
               {/* Hospital */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('userHospitals')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userHospitals')}
+                  </span>
                   <HopitalSelect />
                 </label>
               </div>
@@ -552,7 +555,10 @@ const Users = () => {
               {/* Ward */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('userWard')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userWard')}
+                  </span>
                   <WardSelect formData={formData} setFormData={setFormData} />
                 </label>
               </div>
@@ -560,13 +566,17 @@ const Users = () => {
               {/* Username */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('userNameForm')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userNameForm')}
+                  </span>
                   <input
                     name='username'
                     type='text'
                     value={formData.username}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={50}
                   />
                 </label>
               </div>
@@ -574,13 +584,17 @@ const Users = () => {
               {/* Password */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('userPassword')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userPassword')}
+                  </span>
                   <input
                     name='password'
                     type='password'
                     value={formData.password}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={128}
                   />
                 </label>
               </div>
@@ -589,6 +603,7 @@ const Users = () => {
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
                   <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
                     {t('userDisplayName')}
                   </span>
                   <input
@@ -597,6 +612,7 @@ const Users = () => {
                     value={formData.display}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={80}
                   />
                 </label>
               </div>
@@ -604,7 +620,9 @@ const Users = () => {
               {/* Role */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('userRole')}</span>
+                  <span className='label-text mb-2'>
+                    {t('userRole')}
+                  </span>
                   <RoleSelect
                     formData={formData}
                     roleToken={role}
@@ -700,13 +718,17 @@ const Users = () => {
               {/* Username */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('userNameForm')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userNameForm')}
+                  </span>
                   <input
                     type='text'
                     name='username'
                     value={formData.username}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={50}
                   />
                 </label>
               </div>
@@ -715,6 +737,7 @@ const Users = () => {
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
                   <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
                     {t('userDisplayName')}
                   </span>
                   <input
@@ -723,6 +746,7 @@ const Users = () => {
                     value={formData.display}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={80}
                   />
                 </label>
               </div>

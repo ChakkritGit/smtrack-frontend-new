@@ -219,6 +219,10 @@ export default {
     addWard: 'Add Ward',
     editHos: 'Edit Hospital',
     editWard: 'Edit Ward',
+    userTel: 'Customer telephone',
+    userContact: 'Customer Contact Address',
+    hosLat: 'Latitude',
+    hosLong: 'Longitude',
 
     // history
     hisDetail: 'Detail',
@@ -453,6 +457,7 @@ export default {
     alertHeaderUpdating: 'Updating',
     completeField: 'Please complete this field!',
     deleteUserTitle: 'Do you want to delete a user?',
+    deleteDeviceTitle: 'Do you want to delete a device?',
     notReverseText: 'You will not be able to reverse this',
     CustomMessageLogData:
       'The selected time periods are more than 30 days apart.',

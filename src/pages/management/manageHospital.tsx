@@ -20,7 +20,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import DataTableNoData from '../../components/skeleton/table/noData'
-import { RiDeleteBin7Line, RiEditLine } from 'react-icons/ri'
+import {
+  RiArrowRightSLine,
+  RiArrowUpSLine,
+  RiDeleteBin7Line,
+  RiEditLine
+} from 'react-icons/ri'
 import { resizeImage } from '../../constants/utils/image'
 import { FormAddHospitalState } from '../../types/smtrack/users/usersType'
 import defaultPic from '../../assets/images/default-pic.png'
@@ -32,11 +37,12 @@ import { GlobalContext } from '../../contexts/globalContext'
 const ManageHospital = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const { fetchHospital, setWard } = useContext(
+  const { hospital, fetchHospital } = useContext(
     GlobalContext
   ) as GlobalContextType
-  const { globalSearch } = useSelector((state: RootState) => state.utils)
-  const [hospitalData, setHospitalData] = useState<HospitalsType[]>([])
+  const { globalSearch, tokenDecode } = useSelector(
+    (state: RootState) => state.utils
+  )
   const [filterHospital, setFilterHospital] = useState<HospitalsType[]>([])
   const [imageProcessing, setImageProcessing] = useState(false)
   const [hospitalForm, setHospitalForm] = useState<FormAddHospitalState>({
@@ -50,27 +56,13 @@ const ManageHospital = () => {
     userTel: '',
     imagePreview: null
   })
+  const { hosId, wardId } = tokenDecode ?? {}
 
   const addHosModalRef = useRef<HTMLDialogElement>(null)
   const editHosModalRef = useRef<HTMLDialogElement>(null)
   const addWardModalRef = useRef<HTMLDialogElement>(null)
   const editWardModalRef = useRef<HTMLDialogElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const fetchHospitals = useCallback(async () => {
-    try {
-      const response = await axiosInstance.get<responseType<HospitalsType[]>>(
-        '/auth/hospital'
-      )
-      setHospitalData(response.data.data)
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        console.error(error.response?.data.message)
-      } else {
-        console.error(error)
-      }
-    }
-  }, [])
 
   const resetForm = () => {
     setHospitalForm({
@@ -109,7 +101,6 @@ const ManageHospital = () => {
 
         addHosModalRef.current?.close()
         resetForm()
-        await fetchHospitals()
         await fetchHospital()
         Swal.fire({
           title: t('alertHeaderError'),
@@ -147,6 +138,65 @@ const ManageHospital = () => {
     }
   }
 
+  const handleUpdateHospital = async (e: FormEvent) => {
+    e.preventDefault()
+    dispatch(setSubmitLoading())
+
+    if (
+      hospitalForm.hosName !== '' &&
+      hospitalForm.hosAddress !== '' &&
+      hospitalForm.hosTel !== '' &&
+      hospitalForm.userTel !== ''
+    ) {
+      try {
+        const formDataObj = createFormData()
+        await axiosInstance.put<responseType<FormAddHospitalState>>(
+          `/auth/hospital/${hospitalForm.id}`,
+          formDataObj,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          }
+        )
+
+        editHosModalRef.current?.close()
+        resetForm()
+        await fetchHospital()
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: t('submitSuccess'),
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } catch (error) {
+        editHosModalRef.current?.close()
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          }).finally(() => editHosModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    } else {
+      editHosModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => editHosModalRef.current?.showModal())
+      dispatch(setSubmitLoading())
+    }
+  }
+
   const handleSubmitWard = async (e: FormEvent) => {
     e.preventDefault()
   }
@@ -166,14 +216,32 @@ const ManageHospital = () => {
     }
   }
 
+  const formatPhoneNumber = (value: string) => {
+    const cleaned = value.replace(/\D/g, '')
+
+    const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/)
+
+    if (match) {
+      const [, part1, part2, part3] = match
+      return [part1, part2, part3].filter(Boolean).join('-')
+    }
+
+    return value
+  }
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target
 
+    let formattedValue = value
+
+    formattedValue =
+      name === 'hosTel' || name === 'userTel' ? formatPhoneNumber(value) : value
+
     setHospitalForm(prev => ({
       ...prev,
-      [name]: value
+      [name]: formattedValue
     }))
   }
 
@@ -200,19 +268,73 @@ const ManageHospital = () => {
     return formDataObj
   }
 
-  useEffect(() => {
-    fetchHospitals()
-  }, [])
+  const openEditHosModal = (hos: HospitalsType) => {
+    setHospitalForm({
+      id: hos.id,
+      hosAddress: hos.hosAddress,
+      hosLatitude: hos.hosLatitude,
+      hosLongitude: hos.hosLongitude,
+      hosName: hos.hosName,
+      hosPic: null,
+      hosTel: hos.hosTel,
+      userContact: hos.userContact,
+      userTel: hos.userTel,
+      imagePreview: hos.hosPic
+    })
+    editHosModalRef.current?.showModal()
+  }
+
+  const deleteHospital = async (id: string) => {
+    const result = await Swal.fire({
+      title: t('deleteHosTitle'),
+      text: t('notReverseText'),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: t('confirmButton'),
+      cancelButtonText: t('cancelButton')
+    })
+
+    if (result.isConfirmed) {
+      dispatch(setSubmitLoading())
+      try {
+        const response = await axiosInstance.delete<
+          responseType<FormAddHospitalState>
+        >(`/auth/hospital/${id}`)
+        await fetchHospital()
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: response.data.message,
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          })
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    }
+  }
 
   useEffect(() => {
-    const filter = hospitalData?.filter(
+    const filter = hospital?.filter(
       item =>
         item.hosName.toLowerCase().includes(globalSearch.toLowerCase()) ||
         item.hosTel?.toLowerCase().includes(globalSearch.toLowerCase()) ||
         item.userTel?.toLowerCase().includes(globalSearch.toLowerCase())
     )
     setFilterHospital(filter)
-  }, [hospitalData, globalSearch])
+  }, [hospital, globalSearch])
 
   const columns: TableColumn<HospitalsType>[] = [
     {
@@ -243,7 +365,14 @@ const ManageHospital = () => {
     },
     {
       name: t('hosAddress'),
-      cell: item => item.hosAddress ?? '—',
+      cell: item =>
+        item.hosAddress ? (
+          <span className='truncate max-w-[200px]' title={item.hosAddress}>
+            {item.hosAddress}
+          </span>
+        ) : (
+          '—'
+        ),
       center: true,
       sortable: false
     },
@@ -255,16 +384,26 @@ const ManageHospital = () => {
     },
     {
       name: t('action'),
-      cell: (item, index) => (
-        <div className='flex items-center justify-center gap-3 p-3'>
-          <button className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'>
-            <RiDeleteBin7Line size={20} />
-          </button>
-          <button className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'>
-            <RiEditLine size={20} />
-          </button>
-        </div>
-      ),
+      cell: (item, index) =>
+        hosId !== item.id && (
+          <div
+            className='flex items-center justify-center gap-3 p-3'
+            key={index}
+          >
+            <button
+              onClick={() => deleteHospital(item.id)}
+              className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
+            >
+              <RiDeleteBin7Line size={20} />
+            </button>
+            <button
+              onClick={() => openEditHosModal(item)}
+              className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
+            >
+              <RiEditLine size={20} />
+            </button>
+          </div>
+        ),
       center: true,
       sortable: false
     }
@@ -287,16 +426,20 @@ const ManageHospital = () => {
     },
     {
       name: t('action'),
-      cell: (item, index) => (
-        <div className='flex items-center justify-center gap-3 p-3'>
-          <button className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'>
-            <RiDeleteBin7Line size={20} />
-          </button>
-          <button className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'>
-            <RiEditLine size={20} />
-          </button>
-        </div>
-      ),
+      cell: (item, index) =>
+        wardId !== item.id && (
+          <div
+            className='flex items-center justify-center gap-3 p-3'
+            key={index}
+          >
+            <button className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'>
+              <RiDeleteBin7Line size={20} />
+            </button>
+            <button className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'>
+              <RiEditLine size={20} />
+            </button>
+          </div>
+        ),
       center: true,
       sortable: false
     }
@@ -341,6 +484,12 @@ const ManageHospital = () => {
           responsive
           fixedHeader
           fixedHeaderScrollHeight='calc(100dvh - 350px)'
+          expandableIcon={{
+            collapsed: (
+              <RiArrowRightSLine size={24} className='text-base-content' />
+            ),
+            expanded: <RiArrowUpSLine size={24} className='text-base-content' />
+          }}
         />
       </div>
 
@@ -401,6 +550,7 @@ const ManageHospital = () => {
                     value={hospitalForm.hosName}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={80}
                   />
                 </label>
               </div>
@@ -408,13 +558,17 @@ const ManageHospital = () => {
               {/* Address */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('hosAddress')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('hosAddress')}
+                  </span>
                   <input
                     name='hosAddress'
                     type='text'
                     value={hospitalForm.hosAddress}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={120}
                   />
                 </label>
               </div>
@@ -422,13 +576,35 @@ const ManageHospital = () => {
               {/* tel */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('hosTel')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('hosTel')}
+                  </span>
                   <input
                     name='hosTel'
                     type='tel'
                     value={hospitalForm.hosTel}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={12}
+                  />
+                </label>
+              </div>
+
+              {/* userTel */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userTel')}
+                  </span>
+                  <input
+                    name='userTel'
+                    type='tel'
+                    value={hospitalForm.userTel}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                    maxLength={12}
                   />
                 </label>
               </div>
@@ -436,13 +612,14 @@ const ManageHospital = () => {
               {/* hosLatitude */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('hosLatitude')}</span>
+                  <span className='label-text mb-2'>{t('hosLat')}</span>
                   <input
                     name='hosLatitude'
                     type='text'
                     value={hospitalForm.hosLatitude}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={18}
                   />
                 </label>
               </div>
@@ -450,13 +627,14 @@ const ManageHospital = () => {
               {/* hosLongitude */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('hosLongitude')}</span>
+                  <span className='label-text mb-2'>{t('hosLong')}</span>
                   <input
                     name='hosLongitude'
                     type='text'
                     value={hospitalForm.hosLongitude}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={18}
                   />
                 </label>
               </div>
@@ -471,20 +649,7 @@ const ManageHospital = () => {
                     value={hospitalForm.userContact}
                     onChange={handleChange}
                     className='input input-bordered w-full'
-                  />
-                </label>
-              </div>
-
-              {/* userTel */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('userTel')}</span>
-                  <input
-                    name='userTel'
-                    type='tel'
-                    value={hospitalForm.userTel}
-                    onChange={handleChange}
-                    className='input input-bordered w-full'
+                    maxLength={120}
                   />
                 </label>
               </div>
@@ -498,6 +663,188 @@ const ManageHospital = () => {
               className='btn'
               onClick={() => {
                 addHosModalRef.current?.close()
+                resetForm()
+              }}
+            >
+              {t('cancelButton')}
+            </button>
+            <button type='submit' className='btn btn-primary'>
+              {t('submitButton')}
+            </button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog ref={editHosModalRef} className='modal'>
+        <form
+          onSubmit={handleUpdateHospital}
+          className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
+        >
+          <h3 className='font-bold text-lg'>{t('addHos')}</h3>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
+            <div className='col-span-1 flex justify-center'>
+              <div className='form-control'>
+                <label className='label cursor-pointer image-hover flex flex-col justify-center'>
+                  <span className='label-text'>{t('hosPicture')}</span>
+                  <input
+                    ref={fileInputRef}
+                    type='file'
+                    accept='image/*'
+                    onChange={handleImageChange}
+                    className='hidden'
+                  />
+                  {imageProcessing ? (
+                    <div className='mt-4 flex justify-center w-32 h-32 md:w-48 md:h-48'>
+                      <span className='loading loading-ring loading-md'></span>
+                    </div>
+                  ) : (
+                    <div className='mt-4 relative'>
+                      <img
+                        src={hospitalForm.imagePreview || defaultPic}
+                        alt='Preview'
+                        className={`w-32 h-32 md:w-48 md:h-48 rounded-btn object-cover border-2 border-dashed border-base-300 ${
+                          hospitalForm.imagePreview || defaultPic
+                            ? 'border-none'
+                            : ''
+                        }`}
+                      />
+                      <div className='absolute edit-icon bottom-1 right-1 bg-base-100/50 backdrop-blur rounded-full p-2 shadow-sm'>
+                        <RiEditLine size={20} />
+                      </div>
+                    </div>
+                  )}
+                </label>
+              </div>
+            </div>
+
+            {/* Right Column - 2/3 of the grid (70%) */}
+            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
+              {/* Hospital name */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('hosName')}
+                  </span>
+                  <input
+                    name='hosName'
+                    type='text'
+                    value={hospitalForm.hosName}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                    maxLength={80}
+                  />
+                </label>
+              </div>
+
+              {/* Address */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('hosAddress')}
+                  </span>
+                  <input
+                    name='hosAddress'
+                    type='text'
+                    value={hospitalForm.hosAddress}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                    maxLength={120}
+                  />
+                </label>
+              </div>
+
+              {/* tel */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('hosTel')}
+                  </span>
+                  <input
+                    name='hosTel'
+                    type='tel'
+                    value={hospitalForm.hosTel}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                    maxLength={12}
+                  />
+                </label>
+              </div>
+
+              {/* userTel */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userTel')}
+                  </span>
+                  <input
+                    name='userTel'
+                    type='tel'
+                    value={hospitalForm.userTel}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                    maxLength={12}
+                  />
+                </label>
+              </div>
+
+              {/* hosLatitude */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('hosLat')}</span>
+                  <input
+                    name='hosLatitude'
+                    type='text'
+                    value={hospitalForm.hosLatitude}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                    maxLength={18}
+                  />
+                </label>
+              </div>
+
+              {/* hosLongitude */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('hosLong')}</span>
+                  <input
+                    name='hosLongitude'
+                    type='text'
+                    value={hospitalForm.hosLongitude}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                    maxLength={18}
+                  />
+                </label>
+              </div>
+
+              {/* userContact */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('userContact')}</span>
+                  <input
+                    name='userContact'
+                    type='text'
+                    value={hospitalForm.userContact}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                    maxLength={120}
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Actions */}
+          <div className='modal-action mt-4 md:mt-6'>
+            <button
+              type='button'
+              className='btn'
+              onClick={() => {
+                editHosModalRef.current?.close()
                 resetForm()
               }}
             >

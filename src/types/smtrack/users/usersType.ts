@@ -28,15 +28,15 @@ type FormState = {
 
 type FormAddHospitalState = {
   id?: string
-  hosAddress: string
+  hosAddress?: string
   hosLatitude?: string
   hosLongitude?: string
   hosName: string
   hosPic: File | null
-  hosTel: string
+  hosTel?: string
   userContact?: string
   userTel?: string
-  imagePreview: string | null
+  imagePreview?: string | null
 }
 
 export type { UsersType, FormState, FormAddHospitalState }

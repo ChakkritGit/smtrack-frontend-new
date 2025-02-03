@@ -229,6 +229,10 @@ export default {
     addWard: 'เพิ่มวอร์ด',
     editHos: 'แก้โรงพยาบาล',
     editWard: 'แก้ไขวอร์ด',
+    userTel: 'เบอร์โทรลูกค้า',
+    userContact: 'ที่อยู่ที่ติดต่อลูกค้า',
+    hosLat: 'ละติจูด',
+    hosLong: 'ลองจิจูด',
 
     // history
     hisDetail: 'รายละเอียด',
@@ -452,6 +456,7 @@ export default {
     alertHeaderUpdating: 'กำลังอัปเดท',
     completeField: 'โปรดป้อนข้อมูลให้ครบ',
     deleteUserTitle: 'คุณต้องการลบผู้ใช้หรือไม่',
+    deleteDeviceTitle: 'คุณต้องการลบอุปกรณ์หรือไม่',
     notReverseText: 'คุณจะไม่สามารถย้อนกลับสิ่งนี้ได้',
     customMessageLogData: 'ช่วงเวลาที่เลือกห่างกันมากกว่า 30 วัน',
     deactivateDevice: 'คุณต้องการปิดการใช้งานหรือไม่',

@@ -16,10 +16,7 @@ import axiosInstance from '../../constants/axios/axiosInstance'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { AxiosError } from 'axios'
-import {
-  setHosId,
-  setSubmitLoading
-} from '../../redux/actions/utilsActions'
+import { setHosId, setSubmitLoading } from '../../redux/actions/utilsActions'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import Loading from '../../components/skeleton/table/loading'
 import DataTableNoData from '../../components/skeleton/table/noData'
@@ -187,8 +184,8 @@ const ManageDevice = () => {
 
   const deleteDevice = async (id: string) => {
     const result = await Swal.fire({
-      title: t('alertHeaderWarning'),
-      text: t('deleteUserTitle'),
+      title: t('deleteDeviceTitle'),
+      text: t('notReverseText'),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: t('confirmButton'),
@@ -396,7 +393,10 @@ const ManageDevice = () => {
               {/* Hospital */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('userHospitals')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userHospitals')}
+                  </span>
                   <HopitalSelect />
                 </label>
               </div>
@@ -404,7 +404,10 @@ const ManageDevice = () => {
               {/* Ward */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('userWard')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userWard')}
+                  </span>
                   <WardSelectTms
                     formData={formData}
                     setFormData={setFormData}
@@ -415,13 +418,17 @@ const ManageDevice = () => {
               {/* sn */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('deviceSerialTb')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('deviceSerialTb')}
+                  </span>
                   <input
                     name='sn'
                     type='text'
                     value={formData.sn}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={23}
                   />
                 </label>
               </div>
@@ -429,13 +436,17 @@ const ManageDevice = () => {
               {/* name */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('deviceNameTb')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('deviceNameTb')}
+                  </span>
                   <input
                     name='name'
                     type='text'
                     value={formData.name}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={80}
                   />
                 </label>
               </div>
@@ -473,7 +484,10 @@ const ManageDevice = () => {
               {/* Hospital */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('userHospitals')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userHospitals')}
+                  </span>
                   <HopitalSelect />
                 </label>
               </div>
@@ -481,7 +495,10 @@ const ManageDevice = () => {
               {/* Ward */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('userWard')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userWard')}
+                  </span>
                   <WardSelectTms
                     formData={formData}
                     setFormData={setFormData}
@@ -492,13 +509,17 @@ const ManageDevice = () => {
               {/* sn */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('deviceSerialTb')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('deviceSerialTb')}
+                  </span>
                   <input
                     name='sn'
                     type='text'
                     value={formData.sn}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={23}
                   />
                 </label>
               </div>
@@ -506,13 +527,17 @@ const ManageDevice = () => {
               {/* name */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('deviceNameTb')}</span>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('deviceNameTb')}
+                  </span>
                   <input
                     name='name'
                     type='text'
                     value={formData.name}
                     onChange={handleChange}
                     className='input input-bordered w-full'
+                    maxLength={80}
                   />
                 </label>
               </div>
