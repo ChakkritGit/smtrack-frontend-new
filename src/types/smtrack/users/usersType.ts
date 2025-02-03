@@ -29,13 +29,13 @@ type FormState = {
 type FormAddHospitalState = {
   id?: string
   hosAddress: string
-  hosLatitude: string
-  hosLongitude: string
+  hosLatitude?: string
+  hosLongitude?: string
   hosName: string
   hosPic: File | null
   hosTel: string
-  userContact: string
-  userTel: string
+  userContact?: string
+  userTel?: string
   imagePreview: string | null
 }
 

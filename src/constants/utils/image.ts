@@ -3,7 +3,7 @@ import heic2any from 'heic2any'
 
 export const resizeImage = (
   file: File,
-  targetDPI: number = 500
+  targetDPI: number = 300
 ): Promise<File> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -51,7 +51,7 @@ export const resizeImage = (
           const canvas = document.createElement('canvas')
           const context: CanvasRenderingContext2D | null =
             canvas.getContext('2d')
-          const maxDimensions = { width: 720, height: 720 }
+          const maxDimensions = { width: 128, height: 128 }
           const scaleFactor = Math.min(
             maxDimensions.width / image.width,
             maxDimensions.height / image.height
@@ -65,6 +65,27 @@ export const resizeImage = (
           canvas.style.height = `${originalHeight}px`
           context?.scale(dpiScale, dpiScale)
           context?.drawImage(image, 0, 0, originalWidth, originalHeight)
+
+          // Add Watermark with Shadow
+          if (context) {
+            context.font = '6px Anuphan'
+            context.fillStyle = 'rgba(255, 255, 255, 0.18)'
+            context.textAlign = 'right'
+
+            // Add shadow
+            context.shadowColor = 'rgba(0, 0, 0, 0.5)'
+            context.shadowOffsetX = 2
+            context.shadowOffsetY = 2
+            context.shadowBlur = 1
+
+            context.fillText('SMTrack+', originalWidth - 5, originalHeight - 5)
+
+            // Reset shadow settings
+            context.shadowColor = 'transparent'
+            context.shadowOffsetX = 0
+            context.shadowOffsetY = 0
+            context.shadowBlur = 0
+          }
 
           // Always convert to JPEG
           const dataUrl = canvas.toDataURL(finalMimeString)

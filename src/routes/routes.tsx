@@ -96,7 +96,7 @@ const Routes = () => {
   }, [location, cookieDecode, userProfile])
 
   return (
-    <GlobalContext.Provider value={{ hospital, setHospital, ward, setWard }}>
+    <GlobalContext.Provider value={{ hospital, setHospital, ward, setWard, fetchHospital, fetchWard }}>
       <RouterProvider router={router(role, tmsMode)} />
     </GlobalContext.Provider>
   )

@@ -68,7 +68,7 @@ const MainSmtrack = () => {
 
   return (
     <main>
-      <div className='drawer lg:drawer-open w-auto'>
+      <div className='drawer lg:drawer-open w-auto duration-300'>
         <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content'>
           <Navbar />

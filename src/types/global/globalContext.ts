@@ -7,6 +7,8 @@ type GlobalContextType = {
   ward: WardType[]
   setHospital: Dispatch<SetStateAction<HospitalType[]>>
   setWard: Dispatch<SetStateAction<WardType[]>>
+  fetchHospital: () => Promise<void>
+  fetchWard: () => Promise<void>
 }
 
 export type { GlobalContextType }

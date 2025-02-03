@@ -370,7 +370,6 @@ const ManageDevice = () => {
           fixedHeader
           pagination
           paginationServer
-          pointerOnHover
           columns={columns}
           data={devicesFiltered}
           paginationTotalRows={totalRows}
