@@ -4,17 +4,18 @@ import ManageHospital from './manageHospital'
 import ManageDevice from './manageDevice'
 import { setSearch } from '../../redux/actions/utilsActions'
 import { useDispatch } from 'react-redux'
+import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
 
 const ManagementTms = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const [tab, setTab] = useState(1)
+  const [tab, setTab] = useState(cookies.get('manageHospitalTab') ?? 1)
 
-    useEffect(() => {
-      return () => {
-        dispatch(setSearch(''))
-      }
-    }, [])
+  useEffect(() => {
+    return () => {
+      dispatch(setSearch(''))
+    }
+  }, [])
 
   return (
     <div className='p-3 px-[16px]'>
@@ -22,14 +23,20 @@ const ManagementTms = () => {
         <a
           role='tab'
           className={`tab text-sm md:text-lg ${tab === 1 ? 'tab-active' : ''}`}
-          onClick={() => setTab(1)}
+          onClick={() => {
+            cookies.set('manageHospitalTab', 1, cookieOptions)
+            setTab(1)
+          }}
         >
           {t('tabManageDevice')}
         </a>
         <a
           role='tab'
           className={`tab text-sm md:text-lg ${tab === 2 ? 'tab-active' : ''}`}
-          onClick={() => setTab(2)}
+          onClick={() => {
+            cookies.set('manageHospitalTab', 2, cookieOptions)
+            setTab(2)
+          }}
         >
           {t('tabManageHospitals')}
         </a>
