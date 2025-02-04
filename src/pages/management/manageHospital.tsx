@@ -24,7 +24,8 @@ import {
   RiArrowRightSLine,
   RiArrowUpSLine,
   RiDeleteBin7Line,
-  RiEditLine
+  RiEditLine,
+  RiErrorWarningLine
 } from 'react-icons/ri'
 import { resizeImage } from '../../constants/utils/image'
 import { FormAddHospitalState } from '../../types/smtrack/users/usersType'
@@ -103,7 +104,7 @@ const ManageHospital = () => {
         resetForm()
         await fetchHospital()
         Swal.fire({
-          title: t('alertHeaderError'),
+          title: t('alertHeaderSuccess'),
           text: t('submitSuccess'),
           icon: 'success',
           showConfirmButton: false,
@@ -162,7 +163,7 @@ const ManageHospital = () => {
         resetForm()
         await fetchHospital()
         Swal.fire({
-          title: t('alertHeaderError'),
+          title: t('alertHeaderSuccess'),
           text: t('submitSuccess'),
           icon: 'success',
           showConfirmButton: false,
