@@ -24,7 +24,7 @@ const initialState: UtilsState = {
   cookieEncode: cookies.get('tokenObject'),
   cookieDecode: undefined,
   tokenDecode: undefined,
-  userProfile: undefined,
+  userProfile: cookies.get('userProfile') ?? undefined,
   globalSearch: '',
   themeMode: localStorage.getItem('theme') ?? '',
   tmsMode: cookies.get('tmsMode') ?? false,

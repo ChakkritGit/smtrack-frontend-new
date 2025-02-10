@@ -72,7 +72,7 @@ const WardSelect = (props: WardSelectType) => {
       )}
       onChange={e => getWard(e?.value)}
       autoFocus={false}
-      className='react-select-container w-full'
+      className='react-select-container custom-menu-select w-full'
       classNamePrefix='react-select'
     />
   )

@@ -111,6 +111,20 @@
   }
 }
 
+.custom-device-select {
+  &>.react-select__menu>div:nth-child(1) {
+    justify-content: unset !important;
+    max-height: 300px;
+  }
+}
+
+.custom-menu-select {
+  &>.react-select__menu>div:nth-child(1) {
+    justify-content: unset !important;
+    max-height: 250px;
+  }
+}
+
 .loading-hieght-full {
   height: calc(100dvh - 150px);
 }

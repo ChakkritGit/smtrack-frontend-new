@@ -121,7 +121,7 @@ const HospitalAndWard = () => {
               )}
               onChange={e => getHospital(e?.value)}
               autoFocus={false}
-              className='react-select-container z-30 min-w-[150px]'
+              className='react-select-container custom-menu-select z-30 min-w-[150px]'
               classNamePrefix='react-select'
             />
           )}
@@ -139,7 +139,7 @@ const HospitalAndWard = () => {
             )}
             onChange={e => getWard(e?.value)}
             autoFocus={false}
-            className='react-select-container z-30 min-w-[150px]'
+            className='react-select-container custom-menu-select z-30 min-w-[150px]'
             classNamePrefix='react-select'
           />
           <RiCloseLine

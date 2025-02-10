@@ -43,7 +43,7 @@ const FullTableTmsComponent = (props: FullTablePropType) => {
   ]
 
   return (
-    <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300 mt-3'>
+    <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300 mt-5'>
       <DataTable
         pagination
         fixedHeader

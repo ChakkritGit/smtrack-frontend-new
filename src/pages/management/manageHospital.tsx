@@ -3,7 +3,6 @@ import {
   ChangeEvent,
   FormEvent,
   memo,
-  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -24,16 +23,19 @@ import {
   RiArrowRightSLine,
   RiArrowUpSLine,
   RiDeleteBin7Line,
-  RiEditLine,
-  RiErrorWarningLine
+  RiEditLine
 } from 'react-icons/ri'
 import { resizeImage } from '../../constants/utils/image'
-import { FormAddHospitalState } from '../../types/smtrack/users/usersType'
+import {
+  FormAddHospitalState,
+  FormAddWardType
+} from '../../types/smtrack/users/usersType'
 import defaultPic from '../../assets/images/default-pic.png'
 import Swal from 'sweetalert2'
 import { setSubmitLoading } from '../../redux/actions/utilsActions'
 import { GlobalContextType } from '../../types/global/globalContext'
 import { GlobalContext } from '../../contexts/globalContext'
+import HopitalSelect from '../../components/selects/hopitalSelect'
 
 const ManageHospital = () => {
   const dispatch = useDispatch()
@@ -41,7 +43,7 @@ const ManageHospital = () => {
   const { hospital, fetchHospital } = useContext(
     GlobalContext
   ) as GlobalContextType
-  const { globalSearch, tokenDecode } = useSelector(
+  const { globalSearch, tokenDecode, hosId } = useSelector(
     (state: RootState) => state.utils
   )
   const [filterHospital, setFilterHospital] = useState<HospitalsType[]>([])
@@ -57,7 +59,11 @@ const ManageHospital = () => {
     userTel: '',
     imagePreview: null
   })
-  const { hosId, wardId } = tokenDecode ?? {}
+  const [wardForm, setWardForm] = useState<FormAddWardType>({
+    wardName: '',
+    hosId: ''
+  })
+  const { wardId } = tokenDecode ?? {}
 
   const addHosModalRef = useRef<HTMLDialogElement>(null)
   const editHosModalRef = useRef<HTMLDialogElement>(null)
@@ -78,6 +84,13 @@ const ManageHospital = () => {
       imagePreview: null
     })
     if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  const resetFormWard = () => {
+    setWardForm({
+      wardName: '',
+      hosId: ''
+    })
   }
 
   const handleSubmitHospital = async (e: FormEvent) => {
@@ -200,6 +213,106 @@ const ManageHospital = () => {
 
   const handleSubmitWard = async (e: FormEvent) => {
     e.preventDefault()
+    dispatch(setSubmitLoading())
+
+    if (wardForm.wardName !== '' && hosId !== '') {
+      try {
+        wardForm.hosId = hosId
+        await axiosInstance.post<responseType<FormAddHospitalState>>(
+          '/auth/ward',
+          wardForm
+        )
+
+        addWardModalRef.current?.close()
+        resetFormWard()
+        await fetchHospital()
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: t('submitSuccess'),
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } catch (error) {
+        addWardModalRef.current?.close()
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          }).finally(() => addWardModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    } else {
+      addWardModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => addWardModalRef.current?.showModal())
+      dispatch(setSubmitLoading())
+    }
+  }
+
+  const handleUpdateWard = async (e: FormEvent) => {
+    e.preventDefault()
+    dispatch(setSubmitLoading())
+
+    if (wardForm.wardName !== '' && wardForm.hosId !== '') {
+      try {
+        await axiosInstance.put<responseType<FormAddHospitalState>>(
+          `/auth/ward/${wardForm.id}`,
+          {
+            wardName: wardForm.wardName,
+            hosId: wardForm.hosId
+          }
+        )
+
+        editWardModalRef.current?.close()
+        resetFormWard()
+        await fetchHospital()
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: t('submitSuccess'),
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } catch (error) {
+        editWardModalRef.current?.close()
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          }).finally(() => editWardModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    } else {
+      editWardModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => editWardModalRef.current?.showModal())
+      dispatch(setSubmitLoading())
+    }
   }
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -246,6 +359,17 @@ const ManageHospital = () => {
     }))
   }
 
+  const handleWardChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target
+
+    setWardForm(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
   const createFormData = () => {
     const formDataObj = new FormData()
 
@@ -283,6 +407,15 @@ const ManageHospital = () => {
       imagePreview: hos.hosPic
     })
     editHosModalRef.current?.showModal()
+  }
+
+  const openEditWardModal = (ward: WardType) => {
+    setWardForm({
+      id: ward.id,
+      wardName: ward.wardName,
+      hosId: ward.hosId
+    })
+    editWardModalRef.current?.showModal()
   }
 
   const deleteHospital = async (id: string) => {
@@ -325,6 +458,10 @@ const ManageHospital = () => {
         dispatch(setSubmitLoading())
       }
     }
+  }
+
+  const deleteWard = async (id: string) => {
+    console.log(id)
   }
 
   useEffect(() => {
@@ -386,7 +523,7 @@ const ManageHospital = () => {
     {
       name: t('action'),
       cell: (item, index) =>
-        hosId !== item.id && (
+        tokenDecode?.hosId !== item.id && (
           <div
             className='flex items-center justify-center gap-3 p-3'
             key={index}
@@ -433,10 +570,16 @@ const ManageHospital = () => {
             className='flex items-center justify-center gap-3 p-3'
             key={index}
           >
-            <button className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'>
+            <button
+              onClick={() => deleteWard(item.id)}
+              className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
+            >
               <RiDeleteBin7Line size={20} />
             </button>
-            <button className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'>
+            <button
+              onClick={() => openEditWardModal(item)}
+              className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
+            >
               <RiEditLine size={20} />
             </button>
           </div>
@@ -468,7 +611,12 @@ const ManageHospital = () => {
           >
             {t('addHos')}
           </button>
-          <button className='btn btn-primary'>{t('addWard')}</button>
+          <button
+            className='btn btn-primary'
+            onClick={() => addWardModalRef.current?.showModal()}
+          >
+            {t('addWard')}
+          </button>
         </div>
       </div>
       <div className='dataTableWrapper bg-base-100 rounded-btn p-3 mt-5 duration-300'>
@@ -847,6 +995,124 @@ const ManageHospital = () => {
               onClick={() => {
                 editHosModalRef.current?.close()
                 resetForm()
+              }}
+            >
+              {t('cancelButton')}
+            </button>
+            <button type='submit' className='btn btn-primary'>
+              {t('submitButton')}
+            </button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog ref={addWardModalRef} className='modal'>
+        <form
+          onSubmit={handleSubmitWard}
+          className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
+        >
+          <h3 className='font-bold text-lg'>{t('addWard')}</h3>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
+            {/* Right Column - 2/3 of the grid (70%) */}
+            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
+              {/* Hospital */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userHospitals')}
+                  </span>
+                  <HopitalSelect />
+                </label>
+              </div>
+
+              {/* Ward */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userWard')}
+                  </span>
+                  <input
+                    name='wardName'
+                    type='text'
+                    value={wardForm.wardName}
+                    onChange={handleWardChange}
+                    className='input input-bordered w-full'
+                    maxLength={80}
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Actions */}
+          <div className='modal-action mt-4 md:mt-6'>
+            <button
+              type='button'
+              className='btn'
+              onClick={() => {
+                addWardModalRef.current?.close()
+                resetFormWard()
+              }}
+            >
+              {t('cancelButton')}
+            </button>
+            <button type='submit' className='btn btn-primary'>
+              {t('submitButton')}
+            </button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog ref={editWardModalRef} className='modal'>
+        <form
+          onSubmit={handleUpdateWard}
+          className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
+        >
+          <h3 className='font-bold text-lg'>{t('editWard')}</h3>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
+            {/* Right Column - 2/3 of the grid (70%) */}
+            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
+              {/* Hospital */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userHospitals')}
+                  </span>
+                  <HopitalSelect />
+                </label>
+              </div>
+
+              {/* Ward */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('userWard')}
+                  </span>
+                  <input
+                    name='wardName'
+                    type='text'
+                    value={wardForm.wardName}
+                    onChange={handleWardChange}
+                    className='input input-bordered w-full'
+                    maxLength={80}
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Actions */}
+          <div className='modal-action mt-4 md:mt-6'>
+            <button
+              type='button'
+              className='btn'
+              onClick={() => {
+                editWardModalRef.current?.close()
+                resetFormWard()
               }}
             >
               {t('cancelButton')}

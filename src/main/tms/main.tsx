@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { SubmitLoading } from '../../components/loading/submitLoading'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import axiosInstance from '../../constants/axios/axiosInstance'
 import {
   responseType,
@@ -19,6 +19,7 @@ import { RiCloseLargeFill } from 'react-icons/ri'
 import { useTranslation } from 'react-i18next'
 import { changIcon, changText } from '../../constants/utils/webSocket'
 import notificationSound from '../../assets/sounds/notification.mp3'
+import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
 
 const MainTms = () => {
   const { t } = useTranslation()
@@ -30,12 +31,13 @@ const MainTms = () => {
     tokenDecode,
     socketData,
     soundMode,
-    popUpMode
+    popUpMode,
+    userProfile
   } = useSelector((state: RootState) => state.utils)
   const { token } = cookieDecode || {}
   const { id, hosId, role } = tokenDecode || {}
   const notiSound = new Audio(notificationSound)
-  let isFirstLoad = true
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
   let isPlaying = false
   const toastLimit = 5
 
@@ -49,7 +51,10 @@ const MainTms = () => {
               : ''
           }/auth/user/${id}`
         )
-        dispatch(setUserProfile(response.data.data))
+        if (!userProfile) {
+          cookies.set('userProfile', response.data.data, cookieOptions)
+          dispatch(setUserProfile(response.data.data))
+        }
       } catch (error) {
         if (error instanceof AxiosError) {
           if (error.response?.status === 401) {
@@ -88,7 +93,7 @@ const MainTms = () => {
 
       if (isFirstLoad) {
         fetchUserProfile()
-        isFirstLoad = false
+        setIsFirstLoad(false)
         return
       }
 
@@ -98,7 +103,7 @@ const MainTms = () => {
 
       return () => clearTimeout(timer)
     }
-  }, [location, token, tokenDecode])
+  }, [location, token, tokenDecode, isFirstLoad])
 
   useEffect(() => {
     socket.on('connect', handleConnect)

@@ -6,21 +6,23 @@ import {
   DeviceLogTms,
   LogChartTms
 } from '../../../types/tms/devices/deviceType'
-import { cookies } from '../../../constants/utils/utilsConstants'
+import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
 import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import { useTranslation } from 'react-i18next'
 import { RiBarChart2Fill, RiDashboardLine } from 'react-icons/ri'
 import FullChartTmsComponent from '../../../components/pages/dashboard/tms/fullChartTms'
 import Swal from 'sweetalert2'
+import { useDispatch } from 'react-redux'
+import { setDeviceKey } from '../../../redux/actions/utilsActions'
 
 const FullChartTms = () => {
+  const dispatch = useDispatch()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation() as Location<{ deviceLogs: DeviceLogTms }>
   const { deviceLogs } = location.state ?? {
     deviceLogs: { sn: '', minTemp: 0, maxTemp: 0 }
   }
-  const { sn, minTemp, maxTemp } = deviceLogs
   const [pageNumber, setPagenumber] = useState(1)
   const [dataLog, setDataLog] = useState<LogChartTms[]>([])
   const [filterDate, setFilterDate] = useState({
@@ -28,12 +30,22 @@ const FullChartTms = () => {
     endDate: ''
   })
 
+  useEffect(() => {
+    if (!deviceLogs) {
+      dispatch(setDeviceKey(''))
+      cookies.remove('deviceKey', cookieOptions)
+      navigate('/dashboard')
+    }
+  }, [deviceLogs])
+
   const logDay = async () => {
     setPagenumber(1)
     setDataLog([])
     try {
       const response = await axiosInstance.get<responseType<LogChartTms[]>>(
-        `/legacy/graph?filter=day&sn=${sn ? sn : cookies.get('deviceKey')}`
+        `/legacy/graph?filter=day&sn=${
+          deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')
+        }`
       )
       setDataLog(response.data.data)
     } catch (error) {
@@ -50,7 +62,9 @@ const FullChartTms = () => {
     setDataLog([])
     try {
       const response = await axiosInstance.get<responseType<LogChartTms[]>>(
-        `/legacy/graph?filter=week&sn=${sn ? sn : cookies.get('deviceKey')}`
+        `/legacy/graph?filter=week&sn=${
+          deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')
+        }`
       )
       setDataLog(response.data.data)
     } catch (error) {
@@ -67,7 +81,9 @@ const FullChartTms = () => {
     setDataLog([])
     try {
       const response = await axiosInstance.get<responseType<LogChartTms[]>>(
-        `/legacy/graph?filter=month&sn=${sn ? sn : cookies.get('deviceKey')}`
+        `/legacy/graph?filter=month&sn=${
+          deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')
+        }`
       )
       setDataLog(response.data.data)
     } catch (error) {
@@ -94,7 +110,7 @@ const FullChartTms = () => {
           >(
             `/legacy/graph?filter=${filterDate.startDate},${
               filterDate.endDate
-            }&sn=${sn ? sn : cookies.get('deviceKey')}`
+            }&sn=${deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')}`
           )
           setDataLog(responseData.data.data)
         } catch (error) {
@@ -133,10 +149,10 @@ const FullChartTms = () => {
   }, [])
 
   useEffect(() => {
-    if (sn === '') {
+    if (deviceLogs?.sn === '') {
       navigate('/dashboard')
     }
-  }, [sn])
+  }, [deviceLogs?.sn])
 
   return (
     <div className='container mx-auto p-3'>
@@ -212,8 +228,8 @@ const FullChartTms = () => {
       )}
       <FullChartTmsComponent
         dataLog={dataLog}
-        tempMin={minTemp}
-        tempMax={maxTemp}
+        tempMin={deviceLogs?.minTemp}
+        tempMax={deviceLogs?.maxTemp}
       />
     </div>
   )

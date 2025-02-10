@@ -241,9 +241,11 @@ const FullChartTmsComponent = (props: FullChartPropType) => {
     }
   }
 
-  return <div className='mt-3'>
-    <Chart options={options} series={series} height={680} />
-  </div>
+  return (
+    <div className='mt-3'>
+      <Chart options={options} series={series} height={680} />
+    </div>
+  )
 }
 
 export default FullChartTmsComponent

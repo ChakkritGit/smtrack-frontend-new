@@ -39,4 +39,10 @@ type FormAddHospitalState = {
   imagePreview?: string | null
 }
 
-export type { UsersType, FormState, FormAddHospitalState }
+type FormAddWardType = {
+  id?: string
+  wardName: string,
+  hosId: string
+}
+
+export type { UsersType, FormState, FormAddHospitalState, FormAddWardType }

@@ -3,15 +3,17 @@ import { HideSettingTms } from '../middleware/Auth'
 import {
   DashboardSkeletonTms,
   HomeSkeletonTms,
+  ManageSkeleton,
   UserSkeleton
 } from '../components/skeleton'
 import { RouteObject } from 'react-router-dom'
-import ManagementTms from '../pages/management/managementTms'
+import FullDashboardSkeleton from '../components/skeleton/dashboard/fullDashboardSkeleton'
 const HomeTms = lazy(() => import('../pages/home/homeTms'))
 const DashboardTms = lazy(() => import('../pages/dashboard/tms/dashboardTms'))
 const Users = lazy(() => import('../pages/users/users'))
 const FullChartTms = lazy(() => import('../pages/dashboard/tms/fullChartTms'))
 const FullTableTms = lazy(() => import('../pages/dashboard/tms/fullTableTms'))
+const ManagementTms = lazy(() => import('../pages/management/managementTms'))
 
 const tmsChildren: RouteObject[] = [
   {
@@ -48,7 +50,7 @@ const tmsChildren: RouteObject[] = [
       {
         path: 'management',
         element: (
-          <Suspense fallback={<span>Loading...</span>}>
+          <Suspense fallback={<ManageSkeleton />}>
             <ManagementTms />
           </Suspense>
         ),
@@ -59,7 +61,7 @@ const tmsChildren: RouteObject[] = [
   {
     path: 'dashboard/chart',
     element: (
-      <Suspense fallback={<span>Loading...</span>}>
+      <Suspense fallback={<FullDashboardSkeleton />}>
         <FullChartTms />
       </Suspense>
     ),
@@ -68,7 +70,7 @@ const tmsChildren: RouteObject[] = [
   {
     path: 'dashboard/chart/preview',
     element: (
-      <Suspense fallback={<span>Loading...</span>}>
+      <Suspense fallback={<FullDashboardSkeleton />}>
         <></>
       </Suspense>
     ),
@@ -77,7 +79,7 @@ const tmsChildren: RouteObject[] = [
   {
     path: 'dashboard/table',
     element: (
-      <Suspense fallback={<span>Loading...</span>}>
+      <Suspense fallback={<FullDashboardSkeleton />}>
         <FullTableTms />
       </Suspense>
     ),
@@ -88,15 +90,6 @@ const tmsChildren: RouteObject[] = [
     element: (
       <Suspense fallback={<span>Loading...</span>}>
         <>Setting</>
-      </Suspense>
-    ),
-    errorElement: <></>
-  },
-  {
-    path: 'changeLog',
-    element: (
-      <Suspense fallback={<span>Loading...</span>}>
-        <></>
       </Suspense>
     ),
     errorElement: <></>

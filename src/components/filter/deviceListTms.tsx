@@ -17,23 +17,6 @@ const DeviceTmsList = () => {
   const [deviceListFilter, setDeviceListFilter] = useState<DeviceListTmsType[]>(
     []
   )
-  // const fetchDeviceList = useCallback(async () => {
-  //   try {
-  //     const response = await axiosInstance.get<
-  //       responseType<DeviceListTmsType[]>
-  //     >(`/legacy/device/devices/list`)
-  //     setNumber((number += 1))
-  //     if (response.data.data && response.data.data.length > 0) {
-  //       setDeviceList(response.data.data)
-  //     }
-  //   } catch (error) {
-  //     if (error instanceof AxiosError) {
-  //       console.error(error.response?.data.message)
-  //     } else {
-  //       console.error(error)
-  //     }
-  //   }
-  // }, [])
 
   const fetchDeviceList = useCallback(async () => {
     try {
@@ -102,7 +85,7 @@ const DeviceTmsList = () => {
         dispatch(setDeviceKey(String(e?.value)))
       }}
       autoFocus={false}
-      className='react-select-container z-[75] min-w-full md:min-w-[315px]'
+      className='react-select-container custom-device-select z-[75] min-w-full md:min-w-[315px]'
       classNamePrefix='react-select'
     />
   )

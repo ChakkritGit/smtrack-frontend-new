@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import Navbar from '../../components/navigation/navbar/navbar'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import axiosInstance from '../../constants/axios/axiosInstance'
@@ -12,16 +12,17 @@ import { setUserProfile } from '../../redux/actions/utilsActions'
 import { AxiosError } from 'axios'
 import { SubmitLoading } from '../../components/loading/submitLoading'
 import Sidebar from '../../components/navigation/sidebar/smtrack/sidebar'
+import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
 
 const MainSmtrack = () => {
   const dispatch = useDispatch()
   const location = useLocation()
-  const { cookieDecode, tokenDecode, submitLoading } = useSelector(
+  const { cookieDecode, tokenDecode, submitLoading, userProfile } = useSelector(
     (state: RootState) => state.utils
   )
   const { token } = cookieDecode || {}
   const { id } = tokenDecode || {}
-  let isFirstLoad = true
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
 
   const fetchUserProfile = async () => {
     if (id) {
@@ -33,7 +34,10 @@ const MainSmtrack = () => {
               : ''
           }/auth/user/${id}`
         )
-        dispatch(setUserProfile(response.data.data))
+        if (!userProfile) {
+          cookies.set('userProfile', response.data.data, cookieOptions)
+          dispatch(setUserProfile(response.data.data))
+        }
       } catch (error) {
         if (error instanceof AxiosError) {
           if (error.response?.status === 401) {
@@ -54,7 +58,7 @@ const MainSmtrack = () => {
 
       if (isFirstLoad) {
         fetchUserProfile()
-        isFirstLoad = false
+        setIsFirstLoad(false)
         return
       }
 
@@ -64,7 +68,7 @@ const MainSmtrack = () => {
 
       return () => clearTimeout(timer)
     }
-  }, [location, token, tokenDecode])
+  }, [location, token, tokenDecode, isFirstLoad])
 
   return (
     <main>

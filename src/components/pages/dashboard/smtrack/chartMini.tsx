@@ -1,6 +1,6 @@
 import Chart from 'react-apexcharts'
-import { DeviceLogType } from '../../../types/smtrack/logs/deviceLog'
 import { useTranslation } from 'react-i18next'
+import { DeviceLogType } from '../../../../types/smtrack/logs/deviceLog'
 
 interface ChartMiniProps {
   logData: DeviceLogType[]
