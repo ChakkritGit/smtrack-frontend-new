@@ -46,6 +46,7 @@ const Users = () => {
   const [users, setUsers] = useState<UsersType[]>([])
   const [usersFilter, setUsersFilter] = useState<UsersType[]>([])
   const [imageProcessing, setImageProcessing] = useState(false)
+  const [deviceConnect, setDeviceConnect] = useState('')
 
   const [formData, setFormData] = useState<FormState>({
     username: '',
@@ -324,19 +325,59 @@ const Users = () => {
     }
   }
 
+  const handleFilterConnect = (status: string) => {
+    if (deviceConnect === status) {
+      setDeviceConnect('')
+    } else {
+      setDeviceConnect(status)
+    }
+  }
+
   useEffect(() => {
     fetchUsers()
   }, [])
 
+  // useEffect(() => {
+  //   const filterUsers = users?.filter(item =>
+  //     wardId
+  //       ? (item.ward?.id?.toLowerCase().includes(wardId.toLowerCase()) &&
+  //           item.display?.toLowerCase().includes(globalSearch.toLowerCase())) ||
+  //         item.username?.toLowerCase().includes(globalSearch.toLowerCase())
+  //       : item.display?.toLowerCase().includes(globalSearch.toLowerCase()) ||
+  //         item.username?.toLowerCase().includes(globalSearch.toLowerCase())
+  //   )
+  //   const newFilter = tmsMode
+  //     ? filterUsers.filter(
+  //         item =>
+  //           item.role?.includes('LEGACY_ADMIN') ||
+  //           item.role?.includes('LEGACY_USER')
+  //       )
+  //     : filterUsers
+  //   setUsersFilter(newFilter)
+  // }, [users, globalSearch, wardId, tmsMode])
+
   useEffect(() => {
-    const filterUsers = users?.filter(item =>
-      wardId
-        ? (item.ward?.id?.toLowerCase().includes(wardId.toLowerCase()) &&
-            item.display?.toLowerCase().includes(globalSearch.toLowerCase())) ||
-          item.username?.toLowerCase().includes(globalSearch.toLowerCase())
-        : item.display?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-          item.username?.toLowerCase().includes(globalSearch.toLowerCase())
-    )
+    const filterUsers = users?.filter(f => {
+      const matchesSearch = wardId
+        ? (f.ward?.id?.toLowerCase().includes(wardId.toLowerCase()) &&
+            f.display?.toLowerCase().includes(globalSearch.toLowerCase())) ||
+          f.username?.toLowerCase().includes(globalSearch.toLowerCase())
+        : f.display?.toLowerCase().includes(globalSearch.toLowerCase()) ||
+          f.username?.toLowerCase().includes(globalSearch.toLowerCase())
+
+      const matchesConnection =
+        deviceConnect === '' ||
+        (deviceConnect === 'SUPER' && f.role === 'SUPER') ||
+        (deviceConnect === 'SERVICE' && f.role === 'SERVICE') ||
+        (deviceConnect === 'ADMIN' && f.role === 'ADMIN') ||
+        (deviceConnect === 'USER' && f.role === 'USER') ||
+        (deviceConnect === 'LEGACY_ADMIN' && f.role === 'LEGACY_ADMIN') ||
+        (deviceConnect === 'LEGACY_USER' && f.role === 'LEGACY_USER') ||
+        (deviceConnect === 'GUEST' && f.role === 'GUEST')
+
+      return matchesSearch && matchesConnection
+    })
+
     const newFilter = tmsMode
       ? filterUsers.filter(
           item =>
@@ -345,7 +386,7 @@ const Users = () => {
         )
       : filterUsers
     setUsersFilter(newFilter)
-  }, [users, globalSearch, wardId, tmsMode])
+  }, [users, globalSearch, wardId, tmsMode, deviceConnect])
 
   const UserCard = useMemo(() => {
     if (usersFilter?.length > 0) {
@@ -493,6 +534,106 @@ const Users = () => {
         </div>
       </div>
 
+      <div className='flex items-center justify-start flex-wrap gap-3 mt-5'>
+        {(role !== 'LEGACY_ADMIN' && !tmsMode) ? (
+          <>
+            <button
+              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
+                deviceConnect === 'SUPER'
+                  ? 'btn-primary text-white'
+                  : 'btn-ghost border border-gray-500/50 text-gray-500'
+              }`}
+              onClick={() => handleFilterConnect('SUPER')}
+            >
+              <span>{t('levelSuper')}</span>
+            </button>
+            <button
+              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
+                deviceConnect === 'SERVICE'
+                  ? 'btn-primary text-white'
+                  : 'btn-ghost border border-gray-500/50 text-gray-500'
+              }`}
+              onClick={() => handleFilterConnect('SERVICE')}
+            >
+              <span>{t('levelService')}</span>
+            </button>
+            <button
+              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
+                deviceConnect === 'ADMIN'
+                  ? 'btn-primary text-white'
+                  : 'btn-ghost border border-gray-500/50 text-gray-500'
+              }`}
+              onClick={() => handleFilterConnect('ADMIN')}
+            >
+              <span>{t('levelAdmin')}</span>
+            </button>
+            <button
+              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
+                deviceConnect === 'USER'
+                  ? 'btn-primary text-white'
+                  : 'btn-ghost border border-gray-500/50 text-gray-500'
+              }`}
+              onClick={() => handleFilterConnect('USER')}
+            >
+              <span>{t('levelUser')}</span>
+            </button>
+            <button
+              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
+                deviceConnect === 'LEGACY_ADMIN'
+                  ? 'btn-primary text-white'
+                  : 'btn-ghost border border-gray-500/50 text-gray-500'
+              }`}
+              onClick={() => handleFilterConnect('LEGACY_ADMIN')}
+            >
+              <span>{t('legacyAdmin')}</span>
+            </button>
+            <button
+              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
+                deviceConnect === 'LEGACY_USER'
+                  ? 'btn-primary text-white'
+                  : 'btn-ghost border border-gray-500/50 text-gray-500'
+              }`}
+              onClick={() => handleFilterConnect('LEGACY_USER')}
+            >
+              <span>{t('legacyUser')}</span>
+            </button>
+            <button
+              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
+                deviceConnect === 'GUEST'
+                  ? 'btn-primary text-white'
+                  : 'btn-ghost border border-gray-500/50 text-gray-500'
+              }`}
+              onClick={() => handleFilterConnect('GUEST')}
+            >
+              <span>{t('levelGuest')}</span>
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
+                deviceConnect === 'LEGACY_ADMIN'
+                  ? 'btn-primary text-white'
+                  : 'btn-ghost border border-gray-500/50 text-gray-500'
+              }`}
+              onClick={() => handleFilterConnect('LEGACY_ADMIN')}
+            >
+              <span>{t('legacyAdmin')}</span>
+            </button>
+            <button
+              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
+                deviceConnect === 'LEGACY_USER'
+                  ? 'btn-primary text-white'
+                  : 'btn-ghost border border-gray-500/50 text-gray-500'
+              }`}
+              onClick={() => handleFilterConnect('LEGACY_USER')}
+            >
+              <span>{t('legacyUser')}</span>
+            </button>
+          </>
+        )}
+      </div>
+
       {UserCard}
 
       {/* Add User Modal */}
@@ -620,9 +761,7 @@ const Users = () => {
               {/* Role */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>
-                    {t('userRole')}
-                  </span>
+                  <span className='label-text mb-2'>{t('userRole')}</span>
                   <RoleSelect
                     formData={formData}
                     roleToken={role}
