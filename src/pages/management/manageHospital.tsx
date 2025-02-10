@@ -266,13 +266,12 @@ const ManageHospital = () => {
     e.preventDefault()
     dispatch(setSubmitLoading())
 
-    if (wardForm.wardName !== '' && wardForm.hosId !== '') {
+    if (wardForm.wardName !== '') {
       try {
         await axiosInstance.put<responseType<FormAddHospitalState>>(
           `/auth/ward/${wardForm.id}`,
           {
-            wardName: wardForm.wardName,
-            hosId: wardForm.hosId
+            wardName: wardForm.wardName
           }
         )
 
@@ -461,7 +460,45 @@ const ManageHospital = () => {
   }
 
   const deleteWard = async (id: string) => {
-    console.log(id)
+    const result = await Swal.fire({
+      title: t('deleteWardTitle'),
+      text: t('notReverseText'),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: t('confirmButton'),
+      cancelButtonText: t('cancelButton')
+    })
+
+    if (result.isConfirmed) {
+      dispatch(setSubmitLoading())
+      try {
+        const response = await axiosInstance.delete<
+          responseType<FormAddHospitalState>
+        >(`/auth/ward/${id}`)
+        await fetchHospital()
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: response.data.message,
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          })
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    }
   }
 
   useEffect(() => {
@@ -1068,23 +1105,12 @@ const ManageHospital = () => {
       <dialog ref={editWardModalRef} className='modal'>
         <form
           onSubmit={handleUpdateWard}
-          className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
+          className='modal-box w-4/5 md:overflow-y-visible'
         >
           <h3 className='font-bold text-lg'>{t('editWard')}</h3>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
+          <div className='grid grid-cols-1 gap-4 mt-4 w-full'>
             {/* Right Column - 2/3 of the grid (70%) */}
-            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
-              {/* Hospital */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>
-                    <span className='font-medium text-red-500 mr-1'>*</span>
-                    {t('userHospitals')}
-                  </span>
-                  <HopitalSelect />
-                </label>
-              </div>
-
+            <div className='col-span-2 grid grid-cols-1 gap-2 md:gap-4'>
               {/* Ward */}
               <div className='form-control w-full'>
                 <label className='label flex-col items-start'>
