@@ -387,6 +387,7 @@ export default {
     delay: 'Delay Time',
     door: 'Number of door',
     nodata: 'Data not found',
+    noHistory: 'No search history found',
     loading: 'Loading...',
     loadingConfig: 'Loading settings...',
     searchItemsNav: 'Search',
@@ -436,6 +437,8 @@ export default {
     selectValue: 'Select',
     hospitalsName: 'Hospital',
     wardsName: 'Ward',
+    pressPre1: 'Press',
+    pressPre2: 'to exit search',
 
     // connect
     ipAddress: 'IP',

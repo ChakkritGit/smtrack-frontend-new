@@ -386,6 +386,7 @@ export default {
     delay: 'ดีเลย์ไทม์',
     door: 'จำนวนประตู',
     nodata: 'ไม่พบข้อมูล',
+    noHistory: 'ไม่พบประวัติการค้นหา',
     loading: 'กำลังโหลด...',
     loadingConfig: 'กำลังโหลดการตั้งค่า...',
     searchItemsNav: 'ค้นหา',
@@ -435,6 +436,8 @@ export default {
     selectValue: 'เลือก',
     hospitalsName: 'โรงพยาบาล',
     wardsName: 'วอร์ด',
+    pressPre1: 'กด',
+    pressPre2: 'เพื่อออกจากการค้นหา',
 
     // connect
     ipAddress: 'IP',

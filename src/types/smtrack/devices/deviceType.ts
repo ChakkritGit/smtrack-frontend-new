@@ -43,6 +43,7 @@ type DeviceListType = {
   id: string
   name: string
   ward: string
+  sn?: string
 }
 
 export type { DevicesType, DeviceType, DeviceLogsType, DeviceListType }

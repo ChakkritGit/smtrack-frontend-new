@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   RiNotification4Line,
   RiSearchLine,
@@ -6,12 +6,14 @@ import {
   RiLayoutLeftLine,
   RiLayoutRightLine,
   RiCloseLine,
-  RiHistoryLine
+  RiHistoryLine,
+  RiDeviceLine
 } from 'react-icons/ri'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import {
   setCookieEncode,
+  setDeviceKey,
   setIsExpand,
   setSearch
 } from '../../../redux/actions/utilsActions'
@@ -27,17 +29,23 @@ import ThemeList from '../../theme/themeList'
 import LanguageList from '../../language/languageList'
 import { menuDataArraySmtrack } from '../../../constants/utils/dataSearch'
 import { useNavigate } from 'react-router-dom'
+import axiosInstance from '../../../constants/axios/axiosInstance'
+import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
+import { DeviceListTmsType } from '../../../types/tms/devices/deviceType'
+import { AxiosError } from 'axios'
+import { DeviceListType } from '../../../types/smtrack/devices/deviceType'
 
 type SearchType = {
   text: string
   path: string
+  tag: string
 }
 
 const Navbar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const { isExpand, userProfile, globalSearch } = useSelector(
+  const { isExpand, userProfile, globalSearch, tmsMode } = useSelector(
     (state: RootState) => state.utils
   )
   const { pic, display, role } = userProfile || {}
@@ -48,6 +56,9 @@ const Navbar = () => {
   const isMac = os === 'mac os'
   const clearText = globalSearch === ''
   const [isFocused, setIsFocused] = useState(false)
+  const [deviceList, setDeviceList] = useState<
+    DeviceListType[] | DeviceListTmsType[]
+  >([])
 
   const [searchHistory, setSearchHistory] = useState<SearchType[]>(() => {
     const storedHistory = cookies.get('searchHistory')
@@ -72,6 +83,25 @@ const Navbar = () => {
     })
   }
 
+  const fetchDeviceList = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get<
+        responseType<DeviceListTmsType[] | DeviceListTmsType[]>
+      >(!tmsMode ? '/devices/dashboard/device' : '/legacy/device/devices/list')
+      setDeviceList(response.data.data)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data.message)
+      } else {
+        console.error(error)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchDeviceList()
+  }, [])
+
   useEffect(() => {
     localStorage.setItem('expandaside', isExpand.toString())
   }, [isExpand])
@@ -83,6 +113,12 @@ const Navbar = () => {
           e.preventDefault()
           searchRef.current?.focus()
         }
+      } else if (e.key?.toLowerCase() === 'escape') {
+        e.preventDefault()
+        if (isFocused) {
+          searchRef.current?.blur()
+          setIsFocused(false)
+        }
       }
     }
 
@@ -91,7 +127,7 @@ const Navbar = () => {
     return () => {
       window.removeEventListener('keydown', handleCk)
     }
-  }, [])
+  }, [isFocused])
 
   useEffect(() => {
     function handleClickOutside (event: any) {
@@ -116,9 +152,23 @@ const Navbar = () => {
       f.text?.toLowerCase().includes(globalSearch?.toLowerCase())
     )
 
+    const devive = deviceList
+      .filter(
+        f =>
+          f.name?.toLowerCase().includes(globalSearch?.toLowerCase()) ||
+          f.id?.toLowerCase().includes(globalSearch?.toLowerCase()) ||
+          f.sn?.toLowerCase().includes(globalSearch?.toLowerCase())
+      )
+      .slice(0, 6)
+
     return (
-      <div className='absolute min-w-[450px] min-h-[50px] max-w-[500px] max-h-[300px] bg-base-100 border-base-content/15 border-[1px] py-3 pl-4 top-[60px] overflow-y-scroll rounded-btn'>
-        {searchHistory.length > 0 && (
+      <div className='absolute min-w-[450px] min-h-[50px] max-w-[500px] max-h-[400px] bg-base-100 border-base-content/15 border-[1px] py-3 pl-4 pr-2 top-[60px] overflow-y-scroll rounded-btn'>
+        <div className='p-1 flex items-center gap-3 opacity-70 mb-1'>
+          <span>{t('pressPre1')}</span>
+          <kbd className='kbd kbd-sm'>Esc</kbd>
+          <span>{t('pressPre2')}</span>
+        </div>
+        {searchHistory.length > 0 ? (
           <>
             {searchHistory.map((item, index) => (
               <div
@@ -128,13 +178,22 @@ const Navbar = () => {
                 <div
                   className='flex items-center gap-3'
                   onClick={() => {
-                    dispatch(setSearch(item.text))
+                    if (item.tag === 'menu') {
+                      navigate(item.path)
+                      setIsFocused(false)
+                    } else if (item.tag === 'device') {
+                      cookies.set('deviceKey', item.path, cookieOptions) // it's mean setSerial
+                      dispatch(setDeviceKey(item.path))
+                      navigate('/dashboard')
+                      window.scrollTo(0, 0)
+                      setIsFocused(false)
+                    }
                   }}
                 >
                   <div>
                     <RiHistoryLine size={18} />
                   </div>
-                  <span>{item.text}</span>
+                  <span className='truncate  max-w-[300px]'>{item.text}</span>
                 </div>
                 <button
                   className='p-1 rounded-full hover:bg-red-500 hover:text-white duration-300'
@@ -148,10 +207,59 @@ const Navbar = () => {
               </div>
             ))}
           </>
+        ) : (
+          <div className='flex items-center justify-center'>
+            <span className='opacity-70'>{t('noHistory')}</span>
+          </div>
         )}
 
         {globalSearch && (
           <div>
+            <div className='divider text-[12px] opacity-50'>
+              {t('countDeviceUnit')}
+            </div>
+            <div
+              className={`grid grid-cols-1 ${
+                devive.length > 0 ? 'md:grid-cols-2' : ''
+              } gap-2`}
+            >
+              {devive.length > 0 ? (
+                devive.map((item, index) => (
+                  <div
+                    key={index}
+                    className='flex items-center gap-3 p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300'
+                    onClick={() => {
+                      const newItem = {
+                        text: item.name,
+                        path: !tmsMode ? item.id : String(item.sn),
+                        tag: 'device'
+                      }
+                      setIsFocused(false)
+                      updateSearchHistory(newItem)
+                      cookies.set(
+                        'deviceKey',
+                        !tmsMode ? item.id : item.sn,
+                        cookieOptions
+                      ) // it's mean setSerial
+                      dispatch(
+                        setDeviceKey(!tmsMode ? item.id : String(item.sn))
+                      )
+                      navigate('/dashboard')
+                      window.scrollTo(0, 0)
+                    }}
+                  >
+                    <div>
+                      <RiDeviceLine size={18} />
+                    </div>
+                    <span className='truncate max-w-[150px]'>{item.name}</span>
+                  </div>
+                ))
+              ) : (
+                <div className='flex items-center justify-center'>
+                  <span className='opacity-70'>{t('noHistory')}</span>
+                </div>
+              )}
+            </div>
             <div className='divider text-[12px] opacity-50'>
               {t('menuButton')}
             </div>
@@ -166,19 +274,23 @@ const Navbar = () => {
                     key={index}
                     className='flex items-center gap-3 p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300'
                     onClick={() => {
-                      const newItem = { text: item.text, path: item.path }
+                      const newItem = {
+                        text: item.text,
+                        path: item.path,
+                        tag: 'menu'
+                      }
                       navigate(item.path)
                       setIsFocused(false)
                       updateSearchHistory(newItem)
                     }}
                   >
                     <div>{item.icon}</div>
-                    <span>{item.text}</span>
+                    <span className='truncate max-w-[150px]'>{item.text}</span>
                   </div>
                 ))
               ) : (
                 <div className='flex items-center justify-center'>
-                  <span>{t('nodata')}</span>
+                  <span className='opacity-70'>{t('noHistory')}</span>
                 </div>
               )}
             </div>
