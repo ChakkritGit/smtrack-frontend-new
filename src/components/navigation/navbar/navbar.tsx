@@ -163,7 +163,7 @@ const Navbar = () => {
       .slice(0, 6)
 
     return (
-      <div className='absolute min-w-[450px] min-h-[50px] max-w-[500px] max-h-[400px] bg-base-100 border-base-content/15 border-[1px] py-3 pl-4 pr-1 top-[60px] overflow-y-scroll rounded-btn'>
+      <div className='absolute min-w-[450px] min-h-[50px] max-w-[500px] max-h-[400px] bg-base-100 backdrop-blur transition-shadow shadow-sm duration-300 border-base-content/15 border-[1px] py-3 pl-4 pr-1 top-[60px] overflow-y-scroll rounded-btn'>
         <div className='p-1 flex items-center gap-3 opacity-70 mb-1'>
           <span>{t('pressPre1')}</span>
           <kbd className='kbd kbd-sm'>Esc</kbd>
@@ -350,7 +350,7 @@ const Navbar = () => {
                   onChange={e => dispatch(setSearch(e.target.value))}
                   value={globalSearch}
                   type='text'
-                  className='grow !w-28 md:w-auto'
+                  className='grow !w-28 md:w-auto caret-primary'
                   placeholder='Search'
                   ref={searchRef}
                 />
