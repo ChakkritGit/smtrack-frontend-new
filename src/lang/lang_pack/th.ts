@@ -167,6 +167,8 @@ export default {
 
     userActive: 'ใช้งาน',
     userInactive: 'ปิดการใช้งาน',
+    deviceActive: 'เปิดใช้งาน',
+    deviceInactive: 'ปิดการใช้งาน',
 
     // user form
     userHospitals: 'โรงพยาบาบาล',

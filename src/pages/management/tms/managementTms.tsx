@@ -1,12 +1,12 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { setSearch } from '../../redux/actions/utilsActions'
+import { setSearch } from '../../../redux/actions/utilsActions'
 import { useDispatch, useSelector } from 'react-redux'
-import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
-import { RootState } from '../../redux/reducers/rootReducer'
-import ManageDeviceSkeleton from '../../components/skeleton/manage/manageDeviceSkeleton'
-import ManageHospitalSkeleton from '../../components/skeleton/manage/manageHospitalSkeleton'
-const ManageHospital = lazy(() => import('./manageHospital'))
+import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
+import { RootState } from '../../../redux/reducers/rootReducer'
+import ManageDeviceSkeleton from '../../../components/skeleton/manage/manageDeviceSkeleton'
+import ManageHospitalSkeleton from '../../../components/skeleton/manage/manageHospitalSkeleton'
+const ManageHospital = lazy(() => import('../manageHospital'))
 const ManageDevice = lazy(() => import('./manageDevice'))
 
 const ManagementTms = () => {

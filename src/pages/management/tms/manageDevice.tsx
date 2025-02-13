@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import HospitalAndWard from '../../components/filter/hospitalAndWard'
+import HospitalAndWard from '../../../components/filter/hospitalAndWard'
 import {
   ChangeEvent,
   FormEvent,
@@ -11,19 +11,19 @@ import {
 import {
   AddDeviceType,
   DeviceTmsType
-} from '../../types/tms/devices/deviceType'
-import axiosInstance from '../../constants/axios/axiosInstance'
-import { RootState } from '../../redux/reducers/rootReducer'
+} from '../../../types/tms/devices/deviceType'
+import axiosInstance from '../../../constants/axios/axiosInstance'
+import { RootState } from '../../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { AxiosError } from 'axios'
-import { setHosId, setSubmitLoading } from '../../redux/actions/utilsActions'
+import { setHosId, setSubmitLoading } from '../../../redux/actions/utilsActions'
 import DataTable, { TableColumn } from 'react-data-table-component'
-import Loading from '../../components/skeleton/table/loading'
-import DataTableNoData from '../../components/skeleton/table/noData'
-import HopitalSelect from '../../components/selects/hopitalSelect'
-import WardSelectTms from '../../components/selects/tms/wardSelect'
+import Loading from '../../../components/skeleton/table/loading'
+import DataTableNoData from '../../../components/skeleton/table/noData'
+import HopitalSelect from '../../../components/selects/hopitalSelect'
+import WardSelectTms from '../../../components/selects/tms/wardSelect'
 import Swal from 'sweetalert2'
-import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
+import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import { RiDeleteBin7Line, RiEditLine, RiFileCopyLine } from 'react-icons/ri'
 import toast from 'react-hot-toast'
 
@@ -327,7 +327,7 @@ const ManageDevice = () => {
       name: t('token'),
       cell: item => (
         <div
-          className='flex items-center cursor-pointer underline hover:opacity-50 duration-300'
+          className='flex items-center gap-1 cursor-pointer hover:opacity-50 duration-300'
           onClick={() => {
             try {
               navigator.clipboard.writeText(item.token)
@@ -372,7 +372,6 @@ const ManageDevice = () => {
     <div>
       <div className='flex flex-col lg:flex-row lg:items-center justify-between mt-3'>
         <span className='text-[20px] font-medium'>
-          {/* {t('tabManageDevice')} */}
         </span>
         <div className='flex flex-col lg:flex-row mt-3 lg:mt-0 lg:items-center items-end gap-4'>
           <HospitalAndWard />

@@ -7,6 +7,7 @@ import { setSearch } from '../../redux/actions/utilsActions'
 import ManageHospital from './manageHospital'
 import ManageHospitalSkeleton from '../../components/skeleton/manage/manageHospitalSkeleton'
 import ManageDeviceSkeleton from '../../components/skeleton/manage/manageDeviceSkeleton'
+import ManageDevice from './smtrack/manageDevice'
 
 const Management = () => {
   const dispatch = useDispatch()
@@ -59,7 +60,7 @@ const Management = () => {
       <div className='mt-3'>
         {tab === 1 ? (
           <Suspense fallback={<ManageDeviceSkeleton />}>
-            {/* <ManageDevice /> */}
+            <ManageDevice />
           </Suspense>
         ) : (
           <Suspense fallback={<ManageHospitalSkeleton />}>

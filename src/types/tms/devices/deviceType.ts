@@ -90,6 +90,11 @@ type AddDeviceType = {
   name: string
 }
 
+type AddDeviceForm = {
+  id?: string
+  name?: string
+}
+
 export type {
   CountTms,
   DeviceTmsType,
@@ -97,5 +102,6 @@ export type {
   DeviceLogTms,
   DeviceLogsTms,
   LogChartTms,
-  AddDeviceType
+  AddDeviceType,
+  AddDeviceForm
 }

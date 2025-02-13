@@ -5,6 +5,7 @@ import { UserRole } from '../../types/global/users/usersType'
 import { DeviceType } from '../../types/smtrack/devices/deviceType'
 import { Dispatch } from 'redux'
 import { AxiosError } from 'axios'
+import Swal from 'sweetalert2'
 
 const accessToken = (tokenObject: TokenDecodeType) =>
   CryptoJS.AES.encrypt(
@@ -130,6 +131,14 @@ const handleApiError = (error: unknown) => {
   }
 }
 
+const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: "btn btn-ghost bg-red-500",
+    cancelButton: "btn btn-primary",
+  },
+  buttonsStyling: false,
+})
+
 export {
   accessToken,
   cookieDecodeObject,
@@ -137,5 +146,6 @@ export {
   calulateDate,
   cookies,
   updateLocalStorageAndDispatch,
-  handleApiError
+  handleApiError,
+  swalWithBootstrapButtons
 }

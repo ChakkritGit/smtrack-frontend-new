@@ -157,6 +157,8 @@ export default {
 
     userActive: 'Active',
     userInactive: 'Inactive',
+    deviceActive: 'Active',
+    deviceInactive: 'Inactive',
 
     // user form
     userHospitals: 'Hospitals',
