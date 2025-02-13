@@ -43,7 +43,8 @@ export default {
     deviceSnBox: 'S/N',
     deviceNameTb: 'ชื่ออุปกรณ์',
     deviceSerialTb: 'ซีเรียลกล่อง',
-    deviceLocationTb: 'ตำแหน่งที่ติดตั้ง',
+    deviceLocationTb: 'ตำแหน่ง',
+    deviceLocationDeviceTb: 'ตำแหน่งที่ติดตั้งอุปกรณ์',
     devicTemperatureTb: 'อุณหภูมิ',
     deviceHumiTb: 'ความชื้น',
     deviceProbeTb: 'โพรบ',
@@ -442,6 +443,9 @@ export default {
     wardsName: 'วอร์ด',
     pressPre1: 'กด',
     pressPre2: 'เพื่อออกจากการค้นหา',
+    token: 'โทเค็น',
+    remmark: 'หมายเหตุ',
+    tag: 'แท็ก',
 
     // connect
     ipAddress: 'IP',
@@ -492,7 +496,6 @@ export default {
     sendingFirmwareSuccess: 'อุปกรณ์ทั้งหมดได้รับการอัปเดตเรียบร้อยแล้ว!',
     sendingFirmwareError: 'ไม่สามารถอัปเดตอุปกรณ์บางอย่างได้!',
     submitSuccess: 'บันทึกสำเร็จ',
-    token: 'โทเค็น',
 
     // time
     thTime: 'th-TH',

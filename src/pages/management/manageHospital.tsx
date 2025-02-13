@@ -98,10 +98,10 @@ const ManageHospital = () => {
     dispatch(setSubmitLoading())
 
     if (
-      hospitalForm.hosName !== '' &&
-      hospitalForm.hosAddress !== '' &&
-      hospitalForm.hosTel !== '' &&
-      hospitalForm.userTel !== ''
+      hospitalForm.hosName &&
+      hospitalForm.hosAddress &&
+      hospitalForm.hosTel &&
+      hospitalForm.userTel
     ) {
       try {
         const formDataObj = createFormData()
@@ -157,10 +157,10 @@ const ManageHospital = () => {
     dispatch(setSubmitLoading())
 
     if (
-      hospitalForm.hosName !== '' &&
-      hospitalForm.hosAddress !== '' &&
-      hospitalForm.hosTel !== '' &&
-      hospitalForm.userTel !== ''
+      hospitalForm.hosName &&
+      hospitalForm.hosAddress &&
+      hospitalForm.hosTel &&
+      hospitalForm.userTel
     ) {
       try {
         const formDataObj = createFormData()
@@ -215,7 +215,7 @@ const ManageHospital = () => {
     e.preventDefault()
     dispatch(setSubmitLoading())
 
-    if (wardForm.wardName !== '' && hosId !== '') {
+    if (wardForm.wardName && hosId) {
       try {
         wardForm.hosId = hosId
         await axiosInstance.post<responseType<FormAddHospitalState>>(
@@ -266,7 +266,7 @@ const ManageHospital = () => {
     e.preventDefault()
     dispatch(setSubmitLoading())
 
-    if (wardForm.wardName !== '') {
+    if (wardForm.wardName) {
       try {
         await axiosInstance.put<responseType<FormAddHospitalState>>(
           `/auth/ward/${wardForm.id}`,

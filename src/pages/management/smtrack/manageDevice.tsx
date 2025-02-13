@@ -17,6 +17,7 @@ import { AxiosError } from 'axios'
 import { DevicesType } from '../../../types/smtrack/devices/deviceType'
 import axiosInstance from '../../../constants/axios/axiosInstance'
 import {
+  RiDeleteBin7Line,
   RiEditLine,
   RiFileCopyLine,
   RiShutDownLine,
@@ -25,10 +26,14 @@ import {
 import { setHosId, setSubmitLoading } from '../../../redux/actions/utilsActions'
 import toast from 'react-hot-toast'
 import { socket } from '../../../services/websocket'
-import Swal from 'sweetalert2'
 import { AddDeviceForm } from '../../../types/tms/devices/deviceType'
 import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import { swalWithBootstrapButtons } from '../../../constants/utils/utilsConstants'
+import { resizeImage } from '../../../constants/utils/image'
+import Swal from 'sweetalert2'
+import defaultPic from '../../../assets/images/default-pic.png'
+import WardSelectDevice from '../../../components/selects/wardSelectDevice'
+import HopitalSelect from '../../../components/selects/hopitalSelect'
 
 const ManageDevice = () => {
   const dispatch = useDispatch()
@@ -42,13 +47,23 @@ const ManageDevice = () => {
   const [totalRows, setTotalRows] = useState(0)
   const [perPage, setPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
+  const [imageProcessing, setImageProcessing] = useState(false)
   const addModalRef = useRef<HTMLDialogElement>(null)
   const editModalRef = useRef<HTMLDialogElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const { token } = cookieDecode || {}
   const { role } = tokenDecode || {}
   const [formData, setFormData] = useState<AddDeviceForm>({
     id: '',
-    name: ''
+    name: '',
+    hospital: '',
+    ward: '',
+    location: '',
+    position: '',
+    remark: '',
+    tag: '',
+    image: null,
+    imagePreview: null
   })
 
   const fetchDevices = useCallback(
@@ -139,6 +154,80 @@ const ManageDevice = () => {
     }
   }
 
+  const createFormData = () => {
+    const formDataObj = new FormData()
+
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value === null || value === undefined || key === 'imagePreview')
+        return
+
+      if (value instanceof File) {
+        formDataObj.append(key, value)
+      } else {
+        if (key === 'remark' || key === 'tag') {
+          formDataObj.append(key, value as string)
+        } else {
+          formDataObj.append(key, value as string)
+        }
+      }
+    })
+
+    return formDataObj
+  }
+
+  const handleUpdate = async (e: FormEvent) => {
+    e.preventDefault()
+    dispatch(setSubmitLoading())
+    if (formData.name && formData.location && formData.position) {
+      try {
+        const formDataObj = createFormData()
+        formDataObj.delete('id')
+        await axiosInstance.put<responseType<DevicesType>>(
+          `/devices/device/${formData.id}`,
+          formDataObj,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          }
+        )
+        editModalRef.current?.close()
+        resetForm()
+        await fetchDevices(1)
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: t('submitSuccess'),
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } catch (error) {
+        editModalRef.current?.close()
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          }).finally(() => editModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    } else {
+      editModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => editModalRef.current?.showModal())
+      dispatch(setSubmitLoading())
+    }
+  }
+
   const formatId = (value: string) => {
     value = value.replace(/[^a-zA-Z0-9]/g, '')
 
@@ -175,18 +264,49 @@ const ManageDevice = () => {
     }
   }
 
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setImageProcessing(true)
+      await new Promise(resolve => setTimeout(resolve, 500))
+      const reSized = await resizeImage(file)
+      setFormData(prev => ({
+        ...prev,
+        imageFile: reSized,
+        imagePreview: URL.createObjectURL(file)
+      }))
+      setImageProcessing(false)
+    }
+  }
+
   const resetForm = () => {
     setFormData({
       id: '',
-      name: ''
+      name: '',
+      hospital: '',
+      ward: '',
+      location: '',
+      position: '',
+      image: null,
+      remark: '',
+      tag: ''
     })
+    if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
   const openEditModal = (device: DevicesType) => {
     dispatch(setHosId(device.hospital))
     setFormData({
       id: device.id,
-      name: device.name
+      name: device.name,
+      hospital: device.hospital,
+      ward: device.ward,
+      location: device.location,
+      position: device.position,
+      remark: device.remark,
+      tag: device.tag,
+      image: null,
+      imagePreview: device.positionPic || null
     })
     editModalRef.current?.showModal()
   }
@@ -198,6 +318,7 @@ const ManageDevice = () => {
         `/devices/device/${id}`,
         { status }
       )
+      await fetchDevices(1)
       Swal.fire({
         title: t('alertHeaderSuccess'),
         text: response.data.message,
@@ -205,7 +326,6 @@ const ManageDevice = () => {
         timer: 2000,
         showConfirmButton: false
       })
-      fetchDevices(1)
     } catch (error) {
       if (error instanceof AxiosError) {
         Swal.fire({
@@ -223,6 +343,37 @@ const ManageDevice = () => {
           timer: 2000,
           showConfirmButton: false
         })
+      }
+    } finally {
+      dispatch(setSubmitLoading())
+    }
+  }
+
+  const deleteDevices = async (id: string) => {
+    dispatch(setSubmitLoading())
+    try {
+      const response = await axiosInstance.delete<responseType<DevicesType>>(
+        `/devices/device/${id}`
+      )
+      await fetchDevices(1)
+      Swal.fire({
+        title: t('alertHeaderSuccess'),
+        text: response.data.message,
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2500
+      })
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: error.response?.data.message,
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2500
+        }).finally(() => editModalRef.current?.showModal())
+      } else {
+        console.error(error)
       }
     } finally {
       dispatch(setSubmitLoading())
@@ -325,6 +476,28 @@ const ManageDevice = () => {
       center: true
     },
     {
+      name: t('token'),
+      cell: item => (
+        <div
+          className='flex items-center gap-1 cursor-pointer hover:opacity-50 duration-300'
+          onClick={() => {
+            try {
+              navigator.clipboard.writeText(item.token)
+              toast.success(t('copyToClip'))
+            } catch (error) {
+              console.error('Failed to copy: ', error)
+              toast.error(t('copyToClipFaile'))
+            }
+          }}
+        >
+          <span className='truncate max-w-[80px]'>{item.token}</span>
+          <RiFileCopyLine size={18} className='text-base-content/70' />
+        </div>
+      ),
+      sortable: false,
+      center: true
+    },
+    {
       name: t('action'),
       cell: item => (
         <div className='flex items-center justify-center gap-3 p-3'>
@@ -384,6 +557,30 @@ const ManageDevice = () => {
           >
             <RiEditLine size={20} />
           </button>
+          {role === 'SUPER' && (
+            <button
+              className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
+              onClick={() =>
+                swalWithBootstrapButtons
+                  .fire({
+                    title: t('deleteDeviceTitle'),
+                    text: t('notReverseText'),
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: t('confirmButton'),
+                    cancelButtonText: t('cancelButton'),
+                    reverseButtons: false
+                  })
+                  .then(result => {
+                    if (result.isConfirmed) {
+                      deleteDevices(item.id)
+                    }
+                  })
+              }
+            >
+              <RiDeleteBin7Line size={20} />
+            </button>
+          )}
         </div>
       ),
       sortable: false,
@@ -509,6 +706,182 @@ const ManageDevice = () => {
               className='btn'
               onClick={() => {
                 addModalRef.current?.close()
+                resetForm()
+              }}
+            >
+              {t('cancelButton')}
+            </button>
+            <button type='submit' className='btn btn-primary'>
+              {t('submitButton')}
+            </button>
+          </div>
+        </form>
+      </dialog>
+
+      {/* Edit User Modal */}
+      <dialog ref={editModalRef} className='modal'>
+        <form
+          onSubmit={handleUpdate}
+          className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
+        >
+          <h3 className='font-bold text-lg'>{t('editUserButton')}</h3>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
+            {/* Image Upload - Left Column (30%) */}
+            <div className='col-span-1 flex justify-center'>
+              <div className='form-control'>
+                <label className='label cursor-pointer image-hover flex flex-col justify-center'>
+                  <span className='label-text'>{t('userPicture')}</span>
+                  <input
+                    ref={fileInputRef}
+                    type='file'
+                    accept='image/*'
+                    onChange={handleImageChange}
+                    className='hidden'
+                  />
+                  {imageProcessing ? (
+                    <div className='mt-4 flex justify-center w-32 h-32 md:w-48 md:h-48'>
+                      <span className='loading loading-ring loading-md'></span>
+                    </div>
+                  ) : (
+                    <div className='mt-4 relative'>
+                      <img
+                        src={formData.imagePreview || defaultPic}
+                        alt='Preview'
+                        className={`w-32 h-32 md:w-48 md:h-48 rounded-btn object-cover border-2 border-dashed border-base-300 ${
+                          formData.imagePreview || defaultPic
+                            ? 'border-none'
+                            : ''
+                        }`}
+                      />
+                      <div className='absolute edit-icon bottom-1 right-1 bg-base-100/50 backdrop-blur rounded-full p-2 shadow-sm'>
+                        <RiEditLine size={20} />
+                      </div>
+                    </div>
+                  )}
+                </label>
+              </div>
+            </div>
+
+            {/* Right Column - Form Fields (70%) */}
+            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
+              {/* Hospital */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('hospitalsName')}
+                  </span>
+                  <HopitalSelect />
+                </label>
+              </div>
+
+              {/* Ward */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('ward')}
+                  </span>
+                  <WardSelectDevice
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
+                </label>
+              </div>
+
+              {/* name */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('deviceNameTb')}
+                  </span>
+                  <input
+                    type='text'
+                    name='name'
+                    value={formData.name}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                    maxLength={50}
+                  />
+                </label>
+              </div>
+
+              {/* location */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('deviceLocationTb')}
+                  </span>
+                  <input
+                    type='text'
+                    name='location'
+                    value={formData.location}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                    maxLength={80}
+                  />
+                </label>
+              </div>
+
+              {/* position */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('deviceLocationDeviceTb')}
+                  </span>
+                  <input
+                    type='text'
+                    name='position'
+                    value={formData.position}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                    maxLength={80}
+                  />
+                </label>
+              </div>
+
+              {/* remark */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('remmark')}</span>
+                  <input
+                    type='text'
+                    name='remark'
+                    value={formData.remark}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                    maxLength={80}
+                  />
+                </label>
+              </div>
+
+              {/* tag */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>{t('tag')}</span>
+                  <input
+                    type='text'
+                    name='tag'
+                    value={formData.tag}
+                    onChange={handleChange}
+                    className='input input-bordered w-full'
+                    maxLength={80}
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Actions */}
+          <div className='modal-action mt-4 md:mt-6'>
+            <button
+              type='button'
+              className='btn'
+              onClick={() => {
+                editModalRef.current?.close()
                 resetForm()
               }}
             >

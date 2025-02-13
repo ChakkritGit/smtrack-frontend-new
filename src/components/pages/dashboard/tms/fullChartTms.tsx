@@ -36,7 +36,7 @@ const FullChartTmsComponent = (props: FullChartPropType) => {
   const series: ApexAxisChartSeries = Object.keys(groupedByProbe).map(
     probe => ({
       type: 'area',
-      name: `${probe} - ${t('temperatureName')}`,
+      name: probe,
       data: groupedByProbe[probe],
       zIndex: 50
     })

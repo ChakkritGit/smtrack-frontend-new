@@ -92,7 +92,15 @@ type AddDeviceType = {
 
 type AddDeviceForm = {
   id?: string
+  hospital?: string
+  ward?: string
   name?: string
+  location?: string
+  position?: string
+  remark?: string
+  tag?: string
+  image?: File | null
+  imagePreview?: string | null
 }
 
 export type {

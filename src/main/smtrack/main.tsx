@@ -17,7 +17,7 @@ import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
 const MainSmtrack = () => {
   const dispatch = useDispatch()
   const location = useLocation()
-  const { cookieDecode, tokenDecode, submitLoading, userProfile } = useSelector(
+  const { cookieDecode, tokenDecode, submitLoading } = useSelector(
     (state: RootState) => state.utils
   )
   const { token } = cookieDecode || {}
@@ -34,10 +34,8 @@ const MainSmtrack = () => {
               : ''
           }/auth/user/${id}`
         )
-        if (!userProfile) {
-          cookies.set('userProfile', response.data.data, cookieOptions)
-          dispatch(setUserProfile(response.data.data))
-        }
+        cookies.set('userProfile', response.data.data, cookieOptions)
+        dispatch(setUserProfile(response.data.data))
       } catch (error) {
         if (error instanceof AxiosError) {
           if (error.response?.status === 401) {

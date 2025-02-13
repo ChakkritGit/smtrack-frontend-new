@@ -43,7 +43,8 @@ export default {
     deviceSnBox: 'S/N',
     deviceNameTb: 'Device Name',
     deviceSerialTb: 'Device Serial',
-    deviceLocationTb: 'Device Location',
+    deviceLocationTb: 'Location',
+    deviceLocationDeviceTb: 'Device Location',
     devicTemperatureTb: 'Temperature',
     deviceHumiTb: 'Humidity',
     deviceProbeTb: 'Probe',
@@ -443,6 +444,9 @@ export default {
     wardsName: 'Ward',
     pressPre1: 'Press',
     pressPre2: 'to exit search',
+    token: 'Token',
+    remmark: 'Remark',
+    tag: 'Tag',
 
     // connect
     ipAddress: 'IP',
@@ -496,7 +500,6 @@ export default {
     sendingFirmwareSuccess: 'All devices have been updated successfully!',
     sendingFirmwareError: 'Failed to update some devices!',
     submitSuccess: 'Submit Completed',
-    token: 'Token',
 
     // time
     thTime: 'en-EN',
