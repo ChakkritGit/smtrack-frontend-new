@@ -110,7 +110,7 @@ const ManageDevice = () => {
         name: formData.name
       }
       try {
-        await axiosInstance.post<responseType<DeviceTmsType>>(
+        const response = await axiosInstance.post<responseType<DeviceTmsType>>(
           '/legacy/device',
           body
         )
@@ -119,12 +119,20 @@ const ManageDevice = () => {
         resetForm()
         Swal.fire({
           title: t('alertHeaderSuccess'),
-          text: t('submitSuccess'),
+          text: response.data.data.token,
           icon: 'success',
-          showConfirmButton: false,
-          timer: 2500
+          confirmButtonText: t('copyToken'),
+          showConfirmButton: true,
+          showCancelButton: false
         }).finally(async () => {
           await fetchDevices(1)
+          try {
+            navigator.clipboard.writeText(response.data.data.token)
+            toast.success(t('copyToClip'))
+          } catch (error) {
+            console.error('Failed to copy: ', error)
+            toast.error(t('copyToClipFaile'))
+          }
         })
       } catch (error) {
         addModalRef.current?.close()
@@ -371,8 +379,7 @@ const ManageDevice = () => {
   return (
     <div>
       <div className='flex flex-col lg:flex-row lg:items-center justify-between mt-3'>
-        <span className='text-[20px] font-medium'>
-        </span>
+        <span className='text-[20px] font-medium'></span>
         <div className='flex flex-col lg:flex-row mt-3 lg:mt-0 lg:items-center items-end gap-4'>
           <HospitalAndWard />
           <button

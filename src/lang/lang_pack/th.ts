@@ -446,6 +446,7 @@ export default {
     token: 'โทเค็น',
     remmark: 'หมายเหตุ',
     tag: 'แท็ก',
+    copyToken: 'คัดลอก โทเค็น',
 
     // connect
     ipAddress: 'IP',

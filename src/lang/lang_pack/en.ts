@@ -447,6 +447,7 @@ export default {
     token: 'Token',
     remmark: 'Remark',
     tag: 'Tag',
+    copyToken: 'Copy Token',
 
     // connect
     ipAddress: 'IP',
