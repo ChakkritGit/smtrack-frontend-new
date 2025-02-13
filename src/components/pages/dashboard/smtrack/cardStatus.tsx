@@ -265,7 +265,7 @@ const CardStatus = (props: PropsType) => {
               : ''
           }`}
         >
-          {deviceData?.log[0]?.battery
+          {deviceData?.log && deviceData?.log[0]?.battery
             ? `${deviceData?.log[0]?.battery} %`
             : '—'}
         </div>

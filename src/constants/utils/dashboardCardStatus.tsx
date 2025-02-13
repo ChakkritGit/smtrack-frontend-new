@@ -47,30 +47,36 @@ const humiLimit = (
 }
 
 const doorOpen = (deviceData: DeviceLogsType | undefined) => {
-  return (
-    deviceData?.log[0]?.door1 ||
-    deviceData?.log[0]?.door2 ||
-    deviceData?.log[0]?.door3
-  )
+  if (deviceData?.log) {
+    return (
+      deviceData?.log[0]?.door1 ||
+      deviceData?.log[0]?.door2 ||
+      deviceData?.log[0]?.door3
+    )
+  }
 }
 
 const unPlug = (deviceData: DeviceLogsType | undefined) => {
-  return deviceData?.log[0]?.plug
+  if (deviceData?.log) {
+    return deviceData?.log[0]?.plug
+  }
 }
 
 const battertyLevel = (deviceData: DeviceLogsType | undefined) => {
-  const plugIn = deviceData?.log[0]?.plug
-  const level = deviceData?.log[0]?.battery
-  if (plugIn) {
-    return <RiBatteryChargeLine size={20} />
-  } else if (level === 0) {
-    return <RiBatteryLine size={20} />
-  } else if (level && level <= 50) {
-    return <RiBatteryLowLine size={20} />
-  } else if (level && level <= 100) {
-    return <RiBatteryFill size={20} />
-  } else {
-    return <RiAlertLine size={20} />
+  if (deviceData?.log) {
+    const plugIn = deviceData?.log[0]?.plug
+    const level = deviceData?.log[0]?.battery
+    if (plugIn) {
+      return <RiBatteryChargeLine size={20} />
+    } else if (level === 0) {
+      return <RiBatteryLine size={20} />
+    } else if (level && level <= 50) {
+      return <RiBatteryLowLine size={20} />
+    } else if (level && level <= 100) {
+      return <RiBatteryFill size={20} />
+    } else {
+      return <RiAlertLine size={20} />
+    }
   }
 }
 
@@ -101,21 +107,25 @@ const tempOfDay = (deviceData: DeviceLogsType | undefined, channel: string) => {
 }
 
 const tempOfDayTms = (deviceData: DeviceLogTms | undefined) => {
-  const max =
-    deviceData?.log?.length &&
-    Number(Math.max(...deviceData.log.map(item => item.tempValue))).toFixed(2)
-  const min =
-    deviceData?.log?.length &&
-    Number(Math.min(...deviceData.log.map(item => item.tempValue))).toFixed(2)
+  if (deviceData?.log) {
+    const max =
+      deviceData?.log?.length &&
+      Number(Math.max(...deviceData.log.map(item => item.tempValue))).toFixed(2)
+    const min =
+      deviceData?.log?.length &&
+      Number(Math.min(...deviceData.log.map(item => item.tempValue))).toFixed(2)
 
-  return {
-    min,
-    max
+    return {
+      min,
+      max
+    }
   }
 }
 
 const sdCard = (deviceData: DeviceLogsType | undefined) => {
-  return deviceData?.log[0]?.extMemory ?? false
+  if (deviceData?.log) {
+    return deviceData?.log[0]?.extMemory ?? false
+  }
 }
 
 export {

@@ -27,17 +27,17 @@ const CardStatusTms = (props: PropsType) => {
         <div className='flex items-center gap-2 h-[30%]'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              (deviceData &&
+              (deviceData?.log &&
                 deviceData?.log[0]?.tempValue > deviceData?.maxTemp) ||
-              (deviceData &&
+              (deviceData?.log &&
                 deviceData?.log[0]?.tempValue < deviceData?.minTemp)
                 ? 'text-base-content bg-opacity-80 bg-red-500'
                 : ''
             }`}
           >
-            {(deviceData &&
+            {(deviceData?.log &&
               deviceData?.log[0]?.tempValue > deviceData?.maxTemp) ||
-            (deviceData &&
+            (deviceData?.log &&
               deviceData?.log[0]?.tempValue < deviceData?.minTemp) ? (
               <RiErrorWarningLine size={20} />
             ) : (
@@ -49,16 +49,16 @@ const CardStatusTms = (props: PropsType) => {
         <div className='flex flex-col items-center justify-center text-[18px] mt-1 font-bold h-[50%]'>
           <div
             className={
-              (deviceData &&
+              (deviceData?.log &&
                 deviceData?.log[0]?.tempValue > deviceData?.maxTemp) ||
-              (deviceData &&
+              (deviceData?.log &&
                 deviceData?.log[0]?.tempValue < deviceData?.minTemp)
                 ? 'text-red-500'
                 : ''
             }
           >
             <span>Temp: </span>
-            <span>{deviceData?.log[0]?.tempValue?.toFixed(2) ?? '—'}</span>
+            <span>{deviceData?.log ? deviceData?.log[0]?.tempValue?.toFixed(2) : '—'}</span>
             <sub> °C</sub>
           </div>
         </div>
@@ -67,12 +67,12 @@ const CardStatusTms = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              deviceData?.log[0]?.internet
+              deviceData?.log && deviceData?.log[0]?.internet
                 ? 'text-base-content bg-opacity-80 bg-red-500'
                 : ''
             }`}
           >
-            {deviceData?.log[0]?.internet ? (
+            {deviceData?.log && deviceData?.log[0]?.internet ? (
               <RiSignalWifiOffLine size={20} />
             ) : (
               <RiSignalWifi1Line size={20} />
@@ -82,10 +82,10 @@ const CardStatusTms = (props: PropsType) => {
         </div>
         <div
           className={`flex items-center justify-center text-[20px] font-bold h-full ${
-            deviceData?.log[0]?.internet ? 'text-red-500' : ''
+            deviceData?.log && deviceData?.log[0]?.internet ? 'text-red-500' : ''
           }`}
         >
-          {deviceData
+          {deviceData?.log
             ? deviceData?.log[0]?.internet
               ? t('stateDisconnect')
               : t('stateConnect')
@@ -96,12 +96,12 @@ const CardStatusTms = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              deviceData?.log[0]?.door
+              deviceData?.log && deviceData?.log[0]?.door
                 ? 'text-base-content bg-opacity-80 bg-red-500'
                 : ''
             }`}
           >
-            {deviceData?.log[0]?.door ? (
+            {deviceData?.log && deviceData?.log[0]?.door ? (
               <RiDoorOpenLine size={20} />
             ) : (
               <RiDoorClosedLine size={20} />
@@ -111,10 +111,10 @@ const CardStatusTms = (props: PropsType) => {
         </div>
         <div
           className={`flex items-center justify-center text-[20px] font-bold h-full ${
-            deviceData?.log[0]?.door ? 'text-red-500' : ''
+            deviceData?.log && deviceData?.log[0]?.door ? 'text-red-500' : ''
           }`}
         >
-          {deviceData
+          {deviceData?.log
             ? deviceData?.log[0]?.door
               ? t('doorOpen')
               : t('doorClose')
@@ -125,12 +125,12 @@ const CardStatusTms = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              deviceData?.log[0]?.plugin
+              deviceData?.log && deviceData?.log[0]?.plugin
                 ? 'text-base-content bg-opacity-80 bg-red-500'
                 : ''
             }`}
           >
-            {deviceData?.log[0]?.plugin ? (
+            {deviceData?.log && deviceData?.log[0]?.plugin ? (
               <RiAlertLine size={20} />
             ) : (
               <RiPlugLine size={20} />
@@ -140,10 +140,10 @@ const CardStatusTms = (props: PropsType) => {
         </div>
         <div
           className={`flex items-center justify-center text-[20px] font-bold h-full ${
-            deviceData?.log[0]?.plugin ? 'text-red-500' : ''
+            deviceData?.log && deviceData?.log[0]?.plugin ? 'text-red-500' : ''
           }`}
         >
-          {deviceData
+          {deviceData?.log
             ? deviceData?.log[0]?.plugin
               ? t('stateProblem')
               : t('stateNormal')
@@ -171,13 +171,13 @@ const CardStatusTms = (props: PropsType) => {
           <div>
             <span>↑ </span>
             <span>
-              {deviceData?.log ? tempOfDayTms(deviceData).max : '—'} °C
+              {tempOfDayTms(deviceData)?.max ?? '—'} °C
             </span>
           </div>
           <div>
             <span>↓</span>
             <span>
-              {deviceData?.log ? tempOfDayTms(deviceData).max : '—'} °C
+              {tempOfDayTms(deviceData)?.max ?? '—'} °C
             </span>
           </div>
         </div>

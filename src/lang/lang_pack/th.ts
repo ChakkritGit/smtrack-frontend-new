@@ -490,6 +490,7 @@ export default {
     sendingFirmwareSuccess: 'อุปกรณ์ทั้งหมดได้รับการอัปเดตเรียบร้อยแล้ว!',
     sendingFirmwareError: 'ไม่สามารถอัปเดตอุปกรณ์บางอย่างได้!',
     submitSuccess: 'บันทึกสำเร็จ',
+    token: 'Token',
 
     // time
     thTime: 'th-TH',

@@ -25,6 +25,7 @@ import WardSelectTms from '../../components/selects/tms/wardSelect'
 import Swal from 'sweetalert2'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
 import { RiDeleteBin7Line, RiEditLine } from 'react-icons/ri'
+import toast from 'react-hot-toast'
 
 const ManageDevice = () => {
   const dispatch = useDispatch()
@@ -117,7 +118,7 @@ const ManageDevice = () => {
         addModalRef.current?.close()
         resetForm()
         Swal.fire({
-          title: t('alertHeaderError'),
+          title: t('alertHeaderSuccess'),
           text: t('submitSuccess'),
           icon: 'success',
           showConfirmButton: false,
@@ -319,6 +320,27 @@ const ManageDevice = () => {
     {
       name: t('wardsName'),
       cell: item => item.ward,
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('token'),
+      cell: item => (
+        <span
+          className='truncate max-w-[80px]'
+          onClick={() => {
+            try {
+              navigator.clipboard.writeText(item.token)
+              toast.success(t('copyToClip'))
+            } catch (error) {
+              console.error('Failed to copy: ', error)
+              toast.error(t('copyToClipFaile'))
+            }
+          }}
+        >
+          {item.token}
+        </span>
+      ),
       sortable: false,
       center: true
     },

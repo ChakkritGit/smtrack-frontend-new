@@ -23,6 +23,7 @@ type DeviceTmsType = {
   record: number
   sn: string
   ward: string
+  token: string
 }
 
 type CountTms = {

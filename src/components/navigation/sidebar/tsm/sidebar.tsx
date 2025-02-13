@@ -13,7 +13,10 @@ import {
   RiUser6Fill,
   RiUser6Line
 } from 'react-icons/ri'
-import { setDeviceKey, setTmsMode } from '../../../../redux/actions/utilsActions'
+import {
+  setDeviceKey,
+  setTmsMode
+} from '../../../../redux/actions/utilsActions'
 import DefaultPic from '../../../../assets/images/default-pic.png'
 import { useTranslation } from 'react-i18next'
 import {
@@ -181,12 +184,15 @@ const Sidebar = () => {
                     type='checkbox'
                     className='toggle toggle-md'
                     defaultChecked={tmsMode}
-                    onClick={() => {
+                    onClick={async () => {
                       dispatch(setTmsMode())
+                      navigate('/')
+
+                      await new Promise(resolve => setTimeout(resolve, 500))
+
                       dispatch(setDeviceKey(''))
                       cookies.set('tmsMode', !tmsMode, cookieOptions)
                       cookies.remove('deviceKey', cookieOptions)
-                      navigate('/')
                     }}
                   />
                 </div>

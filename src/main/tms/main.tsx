@@ -91,6 +91,8 @@ const MainTms = () => {
     if (location.pathname !== '/login') {
       window.scrollTo(0, 0)
 
+      fetchUserProfile()
+
       if (isFirstLoad) {
         fetchUserProfile()
         setIsFirstLoad(false)
