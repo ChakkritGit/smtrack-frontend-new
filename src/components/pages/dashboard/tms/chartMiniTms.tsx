@@ -19,54 +19,85 @@ const ChartMiniTms = (props: ChartMiniProps) => {
   const maxTempAvg = Math.max(...tempAvgValues) + 2
 
   const mappedData = deviceLogs?.log
-    ? deviceLogs?.log.map(item => {
-        const time = new Date(item.createdAt).getTime()
-        return {
-          time,
-          tempAvg: item.tempValue,
-          door: item.door ? 1 : 0
-        }
-      })
-    : [{ time: '', tempAvg: 0, door: 0 }]
-
-  const series: ApexAxisChartSeries = [
-    {
-      type: 'area',
-      zIndex: 50,
-      name: t('temperatureName'),
-      data: mappedData.map(data => ({
-        x: data.time,
-        y: data.tempAvg
+    ? deviceLogs.log.map(item => ({
+        time: new Date(item.createdAt).getTime(),
+        tempAvg: item.tempValue,
+        door: item.door ? 1 : 0,
+        mcuId: item.mcuId
       }))
-    },
+    : [{ time: 0, tempAvg: 0, door: 0, mcuId: '' }]
+
+  const groupedByDevice: Record<string, { x: number; y: number }[]> = {}
+
+  mappedData.forEach(item => {
+    if (!groupedByDevice[item.mcuId]) {
+      groupedByDevice[item.mcuId] = []
+    }
+    groupedByDevice[item.mcuId].push({ x: item.time, y: item.tempAvg })
+  })
+
+  const series: ApexAxisChartSeries = Object.keys(groupedByDevice).map(
+    mcuId => ({
+      type: 'area',
+      name: `${mcuId} - ${t('temperatureName')}`,
+      data: groupedByDevice[mcuId],
+      zIndex: 50
+    })
+  )
+
+  series.push(
     {
       type: 'area',
       name: t('tempMin'),
       zIndex: 60,
-      data: mappedData.map(data => ({
-        x: data.time,
-        y: minTemp
-      }))
+      data: mappedData.map(data => ({ x: data.time, y: minTemp }))
     },
     {
       type: 'area',
       name: t('tempMax'),
       zIndex: 60,
-      data: mappedData.map(data => ({
-        x: data.time,
-        y: maxTemp
-      }))
+      data: mappedData.map(data => ({ x: data.time, y: maxTemp }))
     },
     {
       type: 'area',
       name: t('dashDoor'),
       zIndex: 30,
-      data: mappedData.map(data => ({
-        x: data.time,
-        y: data.door
-      }))
+      data: mappedData.map(data => ({ x: data.time, y: data.door }))
     }
-  ]
+  )
+
+  const generateColors = (count: number) => {
+    const colors = ['oklch(72% 0.2 25 / 1)']
+    for (let i = 1; i < count; i++) {
+      const chroma = (Math.random() * 0.2 + 0.1).toFixed(4)
+      const hue = (Math.random() * 360).toFixed(0)
+      colors.push(`oklch(72% ${chroma} ${hue} / 1)`)
+    }
+    return colors
+  }
+
+  const dynamicColors = generateColors(series.length)
+
+  const dynamicStrokeCurves = Array.from({ length: series.length }, (_, i) =>
+    i === series.length - 1 ? 'stepline' : 'smooth'
+  )
+
+  const dynamicStrokeWidths = Array.from({ length: series.length }, (_, i) =>
+    i === 0 ? 2.0 : i === series.length - 1 ? 1.5 : 0.8
+  )
+
+  const dynamicYaxis = Array.from({ length: series.length }, (_, i) => ({
+    show: i === 0,
+    axisTicks: {
+      show: i === 0
+    },
+    axisBorder: {
+      show: i === 0,
+      color: 'oklch(72% 0.1938 31 / 1)'
+    },
+    min: i === series.length - 1 ? 5 : minTempAvg,
+    max: i === series.length - 1 ? 0 : maxTempAvg
+  }))
 
   const options: ApexCharts.ApexOptions = {
     chart: {
@@ -183,40 +214,13 @@ const ChartMiniTms = (props: ChartMiniProps) => {
     },
     stroke: {
       lineCap: 'round',
-      curve: ['smooth', 'smooth', 'smooth', 'stepline'],
-      width: [2.5, 0.8, 0.8, 1.5]
+      curve: dynamicStrokeCurves,
+      width: dynamicStrokeWidths
     },
     xaxis: {
       type: 'datetime'
     },
-    yaxis: [
-      {
-        axisTicks: {
-          show: true
-        },
-        axisBorder: {
-          show: false,
-          color: 'oklch(72% 0.1938 31 / 1)'
-        },
-        min: minTempAvg,
-        max: maxTempAvg
-      },
-      {
-        show: false,
-        min: minTempAvg,
-        max: maxTempAvg
-      },
-      {
-        show: false,
-        min: minTempAvg,
-        max: maxTempAvg
-      },
-      {
-        show: false,
-        min: 5,
-        max: 0
-      }
-    ],
+    yaxis: dynamicYaxis,
     noData: {
       text: t('nodata'),
       align: 'center',
@@ -229,28 +233,20 @@ const ChartMiniTms = (props: ChartMiniProps) => {
         fontFamily: 'anuphan'
       }
     },
-    colors: [
-      'oklch(72% 0.1938 31 / var(--tw-text-opacity, 1))',
-      'oklch(81% 0.1696 175 / var(--tw-text-opacity, 1))',
-      'oklch(81% 0.1696 175 / var(--tw-text-opacity, 1))',
-      'oklch(90% 0.1378 90 / var(--tw-text-opacity, 1))'
-    ],
+    colors: dynamicColors,
     fill: {
       type: 'gradient',
       gradient: {
         shade: 'light',
         type: 'vertical',
         shadeIntensity: 0.5,
-        gradientToColors: [
-          'oklch(79.71% 0.1332 31 / var(--tw-text-opacity, 1))',
-          'oklch(0% 0 0 / var(--tw-text-opacity, 0))',
-          'oklch(0% 0 0 / var(--tw-text-opacity, 0))',
-          'oklch(0% 0 0 / var(--tw-text-opacity, 0))'
-        ],
+        gradientToColors: dynamicColors.map(color =>
+          color.replace('72%', '79.71%')
+        ),
         inverseColors: true,
         opacityFrom: 0.45,
         opacityTo: 0,
-        stops: [0, 85]
+        stops: [0, 25]
       }
     },
     legend: {

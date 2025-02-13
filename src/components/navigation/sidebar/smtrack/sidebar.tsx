@@ -17,7 +17,10 @@ import {
   RiUser6Fill,
   RiUser6Line
 } from 'react-icons/ri'
-import { setTmsMode } from '../../../../redux/actions/utilsActions'
+import {
+  setDeviceKey,
+  setTmsMode
+} from '../../../../redux/actions/utilsActions'
 import DefaultPic from '../../../../assets/images/default-pic.png'
 import { useTranslation } from 'react-i18next'
 import {
@@ -214,7 +217,10 @@ const Sidebar = () => {
                     defaultChecked={tmsMode}
                     onClick={() => {
                       dispatch(setTmsMode())
+                      dispatch(setDeviceKey(''))
                       cookies.set('tmsMode', !tmsMode, cookieOptions)
+                      cookies.remove('deviceKey', cookieOptions)
+                      navigate('/')
                     }}
                   />
                 </div>

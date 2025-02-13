@@ -69,6 +69,7 @@ type DeviceLogsTms = {
 }
 
 type LogChartTms = {
+  probe: string
   result: string
   sn: string
   table: number
