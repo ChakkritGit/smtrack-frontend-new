@@ -343,8 +343,6 @@ div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line] {
   overflow-y: hidden !important;
 }
 
-
-
 .image-hover:hover {
   .edit-icon {
     @apply bg-base-200/30 duration-300;
@@ -358,7 +356,16 @@ div:where(.swal2-container).swal2-noanimation {
   @apply !bg-black/30 backdrop-blur;
 }
 
-
 body {
   @apply bg-base-200 h-full;
+}
+
+.go2072408551 {
+  @apply !bg-base-100 !text-base-content;
+}
+
+.go2072408551 {
+  &>svg {
+    @apply !py-0 !px-2;
+  }
 }

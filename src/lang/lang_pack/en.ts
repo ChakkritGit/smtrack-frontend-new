@@ -389,6 +389,8 @@ export default {
     nodata: 'Data not found',
     noHistory: 'No search history found',
     loading: 'Loading...',
+    processing: 'Processing...',
+    downloaded: 'Downloaded',
     loadingConfig: 'Loading settings...',
     searchItemsNav: 'Search',
     uploadLabel: 'Upload or drop a file right here',

@@ -11,7 +11,7 @@ interface FullTablePropType {
 
 const FullTableTmsComponent = (props: FullTablePropType) => {
   const { t } = useTranslation()
-  const { dataLog, tempMin, tempMax } = props
+  const { dataLog } = props
 
   const columns: TableColumn<LogChartTms>[] = [
     {
@@ -30,7 +30,8 @@ const FullTableTmsComponent = (props: FullTablePropType) => {
     },
     {
       name: t('deviceTime'),
-      cell: item => `${item._time.substring(0, 10)} ${item._time.substring(11, 16)}`,
+      cell: item =>
+        `${item._time.substring(0, 10)} ${item._time.substring(11, 16)}`,
       sortable: false,
       center: true
     },

@@ -14,6 +14,7 @@ const Users = lazy(() => import('../pages/users/users'))
 const FullChartTms = lazy(() => import('../pages/dashboard/tms/fullChartTms'))
 const FullTableTms = lazy(() => import('../pages/dashboard/tms/fullTableTms'))
 const ManagementTms = lazy(() => import('../pages/management/managementTms'))
+const PreviewPDF = lazy(() => import('../components/pdf/previewPdf'))
 
 const tmsChildren: RouteObject[] = [
   {
@@ -71,7 +72,7 @@ const tmsChildren: RouteObject[] = [
     path: 'dashboard/chart/preview',
     element: (
       <Suspense fallback={<FullDashboardSkeleton />}>
-        <></>
+        <PreviewPDF />
       </Suspense>
     ),
     errorElement: <></>

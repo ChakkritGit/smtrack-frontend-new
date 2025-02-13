@@ -10,10 +10,17 @@ import axiosInstance from '../../../constants/axios/axiosInstance'
 import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
 import { AxiosError } from 'axios'
-import { RiDashboardLine, RiTableFill } from 'react-icons/ri'
+import {
+  RiDashboardLine,
+  RiFileExcel2Line,
+  RiMenuLine,
+  RiTableFill
+} from 'react-icons/ri'
 import FullTableTmsComponent from '../../../components/pages/dashboard/tms/fullTableTms'
 import { useDispatch } from 'react-redux'
 import { setDeviceKey } from '../../../redux/actions/utilsActions'
+import toast from 'react-hot-toast'
+import * as XLSX from 'xlsx'
 
 const FullTableTms = () => {
   const dispatch = useDispatch()
@@ -43,7 +50,9 @@ const FullTableTms = () => {
     setDataLog([])
     try {
       const response = await axiosInstance.get<responseType<LogChartTms[]>>(
-        `/legacy/graph?filter=day&sn=${deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')}`
+        `/legacy/graph?filter=day&sn=${
+          deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')
+        }`
       )
       setDataLog(response.data.data)
     } catch (error) {
@@ -60,7 +69,9 @@ const FullTableTms = () => {
     setDataLog([])
     try {
       const response = await axiosInstance.get<responseType<LogChartTms[]>>(
-        `/legacy/graph?filter=week&sn=${deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')}`
+        `/legacy/graph?filter=week&sn=${
+          deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')
+        }`
       )
       setDataLog(response.data.data)
     } catch (error) {
@@ -77,7 +88,9 @@ const FullTableTms = () => {
     setDataLog([])
     try {
       const response = await axiosInstance.get<responseType<LogChartTms[]>>(
-        `/legacy/graph?filter=month&sn=${deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')}`
+        `/legacy/graph?filter=month&sn=${
+          deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')
+        }`
       )
       setDataLog(response.data.data)
     } catch (error) {
@@ -136,6 +149,51 @@ const FullTableTms = () => {
         showConfirmButton: false
       })
     }
+  }
+
+  const convertArrayOfObjectsToExcel = (object: {
+    deviceData: DeviceLogTms | undefined
+    log: LogChartTms[]
+  }) => {
+    return new Promise<boolean>((resolve, reject) => {
+      if (object.deviceData && object.log.length > 0) {
+        const newArray = object.log.map((items, index) => {
+          return {
+            No: index + 1,
+            DeviceSN: items.sn,
+            DeviceName: object.deviceData?.name,
+            TemperatureMin: deviceLogs.minTemp,
+            TemperatureMax: deviceLogs.maxTemp,
+            Date: new Date(items._time).toLocaleString('th-TH', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+              timeZone: 'UTC'
+            }),
+            Time: new Date(items._time).toLocaleString('th-TH', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              timeZone: 'UTC'
+            }),
+            Temperature: items._value.toFixed(2)
+          }
+        })
+
+        const ws = XLSX.utils.json_to_sheet(newArray)
+        const wb = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(wb, ws, String(newArray[0].DeviceSN))
+
+        try {
+          XLSX.writeFile(wb, 'smtrack-data-table' + '.xlsx')
+          resolve(true)
+        } catch (error) {
+          reject(false)
+        }
+      } else {
+        reject(false)
+      }
+    })
   }
 
   useEffect(() => {
@@ -197,7 +255,43 @@ const FullTableTms = () => {
             {t('chartCustom')}
           </a>
         </div>
-        <div className='flex items-center justify-end w-full'>export</div>
+        <div className='flex items-center justify-end w-full'>
+          <div className='dropdown dropdown-end z-50'>
+            <button
+              tabIndex={0}
+              role='button'
+              data-tip={t('menuButton')}
+              className='btn btn-ghost flex p-0 max-w-[30px] min-w-[30px] max-h-[30px] min-h-[30px] tooltip tooltip-left'
+            >
+              <RiMenuLine size={20} />
+            </button>
+            <ul
+              tabIndex={0}
+              className='dropdown-content menu bg-base-100 rounded-box z-[1] max-w-[180px] w-[140px] p-2 shadow'
+            >
+              <li
+                onClick={() => {
+                  toast.promise(
+                    convertArrayOfObjectsToExcel({
+                      deviceData: deviceLogs,
+                      log: dataLog
+                    }),
+                    {
+                      loading: 'Downloading',
+                      success: <span>Downloaded</span>,
+                      error: <span>Something wrong</span>
+                    }
+                  )
+                }}
+              >
+                <div className='flex items-center gap-3 text-[16px]'>
+                  <RiFileExcel2Line size={20} />
+                  <a>Excel</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
       {pageNumber === 4 && (
         <div className='flex items-end justify-center flex-col md:items-center md:flex-row gap-3 mt-3'>

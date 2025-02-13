@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 import axiosInstance from '../../../constants/axios/axiosInstance'
 import {
@@ -9,19 +9,43 @@ import {
 import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
 import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import { useTranslation } from 'react-i18next'
-import { RiBarChart2Fill, RiDashboardLine } from 'react-icons/ri'
+import {
+  RiBarChart2Fill,
+  RiDashboardLine,
+  RiFileImageLine,
+  RiFilePdf2Line,
+  RiMenuLine
+} from 'react-icons/ri'
 import FullChartTmsComponent from '../../../components/pages/dashboard/tms/fullChartTms'
 import Swal from 'sweetalert2'
-import { useDispatch } from 'react-redux'
-import { setDeviceKey } from '../../../redux/actions/utilsActions'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  setDeviceKey,
+  setSubmitLoading
+} from '../../../redux/actions/utilsActions'
+import toast from 'react-hot-toast'
+import { RootState } from '../../../redux/reducers/rootReducer'
+import html2canvas from 'html2canvas-pro'
+import Loading from '../../../components/skeleton/table/loading'
+import ImagesOne from '../../../assets/images/Thanes.png'
 
 const FullChartTms = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { userProfile, submitLoading } = useSelector(
+    (state: RootState) => state.utils
+  )
   const location = useLocation() as Location<{ deviceLogs: DeviceLogTms }>
   const { deviceLogs } = location.state ?? {
-    deviceLogs: { sn: '', minTemp: 0, maxTemp: 0 }
+    deviceLogs: {
+      sn: '',
+      minTemp: 0,
+      maxTemp: 0,
+      name: '',
+      ward: '',
+      hospital: ''
+    }
   }
   const [pageNumber, setPagenumber] = useState(1)
   const [dataLog, setDataLog] = useState<LogChartTms[]>([])
@@ -29,14 +53,8 @@ const FullChartTms = () => {
     startDate: '',
     endDate: ''
   })
-
-  useEffect(() => {
-    if (!deviceLogs) {
-      dispatch(setDeviceKey(''))
-      cookies.remove('deviceKey', cookieOptions)
-      navigate('/dashboard')
-    }
-  }, [deviceLogs])
+  const canvasChartRef = useRef<HTMLDivElement | null>(null)
+  const tableInfoRef = useRef<HTMLDivElement | null>(null)
 
   const logDay = async () => {
     setPagenumber(1)
@@ -144,15 +162,142 @@ const FullChartTms = () => {
     }
   }
 
+  const handleDownload = useCallback(
+    async (type: string) => {
+      if (canvasChartRef.current && tableInfoRef.current) {
+        tableInfoRef.current.style.display = 'flex'
+        tableInfoRef.current.style.color = 'black'
+        canvasChartRef.current.style.color = 'black'
+
+        const canvas = canvasChartRef.current
+
+        const promise = html2canvas(canvas, { scale: 2 })
+          .then(canvasImage => {
+            const dataURL = canvasImage.toDataURL(
+              type === 'png' ? 'image/png' : 'image/jpg',
+              1.0
+            )
+
+            let pagename = ''
+            if (pageNumber === 1) {
+              pagename = 'Day_Chart'
+            } else if (pageNumber === 2) {
+              pagename = 'Week_Chart'
+            } else {
+              pagename = 'Custom_Chart'
+            }
+
+            const link = document.createElement('a')
+            link.href = dataURL
+            link.download = `${pagename}${type === 'png' ? '.png' : '.jpg'}`
+
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+          })
+          .catch(error => {
+            console.error('Error generating image:', error)
+            throw new Error('Failed to download the image')
+          })
+          .finally(() => {
+            if (tableInfoRef.current && canvasChartRef.current) {
+              tableInfoRef.current.style.display = 'none'
+              tableInfoRef.current.style.color = ''
+              canvasChartRef.current.style.color = ''
+            }
+          })
+
+        toast.promise(promise, {
+          loading: t('processing'),
+          success: <span>{t('downloaded')}</span>,
+          error: <span>{t('descriptionErrorWrong')}</span>
+        })
+      } else {
+        toast.error(t('nodata'))
+      }
+    },
+    [t]
+  )
+
+  const exportChart = () => {
+    return new Promise(async (resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          if (canvasChartRef.current) {
+            canvasChartRef.current.style.width = '1480px'
+            canvasChartRef.current.style.height = '680px'
+            canvasChartRef.current.style.color = 'black'
+
+            await new Promise(resolve => setTimeout(resolve, 500))
+            const canvas = canvasChartRef.current
+
+            html2canvas(canvas)
+              .then(canvasImage => {
+                resolve(canvasImage.toDataURL('image/png', 1.0))
+              })
+              .catch(error => {
+                reject(error)
+              })
+          }
+        } catch (error) {
+          reject(error)
+        }
+      }, 600)
+    })
+  }
+
   useEffect(() => {
     logDay()
   }, [])
+
+  useEffect(() => {
+    if (!deviceLogs) {
+      dispatch(setDeviceKey(''))
+      cookies.remove('deviceKey', cookieOptions)
+      navigate('/dashboard')
+    }
+  }, [deviceLogs])
 
   useEffect(() => {
     if (deviceLogs?.sn === '') {
       navigate('/dashboard')
     }
   }, [deviceLogs?.sn])
+
+  useEffect(() => {
+    if (submitLoading) {
+      ;(async () => {
+        try {
+          const waitExport = await exportChart()
+          dispatch(setSubmitLoading())
+          navigate('/dashboard/chart/preview', {
+            state: {
+              title: 'Chart-Report',
+              ward: deviceLogs?.ward,
+              image: ImagesOne,
+              hospital: deviceLogs?.hospital,
+              devSn: deviceLogs?.sn,
+              devName: deviceLogs?.name,
+              chartIMG: waitExport,
+              dateTime: String(new Date()).substring(0, 25),
+              hosImg: userProfile?.ward.hospital.hosPic,
+              tempMin: deviceLogs.minTemp,
+              tempMax: deviceLogs.maxTemp
+            }
+          })
+        } catch (error) {
+          dispatch(setSubmitLoading())
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: t('descriptionErrorWrong'),
+            icon: 'error',
+            timer: 2000,
+            showConfirmButton: false
+          })
+        }
+      })()
+    }
+  }, [submitLoading])
 
   return (
     <div className='container mx-auto p-3'>
@@ -203,7 +348,56 @@ const FullChartTms = () => {
             {t('chartCustom')}
           </a>
         </div>
-        <div className='flex items-center justify-end w-full'>export</div>
+        <div className='flex items-center justify-end w-full'>
+          <div className='dropdown dropdown-end z-50'>
+            <button
+              tabIndex={0}
+              role='button'
+              data-tip={t('menuButton')}
+              className='btn btn-ghost flex p-0 max-w-[30px] min-w-[30px] max-h-[30px] min-h-[30px] tooltip tooltip-left'
+            >
+              <RiMenuLine size={20} />
+            </button>
+            <ul
+              tabIndex={0}
+              className='dropdown-content menu bg-base-100 rounded-box z-[1] max-w-[180px] w-[140px] p-2 shadow'
+            >
+              <li onClick={() => handleDownload('png')}>
+                <div className='flex items-center gap-3 text-[16px]'>
+                  <RiFileImageLine size={20} />
+                  <a>PNG</a>
+                </div>
+              </li>
+              <li onClick={() => handleDownload('jpg')}>
+                <div className='flex items-center gap-3 text-[16px]'>
+                  <RiFileImageLine size={20} />
+                  <a>JPG</a>
+                </div>
+              </li>
+              <div className='divider my-1 h-2 before:h-[1px] after:h-[1px]'></div>
+              <li
+                onClick={async () => {
+                  dispatch(setSubmitLoading())
+                  if (dataLog.length === 0) {
+                    Swal.fire({
+                      title: t('alertHeaderWarning'),
+                      text: t('dataNotReady'),
+                      icon: 'warning',
+                      timer: 2000,
+                      showConfirmButton: false
+                    })
+                    dispatch(setSubmitLoading())
+                  }
+                }}
+              >
+                <div className='flex items-center gap-3 text-[16px]'>
+                  <RiFilePdf2Line size={20} />
+                  <a>PDF</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
       {pageNumber === 4 && (
         <div className='flex items-end justify-center flex-col md:items-center md:flex-row gap-3 mt-3'>
@@ -226,11 +420,20 @@ const FullChartTms = () => {
           </button>
         </div>
       )}
-      <FullChartTmsComponent
-        dataLog={dataLog}
-        tempMin={deviceLogs?.minTemp}
-        tempMax={deviceLogs?.maxTemp}
-      />
+      <div ref={canvasChartRef}>
+        <div ref={tableInfoRef} className='hidden'>
+          <h4>{userProfile?.ward.hospital.hosName}</h4>
+          <span>
+            {deviceLogs?.name ? deviceLogs?.name : '--'} | {deviceLogs?.sn}
+          </span>
+        </div>
+        <FullChartTmsComponent
+          dataLog={dataLog}
+          tempMin={deviceLogs?.minTemp}
+          tempMax={deviceLogs?.maxTemp}
+        />
+      </div>
+      {submitLoading && <Loading />}
     </div>
   )
 }

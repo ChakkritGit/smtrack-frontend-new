@@ -388,6 +388,8 @@ export default {
     nodata: 'ไม่พบข้อมูล',
     noHistory: 'ไม่พบประวัติการค้นหา',
     loading: 'กำลังโหลด...',
+    processing: 'กำลังประมวลผล...',
+    downloaded: 'ดาวน์โหลดแล้ว',
     loadingConfig: 'กำลังโหลดการตั้งค่า...',
     searchItemsNav: 'ค้นหา',
     uploadLabel: 'อัปโหลดหรือวางไฟล์ที่นี่',
