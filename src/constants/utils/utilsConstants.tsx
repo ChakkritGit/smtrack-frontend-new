@@ -133,8 +133,8 @@ const handleApiError = (error: unknown) => {
 
 const swalWithBootstrapButtons = Swal.mixin({
   customClass: {
-    confirmButton: "btn btn-ghost bg-red-500",
-    cancelButton: "btn btn-primary",
+    confirmButton: "btn btn-ghost bg-red-500 text-white",
+    cancelButton: "btn btn-ghost bg-gray-700 text-white",
   },
   buttonsStyling: false,
 })

@@ -460,20 +460,21 @@ const ManageDevice = () => {
       cell: item => {
         if (!item.status) {
           return (
-            <span className='badge border-red-500 badge-outline text-red-500 truncate max-w-[80px]'>
+            <span className='badge bg-red-500 border-none px-2 badge-outline text-white'>
               {t('userInactive')}
             </span>
           )
         } else {
           return (
-            <span className='badge badge-primary badge-outline text-primary max-w-[80px]'>
+            <span className='badge bg-green-500 border-none px-2 badge-outline text-white'>
               {t('userActive')}
             </span>
           )
         }
       },
       sortable: false,
-      center: true
+      center: true,
+      width: '130px'
     },
     {
       name: t('token'),
