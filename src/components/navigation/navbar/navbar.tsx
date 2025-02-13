@@ -257,7 +257,7 @@ const Navbar = () => {
                 ))
               ) : (
                 <div className='flex items-center justify-center'>
-                  <span className='opacity-70'>{t('noHistory')}</span>
+                  <span className='opacity-70'>{t('nodata')}</span>
                 </div>
               )}
             </div>
@@ -291,7 +291,7 @@ const Navbar = () => {
                 ))
               ) : (
                 <div className='flex items-center justify-center'>
-                  <span className='opacity-70'>{t('noHistory')}</span>
+                  <span className='opacity-70'>{t('nodata')}</span>
                 </div>
               )}
             </div>
