@@ -48,7 +48,7 @@ const Login = () => {
 
     try {
       const response = await axiosInstance.post('/auth/login', {
-        username,
+        username: username.toLowerCase(),
         password
       })
       const { hosId, token, refreshToken, id, wardId } = response.data.data

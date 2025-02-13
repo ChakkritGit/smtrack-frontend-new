@@ -494,7 +494,7 @@ export default {
     sendingFirmwareSuccess: 'All devices have been updated successfully!',
     sendingFirmwareError: 'Failed to update some devices!',
     submitSuccess: 'Submit Completed',
-    token: 'โทเค็น',
+    token: 'Token',
 
     // time
     thTime: 'en-EN',

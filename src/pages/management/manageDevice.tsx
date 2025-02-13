@@ -24,7 +24,7 @@ import HopitalSelect from '../../components/selects/hopitalSelect'
 import WardSelectTms from '../../components/selects/tms/wardSelect'
 import Swal from 'sweetalert2'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
-import { RiDeleteBin7Line, RiEditLine } from 'react-icons/ri'
+import { RiDeleteBin7Line, RiEditLine, RiFileCopyLine } from 'react-icons/ri'
 import toast from 'react-hot-toast'
 
 const ManageDevice = () => {
@@ -326,8 +326,8 @@ const ManageDevice = () => {
     {
       name: t('token'),
       cell: item => (
-        <span
-          className='truncate max-w-[80px]'
+        <div
+          className='flex items-center cursor-pointer underline hover:opacity-50 duration-300'
           onClick={() => {
             try {
               navigator.clipboard.writeText(item.token)
@@ -338,8 +338,9 @@ const ManageDevice = () => {
             }
           }}
         >
-          {item.token}
-        </span>
+          <span className='truncate max-w-[80px]'>{item.token}</span>
+          <RiFileCopyLine size={18} className='text-base-content/70' />
+        </div>
       ),
       sortable: false,
       center: true

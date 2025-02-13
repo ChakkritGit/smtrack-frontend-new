@@ -113,7 +113,9 @@ const Users = () => {
         formDataObj.append(mappedKey, value)
       } else if (typeof value === 'boolean') {
         formDataObj.append(mappedKey, value.toString())
-      } else {
+      } else if (mappedKey === 'username') {
+        formDataObj.append(mappedKey, value.toLowerCase() as string)
+      } else{
         formDataObj.append(mappedKey, value as string)
       }
     })

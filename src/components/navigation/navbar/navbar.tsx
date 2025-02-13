@@ -209,7 +209,7 @@ const Navbar = () => {
             ))}
           </>
         ) : (
-          <div className='flex items-center justify-center'>
+          <div className='flex items-center justify-center py-5'>
             <span className='opacity-70'>{t('noHistory')}</span>
           </div>
         )}
@@ -256,7 +256,7 @@ const Navbar = () => {
                   </div>
                 ))
               ) : (
-                <div className='flex items-center justify-center'>
+                <div className='flex items-center justify-center py-3'>
                   <span className='opacity-70'>{t('nodata')}</span>
                 </div>
               )}
@@ -290,7 +290,7 @@ const Navbar = () => {
                   </div>
                 ))
               ) : (
-                <div className='flex items-center justify-center'>
+                <div className='flex items-center justify-center py-3'>
                   <span className='opacity-70'>{t('nodata')}</span>
                 </div>
               )}
