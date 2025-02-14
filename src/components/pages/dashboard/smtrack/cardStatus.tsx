@@ -58,12 +58,12 @@ const CardStatus = (props: PropsType) => {
           className='mySwiper h-full'
         >
           {deviceData ? (
-            deviceData?.probe?.map((item, index) => {
+            deviceData?.probe?.map((item) => {
               const findItem = deviceData.log.find(itemTwo =>
                 itemTwo.probe.includes(item.channel)
               )
               return (
-                <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
+                <SwiperSlide className='p-3 h-full bg-base-100' key={item.id}>
                   <div className='flex items-center gap-2 h-[30%]'>
                     <div
                       className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
@@ -299,12 +299,12 @@ const CardStatus = (props: PropsType) => {
           className='mySwiper h-full'
         >
           {deviceData ? (
-            deviceData?.probe?.map((item, index) => {
+            deviceData?.probe?.map((item) => {
               const findItem = deviceData.log.find(itemTwo =>
                 itemTwo.probe.includes(item.channel)
               )
               return (
-                <SwiperSlide className='p-3 h-full bg-base-100' key={index}>
+                <SwiperSlide className='p-3 h-full bg-base-100' key={item.id}>
                   <div className='flex items-center gap-2 h-[30%]'>
                     <div
                       className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${

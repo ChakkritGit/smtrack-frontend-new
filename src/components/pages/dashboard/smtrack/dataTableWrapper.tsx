@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next'
-import { DeviceLogsType } from '../../../types/smtrack/devices/deviceType'
 import { RiFullscreenLine, RiPlayLine, RiStopLine } from 'react-icons/ri'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { Swiper as SwiperType } from 'swiper/types'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, EffectCreative, Pagination } from 'swiper/modules'
 import DataTableMini from './dataTableMini'
+import { DeviceLogsType } from '../../../../types/smtrack/devices/deviceType'
 
 interface DataTableWrapperProps {
   deviceLogs: DeviceLogsType | undefined
@@ -60,12 +60,12 @@ const DataTableWrapper = (props: DataTableWrapperProps) => {
         className='mySwiper h-full'
       >
         {deviceLogs ? (
-          deviceLogs?.probe?.map((item, index) => {
+          deviceLogs?.probe?.map((item) => {
             const filterItem = deviceLogs.log.filter(itemTwo =>
               itemTwo.probe.includes(item.channel)
             )
             return (
-              <SwiperSlide key={index}>
+              <SwiperSlide key={item.id}>
                 <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
                   P{item.channel}
                 </span>

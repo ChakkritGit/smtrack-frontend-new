@@ -81,9 +81,9 @@ const CardInFoComponent = (props: PropsType) => {
             className='mySwiper'
           >
             {deviceData ? (
-              deviceData?.probe?.map((item, index) => {
+              deviceData?.probe?.map((item) => {
                 return (
-                  <SwiperSlide key={index}>
+                  <SwiperSlide key={item.id}>
                     <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 mb-2'>
                       P{item.channel}
                     </span>

@@ -1,11 +1,11 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, EffectCreative, Pagination } from 'swiper/modules'
-import { DeviceLogsType } from '../../../types/smtrack/devices/deviceType'
 import ChartMini from './chartMini'
 import { useTranslation } from 'react-i18next'
 import { RiFullscreenLine, RiPlayLine, RiStopLine } from 'react-icons/ri'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { Swiper as SwiperType } from 'swiper/types'
+import { DeviceLogsType } from '../../../../types/smtrack/devices/deviceType'
 
 interface ChartSwiperWrapperProps {
   deviceLogs: DeviceLogsType | undefined
@@ -60,12 +60,12 @@ const ChartSwiperWrapper = (props: ChartSwiperWrapperProps) => {
         className='mySwiper h-full'
       >
         {deviceLogs ? (
-          deviceLogs?.probe?.map((item, index) => {
+          deviceLogs?.probe?.map(item => {
             const filterItem = deviceLogs.log.filter(itemTwo =>
               itemTwo.probe.includes(item.channel)
             )
             return (
-              <SwiperSlide key={index}>
+              <SwiperSlide key={item.id}>
                 <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 ml-3'>
                   P{item.channel}
                 </span>
@@ -87,7 +87,7 @@ const ChartSwiperWrapper = (props: ChartSwiperWrapperProps) => {
         )}
       </Swiper>
     )
-  }, [isPause, deviceLogs])
+  }, [isPause, deviceLogs, swiperRef])
 
   return (
     <div className='flex flex-col gap-3 bg-base-100 w-full h-full rounded-btn p-3'>
