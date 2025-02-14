@@ -6,6 +6,7 @@ import { DeviceType } from '../../types/smtrack/devices/deviceType'
 import { Dispatch } from 'redux'
 import { AxiosError } from 'axios'
 import Swal from 'sweetalert2'
+import { Schedule, ScheduleHour, ScheduleMinute } from '../../types/tms/devices/probeType'
 
 const accessToken = (tokenObject: TokenDecodeType) =>
   CryptoJS.AES.encrypt(
@@ -139,6 +140,167 @@ const swalWithBootstrapButtons = Swal.mixin({
   buttonsStyling: false,
 })
 
+const scheduleDayArray: Schedule[] = [
+  {
+    scheduleKey: 'OFF',
+    scheduleLabel: 'OFF'
+  },
+  {
+    scheduleKey: 'MON',
+    scheduleLabel: 'MON'
+  },
+  {
+    scheduleKey: 'TUE',
+    scheduleLabel: 'TUE'
+  },
+  {
+    scheduleKey: 'WED',
+    scheduleLabel: 'WED'
+  },
+  {
+    scheduleKey: 'THU',
+    scheduleLabel: 'THU'
+  },
+  {
+    scheduleKey: 'FRI',
+    scheduleLabel: 'FRI'
+  },
+  {
+    scheduleKey: 'SAT',
+    scheduleLabel: 'SAT'
+  },
+  {
+    scheduleKey: 'SUN',
+    scheduleLabel: 'SUN'
+  },
+]
+
+const scheduleTimeArray: ScheduleHour[] = [
+  {
+    scheduleHourKey: '00',
+    scheduleHourLabel: '00'
+  },
+  {
+    scheduleHourKey: '01',
+    scheduleHourLabel: '01'
+  },
+  {
+    scheduleHourKey: '02',
+    scheduleHourLabel: '02'
+  },
+  {
+    scheduleHourKey: '03',
+    scheduleHourLabel: '03'
+  },
+  {
+    scheduleHourKey: '04',
+    scheduleHourLabel: '04'
+  },
+  {
+    scheduleHourKey: '05',
+    scheduleHourLabel: '05'
+  },
+  {
+    scheduleHourKey: '06',
+    scheduleHourLabel: '06'
+  },
+  {
+    scheduleHourKey: '07',
+    scheduleHourLabel: '07'
+  },
+  {
+    scheduleHourKey: '08',
+    scheduleHourLabel: '08'
+  },
+  {
+    scheduleHourKey: '09',
+    scheduleHourLabel: '09'
+  },
+  {
+    scheduleHourKey: '10',
+    scheduleHourLabel: '10'
+  },
+  {
+    scheduleHourKey: '11',
+    scheduleHourLabel: '11'
+  },
+  {
+    scheduleHourKey: '12',
+    scheduleHourLabel: '12'
+  },
+  {
+    scheduleHourKey: '13',
+    scheduleHourLabel: '13'
+  },
+  {
+    scheduleHourKey: '14',
+    scheduleHourLabel: '14'
+  },
+  {
+    scheduleHourKey: '15',
+    scheduleHourLabel: '15'
+  },
+  {
+    scheduleHourKey: '16',
+    scheduleHourLabel: '16'
+  },
+  {
+    scheduleHourKey: '17',
+    scheduleHourLabel: '17'
+  },
+  {
+    scheduleHourKey: '18',
+    scheduleHourLabel: '18'
+  },
+  {
+    scheduleHourKey: '19',
+    scheduleHourLabel: '19'
+  },
+  {
+    scheduleHourKey: '20',
+    scheduleHourLabel: '20'
+  },
+  {
+    scheduleHourKey: '21',
+    scheduleHourLabel: '21'
+  },
+  {
+    scheduleHourKey: '22',
+    scheduleHourLabel: '22'
+  },
+  {
+    scheduleHourKey: '23',
+    scheduleHourLabel: '23'
+  }
+]
+
+const scheduleMinuteArray: ScheduleMinute[] = [
+  {
+    scheduleMinuteKey: '00',
+    scheduleMinuteLabel: '00'
+  },
+  {
+    scheduleMinuteKey: '10',
+    scheduleMinuteLabel: '10'
+  },
+  {
+    scheduleMinuteKey: '20',
+    scheduleMinuteLabel: '20'
+  },
+  {
+    scheduleMinuteKey: '30',
+    scheduleMinuteLabel: '30'
+  },
+  {
+    scheduleMinuteKey: '40',
+    scheduleMinuteLabel: '40'
+  },
+  {
+    scheduleMinuteKey: '50',
+    scheduleMinuteLabel: '50'
+  },
+]
+
 export {
   accessToken,
   cookieDecodeObject,
@@ -147,5 +309,8 @@ export {
   cookies,
   updateLocalStorageAndDispatch,
   handleApiError,
-  swalWithBootstrapButtons
+  swalWithBootstrapButtons,
+  scheduleDayArray,
+  scheduleMinuteArray,
+  scheduleTimeArray
 }

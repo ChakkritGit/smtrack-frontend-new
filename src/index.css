@@ -125,6 +125,14 @@
   }
 }
 
+.react-select__option {
+  @apply max-w-[300px] flex whitespace-normal break-words;
+}
+
+.react-select--is-disabled {
+  @apply opacity-50;
+}
+
 .loading-hieght-full {
   height: calc(100dvh - 150px);
 }
@@ -372,4 +380,14 @@ body {
   &>svg {
     @apply !py-0 !px-2;
   }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }

@@ -1,13 +1,11 @@
-import { Suspense, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../redux/reducers/rootReducer'
-import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
-import { setSearch } from '../../redux/actions/utilsActions'
-import ManageHospital from './manageHospital'
-import ManageHospitalSkeleton from '../../components/skeleton/manage/manageHospitalSkeleton'
-import ManageDeviceSkeleton from '../../components/skeleton/manage/manageDeviceSkeleton'
-import ManageDevice from './smtrack/manageDevice'
+import { RootState } from '../../../redux/reducers/rootReducer'
+import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
+import { setSearch } from '../../../redux/actions/utilsActions'
+import ManageDeviceAndProbe from './manageDeviceAndProbe'
+import ManageHospital from '../manageHospital'
 
 const Management = () => {
   const dispatch = useDispatch()
@@ -24,7 +22,7 @@ const Management = () => {
 
   const manageMenu = useMemo(
     () => (
-      <div role='tablist' className='tabs tabs-bordered w-72 md:w-max mt-5'>
+      <div role='tablist' className='tabs tabs-bordered w-72 md:w-max mt-3'>
         <a
           role='tab'
           className={`tab text-sm md:text-lg ${tab === 1 ? 'tab-active' : ''}`}
@@ -58,15 +56,7 @@ const Management = () => {
     <div className='p-3 px-[16px]'>
       {manageMenu}
       <div className='mt-3'>
-        {tab === 1 ? (
-          <Suspense fallback={<ManageDeviceSkeleton />}>
-            <ManageDevice />
-          </Suspense>
-        ) : (
-          <Suspense fallback={<ManageHospitalSkeleton />}>
-            <ManageHospital />
-          </Suspense>
-        )}
+        {tab === 1 ? <ManageDeviceAndProbe /> : <ManageHospital />}
       </div>
     </div>
   )

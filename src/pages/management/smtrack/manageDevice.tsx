@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next'
-import HospitalAndWard from '../../../components/filter/hospitalAndWard'
 import {
   ChangeEvent,
   FormEvent,
@@ -34,6 +33,7 @@ import Swal from 'sweetalert2'
 import defaultPic from '../../../assets/images/default-pic.png'
 import WardSelectDevice from '../../../components/selects/wardSelectDevice'
 import HopitalSelect from '../../../components/selects/hopitalSelect'
+import HospitalAndWard from '../../../components/filter/hospitalAndWard'
 
 const ManageDevice = () => {
   const dispatch = useDispatch()
@@ -371,7 +371,7 @@ const ManageDevice = () => {
           icon: 'error',
           showConfirmButton: false,
           timer: 2500
-        }).finally(() => editModalRef.current?.showModal())
+        })
       } else {
         console.error(error)
       }
@@ -593,7 +593,7 @@ const ManageDevice = () => {
     <div>
       <div className='flex flex-col lg:flex-row lg:items-center justify-between mt-3'>
         <span className='text-[20px] font-medium'></span>
-        <div className='flex flex-col lg:flex-row mt-3 lg:mt-0 lg:items-center items-end gap-4'>
+        <div className='flex flex-col lg:flex-row mt-3 lg:mt-0 lg:items-center items-end lg:gap-3'>
           <HospitalAndWard />
           <button
             className='btn btn-primary max-w-[130px]'

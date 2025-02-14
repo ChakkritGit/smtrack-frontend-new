@@ -1,20 +1,20 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { setSearch } from '../../../redux/actions/utilsActions'
-import { useDispatch, useSelector } from 'react-redux'
 import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
+import { useDispatch, useSelector } from 'react-redux'
+import { setSearch } from '../../../redux/actions/utilsActions'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import ManageDeviceSkeleton from '../../../components/skeleton/manage/manageDeviceSkeleton'
 import ManageHospitalSkeleton from '../../../components/skeleton/manage/manageHospitalSkeleton'
-const ManageHospital = lazy(() => import('../manageHospital'))
 const ManageDevice = lazy(() => import('./manageDevice'))
+const ManageProbe = lazy(() => import('./manageProbe'))
 
-const ManagementTms = () => {
+const ManageDeviceAndProbe = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
+  const [tab, setTab] = useState(cookies.get('manageDeviceTab') ?? 1)
   const { tokenDecode } = useSelector((state: RootState) => state.utils)
-  const [tab, setTab] = useState(cookies.get('manageHospitalTab') ?? 1)
-  const { role } = tokenDecode ?? {}
+  const { role } = tokenDecode || {}
 
   useEffect(() => {
     return () => {
@@ -27,35 +27,36 @@ const ManagementTms = () => {
       <div role='tablist' className='tabs tabs-bordered w-72 md:w-max mt-3'>
         <a
           role='tab'
-          className={`tab text-sm md:text-lg ${tab === 1 ? 'tab-active' : ''}`}
+          className={`tab text-sm md:text-base ${
+            tab === 1 ? 'tab-active' : ''
+          }`}
           onClick={() => {
-            cookies.set('manageHospitalTab', 1, cookieOptions)
+            cookies.set('manageDeviceTab', 1, cookieOptions)
             setTab(1)
           }}
         >
-          {t('tabManageDevice')}
+          {t('subTabDevice')}
         </a>
         {(role === 'SUPER' || role === 'SERVICE') && (
           <a
             role='tab'
-            className={`tab text-sm md:text-lg ${
+            className={`tab text-sm md:text-base ${
               tab === 2 ? 'tab-active' : ''
             }`}
             onClick={() => {
-              cookies.set('manageHospitalTab', 2, cookieOptions)
+              cookies.set('manageDeviceTab', 2, cookieOptions)
               setTab(2)
             }}
           >
-            {t('tabManageHospitals')}
+            {t('subTabProbe')}
           </a>
         )}
       </div>
     ),
     [tab, role, t]
   )
-
   return (
-    <div className='p-3 px-[16px]'>
+    <div>
       {manageMenu}
       <div className='mt-3'>
         {tab === 1 ? (
@@ -64,7 +65,7 @@ const ManagementTms = () => {
           </Suspense>
         ) : (
           <Suspense fallback={<ManageHospitalSkeleton />}>
-            <ManageHospital />
+            <ManageProbe />
           </Suspense>
         )}
       </div>
@@ -72,4 +73,4 @@ const ManagementTms = () => {
   )
 }
 
-export default ManagementTms
+export default ManageDeviceAndProbe
