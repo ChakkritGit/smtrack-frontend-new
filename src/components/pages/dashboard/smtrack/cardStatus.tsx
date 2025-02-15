@@ -34,11 +34,12 @@ const CardStatus = (props: PropsType) => {
           slidesPerView={'auto'}
           spaceBetween={30}
           centeredSlides={true}
-          loop={true}
-          autoplay={{
-            delay: 8000,
-            disableOnInteraction: false
-          }}
+          loop={deviceData?.probe && deviceData?.probe.length > 2}
+            autoplay={{
+              delay: 8000,
+              disableOnInteraction: false,
+              waitForTransition: false
+            }}
           pagination={{
             dynamicBullets: true,
             clickable: true
@@ -275,10 +276,11 @@ const CardStatus = (props: PropsType) => {
           slidesPerView={'auto'}
           spaceBetween={30}
           centeredSlides={true}
-          loop={true}
+          loop={deviceData?.probe && deviceData?.probe.length > 2}
           autoplay={{
             delay: 8000,
-            disableOnInteraction: false
+            disableOnInteraction: false,
+            waitForTransition: false
           }}
           pagination={{
             dynamicBullets: true,

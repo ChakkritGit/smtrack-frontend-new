@@ -56,11 +56,11 @@ const CardInFoComponent = (props: PropsType) => {
             slidesPerView={'auto'}
             spaceBetween={100}
             centeredSlides={true}
-            loop={true}
+            loop={deviceData?.probe && deviceData?.probe.length > 2}
             autoplay={{
               delay: 8000,
               disableOnInteraction: false,
-              pauseOnMouseEnter: true
+              waitForTransition: false
             }}
             // pagination={{
             //   dynamicBullets: true,
@@ -81,7 +81,7 @@ const CardInFoComponent = (props: PropsType) => {
             className='mySwiper'
           >
             {deviceData ? (
-              deviceData?.probe?.map((item) => {
+              deviceData?.probe?.map(item => {
                 return (
                   <SwiperSlide key={item.id}>
                     <span className='badge badge-primary bg-opacity-15 text-primary font-bold border-2 mb-2'>

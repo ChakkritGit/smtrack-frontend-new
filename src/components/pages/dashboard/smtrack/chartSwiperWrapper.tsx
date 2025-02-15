@@ -35,11 +35,12 @@ const ChartSwiperWrapper = (props: ChartSwiperWrapperProps) => {
         slidesPerView={'auto'}
         spaceBetween={30}
         centeredSlides={true}
-        loop={true}
+        loop={deviceLogs?.probe && deviceLogs?.probe.length > 2}
         autoplay={{
           delay: 8000,
           disableOnInteraction: false,
-          pauseOnMouseEnter: true
+          pauseOnMouseEnter: true,
+          waitForTransition: false
         }}
         pagination={{
           dynamicBullets: true,
