@@ -17,7 +17,16 @@ import { HiOutlineArrowsUpDown } from 'react-icons/hi2'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination, EffectCreative } from 'swiper/modules'
 import { DeviceLogsType } from '../../../../types/smtrack/devices/deviceType'
-import { battertyLevel, doorOpen, humiLimit, probeLimitIcon, sdCard, tempLimit, tempOfDay, unPlug } from '../../../../constants/utils/dashboardCardStatus'
+import {
+  battertyLevel,
+  doorOpen,
+  humiLimit,
+  probeLimitIcon,
+  sdCard,
+  tempLimit,
+  tempOfDay,
+  unPlug
+} from '../../../../constants/utils/dashboardCardStatus'
 
 type PropsType = {
   deviceData: DeviceLogsType | undefined
@@ -35,11 +44,11 @@ const CardStatus = (props: PropsType) => {
           spaceBetween={30}
           centeredSlides={true}
           loop={deviceData?.probe && deviceData?.probe.length > 2}
-            autoplay={{
-              delay: 8000,
-              disableOnInteraction: false,
-              waitForTransition: false
-            }}
+          autoplay={{
+            delay: 8000,
+            disableOnInteraction: false,
+            waitForTransition: false
+          }}
           pagination={{
             dynamicBullets: true,
             clickable: true
@@ -59,7 +68,7 @@ const CardStatus = (props: PropsType) => {
           className='mySwiper h-full'
         >
           {deviceData ? (
-            deviceData?.probe?.map((item) => {
+            deviceData?.probe?.map(item => {
               const findItem = deviceData.log.find(itemTwo =>
                 itemTwo.probe.includes(item.channel)
               )
@@ -301,7 +310,7 @@ const CardStatus = (props: PropsType) => {
           className='mySwiper h-full'
         >
           {deviceData ? (
-            deviceData?.probe?.map((item) => {
+            deviceData?.probe?.map(item => {
               const findItem = deviceData.log.find(itemTwo =>
                 itemTwo.probe.includes(item.channel)
               )

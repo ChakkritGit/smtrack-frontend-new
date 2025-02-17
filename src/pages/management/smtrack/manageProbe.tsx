@@ -880,7 +880,253 @@ const ManageProbe = () => {
                 </div>
               </div>
 
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
+              <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
+                <span>{t('tempMin')}</span>
+                <div className='flex items-center justify-center gap-2 w-full'>
+                  <button
+                    className='btn btn-ghost bg-orange-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.tempMin > -40) {
+                        setFormData({
+                          ...formData,
+                          tempMin: parseFloat(
+                            (formData.tempMin - 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    -
+                  </button>
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    min={-40}
+                    max={120}
+                    value={formData.tempMin}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          tempMin: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, tempMin: num })
+                      }
+                    }}
+                  />
+                  <button
+                    className='btn btn-ghost bg-orange-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.tempMin < 120) {
+                        setFormData({
+                          ...formData,
+                          tempMin: parseFloat(
+                            (formData.tempMin + 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
+                <span>{t('tempMax')}</span>
+                <div className='flex items-center justify-center gap-2 w-full'>
+                  <button
+                    className='btn btn-ghost bg-orange-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.tempMax > -40) {
+                        setFormData({
+                          ...formData,
+                          tempMax: parseFloat(
+                            (formData.tempMax - 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    -
+                  </button>
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    value={formData.tempMax}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          tempMax: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, tempMax: num })
+                      }
+                    }}
+                  />
+                  <button
+                    className='btn btn-ghost bg-orange-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.tempMax < 120) {
+                        setFormData({
+                          ...formData,
+                          tempMax: parseFloat(
+                            (formData.tempMax + 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
+                <span>{t('humiMin')}</span>
+                <div className='flex items-center justify-center gap-2 w-full'>
+                  <button
+                    className='btn btn-ghost bg-blue-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.humiMin > 0) {
+                        setFormData({
+                          ...formData,
+                          humiMin: parseFloat(
+                            (formData.humiMin - 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    -
+                  </button>
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    value={formData.humiMin}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          humiMin: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, humiMin: num })
+                      }
+                    }}
+                  />
+                  <button
+                    className='btn btn-ghost bg-blue-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.humiMin < 100) {
+                        setFormData({
+                          ...formData,
+                          humiMin: parseFloat(
+                            (formData.humiMin + 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
+                <span>{t('humiMax')}</span>
+                <div className='flex items-center justify-center gap-2 w-full'>
+                  <button
+                    className='btn btn-ghost bg-blue-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.humiMax > 0) {
+                        setFormData({
+                          ...formData,
+                          humiMax: parseFloat(
+                            (formData.humiMax - 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    -
+                  </button>
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    value={formData.humiMax}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          humiMax: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, humiMax: num })
+                      }
+                    }}
+                  />
+                  <button
+                    className='btn btn-ghost bg-blue-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.humiMax < 100) {
+                        setFormData({
+                          ...formData,
+                          humiMax: parseFloat(
+                            (formData.humiMax + 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className='md:grid grid-cols-1 hidden md:grid-cols-2 gap-4 mt-4 w-full'>
                 {/* Temperature */}
                 <div className='form-control w-full'>
                   <label className='label flex-col items-start'>
@@ -949,6 +1195,110 @@ const ManageProbe = () => {
                   </label>
                 </div>
               </div>
+
+              <div className='md:grid grid-cols-1 hidden md:grid-cols-2 gap-4 mt-4 w-full'>
+                {/* Temperature */}
+                <div className='flex justify-between gap-2 w-full'>
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    min={-40}
+                    max={120}
+                    value={formData.tempMin}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          tempMin: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, tempMin: num })
+                      }
+                    }}
+                  />
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    value={formData.tempMax}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          tempMax: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, tempMax: num })
+                      }
+                    }}
+                  />
+                </div>
+
+                {/* Humidity */}
+                <div className='flex justify-between gap-2 w-full'>
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    value={formData.humiMin}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          humiMin: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, humiMin: num })
+                      }
+                    }}
+                  />
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    value={formData.humiMax}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          humiMax: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, humiMax: num })
+                      }
+                    }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -972,7 +1322,7 @@ const ManageProbe = () => {
       </dialog>
 
       <dialog ref={editModalRef} className='modal'>
-        <form onSubmit={handleUpdate} className='modal-box max-w-[110rem]'>
+        <form onSubmit={handleUpdate} className='modal-box max-w-[85rem]'>
           <h3 className='font-bold text-lg'>{t('addProbe')}</h3>
           <div className='flex flex-col lg:flex-col xl:flex-row gap-4 mt-4 w-full'>
             <div className='w-full'>
@@ -1149,7 +1499,253 @@ const ManageProbe = () => {
                 </div>
               </div>
 
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
+              <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
+                <span>{t('tempMin')}</span>
+                <div className='flex items-center justify-center gap-2 w-full'>
+                  <button
+                    className='btn btn-ghost bg-orange-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.tempMin > -40) {
+                        setFormData({
+                          ...formData,
+                          tempMin: parseFloat(
+                            (formData.tempMin - 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    -
+                  </button>
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    min={-40}
+                    max={120}
+                    value={formData.tempMin}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          tempMin: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, tempMin: num })
+                      }
+                    }}
+                  />
+                  <button
+                    className='btn btn-ghost bg-orange-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.tempMin < 120) {
+                        setFormData({
+                          ...formData,
+                          tempMin: parseFloat(
+                            (formData.tempMin + 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
+                <span>{t('tempMax')}</span>
+                <div className='flex items-center justify-center gap-2 w-full'>
+                  <button
+                    className='btn btn-ghost bg-orange-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.tempMax > -40) {
+                        setFormData({
+                          ...formData,
+                          tempMax: parseFloat(
+                            (formData.tempMax - 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    -
+                  </button>
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    value={formData.tempMax}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          tempMax: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, tempMax: num })
+                      }
+                    }}
+                  />
+                  <button
+                    className='btn btn-ghost bg-orange-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.tempMax < 120) {
+                        setFormData({
+                          ...formData,
+                          tempMax: parseFloat(
+                            (formData.tempMax + 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
+                <span>{t('humiMin')}</span>
+                <div className='flex items-center justify-center gap-2 w-full'>
+                  <button
+                    className='btn btn-ghost bg-blue-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.humiMin > 0) {
+                        setFormData({
+                          ...formData,
+                          humiMin: parseFloat(
+                            (formData.humiMin - 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    -
+                  </button>
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    value={formData.humiMin}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          humiMin: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, humiMin: num })
+                      }
+                    }}
+                  />
+                  <button
+                    className='btn btn-ghost bg-blue-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.humiMin < 100) {
+                        setFormData({
+                          ...formData,
+                          humiMin: parseFloat(
+                            (formData.humiMin + 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
+                <span>{t('humiMax')}</span>
+                <div className='flex items-center justify-center gap-2 w-full'>
+                  <button
+                    className='btn btn-ghost bg-blue-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.humiMax > 0) {
+                        setFormData({
+                          ...formData,
+                          humiMax: parseFloat(
+                            (formData.humiMax - 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    -
+                  </button>
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    value={formData.humiMax}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          humiMax: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, humiMax: num })
+                      }
+                    }}
+                  />
+                  <button
+                    className='btn btn-ghost bg-blue-500 text-white text-lg'
+                    type='button'
+                    onClick={() => {
+                      if (formData.humiMax < 100) {
+                        setFormData({
+                          ...formData,
+                          humiMax: parseFloat(
+                            (formData.humiMax + 0.01).toFixed(2)
+                          )
+                        })
+                      }
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className='md:grid grid-cols-1 hidden md:grid-cols-2 gap-4 mt-4 w-full'>
                 {/* Temperature */}
                 <div className='form-control w-full'>
                   <label className='label flex-col items-start'>
@@ -1170,12 +1766,13 @@ const ManageProbe = () => {
                       }
                       pearling
                       minDistance={1}
+                      step={0.01}
                       min={-40}
                       max={120}
                       renderThumb={(props, state) => (
                         <div
                           {...props}
-                          className='flex items-center justify-center w-[32px] h-[32px] bg-orange-500 text-white font-bold text-sm shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50'
+                          className='flex items-center justify-center w-[42px] h-[32px] bg-orange-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50'
                         >
                           {state.valueNow}
                         </div>
@@ -1204,18 +1801,123 @@ const ManageProbe = () => {
                       }
                       pearling
                       minDistance={1}
+                      step={0.01}
                       min={0}
                       max={100}
                       renderThumb={(props, state) => (
                         <div
                           {...props}
-                          className='flex items-center justify-center w-[32px] h-[32px] bg-blue-500 text-white font-bold text-sm shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50'
+                          className='flex items-center justify-center w-[42px] h-[32px] bg-blue-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50'
                         >
                           {state.valueNow}
                         </div>
                       )}
                     />
                   </label>
+                </div>
+              </div>
+
+              <div className='md:grid grid-cols-1 hidden md:grid-cols-2 gap-4 mt-4 w-full'>
+                {/* Temperature */}
+                <div className='flex justify-between gap-2 w-full'>
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    min={-40}
+                    max={120}
+                    value={formData.tempMin}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          tempMin: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, tempMin: num })
+                      }
+                    }}
+                  />
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    value={formData.tempMax}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          tempMax: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, tempMax: num })
+                      }
+                    }}
+                  />
+                </div>
+
+                {/* Humidity */}
+                <div className='flex justify-between gap-2 w-full'>
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    value={formData.humiMin}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          humiMin: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, humiMin: num })
+                      }
+                    }}
+                  />
+                  <input
+                    autoFocus={false}
+                    className='input input-bordered text-center w-full'
+                    type='number'
+                    step={0.01}
+                    value={formData.humiMax}
+                    onChange={e => {
+                      let value = e.target.value
+
+                      if (value === '' || value === '-') {
+                        setFormData({
+                          ...formData,
+                          humiMax: value as unknown as number
+                        })
+                        return
+                      }
+
+                      let num = parseFloat(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, humiMax: num })
+                      }
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -1729,10 +2431,10 @@ const ManageProbe = () => {
                 />
               </div>
             </div>
-            <div className='divider divider-vertical xl:divider-horizontal'></div>
+            {/* <div className='divider divider-vertical xl:divider-horizontal'></div>
             <div className='w-full'>
               <h3 className='font-bold text-base'>{t('muteSettings')}</h3>
-            </div>
+            </div> */}
           </div>
 
           {/* Modal Actions */}

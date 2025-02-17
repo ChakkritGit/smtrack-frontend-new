@@ -11,6 +11,7 @@ const Home = lazy(() => import('../pages/home/home'))
 const Dashboard = lazy(() => import('../pages/dashboard/smtrack/dashboard'))
 const Users = lazy(() => import('../pages/users/users'))
 const Management = lazy(() => import('../pages/management/smtrack/management'))
+const Warranty = lazy(() => import('../pages/warranty/warranty'))
 
 const smtrackChildren: RouteObject[] = [
   {
@@ -67,7 +68,11 @@ const smtrackChildren: RouteObject[] = [
   },
   {
     path: 'warranty',
-    element: <>warranty</>,
+    element: (
+      <Suspense fallback={<>123</>}>
+        <Warranty />
+      </Suspense>
+    ),
     errorElement: <></>
   },
   {

@@ -55,6 +55,7 @@ const ManageDeviceAndProbe = () => {
     ),
     [tab, role, t]
   )
+
   return (
     <div>
       {manageMenu}

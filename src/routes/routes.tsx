@@ -12,8 +12,9 @@ import { jwtDecode } from 'jwt-decode'
 import { HospitalType } from '../types/smtrack/hospitals/hospitalType'
 import { WardType } from '../types/smtrack/wards/wardType'
 import { AxiosError } from 'axios'
-import axiosInstance from '../constants/axios/axiosInstance'
 import { GlobalContext } from '../contexts/globalContext'
+import axiosInstance from '../constants/axios/axiosInstance'
+import { client } from '../services/mqtt'
 
 const Routes = () => {
   const dispatch = useDispatch()
@@ -94,6 +95,10 @@ const Routes = () => {
         `${location.pathname.split('/')[1] !== '' ? capitalized : 'Home'}`
       : 'SMTrack+'
   }, [location, cookieDecode, userProfile])
+
+  useEffect(() => {
+    client.connected
+  }, [])
 
   return (
     <GlobalContext.Provider value={{ hospital, setHospital, ward, setWard, fetchHospital, fetchWard }}>
