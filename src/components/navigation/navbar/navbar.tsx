@@ -69,12 +69,11 @@ const Navbar = () => {
     setSearchHistory(prev => {
       let updatedHistory = [item, ...prev.filter(i => i.path !== item.path)]
       if (updatedHistory.length > 7) updatedHistory = updatedHistory.slice(0, 7)
-
       cookies.set('searchHistory', updatedHistory, cookieOptions)
+
       return updatedHistory
     })
   }
-
   const removeHistoryItem = (path: string) => {
     setSearchHistory(prev => {
       const updatedHistory = prev.filter(item => item.path !== path)
@@ -149,8 +148,10 @@ const Navbar = () => {
   const searchRecommend = useMemo(() => {
     if (!isFocused) return null
 
-    const filter = menuDataArraySmtrack(t).filter(f =>
-      f.text?.toLowerCase().includes(globalSearch?.toLowerCase())
+    const filter = menuDataArraySmtrack(t).filter(
+      f =>
+        f.text?.toLowerCase().includes(globalSearch?.toLowerCase()) ||
+        f.tag?.toLowerCase().includes(globalSearch?.toLowerCase())
     )
 
     const devive = deviceList
@@ -163,7 +164,12 @@ const Navbar = () => {
       .slice(0, 6)
 
     return (
-      <div className='absolute min-w-[450px] min-h-[50px] max-w-[500px] max-h-[400px] bg-base-100 backdrop-blur transition-shadow shadow-sm duration-300 border-base-content/15 border-[1px] py-3 pl-4 pr-1 top-[60px] overflow-y-scroll rounded-btn'>
+      <div
+        className='search-anim absolute min-w-[450px] min-h-[50px] max-w-[500px]
+      max-h-[400px] bg-base-100 backdrop-blur transition-shadow shadow-sm duration-300
+      border-base-content/15 border-[1px] py-3 pl-4 pr-1 top-[60px] overflow-y-scroll
+      rounded-btn'
+      >
         <div className='p-1 flex items-center gap-3 opacity-70 mb-1'>
           <span>{t('pressPre1')}</span>
           <kbd className='kbd kbd-sm'>Esc</kbd>
@@ -175,22 +181,24 @@ const Navbar = () => {
               <div
                 key={index}
                 className='flex items-center justify-between p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300'
+                onClick={() => {
+                  updateSearchHistory(item)
+
+                  if (item.tag === 'menu') {
+                    navigate(item.path)
+                    dispatch(setSearch(item.text))
+                    setIsFocused(false)
+                  } else if (item.tag === 'device') {
+                    cookies.set('deviceKey', item.path, cookieOptions) // it's mean setSerial
+                    dispatch(setDeviceKey(item.path))
+                    dispatch(setSearch(item.text))
+                    navigate('/dashboard')
+                    window.scrollTo(0, 0)
+                    setIsFocused(false)
+                  }
+                }}
               >
-                <div
-                  className='flex items-center gap-3'
-                  onClick={() => {
-                    if (item.tag === 'menu') {
-                      navigate(item.path)
-                      setIsFocused(false)
-                    } else if (item.tag === 'device') {
-                      cookies.set('deviceKey', item.path, cookieOptions) // it's mean setSerial
-                      dispatch(setDeviceKey(item.path))
-                      navigate('/dashboard')
-                      window.scrollTo(0, 0)
-                      setIsFocused(false)
-                    }
-                  }}
-                >
+                <div className='flex items-center gap-3'>
                   <div>
                     <RiHistoryLine size={18} />
                   </div>
@@ -235,6 +243,7 @@ const Navbar = () => {
                         path: !tmsMode ? item.id : String(item.sn),
                         tag: 'device'
                       }
+                      dispatch(setSearch(item.name))
                       setIsFocused(false)
                       updateSearchHistory(newItem)
                       cookies.set(
@@ -280,6 +289,7 @@ const Navbar = () => {
                         path: item.path,
                         tag: 'menu'
                       }
+                      dispatch(setSearch(item.text))
                       navigate(item.path)
                       setIsFocused(false)
                       updateSearchHistory(newItem)
@@ -305,7 +315,8 @@ const Navbar = () => {
     menuDataArraySmtrack,
     t,
     globalSearch,
-    navigate
+    navigate,
+    dispatch
   ])
 
   return (

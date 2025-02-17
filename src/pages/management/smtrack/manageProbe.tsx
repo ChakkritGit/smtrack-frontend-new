@@ -55,6 +55,7 @@ const ManageProbe = () => {
   const { t } = useTranslation()
   const { globalSearch } = useSelector((state: RootState) => state.utils)
   const addModalRef = useRef<HTMLDialogElement>(null)
+  const editModalRef = useRef<HTMLDialogElement>(null)
   const [loading, setLoading] = useState(false)
   const [probeList, setProbeList] = useState<ProbeListType[]>([])
   const [probeListFilter, setProbeListFilter] = useState<ProbeListType[]>([])
@@ -180,6 +181,77 @@ const ManageProbe = () => {
       formData.position !== '' &&
       formData.stampTime !== '' &&
       formData.doorQty !== 0 &&
+      formData.channel !== ''
+    ) {
+      const body = {
+        sn: formData.sn,
+        name: formData.name,
+        type: formData.type,
+        position: formData.position,
+        stampTime: formData.stampTime,
+        tempMin: formData.tempMin,
+        tempMax: formData.tempMax,
+        humiMin: formData.humiMin,
+        humiMax: formData.humiMax,
+        doorQty: formData.doorQty,
+        channel: formData.channel
+      }
+      try {
+        await axiosInstance.post<responseType<ProbeListType>>(
+          '/devices/probe',
+          body
+        )
+        addModalRef.current?.close()
+        resetForm()
+        await fetchProbe()
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: t('submitSuccess'),
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } catch (error) {
+        addModalRef.current?.close()
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          }).finally(() => addModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    } else {
+      addModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => addModalRef.current?.showModal())
+      dispatch(setSubmitLoading())
+    }
+  }
+
+  const handleUpdate = async (e: FormEvent) => {
+    e.preventDefault()
+    dispatch(setSubmitLoading())
+
+    if (
+      formData.sn !== '' &&
+      formData.name !== '' &&
+      formData.type !== '' &&
+      formData.position !== '' &&
+      formData.stampTime !== '' &&
+      formData.doorQty !== 0 &&
+      formData.channel !== '' &&
       formData.channel !== '' &&
       scheduleDay.firstDay !== '' &&
       scheduleDay.seccondDay !== '' &&
@@ -215,23 +287,22 @@ const ManageProbe = () => {
         notiToNormal: muteMode.choichtwo === 'send' ? true : false
       }
       try {
-        await axiosInstance.post<responseType<ProbeListType>>(
-          '/devices/probe',
+        await axiosInstance.put<responseType<ProbeListType>>(
+          `/devices/probe/${formData.id}`,
           body
         )
-        addModalRef.current?.close()
+        editModalRef.current?.close()
         resetForm()
+        await fetchProbe()
         Swal.fire({
           title: t('alertHeaderSuccess'),
           text: t('submitSuccess'),
           icon: 'success',
           showConfirmButton: false,
           timer: 2500
-        }).finally(async () => {
-          await fetchProbe()
         })
       } catch (error) {
-        addModalRef.current?.close()
+        editModalRef.current?.close()
         if (error instanceof AxiosError) {
           Swal.fire({
             title: t('alertHeaderError'),
@@ -239,7 +310,7 @@ const ManageProbe = () => {
             icon: 'error',
             showConfirmButton: false,
             timer: 2500
-          }).finally(() => addModalRef.current?.showModal())
+          }).finally(() => editModalRef.current?.showModal())
         } else {
           console.error(error)
         }
@@ -247,14 +318,14 @@ const ManageProbe = () => {
         dispatch(setSubmitLoading())
       }
     } else {
-      addModalRef.current?.close()
+      editModalRef.current?.close()
       Swal.fire({
         title: t('alertHeaderWarning'),
         text: t('completeField'),
         icon: 'warning',
         showConfirmButton: false,
         timer: 2500
-      }).finally(() => addModalRef.current?.showModal())
+      }).finally(() => editModalRef.current?.showModal())
       dispatch(setSubmitLoading())
     }
   }
@@ -325,7 +396,60 @@ const ManageProbe = () => {
   }
 
   const openEditModal = (probe: ProbeListType) => {
-    console.log('Probe: ', probe)
+    setFormData({
+      channel: probe.channel,
+      doorAlarmTime: probe.doorAlarmTime,
+      doorQty: probe.doorQty,
+      doorSound: probe.doorSound,
+      firstDay: probe.firstDay,
+      firstTime: probe.firstTime,
+      humiAdj: probe.humiAdj,
+      humiMax: probe.humiMax,
+      humiMin: probe.humiMin,
+      id: probe.id,
+      muteAlarmDuration: probe.muteAlarmDuration,
+      muteDoorAlarmDuration: probe.muteDoorAlarmDuration,
+      name: probe.name,
+      notiDelay: probe.notiDelay,
+      notiMobile: probe.notiMobile,
+      notiRepeat: probe.notiRepeat,
+      notiToNormal: probe.notiToNormal,
+      position: probe.position,
+      secondDay: probe.secondDay,
+      secondTime: probe.secondTime,
+      sn: probe.sn,
+      stampTime: probe.stampTime,
+      tempAdj: probe.tempAdj,
+      tempMax: probe.tempMax,
+      tempMin: probe.tempMin,
+      thirdDay: probe.thirdDay,
+      thirdTime: probe.thirdTime,
+      type: probe.type
+    })
+    setMuteMode({
+      choichOne: probe.notiDelay < 5 ? 'immediately' : 'after',
+      choichtwo: probe.notiToNormal ? 'send' : 'donotsend',
+      choichthree: probe.notiRepeat < 5 ? 'onetime' : 'every',
+      choichfour: probe.notiMobile ? 'on' : 'off'
+    })
+    setSendTime({
+      after: probe.notiDelay < 5 ? 5 : probe.notiDelay,
+      every: probe.notiRepeat < 5 ? 5 : probe.notiRepeat
+    })
+    setScheduleDay({
+      firstDay: probe.firstDay,
+      seccondDay: probe.secondDay,
+      thirdDay: probe.thirdDay
+    })
+    setScheduleTime({
+      firstTime: probe.firstTime.substring(0, 2),
+      secondTime: probe.secondTime.substring(0, 2),
+      thirdTime: probe.thirdTime.substring(0, 2),
+      firstMinute: probe.firstTime.substring(2, 4),
+      seccondMinute: probe.secondTime.substring(2, 4),
+      thirdMinute: probe.thirdTime.substring(2, 4)
+    })
+    editModalRef.current?.showModal()
   }
 
   const deleteDevices = async (id: string) => {
@@ -579,7 +703,7 @@ const ManageProbe = () => {
       </div>
 
       <dialog ref={addModalRef} className='modal'>
-        <form onSubmit={handleSubmit} className='modal-box max-w-[110rem]'>
+        <form onSubmit={handleSubmit} className='modal-box max-w-[55rem]'>
           <h3 className='font-bold text-lg'>{t('addProbe')}</h3>
           <div className='flex flex-col lg:flex-col xl:flex-row gap-4 mt-4 w-full'>
             <div className='w-full'>
@@ -826,7 +950,276 @@ const ManageProbe = () => {
                 </div>
               </div>
             </div>
-            <div className='divider divider-vertical lg:divider-horizontal'></div>
+          </div>
+
+          {/* Modal Actions */}
+          <div className='modal-action mt-6'>
+            <button
+              type='button'
+              className='btn'
+              onClick={() => {
+                addModalRef.current?.close()
+                resetForm()
+              }}
+            >
+              {t('cancelButton')}
+            </button>
+            <button type='submit' className='btn btn-primary'>
+              {t('submitButton')}
+            </button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog ref={editModalRef} className='modal'>
+        <form onSubmit={handleUpdate} className='modal-box max-w-[110rem]'>
+          <h3 className='font-bold text-lg'>{t('addProbe')}</h3>
+          <div className='flex flex-col lg:flex-col xl:flex-row gap-4 mt-4 w-full'>
+            <div className='w-full'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
+                {/* Right Column - 3 of the grid (100%) */}
+                <div className='col-span-2 grid grid-cols-1'>
+                  {/* Deivce */}
+                  <div className='form-control w-full'>
+                    <label className='label flex-col items-start'>
+                      <span className='label-text mb-2'>
+                        <span className='font-medium text-red-500 mr-1'>*</span>
+                        {t('deviceSerialTb')}
+                      </span>
+                      <Select
+                        options={mapOptions<
+                          DeviceListType,
+                          keyof DeviceListType
+                        >(deviceList, 'id', 'id')}
+                        value={mapDefaultValue<
+                          DeviceListType,
+                          keyof DeviceListType
+                        >(deviceList, formData.sn, 'id', 'id')}
+                        onChange={e =>
+                          setFormData({ ...formData, sn: e?.value as string })
+                        }
+                        autoFocus={false}
+                        className='react-select-container custom-menu-select z-[75] min-w-full'
+                        classNamePrefix='react-select'
+                      />
+                    </label>
+                  </div>
+                </div>
+                {/* Right Column - 2/3 of the grid (70%) */}
+                <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
+                  {/* name */}
+                  <div className='form-control w-full'>
+                    <label className='label flex-col items-start'>
+                      <span className='label-text mb-2'>
+                        <span className='font-medium text-red-500 mr-1'>*</span>
+                        {t('probeName')}
+                      </span>
+                      <input
+                        name='name'
+                        type='text'
+                        value={formData.name}
+                        onChange={handleChange}
+                        className='input input-bordered w-full'
+                        maxLength={23}
+                      />
+                    </label>
+                  </div>
+
+                  {/* probe type */}
+                  <div className='form-control w-full'>
+                    <label className='label flex-col items-start'>
+                      <span className='label-text mb-2'>
+                        <span className='font-medium text-red-500 mr-1'>*</span>
+                        {t('probeType')}
+                      </span>
+                      <input
+                        name='type'
+                        type='text'
+                        value={formData.type}
+                        onChange={handleChange}
+                        className='input input-bordered w-full'
+                        maxLength={23}
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <div className='col-span-2 grid grid-cols-1'>
+                  {/* probe location */}
+                  <div className='form-control w-full'>
+                    <label className='label flex-col items-start'>
+                      <span className='label-text mb-2'>
+                        <span className='font-medium text-red-500 mr-1'>*</span>
+                        {t('probeLocation')}
+                      </span>
+                      <input
+                        name='position'
+                        type='text'
+                        value={formData.position}
+                        onChange={handleChange}
+                        className='input input-bordered w-full'
+                        maxLength={23}
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
+                {/* Deivce */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      <span className='font-medium text-red-500 mr-1'>*</span>
+                      {t('delay')}
+                    </span>
+                    <Select
+                      options={mapOptions<OptionData, keyof OptionData>(
+                        delayTimeArray,
+                        'value',
+                        'name'
+                      )}
+                      value={mapDefaultValue<OptionData, keyof OptionData>(
+                        delayTimeArray,
+                        formData.stampTime || '0',
+                        'value',
+                        'name'
+                      )}
+                      onChange={delayTime}
+                      autoFocus={false}
+                      menuPlacement='top'
+                      className='react-select-container custom-menu-select z-[75] min-w-full'
+                      classNamePrefix='react-select'
+                    />
+                  </label>
+                </div>
+                {/* Deivce */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      <span className='font-medium text-red-500 mr-1'>*</span>
+                      {t('door')}
+                    </span>
+                    <Select
+                      options={mapOptions<OptionData, keyof OptionData>(
+                        doorArray,
+                        'value',
+                        'name'
+                      )}
+                      value={mapDefaultValue<OptionData, keyof OptionData>(
+                        doorArray,
+                        String(formData.doorQty) || '0',
+                        'value',
+                        'name'
+                      )}
+                      onChange={doorSelected}
+                      autoFocus={false}
+                      menuPlacement='top'
+                      className='react-select-container custom-menu-select z-[75] min-w-full'
+                      classNamePrefix='react-select'
+                    />
+                  </label>
+                </div>
+                {/* Deivce */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      <span className='font-medium text-red-500 mr-1'>*</span>
+                      {t('probeChanel')}
+                    </span>
+                    <Select
+                      options={mapOptions<OptionData, keyof OptionData>(
+                        channelArray,
+                        'value',
+                        'name'
+                      )}
+                      value={mapDefaultValue<OptionData, keyof OptionData>(
+                        channelArray,
+                        String(formData.channel) || '0',
+                        'value',
+                        'name'
+                      )}
+                      onChange={channelSelected}
+                      autoFocus={false}
+                      menuPlacement='top'
+                      className='react-select-container custom-menu-select z-[75] min-w-full'
+                      classNamePrefix='react-select'
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
+                {/* Temperature */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      {t('probeTempSubTb')}
+                    </span>
+                    <ReactSlider
+                      className='relative flex items-center w-full h-2 bg-gray-300 rounded-btn my-3'
+                      thumbClassName='flex items-center justify-center'
+                      trackClassName='bg-orange-500/20 h-2 rounded-btn'
+                      value={[formData.tempMin, formData.tempMax]}
+                      onChange={values =>
+                        setFormData({
+                          ...formData,
+                          tempMin: values[0],
+                          tempMax: values[1]
+                        })
+                      }
+                      pearling
+                      minDistance={1}
+                      min={-40}
+                      max={120}
+                      renderThumb={(props, state) => (
+                        <div
+                          {...props}
+                          className='flex items-center justify-center w-[32px] h-[32px] bg-orange-500 text-white font-bold text-sm shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50'
+                        >
+                          {state.valueNow}
+                        </div>
+                      )}
+                    />
+                  </label>
+                </div>
+
+                {/* Humidity */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      {t('probeHumiSubTb')}
+                    </span>
+                    <ReactSlider
+                      className='relative flex items-center w-full h-2 bg-gray-300 rounded-btn my-3'
+                      thumbClassName='flex items-center justify-center'
+                      trackClassName='bg-blue-500/20 h-2 rounded-btn'
+                      value={[formData.humiMin, formData.humiMax]}
+                      onChange={values =>
+                        setFormData({
+                          ...formData,
+                          humiMin: values[0],
+                          humiMax: values[1]
+                        })
+                      }
+                      pearling
+                      minDistance={1}
+                      min={0}
+                      max={100}
+                      renderThumb={(props, state) => (
+                        <div
+                          {...props}
+                          className='flex items-center justify-center w-[32px] h-[32px] bg-blue-500 text-white font-bold text-sm shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50'
+                        >
+                          {state.valueNow}
+                        </div>
+                      )}
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className='divider divider-vertical xl:divider-horizontal'></div>
             <div className='w-full'>
               <h3 className='font-bold text-base'>
                 {t('notificationSettings')}
@@ -1061,7 +1454,9 @@ const ManageProbe = () => {
                 </div>
               </div>
 
-              <div className='divider divider-vertical'></div>
+              <div className='divider divider-vertical opacity-50'>
+                {t('scheduleTile')}
+              </div>
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 w-full'>
                 <div className='form-control w-full items-center justify-center'>
                   <label className='label flex-col items-center justify-center w-full'>
@@ -1191,9 +1586,7 @@ const ManageProbe = () => {
                 </div>
               </div>
 
-              <div className='divider divider-vertical'></div>
-
-              <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4 w-full'>
+              <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-5 w-full'>
                 <span className='label-text mb-2'>{t('firstTime')}</span>
                 <Select
                   // key={String(scheduleTime.firstTime)}
@@ -1336,7 +1729,7 @@ const ManageProbe = () => {
                 />
               </div>
             </div>
-            <div className='divider divider-vertical lg:divider-horizontal'></div>
+            <div className='divider divider-vertical xl:divider-horizontal'></div>
             <div className='w-full'>
               <h3 className='font-bold text-base'>{t('muteSettings')}</h3>
             </div>
@@ -1348,7 +1741,7 @@ const ManageProbe = () => {
               type='button'
               className='btn'
               onClick={() => {
-                addModalRef.current?.close()
+                editModalRef.current?.close()
                 resetForm()
               }}
             >

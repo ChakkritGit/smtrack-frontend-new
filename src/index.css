@@ -391,3 +391,23 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.search-anim {
+  transform: scaleY(0);
+  transform-origin: top;
+  animation: testkey 0.3s ease-in-out forwards;
+}
+
+@keyframes testkey {
+  0% {
+    transform: scaleY(0);
+    scale: .9;
+    opacity: 0;
+  }
+
+  100% {
+    transform: scaleY(1);
+    scale: 1;
+    opacity: 1;
+  }
+}
