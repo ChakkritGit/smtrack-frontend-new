@@ -1,7 +1,16 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { setSearch } from '../../redux/actions/utilsActions'
+import { setSearch, setSubmitLoading } from '../../redux/actions/utilsActions'
 import {
   handleApiError,
   swalWithBootstrapButtons
@@ -14,9 +23,18 @@ import { RiDeleteBin7Line, RiEditLine } from 'react-icons/ri'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import Loading from '../../components/skeleton/table/loading'
 import DataTableNoData from '../../components/skeleton/table/noData'
+import { Option } from '../../types/global/hospitalAndWard'
+import Select from 'react-select'
+import { DeviceListType } from '../../types/smtrack/devices/deviceType'
+import { AxiosError } from 'axios'
+import { GlobalContext } from '../../contexts/globalContext'
+import { GlobalContextType } from '../../types/global/globalContext'
+import { HospitalsType } from '../../types/global/hospitals/hospitalType'
+import Swal from 'sweetalert2'
 
-interface dataTableProps {
-  warrantyData: WarrantiesType[]
+type Company = {
+  key: number
+  value: string
 }
 
 const Warranty = () => {
@@ -25,10 +43,27 @@ const Warranty = () => {
   const { globalSearch, tokenDecode } = useSelector(
     (state: RootState) => state.utils
   )
+  const { hospital } = useContext(GlobalContext) as GlobalContextType
   const [tab, setTab] = useState(1)
   const [warrantyData, setWarrantyData] = useState<WarrantiesType[]>([])
+  const [warrantyFilter, setWarrantyFilter] = useState<WarrantiesType[]>([])
+  const [deviceList, setDeviceList] = useState<DeviceListType[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const { role } = tokenDecode || {}
+  const addModalRef = useRef<HTMLDialogElement>(null)
+  const editModalRef = useRef<HTMLDialogElement>(null)
+  const [warrantyForm, setWarrantyForm] = useState({
+    customerAddress: '',
+    customerName: '',
+    devName: '',
+    expire: '',
+    id: '',
+    installDate: '',
+    invoice: '',
+    model: '',
+    product: '',
+    saleDepartment: ''
+  })
 
   const fetchWarranty = useCallback(async () => {
     try {
@@ -44,30 +79,285 @@ const Warranty = () => {
     }
   }, [])
 
+  const fetchDeviceList = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get<responseType<DeviceListType[]>>(
+        '/devices/dashboard/device'
+      )
+      setDeviceList(response.data.data)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data.message)
+      } else {
+        console.error(error)
+      }
+    }
+  }, [])
+
   const isLeapYear = (year: number): boolean => {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
   }
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    dispatch(setSubmitLoading())
+
+    if (
+      warrantyForm.customerAddress !== '' &&
+      warrantyForm.customerName !== '' &&
+      warrantyForm.devName !== '' &&
+      warrantyForm.expire !== '' &&
+      warrantyForm.installDate !== '' &&
+      warrantyForm.invoice !== '' &&
+      warrantyForm.model !== '' &&
+      warrantyForm.product !== '' &&
+      warrantyForm.saleDepartment !== ''
+    ) {
+      const body = {
+        devName: warrantyForm.devName,
+        product: warrantyForm.product,
+        model: warrantyForm.model,
+        installDate: warrantyForm.installDate,
+        customerName: warrantyForm.customerName,
+        customerAddress: warrantyForm.customerAddress,
+        saleDepartment: warrantyForm.saleDepartment,
+        invoice: warrantyForm.invoice,
+        expire: warrantyForm.expire
+      }
+      try {
+        await axiosInstance.post<responseType<WarrantiesType>>(
+          '/devices/warranty',
+          body
+        )
+        addModalRef.current?.close()
+        resetForm()
+        await fetchWarranty()
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: t('submitSuccess'),
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } catch (error) {
+        addModalRef.current?.close()
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          }).finally(() => addModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    } else {
+      addModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => addModalRef.current?.showModal())
+      dispatch(setSubmitLoading())
+    }
+  }
+
+  const handleUpdate = async (e: FormEvent) => {
+    e.preventDefault()
+    dispatch(setSubmitLoading())
+
+    if (
+      warrantyForm.customerAddress !== '' &&
+      warrantyForm.customerName !== '' &&
+      warrantyForm.devName !== '' &&
+      warrantyForm.expire !== '' &&
+      warrantyForm.installDate !== '' &&
+      warrantyForm.invoice !== '' &&
+      warrantyForm.model !== '' &&
+      warrantyForm.product !== '' &&
+      warrantyForm.saleDepartment !== ''
+    ) {
+      const body = {
+        devName: warrantyForm.devName,
+        product: warrantyForm.product,
+        model: warrantyForm.model,
+        installDate: warrantyForm.installDate,
+        customerName: warrantyForm.customerName,
+        customerAddress: warrantyForm.customerAddress,
+        saleDepartment: warrantyForm.saleDepartment,
+        invoice: warrantyForm.invoice,
+        expire: warrantyForm.expire
+      }
+      try {
+        await axiosInstance.put<responseType<WarrantiesType>>(
+          `/devices/warranty/${warrantyForm.id}`,
+          body
+        )
+        editModalRef.current?.close()
+        resetForm()
+        await fetchWarranty()
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: t('submitSuccess'),
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } catch (error) {
+        editModalRef.current?.close()
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          }).finally(() => editModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    } else {
+      editModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => editModalRef.current?.showModal())
+      dispatch(setSubmitLoading())
+    }
+  }
+
+  const resetForm = () => {
+    setWarrantyForm({
+      customerAddress: '',
+      customerName: '',
+      devName: '',
+      expire: '',
+      id: '',
+      installDate: '',
+      invoice: '',
+      model: '',
+      product: '',
+      saleDepartment: ''
+    })
+  }
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+
+    setWarrantyForm(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const deleteWarranty = async (id: string) => {
+    dispatch(setSubmitLoading())
+    try {
+      const response = await axiosInstance.delete<responseType<WarrantiesType>>(
+        `/devices/warranty/${id}`
+      )
+      await fetchWarranty()
+      Swal.fire({
+        title: t('alertHeaderSuccess'),
+        text: response.data.message,
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2500
+      })
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: error.response?.data.message,
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } else {
+        console.error(error)
+      }
+    } finally {
+      dispatch(setSubmitLoading())
+    }
+  }
+
+  const openEditModal = (warranty: WarrantiesType) => {
+    setWarrantyForm({
+      customerAddress: warranty.customerAddress,
+      customerName: warranty.customerName,
+      devName: warranty.devName,
+      expire: warranty.expire.substring(0, 10),
+      id: warranty.id,
+      installDate: warranty.installDate,
+      invoice: warranty.invoice,
+      model: warranty.model,
+      product: warranty.product,
+      saleDepartment: warranty.saleDepartment
+    })
+    editModalRef.current?.showModal()
+  }
+
+  const mapOptions = <T, K extends keyof T>(
+    data: T[],
+    valueKey: K,
+    labelKey: K
+  ): Option[] =>
+    data?.map(item => ({
+      value: item[valueKey] as unknown as string,
+      label: item[labelKey] as unknown as string
+    }))
+
+  const mapDefaultValue = <T, K extends keyof T>(
+    data: T[],
+    id: string,
+    valueKey: K,
+    labelKey: K
+  ): Option | undefined =>
+    data
+      ?.filter(item => item[valueKey] === id)
+      .map(item => ({
+        value: item[valueKey] as unknown as string,
+        label: item[labelKey] as unknown as string
+      }))[0]
 
   const manageMenu = useMemo(
     () => (
       <div role='tablist' className='tabs tabs-bordered w-72 md:w-max mt-3'>
         <a
           role='tab'
-          className={`tab text-sm md:text-base ${tab === 1 ? 'tab-active' : ''}`}
+          className={`tab text-sm md:text-base ${
+            tab === 1 ? 'tab-active font-bold' : ''
+          }`}
           onClick={() => setTab(1)}
         >
           {t('tabWarrantyAfterSale')}
         </a>
         <a
           role='tab'
-          className={`tab text-sm md:text-base ${tab === 2 ? 'tab-active' : ''}`}
+          className={`tab text-sm md:text-base ${
+            tab === 2 ? 'tab-active font-bold' : ''
+          }`}
           onClick={() => setTab(2)}
         >
           {t('tabWarrantyExpired')}
         </a>
         <a
           role='tab'
-          className={`tab text-sm md:text-base ${tab === 3 ? 'tab-active' : ''}`}
+          className={`tab text-sm md:text-base ${
+            tab === 3 ? 'tab-active font-bold' : ''
+          }`}
           onClick={() => setTab(3)}
         >
           {t('tabWarrantyAll')}
@@ -87,45 +377,51 @@ const Warranty = () => {
 
   useEffect(() => {
     fetchWarranty()
+    fetchDeviceList()
   }, [])
 
-  const devicesArray = warrantyData.filter(
-    items =>
-      items.device.id.toLowerCase().includes(globalSearch.toLowerCase()) ||
-      items.device.location
-        ?.toLowerCase()
-        .includes(globalSearch.toLowerCase()) ||
-      items.device.location?.toLowerCase().includes(globalSearch.toLowerCase())
-  )
+  useEffect(() => {
+    const devicesArray = warrantyData.filter(
+      items =>
+        items.device?.id?.toLowerCase().includes(globalSearch?.toLowerCase()) ||
+        items.device?.name
+          ?.toLowerCase()
+          .includes(globalSearch?.toLowerCase()) ||
+        items.device?.position
+          ?.toLowerCase()
+          .includes(globalSearch?.toLowerCase()) ||
+        items.device?.location
+          ?.toLowerCase()
+          .includes(globalSearch?.toLowerCase())
+    )
+    if (tab === 1) {
+      const onwarrantyArray = devicesArray.filter(items => {
+        const today = new Date()
+        const expiredDate = new Date(items.expire)
+        const timeDifference = expiredDate.getTime() - today.getTime()
+        const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
+        return daysRemaining >= 0
+      })
 
-  const expiredArray = devicesArray.filter(items => {
-    const today = new Date()
-    const expiredDate = new Date(items.expire)
-    const timeDifference = expiredDate.getTime() - today.getTime()
-    const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
-    return daysRemaining <= 0
-  })
-
-  const onwarrantyArray = devicesArray.filter(items => {
-    const today = new Date()
-    const expiredDate = new Date(items.expire)
-    const timeDifference = expiredDate.getTime() - today.getTime()
-    const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
-    return daysRemaining >= 0
-  })
+      setWarrantyFilter(onwarrantyArray)
+    } else if (tab === 2) {
+      const expiredArray = devicesArray.filter(items => {
+        const today = new Date()
+        const expiredDate = new Date(items.expire)
+        const timeDifference = expiredDate.getTime() - today.getTime()
+        const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
+        return daysRemaining <= 0
+      })
+      setWarrantyFilter(expiredArray)
+    } else {
+      setWarrantyFilter(devicesArray)
+    }
+  }, [tab, warrantyData, globalSearch])
 
   const columns: TableColumn<WarrantiesType>[] = [
     {
-      name: t('noNumber'),
-      cell: (_, index) => {
-        return <div>{index + 1}</div>
-      },
-      sortable: false,
-      center: true
-    },
-    {
       name: t('deviceNameTb'),
-      selector: item => item.device.location ?? '- -',
+      selector: item => item.device.name ?? '- -',
       sortable: false,
       center: true
     },
@@ -216,7 +512,7 @@ const Warranty = () => {
             <button
               className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
               onClick={() => {
-                // openEditModal(item)
+                openEditModal(item)
               }}
             >
               <RiEditLine size={20} />
@@ -227,8 +523,8 @@ const Warranty = () => {
                 onClick={() =>
                   swalWithBootstrapButtons
                     .fire({
-                      title: t('deleteDeviceTitle'),
-                      text: t('notReverseText'),
+                      title: t('deleteWarranty'),
+                      text: t('deleteWarrantyText'),
                       icon: 'warning',
                       showCancelButton: true,
                       confirmButtonText: t('confirmButton'),
@@ -237,7 +533,7 @@ const Warranty = () => {
                     })
                     .then(result => {
                       if (result.isConfirmed) {
-                        // deleteDevices(item.id)
+                        deleteWarranty(item.id)
                       }
                     })
                 }
@@ -253,7 +549,7 @@ const Warranty = () => {
     }
   ]
 
-  const DataTableComponent = ({ warrantyData }: dataTableProps) => {
+  const DataTableComponent = useMemo(() => {
     return (
       <div className='dataTableWrapper bg-base-100 rounded-btn p-3 mt-5 duration-300'>
         <DataTable
@@ -262,7 +558,7 @@ const Warranty = () => {
           pagination
           paginationServer
           columns={columns}
-          data={warrantyData}
+          data={warrantyFilter}
           progressPending={isLoading}
           progressComponent={<Loading />}
           noDataComponent={<DataTableNoData />}
@@ -271,7 +567,23 @@ const Warranty = () => {
         />
       </div>
     )
-  }
+  }, [warrantyFilter, isLoading])
+
+  const oneYearLater = new Date()
+  oneYearLater.setFullYear(oneYearLater.getFullYear() + 1)
+
+  const formattedMinDate = oneYearLater.toISOString().split('T')[0]
+
+  const companyList = [
+    {
+      key: 0,
+      value: 'SCI 1'
+    },
+    {
+      key: 1,
+      value: 'SCI 2'
+    }
+  ]
 
   return (
     <div className='p-3 px-[16px]'>
@@ -281,21 +593,514 @@ const Warranty = () => {
         <div className='flex flex-col lg:flex-row mt-3 lg:mt-0 lg:items-center items-end lg:gap-3'>
           <button
             className='btn btn-primary max-w-[150px]'
-            // onClick={() => addModalRef.current?.showModal()}
+            onClick={() => addModalRef.current?.showModal()}
           >
             {t('addWarrantyButton')}
           </button>
         </div>
       </div>
-      {
-        tab === 1 ?
-        <DataTableComponent warrantyData={expiredArray} />
-        :
-        tab === 2 ?
-        <DataTableComponent warrantyData={onwarrantyArray} />
-        :
-        <DataTableComponent warrantyData={devicesArray} />
-      }
+      {DataTableComponent}
+
+      <dialog ref={addModalRef} className='modal'>
+        <form onSubmit={handleSubmit} className='modal-box w-5/6 max-w-[50rem]'>
+          <h3 className='font-bold text-lg'>{t('addWarrantyButton')}</h3>
+          {/* Invoic */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('invoice')}
+              </span>
+              <input
+                name='invoice'
+                type='text'
+                value={warrantyForm.invoice}
+                onChange={handleChange}
+                className='input input-bordered w-full'
+                maxLength={23}
+              />
+            </label>
+          </div>
+
+          {/* productName */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('productName')}
+              </span>
+              <input
+                name='product'
+                type='text'
+                value={warrantyForm.product}
+                onChange={handleChange}
+                className='input input-bordered w-full'
+                maxLength={23}
+              />
+            </label>
+          </div>
+
+          {/* selectDeviceDrop */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('selectDeviceDrop')}
+              </span>
+              <Select
+                options={mapOptions<DeviceListType, keyof DeviceListType>(
+                  deviceList,
+                  'staticName',
+                  'id'
+                )}
+                value={mapDefaultValue<DeviceListType, keyof DeviceListType>(
+                  deviceList,
+                  warrantyForm.devName,
+                  'staticName',
+                  'id'
+                )}
+                onChange={e =>
+                  setWarrantyForm({
+                    ...warrantyForm,
+                    devName: e?.value as string,
+                    model: String(
+                      e?.label.substring(0, 3) === 'eTP' ? 'eTEMP' : 'i-TeMS'
+                    )
+                  })
+                }
+                autoFocus={false}
+                className='react-select-container custom-menu-select z-[75] min-w-full'
+                classNamePrefix='react-select'
+              />
+            </label>
+          </div>
+
+          {/* modelName */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('modelName')}
+              </span>
+              <input
+                name='model'
+                type='text'
+                value={warrantyForm.model}
+                onChange={handleChange}
+                className='input input-bordered w-full'
+                maxLength={23}
+              />
+            </label>
+          </div>
+
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
+            {/* Right Column - 2/3 of the grid (70%) */}
+            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
+              {/* startDate */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('startDate')}
+                  </span>
+                  <input
+                    type='date'
+                    className='input input-bordered w-full'
+                    onChange={e =>
+                      setWarrantyForm({
+                        ...warrantyForm,
+                        installDate: e.target.value
+                      })
+                    }
+                  />
+                </label>
+              </div>
+
+              {/* endDate */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('endDate')}
+                  </span>
+                  <input
+                    type='date'
+                    className='input input-bordered w-full'
+                    min={formattedMinDate}
+                    onChange={e =>
+                      setWarrantyForm({
+                        ...warrantyForm,
+                        expire: e.target.value
+                      })
+                    }
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* customerName */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('customerName')}
+              </span>
+              <Select
+                options={mapOptions<HospitalsType, keyof HospitalsType>(
+                  hospital,
+                  'id',
+                  'hosName'
+                )}
+                value={mapDefaultValue<HospitalsType, keyof HospitalsType>(
+                  hospital,
+                  warrantyForm.devName,
+                  'id',
+                  'hosName'
+                )}
+                onChange={e =>
+                  setWarrantyForm({
+                    ...warrantyForm,
+                    customerName: e?.label as string,
+                    customerAddress: String(
+                      hospital
+                        .filter(items =>
+                          items.id
+                            .toLowerCase()
+                            .includes(String(e?.value).toLowerCase())
+                        )
+                        .map(items => items.hosAddress)[0] ?? '—'
+                    )
+                  })
+                }
+                menuPlacement='top'
+                autoFocus={false}
+                className='react-select-container custom-menu-select z-[80] min-w-full'
+                classNamePrefix='react-select'
+              />
+            </label>
+          </div>
+
+          {/* customerAddress */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('customerAddress')}
+              </span>
+              <input
+                name='customerAddress'
+                type='text'
+                value={warrantyForm.customerAddress}
+                onChange={handleChange}
+                className='input input-bordered w-full'
+                maxLength={23}
+              />
+            </label>
+          </div>
+
+          {/* distributionCompany */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('distributionCompany')}
+              </span>
+              <Select
+                options={mapOptions<Company, keyof Company>(
+                  companyList,
+                  'key',
+                  'value'
+                )}
+                value={mapDefaultValue<Company, keyof Company>(
+                  companyList,
+                  warrantyForm.saleDepartment,
+                  'key',
+                  'value'
+                )}
+                onChange={e =>
+                  setWarrantyForm({
+                    ...warrantyForm,
+                    saleDepartment: e?.label as string
+                  })
+                }
+                menuPlacement='top'
+                autoFocus={false}
+                className='react-select-container custom-menu-select z-[100] min-w-full'
+                classNamePrefix='react-select'
+              />
+            </label>
+          </div>
+
+          {/* Modal Actions */}
+          <div className='modal-action mt-6'>
+            <button
+              type='button'
+              className='btn'
+              onClick={() => {
+                addModalRef.current?.close()
+                resetForm()
+              }}
+            >
+              {t('cancelButton')}
+            </button>
+            <button type='submit' className='btn btn-primary'>
+              {t('submitButton')}
+            </button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog ref={editModalRef} className='modal'>
+        <form onSubmit={handleUpdate} className='modal-box w-5/6 max-w-[50rem]'>
+          <h3 className='font-bold text-lg'>{t('editWarranty')}</h3>
+          {/* Invoic */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('invoice')}
+              </span>
+              <input
+                name='invoice'
+                type='text'
+                value={warrantyForm.invoice}
+                onChange={handleChange}
+                className='input input-bordered w-full'
+                maxLength={23}
+              />
+            </label>
+          </div>
+
+          {/* productName */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('productName')}
+              </span>
+              <input
+                name='product'
+                type='text'
+                value={warrantyForm.product}
+                onChange={handleChange}
+                className='input input-bordered w-full'
+                maxLength={23}
+              />
+            </label>
+          </div>
+
+          {/* selectDeviceDrop */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('selectDeviceDrop')}
+              </span>
+              <Select
+                options={mapOptions<DeviceListType, keyof DeviceListType>(
+                  deviceList,
+                  'staticName',
+                  'id'
+                )}
+                value={mapDefaultValue<DeviceListType, keyof DeviceListType>(
+                  deviceList,
+                  warrantyForm.devName,
+                  'staticName',
+                  'id'
+                )}
+                onChange={e =>
+                  setWarrantyForm({
+                    ...warrantyForm,
+                    devName: e?.value as string,
+                    model: String(
+                      e?.label.substring(0, 3) === 'eTP' ? 'eTEMP' : 'i-TeMS'
+                    )
+                  })
+                }
+                autoFocus={false}
+                className='react-select-container custom-menu-select z-[75] min-w-full'
+                classNamePrefix='react-select'
+              />
+            </label>
+          </div>
+
+          {/* modelName */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('modelName')}
+              </span>
+              <input
+                name='model'
+                type='text'
+                value={warrantyForm.model}
+                onChange={handleChange}
+                className='input input-bordered w-full'
+                maxLength={23}
+              />
+            </label>
+          </div>
+
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
+            {/* Right Column - 2/3 of the grid (70%) */}
+            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
+              {/* startDate */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('startDate')}
+                  </span>
+                  <input
+                    type='date'
+                    className='input input-bordered w-full'
+                    value={warrantyForm.installDate}
+                    onChange={e =>
+                      setWarrantyForm({
+                        ...warrantyForm,
+                        installDate: e.target.value
+                      })
+                    }
+                  />
+                </label>
+              </div>
+
+              {/* endDate */}
+              <div className='form-control w-full'>
+                <label className='label flex-col items-start'>
+                  <span className='label-text mb-2'>
+                    <span className='font-medium text-red-500 mr-1'>*</span>
+                    {t('endDate')}
+                  </span>
+                  <input
+                    type='date'
+                    className='input input-bordered w-full'
+                    value={warrantyForm.expire}
+                    onChange={e =>
+                      setWarrantyForm({
+                        ...warrantyForm,
+                        expire: e.target.value
+                      })
+                    }
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* customerName */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('customerName')}
+              </span>
+              <Select
+                options={mapOptions<HospitalsType, keyof HospitalsType>(
+                  hospital,
+                  'id',
+                  'hosName'
+                )}
+                value={mapDefaultValue<HospitalsType, keyof HospitalsType>(
+                  hospital,
+                  warrantyForm.customerName,
+                  'hosName',
+                  'hosName'
+                )}
+                onChange={e =>
+                  setWarrantyForm({
+                    ...warrantyForm,
+                    customerName: e?.label as string,
+                    customerAddress: String(
+                      hospital
+                        .filter(items =>
+                          items.id
+                            .toLowerCase()
+                            .includes(String(e?.value).toLowerCase())
+                        )
+                        .map(items => items.hosAddress)[0] ?? '—'
+                    )
+                  })
+                }
+                menuPlacement='top'
+                autoFocus={false}
+                className='react-select-container custom-menu-select z-[80] min-w-full'
+                classNamePrefix='react-select'
+              />
+            </label>
+          </div>
+
+          {/* customerAddress */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('customerAddress')}
+              </span>
+              <input
+                name='customerAddress'
+                type='text'
+                value={warrantyForm.customerAddress}
+                onChange={handleChange}
+                className='input input-bordered w-full'
+                maxLength={23}
+              />
+            </label>
+          </div>
+
+          {/* distributionCompany */}
+          <div className='form-control w-full'>
+            <label className='label flex-col items-start'>
+              <span className='label-text mb-2'>
+                <span className='font-medium text-red-500 mr-1'>*</span>
+                {t('distributionCompany')}
+              </span>
+              <Select
+                options={mapOptions<Company, keyof Company>(
+                  companyList,
+                  'key',
+                  'value'
+                )}
+                value={mapDefaultValue<Company, keyof Company>(
+                  companyList,
+                  warrantyForm.saleDepartment,
+                  'value',
+                  'value'
+                )}
+                onChange={e =>
+                  setWarrantyForm({
+                    ...warrantyForm,
+                    saleDepartment: e?.label as string
+                  })
+                }
+                menuPlacement='top'
+                autoFocus={false}
+                className='react-select-container custom-menu-select z-[100] min-w-full'
+                classNamePrefix='react-select'
+              />
+            </label>
+          </div>
+
+          {/* Modal Actions */}
+          <div className='modal-action mt-6'>
+            <button
+              type='button'
+              className='btn'
+              onClick={() => {
+                editModalRef.current?.close()
+                resetForm()
+              }}
+            >
+              {t('cancelButton')}
+            </button>
+            <button type='submit' className='btn btn-primary'>
+              {t('submitButton')}
+            </button>
+          </div>
+        </form>
+      </dialog>
     </div>
   )
 }

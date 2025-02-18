@@ -25,7 +25,7 @@ const Management = () => {
       <div role='tablist' className='tabs tabs-bordered w-72 md:w-max mt-3'>
         <a
           role='tab'
-          className={`tab text-sm md:text-lg ${tab === 1 ? 'tab-active' : ''}`}
+          className={`tab text-sm md:text-lg ${tab === 1 ? 'tab-active font-bold' : ''}`}
           onClick={() => {
             cookies.set('manageHospitalTab', 1, cookieOptions)
             setTab(1)
@@ -37,7 +37,7 @@ const Management = () => {
           <a
             role='tab'
             className={`tab text-sm md:text-lg ${
-              tab === 2 ? 'tab-active' : ''
+              tab === 2 ? 'tab-active font-bold' : ''
             }`}
             onClick={() => {
               cookies.set('manageHospitalTab', 2, cookieOptions)

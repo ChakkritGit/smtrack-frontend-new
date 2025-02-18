@@ -1147,12 +1147,13 @@ const ManageProbe = () => {
                       }
                       pearling
                       minDistance={1}
+                      step={0.01}
                       min={-40}
                       max={120}
                       renderThumb={(props, state) => (
                         <div
                           {...props}
-                          className='flex items-center justify-center w-[32px] h-[32px] bg-orange-500 text-white font-bold text-sm shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50'
+                          className='flex items-center justify-center w-[42px] h-[32px] bg-orange-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50'
                         >
                           {state.valueNow}
                         </div>
@@ -1181,12 +1182,13 @@ const ManageProbe = () => {
                       }
                       pearling
                       minDistance={1}
+                      step={0.01}
                       min={0}
                       max={100}
                       renderThumb={(props, state) => (
                         <div
                           {...props}
-                          className='flex items-center justify-center w-[32px] h-[32px] bg-blue-500 text-white font-bold text-sm shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50'
+                          className='flex items-center justify-center w-[42px] h-[32px] bg-blue-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50'
                         >
                           {state.valueNow}
                         </div>
@@ -1323,7 +1325,7 @@ const ManageProbe = () => {
 
       <dialog ref={editModalRef} className='modal'>
         <form onSubmit={handleUpdate} className='modal-box max-w-[85rem]'>
-          <h3 className='font-bold text-lg'>{t('addProbe')}</h3>
+          <h3 className='font-bold text-lg'>{t('editProbe')}</h3>
           <div className='flex flex-col lg:flex-col xl:flex-row gap-4 mt-4 w-full'>
             <div className='w-full'>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>

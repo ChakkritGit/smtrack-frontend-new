@@ -230,7 +230,7 @@ export default {
     wardName: 'ชื่อวอร์ด',
     addHos: 'เพิ่มโรงพยาบาล',
     addWard: 'เพิ่มวอร์ด',
-    editHos: 'แก้โรงพยาบาล',
+    editHos: 'แก้ไขโรงพยาบาล',
     editWard: 'แก้ไขวอร์ด',
     userTel: 'เบอร์โทรลูกค้า',
     userContact: 'ที่อยู่ที่ติดต่อลูกค้า',

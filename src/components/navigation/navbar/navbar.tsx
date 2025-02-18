@@ -115,7 +115,6 @@ const Navbar = () => {
       } else if (e.key?.toLowerCase() === 'escape') {
         e.preventDefault()
         if (isFocused) {
-          dispatch(setSearch(''))
           searchRef.current?.blur()
           setIsFocused(false)
         }

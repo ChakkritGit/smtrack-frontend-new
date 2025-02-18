@@ -28,7 +28,7 @@ const ManageDeviceAndProbe = () => {
         <a
           role='tab'
           className={`tab text-sm md:text-base ${
-            tab === 1 ? 'tab-active' : ''
+            tab === 1 ? 'tab-active font-bold' : ''
           }`}
           onClick={() => {
             cookies.set('manageDeviceTab', 1, cookieOptions)
@@ -41,7 +41,7 @@ const ManageDeviceAndProbe = () => {
           <a
             role='tab'
             className={`tab text-sm md:text-base ${
-              tab === 2 ? 'tab-active' : ''
+              tab === 2 ? 'tab-active font-bold' : ''
             }`}
             onClick={() => {
               cookies.set('manageDeviceTab', 2, cookieOptions)

@@ -725,7 +725,7 @@ const ManageDevice = () => {
           onSubmit={handleUpdate}
           className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
         >
-          <h3 className='font-bold text-lg'>{t('editUserButton')}</h3>
+          <h3 className='font-bold text-lg'>{t('editDeviceButton')}</h3>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
             {/* Image Upload - Left Column (30%) */}
             <div className='col-span-1 flex justify-center'>

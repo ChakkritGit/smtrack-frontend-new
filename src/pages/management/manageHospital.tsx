@@ -866,7 +866,7 @@ const ManageHospital = () => {
           onSubmit={handleUpdateHospital}
           className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
         >
-          <h3 className='font-bold text-lg'>{t('addHos')}</h3>
+          <h3 className='font-bold text-lg'>{t('editHos')}</h3>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
             <div className='col-span-1 flex justify-center'>
               <div className='form-control'>
@@ -1048,7 +1048,7 @@ const ManageHospital = () => {
           onSubmit={handleSubmitWard}
           className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
         >
-          <h3 className='font-bold text-lg'>{t('addWard')}</h3>
+          <h3 className='font-bold text-lg'>{t('editWard')}</h3>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
             {/* Right Column - 2/3 of the grid (70%) */}
             <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
