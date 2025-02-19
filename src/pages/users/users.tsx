@@ -115,7 +115,7 @@ const Users = () => {
         formDataObj.append(mappedKey, value.toString())
       } else if (mappedKey === 'username') {
         formDataObj.append(mappedKey, value.toLowerCase() as string)
-      } else{
+      } else {
         formDataObj.append(mappedKey, value as string)
       }
     })
@@ -339,25 +339,6 @@ const Users = () => {
     fetchUsers()
   }, [])
 
-  // useEffect(() => {
-  //   const filterUsers = users?.filter(item =>
-  //     wardId
-  //       ? (item.ward?.id?.toLowerCase().includes(wardId.toLowerCase()) &&
-  //           item.display?.toLowerCase().includes(globalSearch.toLowerCase())) ||
-  //         item.username?.toLowerCase().includes(globalSearch.toLowerCase())
-  //       : item.display?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-  //         item.username?.toLowerCase().includes(globalSearch.toLowerCase())
-  //   )
-  //   const newFilter = tmsMode
-  //     ? filterUsers.filter(
-  //         item =>
-  //           item.role?.includes('LEGACY_ADMIN') ||
-  //           item.role?.includes('LEGACY_USER')
-  //       )
-  //     : filterUsers
-  //   setUsersFilter(newFilter)
-  // }, [users, globalSearch, wardId, tmsMode])
-
   useEffect(() => {
     const filterUsers = users?.filter(f => {
       const matchesSearch = wardId
@@ -399,7 +380,7 @@ const Users = () => {
           itemPerPage={[10, 30, 50, 100]}
           renderItem={(item, index) => (
             <div
-              className={`min-h-[240px] max-h-[270px] sm:w-[300px] lg:w-full w-full ${
+              className={`min-h-[240px] max-h-[270px] sm:w-[300px] shadow-sm lg:w-full w-full ${
                 !item.status ? 'bg-base-100/40' : 'bg-base-100'
               } rounded-btn`}
               key={index}
@@ -537,7 +518,7 @@ const Users = () => {
       </div>
 
       <div className='flex items-center justify-start flex-wrap gap-3 mt-5'>
-        {(role !== 'LEGACY_ADMIN' && !tmsMode) ? (
+        {role !== 'LEGACY_ADMIN' && !tmsMode ? (
           <>
             <button
               className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${

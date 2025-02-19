@@ -20,6 +20,7 @@ import { columnData } from '../../components/pages/home/column'
 import { GlobalContext } from '../../contexts/globalContext'
 import { GlobalContextType } from '../../types/global/globalContext'
 import Loading from '../../components/skeleton/table/loading'
+import HomeDeviceCard from '../../components/pages/home/homeDeviceCard'
 
 const Home = () => {
   const { t } = useTranslation()
@@ -268,7 +269,12 @@ const Home = () => {
           />
         </div>
       ) : (
-        <div>card</div>
+        <HomeDeviceCard
+          devicesFiltered={devicesFiltered}
+          handlePageChange={handlePageChange}
+          handlePerRowsChange={handlePerRowsChange}
+          loading={loading}
+        />
       )}
     </div>
   )
