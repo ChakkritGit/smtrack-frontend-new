@@ -14,6 +14,7 @@ const Management = lazy(() => import('../pages/management/smtrack/management'))
 const Warranty = lazy(() => import('../pages/warranty/warranty'))
 const FullChart = lazy(() => import('../pages/dashboard/smtrack/fullChart'))
 const FullTable = lazy(() => import('../pages/dashboard/smtrack/fullTable'))
+const PreviewPDF = lazy(() => import('../components/pdf/previewPdf'))
 
 const smtrackChildren: RouteObject[] = [
   {
@@ -45,7 +46,11 @@ const smtrackChildren: RouteObject[] = [
   },
   {
     path: 'dashboard/chart/preview',
-    element: <>dashboard/chart/preview</>,
+    element: (
+      <Suspense fallback={<div>123</div>}>
+        <PreviewPDF />
+      </Suspense>
+    ),
     errorElement: <></>
   },
   {

@@ -1,19 +1,23 @@
 import { useTranslation } from 'react-i18next'
-import { LogChartTms } from '../../../../types/tms/devices/deviceType'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import DataTableNoData from '../../../skeleton/table/noData'
+import {
+  DeviceLog,
+  DeviceLogs
+} from '../../../../types/smtrack/devices/deviceType'
 
 interface FullTablePropType {
-  dataLog: LogChartTms[]
+  dataLog: DeviceLogs[]
+  deviceLogs: DeviceLog
   tempMin: number
   tempMax: number
 }
 
 const FullTableComponent = (props: FullTablePropType) => {
   const { t } = useTranslation()
-  const { dataLog } = props
+  const { dataLog, deviceLogs } = props
 
-  const columns: TableColumn<LogChartTms>[] = [
+  const columns: TableColumn<DeviceLogs>[] = [
     {
       name: t('deviceNoTb'),
       cell: (_, index) => {
@@ -24,7 +28,7 @@ const FullTableComponent = (props: FullTablePropType) => {
     },
     {
       name: t('deviceSerialTb'),
-      cell: item => <span title={item.sn}>{item.sn}</span>,
+      cell: () => <span title={deviceLogs.id}>{deviceLogs.id}</span>,
       sortable: false,
       center: true
     },
@@ -37,7 +41,7 @@ const FullTableComponent = (props: FullTablePropType) => {
     },
     {
       name: t('probeTempSubTb'),
-      cell: item => item._value.toFixed(2) + '°C',
+      cell: item => item.temp.toFixed(2) + '°C',
       sortable: false,
       center: true
     }

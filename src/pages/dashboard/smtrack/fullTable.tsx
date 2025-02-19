@@ -1,9 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
-import {
-  LogChartTms
-} from '../../../types/tms/devices/deviceType'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Swal from 'sweetalert2'
 import axiosInstance from '../../../constants/axios/axiosInstance'
 import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
@@ -17,7 +14,6 @@ import {
   RiStopLine,
   RiTableFill
 } from 'react-icons/ri'
-import FullTableTmsComponent from '../../../components/pages/dashboard/tms/fullTableTms'
 import { useDispatch } from 'react-redux'
 import { setDeviceKey } from '../../../redux/actions/utilsActions'
 import toast from 'react-hot-toast'
@@ -25,7 +21,11 @@ import * as XLSX from 'xlsx'
 import { Autoplay, EffectCreative, Pagination } from 'swiper/modules'
 import { Swiper as SwiperType } from 'swiper/types'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { DeviceLog } from '../../../types/smtrack/devices/deviceType'
+import {
+  DeviceLog,
+  DeviceLogs
+} from '../../../types/smtrack/devices/deviceType'
+import FullTableComponent from '../../../components/pages/dashboard/smtrack/fullTable'
 
 const FullTable = () => {
   const dispatch = useDispatch()
@@ -36,7 +36,7 @@ const FullTable = () => {
     deviceLogs: { sn: '', minTemp: 0, maxTemp: 0 }
   }
   const [pageNumber, setPagenumber] = useState(1)
-  const [dataLog, setDataLog] = useState<LogChartTms[]>([])
+  const [dataLog, setDataLog] = useState<DeviceLogs[]>([])
   const [filterDate, setFilterDate] = useState({
     startDate: '',
     endDate: ''
@@ -67,10 +67,10 @@ const FullTable = () => {
     setPagenumber(1)
     setDataLog([])
     try {
-      const response = await axiosInstance.get<responseType<LogChartTms[]>>(
-        `/legacy/graph?filter=day&sn=${
+      const response = await axiosInstance.get<responseType<DeviceLogs[]>>(
+        `/log/graph?sn=${
           deviceLogs?.id ? deviceLogs?.id : cookies.get('deviceKey')
-        }`
+        }&filter=day`
       )
       setDataLog(response.data.data)
     } catch (error) {
@@ -86,10 +86,10 @@ const FullTable = () => {
     setPagenumber(2)
     setDataLog([])
     try {
-      const response = await axiosInstance.get<responseType<LogChartTms[]>>(
-        `/legacy/graph?filter=week&sn=${
+      const response = await axiosInstance.get<responseType<DeviceLogs[]>>(
+        `/log/graph?sn=${
           deviceLogs?.id ? deviceLogs?.id : cookies.get('deviceKey')
-        }`
+        }&filter=week`
       )
       setDataLog(response.data.data)
     } catch (error) {
@@ -105,10 +105,10 @@ const FullTable = () => {
     setPagenumber(3)
     setDataLog([])
     try {
-      const response = await axiosInstance.get<responseType<LogChartTms[]>>(
-        `/legacy/graph?filter=month&sn=${
+      const response = await axiosInstance.get<responseType<DeviceLogs[]>>(
+        `/log/graph?sn=${
           deviceLogs?.id ? deviceLogs?.id : cookies.get('deviceKey')
-        }`
+        }&filter=month`
       )
       setDataLog(response.data.data)
     } catch (error) {
@@ -131,11 +131,11 @@ const FullTable = () => {
         try {
           setDataLog([])
           const responseData = await axiosInstance.get<
-            responseType<LogChartTms[]>
+            responseType<DeviceLogs[]>
           >(
-            `/legacy/graph?filter=${filterDate.startDate},${
-              filterDate.endDate
-            }&sn=${deviceLogs?.id ? deviceLogs?.id : cookies.get('deviceKey')}`
+            `/log/graph?sn=${
+              deviceLogs?.id ? deviceLogs?.id : cookies.get('deviceKey')
+            }&filter=${filterDate.startDate},${filterDate.endDate}`
           )
           setDataLog(responseData.data.data)
         } catch (error) {
@@ -171,14 +171,14 @@ const FullTable = () => {
 
   const convertArrayOfObjectsToExcel = (object: {
     deviceData: DeviceLog | undefined
-    log: LogChartTms[]
+    log: DeviceLogs[]
   }) => {
     return new Promise<boolean>((resolve, reject) => {
       if (object.deviceData && object.log.length > 0) {
         const newArray = object.log.map((items, index) => {
           return {
             No: index + 1,
-            DeviceSN: items.sn,
+            DeviceSN: deviceLogs.id,
             DeviceName: object.deviceData?.name,
             TemperatureMin: 0,
             TemperatureMax: 0,
@@ -194,7 +194,12 @@ const FullTable = () => {
               second: '2-digit',
               timeZone: 'UTC'
             }),
-            Temperature: items._value.toFixed(2)
+            Temperature: items.temp.toFixed(2),
+            Humidity: items.humidity.toFixed(2),
+            Door:
+              items.door1 || items.door2 || items.door3
+                ? t('stateOn')
+                : t('stateOff')
           }
         })
 
@@ -223,6 +228,58 @@ const FullTable = () => {
       navigate('/dashboard')
     }
   }, [deviceLogs?.id])
+
+  const tableWrapper = useMemo(() => {
+    return (
+      <Swiper
+        onSwiper={swiper => (swiperRef.current = swiper)}
+        slidesPerView={'auto'}
+        spaceBetween={30}
+        centeredSlides={true}
+        loop={deviceLogs?.probe && deviceLogs?.probe.length > 2}
+        autoplay={{
+          delay: 8000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+          waitForTransition: false
+        }}
+        pagination={{
+          dynamicBullets: true,
+          clickable: true
+        }}
+        effect={'creative'}
+        creativeEffect={{
+          prev: {
+            shadow: false,
+            translate: ['-120%', 0, -500]
+          },
+          next: {
+            shadow: false,
+            translate: ['120%', 0, -500]
+          }
+        }}
+        modules={[Autoplay, Pagination, EffectCreative]}
+        className='mySwiper h-full custom-swiper-pagination'
+      >
+        {deviceLogs &&
+          deviceLogs?.probe?.map(item => {
+            const filterItem = dataLog.filter(itemTwo =>
+              itemTwo.probe.includes(item.channel)
+            )
+            return (
+              <SwiperSlide key={0}>
+                <FullTableComponent
+                  dataLog={filterItem}
+                  deviceLogs={deviceLogs}
+                  tempMin={item.tempMin}
+                  tempMax={item.tempMax}
+                />
+              </SwiperSlide>
+            )
+          })}
+      </Swiper>
+    )
+  }, [deviceLogs, dataLog])
 
   return (
     <div className='container mx-auto p-3'>
@@ -344,53 +401,7 @@ const FullTable = () => {
           </button>
         </div>
       )}
-
-      <Swiper
-        onSwiper={swiper => (swiperRef.current = swiper)}
-        slidesPerView={'auto'}
-        spaceBetween={30}
-        centeredSlides={true}
-        loop={deviceLogs?.probe && deviceLogs?.probe.length > 2}
-        autoplay={{
-          delay: 8000,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true,
-          waitForTransition: false
-        }}
-        pagination={{
-          dynamicBullets: true,
-          clickable: true
-        }}
-        effect={'creative'}
-        creativeEffect={{
-          prev: {
-            shadow: false,
-            translate: ['-120%', 0, -500]
-          },
-          next: {
-            shadow: false,
-            translate: ['120%', 0, -500]
-          }
-        }}
-        modules={[Autoplay, Pagination, EffectCreative]}
-        className='mySwiper h-full'
-      >
-        {deviceLogs &&
-          deviceLogs?.probe?.map(item => {
-            const filterItem = dataLog.filter(itemTwo =>
-              itemTwo.probe.includes(item.channel)
-            )
-            return (
-              <SwiperSlide key={0}>
-                <FullTableTmsComponent
-                  dataLog={filterItem}
-                  tempMin={item.tempMin}
-                  tempMax={item.tempMax}
-                />
-              </SwiperSlide>
-            )
-          })}
-      </Swiper>
+      {tableWrapper}
     </div>
   )
 }
