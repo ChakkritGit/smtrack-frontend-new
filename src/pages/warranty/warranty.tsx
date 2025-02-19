@@ -338,7 +338,7 @@ const Warranty = () => {
         <a
           role='tab'
           className={`tab text-sm md:text-base ${
-            tab === 1 ? 'tab-active font-bold' : ''
+            tab === 1 ? 'tab-active' : ''
           }`}
           onClick={() => setTab(1)}
         >
@@ -347,7 +347,7 @@ const Warranty = () => {
         <a
           role='tab'
           className={`tab text-sm md:text-base ${
-            tab === 2 ? 'tab-active font-bold' : ''
+            tab === 2 ? 'tab-active' : ''
           }`}
           onClick={() => setTab(2)}
         >
@@ -356,7 +356,7 @@ const Warranty = () => {
         <a
           role='tab'
           className={`tab text-sm md:text-base ${
-            tab === 3 ? 'tab-active font-bold' : ''
+            tab === 3 ? 'tab-active' : ''
           }`}
           onClick={() => setTab(3)}
         >
@@ -567,7 +567,7 @@ const Warranty = () => {
         />
       </div>
     )
-  }, [warrantyFilter, isLoading])
+  }, [warrantyFilter, isLoading, t])
 
   const oneYearLater = new Date()
   oneYearLater.setFullYear(oneYearLater.getFullYear() + 1)

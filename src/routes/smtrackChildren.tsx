@@ -15,6 +15,7 @@ const Warranty = lazy(() => import('../pages/warranty/warranty'))
 const FullChart = lazy(() => import('../pages/dashboard/smtrack/fullChart'))
 const FullTable = lazy(() => import('../pages/dashboard/smtrack/fullTable'))
 const PreviewPDF = lazy(() => import('../components/pdf/previewPdf'))
+const Repair = lazy(() => import('../pages/repair/repair'))
 
 const smtrackChildren: RouteObject[] = [
   {
@@ -112,7 +113,11 @@ const smtrackChildren: RouteObject[] = [
   },
   {
     path: 'repair',
-    element: <>repair</>,
+    element: (
+      <Suspense fallback={<>123</>}>
+        <Repair />
+      </Suspense>
+    ),
     errorElement: <></>
   },
   {
