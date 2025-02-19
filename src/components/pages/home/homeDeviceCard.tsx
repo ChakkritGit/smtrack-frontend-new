@@ -20,6 +20,10 @@ import { ProbeType } from '../../../types/smtrack/probe/probeType'
 import { DeviceLogType } from '../../../types/smtrack/logs/deviceLog'
 import { TbPlug, TbPlugX } from 'react-icons/tb'
 import { MdOutlineSdCard, MdOutlineSdCardAlert } from 'react-icons/md'
+import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
+import { setDeviceKey } from '../../../redux/actions/utilsActions'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 interface DeviceCardProps {
   devicesFiltered: DeviceType[]
@@ -29,6 +33,8 @@ interface DeviceCardProps {
 }
 
 const HomeDeviceCard = (props: DeviceCardProps) => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { t } = useTranslation()
   const { devicesFiltered, handlePageChange, handlePerRowsChange, loading } =
     props
@@ -59,6 +65,13 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
     )
   }
 
+  const handleRowClicked = (row: DeviceType) => {
+    cookies.set('deviceKey', row.id, cookieOptions) // it's mean setSerial
+    dispatch(setDeviceKey(row.id))
+    navigate('/dashboard')
+    window.scrollTo(0, 0)
+  }
+
   const UserCard = useMemo(() => {
     if (devicesFiltered?.length > 0) {
       return (
@@ -85,6 +98,7 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                     <button
                       className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 tooltip tooltip-left'
                       data-tip={t('sideDashboard')}
+                      onClick={() => handleRowClicked(item)}
                     >
                       <RiDashboardLine size={24} />
                     </button>
@@ -154,7 +168,9 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                   )}
                 </div>
                 <div
-                  className='flex items-center justify-center text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top'
+                  className={`${
+                    item.log[0]?.plug ? 'bg-red-500 border-red-500' : ''
+                  } flex items-center justify-center text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top`}
                   data-tip={t('devicePlug')}
                 >
                   {item.log[0]?.plug ? (
@@ -164,7 +180,7 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                   )}
                 </div>
                 <div
-                  className='flex items-center justify-center text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top'
+                  className={`${item.log[0]?.extMemory ? 'bg-red-500 border-red-500' : ''} flex items-center justify-center text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top`}
                   data-tip={t('dashSdCard')}
                 >
                   {item.log[0]?.extMemory ? (
@@ -174,7 +190,7 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                   )}
                 </div>
                 <div
-                  className='flex items-center justify-center gap-1 text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top'
+                  className={`${item.log[0]?.battery <= 20 ? 'bg-yellow-500 border-yellow-500 text-white' : item.log[0]?.battery === 0 ?  'bg-red-500 border-red-500 text-white' : ''} flex items-center justify-center gap-1 text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top`}
                   data-tip={t('deviceBatteryTb')}
                 >
                   <div>
