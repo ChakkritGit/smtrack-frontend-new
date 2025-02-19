@@ -142,7 +142,21 @@
 }
 
 .swiper-pagination-bullet {
-  @apply !bg-base-300 !opacity-100 !rounded-btn !w-[10px] !h-[10px];
+  @apply !bg-primary/70 border border-primary/50 !rounded-btn !w-[10px] !h-[10px];
+}
+
+.custom-swiper-pagination .swiper-pagination-bullet {
+  @apply !w-[15px] !h-[15px];
+}
+
+.custom-swiper-pagination .swiper-pagination-bullet-active-next,
+.custom-swiper-pagination .swiper-pagination-bullet-active-prev {
+  transform: scale(0.80) !important;
+}
+
+.custom-swiper-pagination .swiper-pagination-bullet-active-next-next,
+.custom-swiper-pagination .swiper-pagination-bullet-active-prev-prev {
+  transform: scale(0.67) !important;
 }
 
 .swiper-pagination-bullet-active {

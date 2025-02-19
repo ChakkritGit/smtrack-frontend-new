@@ -47,4 +47,29 @@ type DeviceListType = {
   staticName: string
 }
 
-export type { DevicesType, DeviceType, DeviceLogsType, DeviceListType }
+interface DeviceLog extends DevicesType {
+  config: ConfigType
+  log: DeviceLogType[]
+  probe: ProbeType[]
+  repair: []
+  warranty: WarrantiesType[]
+}
+
+type DeviceLogs = {
+  _time: string
+  door1: boolean
+  door2: boolean
+  door3: boolean
+  humidity: number
+  probe: string
+  temp: number
+}
+
+export type {
+  DevicesType,
+  DeviceType,
+  DeviceLogsType,
+  DeviceListType,
+  DeviceLog,
+  DeviceLogs
+}

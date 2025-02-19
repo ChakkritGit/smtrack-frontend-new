@@ -82,7 +82,7 @@ const FullChartTmsComponent = (props: FullChartPropType) => {
     },
     axisBorder: {
       show: false,
-      color: 'oklch(72% 0.1938 31 / 1)'
+      color: 'oklch(73.24% 0.1973 44.47 / 1)'
     },
     min: minTempAvg,
     max: maxTempAvg

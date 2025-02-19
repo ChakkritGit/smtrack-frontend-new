@@ -12,6 +12,8 @@ const Dashboard = lazy(() => import('../pages/dashboard/smtrack/dashboard'))
 const Users = lazy(() => import('../pages/users/users'))
 const Management = lazy(() => import('../pages/management/smtrack/management'))
 const Warranty = lazy(() => import('../pages/warranty/warranty'))
+const FullChart = lazy(() => import('../pages/dashboard/smtrack/fullChart'))
+const FullTable = lazy(() => import('../pages/dashboard/smtrack/fullTable'))
 
 const smtrackChildren: RouteObject[] = [
   {
@@ -31,6 +33,34 @@ const smtrackChildren: RouteObject[] = [
       </Suspense>
     ),
     errorElement: <>error</>
+  },
+  {
+    path: 'dashboard/chart',
+    element: (
+      <Suspense fallback={<>123</>}>
+        <FullChart />
+      </Suspense>
+    ),
+    errorElement: <></>
+  },
+  {
+    path: 'dashboard/chart/preview',
+    element: <>dashboard/chart/preview</>,
+    errorElement: <></>
+  },
+  {
+    path: 'dashboard/table',
+    element: (
+      <Suspense fallback={<>123</>}>
+        <FullTable />
+      </Suspense>
+    ),
+    errorElement: <></>
+  },
+  {
+    path: 'dashboard/chart/compare',
+    element: <>dashboard/chart/compare</>,
+    errorElement: <></>
   },
   {
     element: <HideSetting />,
@@ -83,26 +113,6 @@ const smtrackChildren: RouteObject[] = [
   {
     path: 'settings',
     element: <>settings</>,
-    errorElement: <></>
-  },
-  {
-    path: 'dashboard/chart',
-    element: <>dashboard/chart</>,
-    errorElement: <></>
-  },
-  {
-    path: 'dashboard/chart/preview',
-    element: <>dashboard/chart/preview</>,
-    errorElement: <></>
-  },
-  {
-    path: 'dashboard/table',
-    element: <>dashboard/table</>,
-    errorElement: <></>
-  },
-  {
-    path: 'dashboard/chart/compare',
-    element: <>dashboard/chart/compare</>,
     errorElement: <></>
   },
   {

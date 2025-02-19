@@ -76,7 +76,9 @@ const MainSmtrack = () => {
         <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content'>
           <Navbar />
-          <Outlet />
+          <div className='min-h-[calc(100dvh-64px)]'>
+            <Outlet />
+          </div>
         </div>
         <Sidebar />
       </div>

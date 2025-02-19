@@ -1,11 +1,7 @@
 import { AxiosError } from 'axios'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 import axiosInstance from '../../../constants/axios/axiosInstance'
-import {
-  DeviceLogTms,
-  LogChartTms
-} from '../../../types/tms/devices/deviceType'
 import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
 import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import { useTranslation } from 'react-i18next'
@@ -14,9 +10,10 @@ import {
   RiDashboardLine,
   RiFileImageLine,
   RiFilePdf2Line,
-  RiMenuLine
+  RiMenuLine,
+  RiPlayLine,
+  RiStopLine
 } from 'react-icons/ri'
-import FullChartTmsComponent from '../../../components/pages/dashboard/tms/fullChartTms'
 import Swal from 'sweetalert2'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -28,18 +25,26 @@ import { RootState } from '../../../redux/reducers/rootReducer'
 import html2canvas from 'html2canvas-pro'
 import Loading from '../../../components/skeleton/table/loading'
 import ImagesOne from '../../../assets/images/Thanes.png'
+import { Autoplay, EffectCreative, Pagination } from 'swiper/modules'
+import { Swiper as SwiperType } from 'swiper/types'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import {
+  DeviceLog,
+  DeviceLogs
+} from '../../../types/smtrack/devices/deviceType'
+import FullChartComponent from '../../../components/pages/dashboard/smtrack/fullChart'
 
-const FullChartTms = () => {
+const FullChart = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { userProfile, submitLoading } = useSelector(
     (state: RootState) => state.utils
   )
-  const location = useLocation() as Location<{ deviceLogs: DeviceLogTms }>
+  const location = useLocation() as Location<{ deviceLogs: DeviceLog }>
   const { deviceLogs } = location.state ?? {
     deviceLogs: {
-      sn: '',
+      id: '',
       minTemp: 0,
       maxTemp: 0,
       name: '',
@@ -48,22 +53,35 @@ const FullChartTms = () => {
     }
   }
   const [pageNumber, setPagenumber] = useState(1)
-  const [dataLog, setDataLog] = useState<LogChartTms[]>([])
+  const [dataLog, setDataLog] = useState<DeviceLogs[]>([])
   const [filterDate, setFilterDate] = useState({
     startDate: '',
     endDate: ''
   })
   const canvasChartRef = useRef<HTMLDivElement | null>(null)
   const tableInfoRef = useRef<HTMLDivElement | null>(null)
+  const [isPause, setIsPaused] = useState(false)
+  const swiperRef = useRef<SwiperType>(null)
+
+  const togglePause = useCallback(() => {
+    setIsPaused(prev => !prev)
+    if (swiperRef.current) {
+      if (isPause) {
+        swiperRef.current.autoplay.start()
+      } else {
+        swiperRef.current.autoplay.stop()
+      }
+    }
+  }, [isPause])
 
   const logDay = async () => {
     setPagenumber(1)
     setDataLog([])
     try {
-      const response = await axiosInstance.get<responseType<LogChartTms[]>>(
-        `/legacy/graph?filter=day&sn=${
-          deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')
-        }`
+      const response = await axiosInstance.get<responseType<DeviceLogs[]>>(
+        `/log/graph?sn=${
+          deviceLogs?.id ? deviceLogs?.id : cookies.get('deviceKey')
+        }&filter=day`
       )
       setDataLog(response.data.data)
     } catch (error) {
@@ -79,10 +97,10 @@ const FullChartTms = () => {
     setPagenumber(2)
     setDataLog([])
     try {
-      const response = await axiosInstance.get<responseType<LogChartTms[]>>(
-        `/legacy/graph?filter=week&sn=${
-          deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')
-        }`
+      const response = await axiosInstance.get<responseType<DeviceLogs[]>>(
+        `/log/graph?sn=${
+          deviceLogs?.id ? deviceLogs?.id : cookies.get('deviceKey')
+        }&filter=week`
       )
       setDataLog(response.data.data)
     } catch (error) {
@@ -98,10 +116,10 @@ const FullChartTms = () => {
     setPagenumber(3)
     setDataLog([])
     try {
-      const response = await axiosInstance.get<responseType<LogChartTms[]>>(
-        `/legacy/graph?filter=month&sn=${
-          deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')
-        }`
+      const response = await axiosInstance.get<responseType<DeviceLogs[]>>(
+        `/log/graph?sn=${
+          deviceLogs?.id ? deviceLogs?.id : cookies.get('deviceKey')
+        }&filter=month`
       )
       setDataLog(response.data.data)
     } catch (error) {
@@ -124,11 +142,11 @@ const FullChartTms = () => {
         try {
           setDataLog([])
           const responseData = await axiosInstance.get<
-            responseType<LogChartTms[]>
+            responseType<DeviceLogs[]>
           >(
-            `/legacy/graph?filter=${filterDate.startDate},${
-              filterDate.endDate
-            }&sn=${deviceLogs?.sn ? deviceLogs?.sn : cookies.get('deviceKey')}`
+            `/log/graph?sn=${
+              deviceLogs?.id ? deviceLogs?.id : cookies.get('deviceKey')
+            }&filter=${filterDate.startDate},${filterDate.endDate}`
           )
           setDataLog(responseData.data.data)
         } catch (error) {
@@ -259,10 +277,10 @@ const FullChartTms = () => {
   }, [deviceLogs])
 
   useEffect(() => {
-    if (deviceLogs?.sn === '') {
+    if (deviceLogs?.id === '') {
       navigate('/dashboard')
     }
-  }, [deviceLogs?.sn])
+  }, [deviceLogs?.id])
 
   useEffect(() => {
     if (submitLoading) {
@@ -276,13 +294,12 @@ const FullChartTms = () => {
               ward: deviceLogs?.ward,
               image: ImagesOne,
               hospital: deviceLogs?.hospital,
-              devSn: deviceLogs?.sn,
+              devSn: deviceLogs?.id,
               devName: deviceLogs?.name,
               chartIMG: waitExport,
               dateTime: String(new Date()).substring(0, 25),
               hosImg: userProfile?.ward.hospital.hosPic,
-              tempMin: deviceLogs.minTemp,
-              tempMax: deviceLogs.maxTemp
+              probe: deviceLogs.probe
             }
           })
         } catch (error) {
@@ -298,6 +315,58 @@ const FullChartTms = () => {
       })()
     }
   }, [submitLoading])
+
+  const chartWrapper = useMemo(() => {
+    return (
+      <Swiper
+        onSwiper={swiper => (swiperRef.current = swiper)}
+        slidesPerView={'auto'}
+        spaceBetween={30}
+        centeredSlides={true}
+        loop={deviceLogs?.probe && deviceLogs?.probe.length > 2}
+        autoplay={{
+          delay: 8000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+          waitForTransition: false
+        }}
+        allowTouchMove={false}
+        pagination={{
+          dynamicBullets: true,
+          clickable: true
+        }}
+        effect={'creative'}
+        creativeEffect={{
+          prev: {
+            shadow: false,
+            translate: ['-120%', 0, -500]
+          },
+          next: {
+            shadow: false,
+            translate: ['120%', 0, -500]
+          }
+        }}
+        modules={[Autoplay, Pagination, EffectCreative]}
+        className='mySwiper h-full custom-swiper-pagination'
+      >
+        {deviceLogs &&
+          deviceLogs?.probe?.map(item => {
+            const filterItem = dataLog.filter(itemTwo =>
+              itemTwo.probe.includes(item.channel)
+            )
+            return (
+              <SwiperSlide key={0}>
+                <FullChartComponent
+                  dataLog={filterItem}
+                  tempMin={item.tempMin}
+                  tempMax={item.tempMax}
+                />
+              </SwiperSlide>
+            )
+          })}
+      </Swiper>
+    )
+  }, [deviceLogs, dataLog])
 
   return (
     <div className='container mx-auto p-3'>
@@ -348,13 +417,25 @@ const FullChartTms = () => {
             {t('chartCustom')}
           </a>
         </div>
-        <div className='flex items-center justify-end w-full'>
+        <div className='flex items-center gap-3 justify-end w-full'>
+          <label
+            htmlFor='button'
+            className='tooltip tooltip-top flex'
+            data-tip={isPause ? t('startSlide') : t('stopSlide')}
+          >
+            <button
+              className='btn btn-primary bg-opacity-15 text-primary border-primary border-2 p-0 hover:opacity-50 hover:border-primary hover:bg-transparent duration-300 max-h-[28px] min-h-[28px] max-w-[28px] min-w-[28px]'
+              onClick={togglePause}
+            >
+              {isPause ? <RiPlayLine size={20} /> : <RiStopLine size={20} />}
+            </button>
+          </label>
           <div className='dropdown dropdown-end z-50'>
             <button
               tabIndex={0}
               role='button'
               data-tip={t('menuButton')}
-              className='btn btn-ghost flex p-0 max-w-[30px] min-w-[30px] max-h-[30px] min-h-[30px] tooltip tooltip-left'
+              className='btn btn-ghost flex p-0 max-w-[30px] min-w-[30px] max-h-[30px] min-h-[30px] tooltip tooltip-top'
             >
               <RiMenuLine size={20} />
             </button>
@@ -424,18 +505,14 @@ const FullChartTms = () => {
         <div ref={tableInfoRef} className='hidden'>
           <h4>{userProfile?.ward.hospital.hosName}</h4>
           <span>
-            {deviceLogs?.name ? deviceLogs?.name : '--'} | {deviceLogs?.sn}
+            {deviceLogs?.name ? deviceLogs?.name : '--'} | {deviceLogs?.id}
           </span>
         </div>
-        <FullChartTmsComponent
-          dataLog={dataLog}
-          tempMin={deviceLogs?.minTemp}
-          tempMax={deviceLogs?.maxTemp}
-        />
+        {chartWrapper}
       </div>
       {submitLoading && <Loading />}
     </div>
   )
 }
 
-export default FullChartTms
+export default FullChart

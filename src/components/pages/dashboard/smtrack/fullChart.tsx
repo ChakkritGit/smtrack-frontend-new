@@ -1,27 +1,27 @@
 import Chart from 'react-apexcharts'
 import { useTranslation } from 'react-i18next'
-import { DeviceLogType } from '../../../../types/smtrack/logs/deviceLog'
+import { DeviceLogs } from '../../../../types/smtrack/devices/deviceType'
 
-interface ChartMiniProps {
-  logData: DeviceLogType[]
+interface FullChartPropType {
+  dataLog: DeviceLogs[]
   tempMin: number
   tempMax: number
 }
 
-const ChartMini = (props: ChartMiniProps) => {
+const FullChartComponent = (props: FullChartPropType) => {
   const { t } = useTranslation()
-  const { logData, tempMin, tempMax } = props
+  const { dataLog, tempMin, tempMax } = props
 
-  const tempAvgValues = logData.map(item => item.temp)
+  const tempAvgValues = dataLog ? dataLog.map(item => item.temp) : [0]
   const minTempAvg = Math.min(...tempAvgValues) - 2
   const maxTempAvg = Math.max(...tempAvgValues) + 2
 
-  const mappedData = logData.map(item => {
-    const time = new Date(item.sendTime).getTime()
+  const mappedData = dataLog.map(item => {
+    const time = new Date(item._time).getTime()
     return {
       time,
-      tempAvg: item.tempDisplay,
-      humidityAvg: item.humidityDisplay,
+      tempAvg: item.temp,
+      humidityAvg: item.humidity,
       door: item.door1 || item.door2 || item.door3 ? 1 : 0
     }
   })
@@ -85,18 +85,18 @@ const ChartMini = (props: ChartMiniProps) => {
           speed: 500
         }
       },
-      stacked: false,
+      stacked: true,
       zoom: {
         type: 'x',
-        enabled: false,
-        autoScaleYaxis: false
+        enabled: true,
+        autoScaleYaxis: true
       },
       toolbar: {
-        show: false,
+        show: true,
         autoSelected: 'zoom',
         tools: {
           download: false,
-          selection: false
+          selection: true
         }
       },
       locales: [
@@ -281,10 +281,10 @@ const ChartMini = (props: ChartMiniProps) => {
   }
 
   return (
-    <div className='mb-5'>
-      <Chart options={options} series={series} height={310} />
+    <div className='mt-3'>
+      <Chart options={options} series={series} height={680} />
     </div>
   )
 }
 
-export default ChartMini
+export default FullChartComponent

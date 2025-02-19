@@ -36,30 +36,6 @@ const tmsChildren: RouteObject[] = [
     errorElement: <></>
   },
   {
-    element: <HideSettingTms />,
-    errorElement: <></>,
-    children: [
-      {
-        path: 'permission',
-        element: (
-          <Suspense fallback={<UserSkeleton />}>
-            <Users />
-          </Suspense>
-        ),
-        errorElement: <></>
-      },
-      {
-        path: 'management',
-        element: (
-          <Suspense fallback={<ManageSkeleton />}>
-            <ManagementTms />
-          </Suspense>
-        ),
-        errorElement: <></>
-      }
-    ]
-  },
-  {
     path: 'dashboard/chart',
     element: (
       <Suspense fallback={<FullDashboardSkeleton />}>
@@ -85,6 +61,30 @@ const tmsChildren: RouteObject[] = [
       </Suspense>
     ),
     errorElement: <>err</>
+  },
+  {
+    element: <HideSettingTms />,
+    errorElement: <></>,
+    children: [
+      {
+        path: 'permission',
+        element: (
+          <Suspense fallback={<UserSkeleton />}>
+            <Users />
+          </Suspense>
+        ),
+        errorElement: <></>
+      },
+      {
+        path: 'management',
+        element: (
+          <Suspense fallback={<ManageSkeleton />}>
+            <ManagementTms />
+          </Suspense>
+        ),
+        errorElement: <></>
+      }
+    ]
   },
   {
     path: 'settings',

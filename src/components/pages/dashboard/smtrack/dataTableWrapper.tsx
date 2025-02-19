@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, EffectCreative, Pagination } from 'swiper/modules'
 import DataTableMini from './dataTableMini'
 import { DeviceLogsType } from '../../../../types/smtrack/devices/deviceType'
+import { useNavigate } from 'react-router-dom'
 
 interface DataTableWrapperProps {
   deviceLogs: DeviceLogsType | undefined
@@ -13,6 +14,7 @@ interface DataTableWrapperProps {
 
 const DataTableWrapper = (props: DataTableWrapperProps) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const { deviceLogs } = props
   const [isPause, setIsPaused] = useState(false)
   const swiperRef = useRef<SwiperType>(null)
@@ -61,7 +63,7 @@ const DataTableWrapper = (props: DataTableWrapperProps) => {
         className='mySwiper h-full'
       >
         {deviceLogs ? (
-          deviceLogs?.probe?.map((item) => {
+          deviceLogs?.probe?.map(item => {
             const filterItem = deviceLogs.log.filter(itemTwo =>
               itemTwo.probe.includes(item.channel)
             )
@@ -109,6 +111,11 @@ const DataTableWrapper = (props: DataTableWrapperProps) => {
         <button
           className='btn btn-ghost flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
           data-tip={t('fullTable')}
+          onClick={() =>
+            navigate('/dashboard/table', {
+              state: { deviceLogs: deviceLogs }
+            })
+          }
         >
           <RiFullscreenLine size={20} />
         </button>

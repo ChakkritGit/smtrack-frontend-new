@@ -93,7 +93,7 @@ const ChartMiniTms = (props: ChartMiniProps) => {
     },
     axisBorder: {
       show: i === 0,
-      color: 'oklch(72% 0.1938 31 / 1)'
+      color: 'oklch(73.24% 0.1973 44.47 / 1)'
     },
     min: i === series.length - 1 ? 5 : minTempAvg,
     max: i === series.length - 1 ? 0 : maxTempAvg
