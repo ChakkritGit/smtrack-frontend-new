@@ -134,7 +134,8 @@
 }
 
 .loading-hieght-full {
-  height: calc(100dvh - 150px);
+  /* height: calc(100dvh - 150px); */
+  height: 50dvh;
 }
 
 .swiper-pagination {
