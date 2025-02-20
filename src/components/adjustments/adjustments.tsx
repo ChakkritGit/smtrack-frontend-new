@@ -24,6 +24,7 @@ import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
 import { ProbeListType } from '../../types/tms/devices/probeType'
 import { AxiosError } from 'axios'
 import AppMute from './appMute'
+import Loading from '../skeleton/table/loading'
 
 type AdjustmentsProps = {
   setProbeData: (value: SetStateAction<ProbeType[]>) => void
@@ -78,6 +79,7 @@ const Adjustments = (props: AdjustmentsProps) => {
     seccondMinute: '',
     thirdMinute: ''
   })
+  const [isLoadingMqtt, setIsLoadingMqtt] = useState(false)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -223,6 +225,7 @@ const Adjustments = (props: AdjustmentsProps) => {
     })
     setSelectedProbe('')
     setMqData({ temp: 0, humi: 0 })
+    setTab(1)
     setProbeData([])
     openAdjustModalRef.current?.close()
   }
@@ -233,27 +236,27 @@ const Adjustments = (props: AdjustmentsProps) => {
         .filter(item => item.id === selectedProbe)
         .find(item => item) as ProbeType
       setMuteMode({
-        choichOne: filter.notiDelay < 5 ? 'immediately' : 'after',
-        choichtwo: filter.notiToNormal ? 'send' : 'donotsend',
-        choichthree: filter.notiRepeat < 5 ? 'onetime' : 'every',
-        choichfour: filter.notiMobile ? 'on' : 'off'
+        choichOne: filter?.notiDelay < 5 ? 'immediately' : 'after',
+        choichtwo: filter?.notiToNormal ? 'send' : 'donotsend',
+        choichthree: filter?.notiRepeat < 5 ? 'onetime' : 'every',
+        choichfour: filter?.notiMobile ? 'on' : 'off'
       })
       setSendTime({
-        after: filter.notiDelay < 5 ? 5 : filter.notiDelay,
-        every: filter.notiRepeat < 5 ? 5 : filter.notiRepeat
+        after: filter?.notiDelay < 5 ? 5 : filter.notiDelay,
+        every: filter?.notiRepeat < 5 ? 5 : filter.notiRepeat
       })
       setScheduleDay({
-        firstDay: filter.firstDay,
-        seccondDay: filter.secondDay,
-        thirdDay: filter.thirdDay
+        firstDay: filter?.firstDay,
+        seccondDay: filter?.secondDay,
+        thirdDay: filter?.thirdDay
       })
       setScheduleTime({
-        firstTime: filter.firstTime.substring(0, 2),
-        secondTime: filter.secondTime.substring(0, 2),
-        thirdTime: filter.thirdTime.substring(0, 2),
-        firstMinute: filter.firstTime.substring(2, 4),
-        seccondMinute: filter.secondTime.substring(2, 4),
-        thirdMinute: filter.thirdTime.substring(2, 4)
+        firstTime: filter?.firstTime.substring(0, 2),
+        secondTime: filter?.secondTime.substring(0, 2),
+        thirdTime: filter?.thirdTime.substring(0, 2),
+        firstMinute: filter?.firstTime.substring(2, 4),
+        seccondMinute: filter?.secondTime.substring(2, 4),
+        thirdMinute: filter?.thirdTime.substring(2, 4)
       })
     }
   }, [tab, probe, selectedProbe])
@@ -266,6 +269,7 @@ const Adjustments = (props: AdjustmentsProps) => {
 
   useEffect(() => {
     if (selectedProbe !== '' && tab === 1) {
+      setIsLoadingMqtt(true)
       const filter = probe
         .filter(item => item.id === selectedProbe)
         .find(item => item)
@@ -299,6 +303,7 @@ const Adjustments = (props: AdjustmentsProps) => {
 
       client.on('message', (_topic, message) => {
         setMqData(JSON.parse(message.toString()))
+        setIsLoadingMqtt(false)
       })
 
       client.on('error', err => {
@@ -363,6 +368,7 @@ const Adjustments = (props: AdjustmentsProps) => {
             className='tab'
             aria-label={t('adjustMents')}
             defaultChecked
+            checked={tab === 1}
             onClick={() => setTab(1)}
           />
           <div role='tabpanel' className='tab-content'>
@@ -824,6 +830,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                       step={0.01}
                       min={-40}
                       max={120}
+                      disabled={isLoadingMqtt}
                       renderThumb={(props, state) => (
                         <div
                           {...props}
@@ -856,6 +863,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                       step={0.01}
                       min={0}
                       max={100}
+                      disabled={isLoadingMqtt}
                       renderThumb={(props, state) => (
                         <div
                           {...props}
@@ -880,6 +888,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     min={-40}
                     max={120}
                     value={adjustmentsForm.adjustTemp}
+                    disabled={isLoadingMqtt}
                     onChange={e => {
                       let value = e.target.value
 
@@ -912,6 +921,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     min={0}
                     max={100}
                     value={adjustmentsForm.adjustHumi}
+                    disabled={isLoadingMqtt}
                     onChange={e => {
                       let value = e.target.value
 
@@ -939,6 +949,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                 <span>{t('adjustTemp')}</span>
                 <div className='flex items-center justify-center gap-2 w-full'>
                   <button
+                    disabled={isLoadingMqtt}
                     className='btn btn-ghost bg-orange-500 text-white text-lg'
                     type='button'
                     onClick={() => {
@@ -960,6 +971,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     type='number'
                     step={0.01}
                     value={adjustmentsForm.adjustTemp}
+                    disabled={isLoadingMqtt}
                     onChange={e => {
                       let value = e.target.value
 
@@ -981,6 +993,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     }}
                   />
                   <button
+                    disabled={isLoadingMqtt}
                     className='btn btn-ghost bg-orange-500 text-white text-lg'
                     type='button'
                     onClick={() => {
@@ -1003,6 +1016,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                 <span>{t('adjustHumi')}</span>
                 <div className='flex items-center justify-center gap-2 w-full'>
                   <button
+                    disabled={isLoadingMqtt}
                     className='btn btn-ghost bg-blue-500 text-white text-lg'
                     type='button'
                     onClick={() => {
@@ -1024,6 +1038,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     type='number'
                     step={0.01}
                     value={adjustmentsForm.adjustHumi}
+                    disabled={isLoadingMqtt}
                     onChange={e => {
                       let value = e.target.value
 
@@ -1045,6 +1060,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     }}
                   />
                   <button
+                    disabled={isLoadingMqtt}
                     className='btn btn-ghost bg-blue-500 text-white text-lg'
                     type='button'
                     onClick={() => {
@@ -1064,51 +1080,63 @@ const Adjustments = (props: AdjustmentsProps) => {
               </div>
             </div>
 
-            <div className='flex flex-col md:flex-row items-center justify-around gap-5 md:gap-2 mt-5'>
-              <div className='flex flex-col items-center gap-2'>
-                <span className='md:text-[14px]'>{t('currentTemp')}</span>
-                <div className='flex items-center justify-center h-[55px] min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
-                  {mqData.temp ? `${mqData.temp.toFixed(2)}°C` : '—'}
+            {!isLoadingMqtt ? (
+              <>
+                <div className='flex flex-col md:flex-row items-center justify-around gap-5 md:gap-2 mt-5'>
+                  <div className='flex flex-col items-center gap-2'>
+                    <span className='md:text-[14px]'>{t('currentTemp')}</span>
+                    <div className='flex items-center justify-center h-[55px] min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
+                      {mqData.temp ? `${mqData.temp.toFixed(2)}°C` : '—'}
+                    </div>
+                  </div>
+                  <RiArrowRightLine size={24} className='hidden md:flex mt-5' />
+                  <RiArrowDownLine size={24} className='flex md:hidden' />
+                  <div className='flex flex-col items-center gap-2'>
+                    <span className='md:text-[14px]'>
+                      {t('adjustAfterTemp')}
+                    </span>
+                    <div className='flex items-center justify-center h-[55px] min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
+                      {mqData.temp
+                        ? `${(
+                            mqData.temp +
+                            adjustmentsForm.adjustTemp -
+                            (probeBefore?.tempAdj ?? 0)
+                          ).toFixed(2)}°C`
+                        : '—'}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <RiArrowRightLine size={24} className='hidden md:flex mt-5' />
-              <RiArrowDownLine size={24} className='flex md:hidden' />
-              <div className='flex flex-col items-center gap-2'>
-                <span className='md:text-[14px]'>{t('adjustAfterTemp')}</span>
-                <div className='flex items-center justify-center h-[55px] min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
-                  {mqData.temp
-                    ? `${(
-                        mqData.temp +
-                        adjustmentsForm.adjustTemp -
-                        (probeBefore?.tempAdj ?? 0)
-                      ).toFixed(2)}°C`
-                    : '—'}
-                </div>
-              </div>
-            </div>
 
-            <div className='flex flex-col md:flex-row items-center justify-around gap-5 md:gap-2 mt-5'>
-              <div className='flex flex-col items-center gap-2'>
-                <span className='md:text-[14px]'>{t('currentHum')}</span>
-                <div className='flex items-center justify-center h-[55px] min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
-                  {mqData.humi ? `${mqData.humi.toFixed(2)}%` : '—'}
+                <div className='flex flex-col md:flex-row items-center justify-around gap-5 md:gap-2 mt-5'>
+                  <div className='flex flex-col items-center gap-2'>
+                    <span className='md:text-[14px]'>{t('currentHum')}</span>
+                    <div className='flex items-center justify-center h-[55px] min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
+                      {mqData.humi ? `${mqData.humi.toFixed(2)}%` : '—'}
+                    </div>
+                  </div>
+                  <RiArrowRightLine size={24} className='hidden md:flex mt-5' />
+                  <RiArrowDownLine size={24} className='flex md:hidden' />
+                  <div className='flex flex-col items-center gap-2'>
+                    <span className='md:text-[14px]'>
+                      {t('adjustAfterHum')}
+                    </span>
+                    <div className='flex items-center justify-center h-[55px] min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
+                      {mqData.humi
+                        ? `${(
+                            mqData.humi +
+                            adjustmentsForm.adjustHumi -
+                            (probeBefore?.humiAdj ?? 0)
+                          ).toFixed(2)}%`
+                        : '—'}
+                    </div>
+                  </div>
                 </div>
+              </>
+            ) : (
+              <div className='mt-5'>
+                <Loading />
               </div>
-              <RiArrowRightLine size={24} className='hidden md:flex mt-5' />
-              <RiArrowDownLine size={24} className='flex md:hidden' />
-              <div className='flex flex-col items-center gap-2'>
-                <span className='md:text-[14px]'>{t('adjustAfterHum')}</span>
-                <div className='flex items-center justify-center h-[55px] min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
-                  {mqData.humi
-                    ? `${(
-                        mqData.humi +
-                        adjustmentsForm.adjustHumi -
-                        (probeBefore?.humiAdj ?? 0)
-                      ).toFixed(2)}%`
-                    : '—'}
-                </div>
-              </div>
-            </div>
+            )}
           </div>
 
           <input
@@ -1117,6 +1145,7 @@ const Adjustments = (props: AdjustmentsProps) => {
             role='tab'
             className='tab'
             aria-label={t('notificationSettings')}
+            checked={tab === 2}
             onClick={() => setTab(2)}
           />
           <div role='tabpanel' className='tab-content mt-3'>
@@ -1138,6 +1167,7 @@ const Adjustments = (props: AdjustmentsProps) => {
             role='tab'
             className='tab'
             aria-label={t('muteSetting')}
+            checked={tab === 3}
             onClick={() => setTab(3)}
           />
           <div role='tabpanel' className='tab-content mt-3'>
@@ -1146,7 +1176,7 @@ const Adjustments = (props: AdjustmentsProps) => {
         </div>
 
         {(tab === 1 || tab === 2) && (
-          <div className='modal-action mt-6'>
+          <div className={`modal-action ${isLoadingMqtt ? 'mt-0' : 'mt-6'}`}>
             <button type='submit' className='btn btn-primary'>
               {t('submitButton')}
             </button>
