@@ -70,16 +70,15 @@ const Adjustments = (props: AdjustmentsProps) => {
         `/devices/probe/${selectedProbe}`,
         body
       )
-      openAdjustModalRef.current?.close()
-      resetForm()
       await fetchDevices(1, 10)
+      openAdjustModalRef.current?.close()
       Swal.fire({
         title: t('alertHeaderSuccess'),
         text: t('submitSuccess'),
         icon: 'success',
         showConfirmButton: false,
         timer: 2500
-      })
+      }).finally(() => openAdjustModalRef.current?.showModal())
     } catch (error) {
       openAdjustModalRef.current?.close()
       if (error instanceof AxiosError) {
@@ -92,6 +91,13 @@ const Adjustments = (props: AdjustmentsProps) => {
         }).finally(() => openAdjustModalRef.current?.showModal())
       } else {
         console.error(error)
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: t('descriptionErrorWrong'),
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2500
+        }).finally(() => openAdjustModalRef.current?.showModal())
       }
     } finally {
       dispatch(setSubmitLoading())

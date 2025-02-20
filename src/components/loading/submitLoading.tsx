@@ -11,7 +11,6 @@ export const SubmitLoading = (props: LoadingModalProps) => {
 
   useEffect(() => {
     const html = document.documentElement
-
     html.style.overflow = 'hidden'
 
     return () => {
@@ -20,14 +19,23 @@ export const SubmitLoading = (props: LoadingModalProps) => {
   }, [])
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout
+
     if (modalRef.current && submitLoading) {
       modalRef.current.showModal()
+
+      timeout = setTimeout(() => {
+        if (modalRef.current) {
+          modalRef.current.close()
+        }
+      }, 60000)
     }
 
     return () => {
-      if (modalRef.current && submitLoading) {
+      if (modalRef.current) {
         modalRef.current.close()
       }
+      clearTimeout(timeout)
     }
   }, [submitLoading])
 
