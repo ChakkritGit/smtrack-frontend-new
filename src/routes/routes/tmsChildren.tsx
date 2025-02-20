@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { HideSettingTms } from '../../middleware/Auth'
+import { HideSettingManageTms, HideSettingTms } from '../../middleware/Auth'
 import {
   DashboardSkeletonTms,
   HomeSkeletonTms,
@@ -83,7 +83,13 @@ const tmsChildren: RouteObject[] = [
           </Suspense>
         ),
         errorElement: <ErrorScreen />
-      },
+      }
+    ]
+  },
+  {
+    element: <HideSettingManageTms />,
+    errorElement: <ErrorScreen />,
+    children: [
       {
         path: 'management',
         element: (

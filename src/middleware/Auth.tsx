@@ -33,6 +33,12 @@ export const HideSettingTms = () => {
   return role === 'LEGACY_USER' || role === 'GUEST' ? <Notacess /> : <Outlet />
 }
 
+export const HideSettingManageTms = () => {
+  const { tokenDecode } = useSelector((state: RootState) => state.utils)
+  const { role } = tokenDecode || {}
+  return role === 'LEGACY_USER' || role === 'LEGACY_ADMIN' || role === 'GUEST' ? <Notacess /> : <Outlet />
+}
+
 export const HideFlashFW = () => {
   const { tokenDecode } = useSelector((state: RootState) => state.utils)
   const { role } = tokenDecode || {}

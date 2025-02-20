@@ -104,7 +104,10 @@ const Routes = () => {
     <GlobalContext.Provider
       value={{ hospital, setHospital, ward, setWard, fetchHospital, fetchWard }}
     >
-      <RouterProvider router={router(role, tmsMode)} />
+      <RouterProvider
+        key={tmsMode ? `tms${role}` : `smtrack${role}`}
+        router={router(role, tmsMode)}
+      />
     </GlobalContext.Provider>
   )
 }
