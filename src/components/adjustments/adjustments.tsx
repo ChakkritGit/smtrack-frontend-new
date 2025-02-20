@@ -23,6 +23,7 @@ import axiosInstance from '../../constants/axios/axiosInstance'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
 import { ProbeListType } from '../../types/tms/devices/probeType'
 import { AxiosError } from 'axios'
+import AppMute from './appMute'
 
 type AdjustmentsProps = {
   setProbeData: (value: SetStateAction<ProbeType[]>) => void
@@ -53,6 +54,30 @@ const Adjustments = (props: AdjustmentsProps) => {
     undefined
   )
   const [tab, setTab] = useState(1)
+
+  const [muteMode, setMuteMode] = useState({
+    choichOne: 'immediately',
+    choichtwo: 'send',
+    choichthree: 'onetime',
+    choichfour: 'on'
+  })
+  const [sendTime, setSendTime] = useState({
+    after: 5,
+    every: 5
+  })
+  const [scheduleDay, setScheduleDay] = useState({
+    firstDay: '',
+    seccondDay: '',
+    thirdDay: ''
+  })
+  const [scheduleTime, setScheduleTime] = useState({
+    firstTime: '',
+    secondTime: '',
+    thirdTime: '',
+    firstMinute: '',
+    seccondMinute: '',
+    thirdMinute: ''
+  })
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -152,13 +177,44 @@ const Adjustments = (props: AdjustmentsProps) => {
   }
 
   useEffect(() => {
+    if (tab === 2) {
+      const filter = probe
+        .filter(item => item.id === selectedProbe)
+        .find(item => item) as ProbeType
+      setMuteMode({
+        choichOne: filter.notiDelay < 5 ? 'immediately' : 'after',
+        choichtwo: filter.notiToNormal ? 'send' : 'donotsend',
+        choichthree: filter.notiRepeat < 5 ? 'onetime' : 'every',
+        choichfour: filter.notiMobile ? 'on' : 'off'
+      })
+      setSendTime({
+        after: filter.notiDelay < 5 ? 5 : filter.notiDelay,
+        every: filter.notiRepeat < 5 ? 5 : filter.notiRepeat
+      })
+      setScheduleDay({
+        firstDay: filter.firstDay,
+        seccondDay: filter.secondDay,
+        thirdDay: filter.thirdDay
+      })
+      setScheduleTime({
+        firstTime: filter.firstTime.substring(0, 2),
+        secondTime: filter.secondTime.substring(0, 2),
+        thirdTime: filter.thirdTime.substring(0, 2),
+        firstMinute: filter.firstTime.substring(2, 4),
+        seccondMinute: filter.secondTime.substring(2, 4),
+        thirdMinute: filter.thirdTime.substring(2, 4)
+      })
+    }
+  }, [tab, probe, selectedProbe])
+
+  useEffect(() => {
     if (selectedProbe === '' && probe.length > 0) {
       setSelectedProbe(probe[0]?.id)
     }
   }, [probe])
 
   useEffect(() => {
-    if (selectedProbe !== '') {
+    if (selectedProbe !== '' && tab === 1) {
       const filter = probe
         .filter(item => item.id === selectedProbe)
         .find(item => item)
@@ -203,7 +259,7 @@ const Adjustments = (props: AdjustmentsProps) => {
         console.error('MQTT Reconnecting...')
       })
     }
-  }, [probe, selectedProbe, serial])
+  }, [probe, selectedProbe, serial, tab])
 
   return (
     <dialog ref={openAdjustModalRef} className='modal overflow-y-scroll py-10'>
@@ -223,7 +279,32 @@ const Adjustments = (props: AdjustmentsProps) => {
         </div>
         <div className='divider divider-vertical my-2'></div>
 
-        <div role='tablist' className='tabs tabs-bordered'>
+        <div className='form-control w-full'>
+          <label className='label flex-col items-start'>
+            <span className='label-text mb-2'>{t('selectProbe')}</span>
+            <Select
+              options={mapOptions<ProbeType, keyof ProbeType>(
+                probe,
+                'id',
+                'name'
+              )}
+              value={mapDefaultValue<ProbeType, keyof ProbeType>(
+                probe,
+                selectedProbe,
+                'id',
+                'name'
+              )}
+              onChange={e => {
+                setSelectedProbe(String(e?.value))
+              }}
+              autoFocus={false}
+              className='react-select-container z-[150] custom-menu-select w-full'
+              classNamePrefix='react-select'
+            />
+          </label>
+        </div>
+
+        <div role='tablist' className='tabs tabs-bordered mt-3'>
           <input
             type='radio'
             name='my_tabs_1'
@@ -233,33 +314,8 @@ const Adjustments = (props: AdjustmentsProps) => {
             defaultChecked
             onClick={() => setTab(1)}
           />
-          <div role='tabpanel' className='tab-content mt-3'>
-            <div className='form-control w-full'>
-              <label className='label flex-col items-start'>
-                <span className='label-text mb-2'>{t('selectProbe')}</span>
-                <Select
-                  options={mapOptions<ProbeType, keyof ProbeType>(
-                    probe,
-                    'id',
-                    'name'
-                  )}
-                  value={mapDefaultValue<ProbeType, keyof ProbeType>(
-                    probe,
-                    selectedProbe,
-                    'id',
-                    'name'
-                  )}
-                  onChange={e => {
-                    setSelectedProbe(String(e?.value))
-                  }}
-                  autoFocus={false}
-                  className='react-select-container z-[150] custom-menu-select w-full'
-                  classNamePrefix='react-select'
-                />
-              </label>
-            </div>
-
-            <div>
+          <div role='tabpanel' className='tab-content'>
+            <div className='mt-3'>
               <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
                 <span>{t('tempMin')}</span>
                 <div className='flex items-center justify-center gap-2 w-full'>
@@ -1013,7 +1069,16 @@ const Adjustments = (props: AdjustmentsProps) => {
             onClick={() => setTab(2)}
           />
           <div role='tabpanel' className='tab-content mt-3'>
-            Tab content 2
+            <AppMute
+              muteMode={muteMode}
+              setMuteMode={setMuteMode}
+              sendTime={sendTime}
+              setSendTime={setSendTime}
+              scheduleDay={scheduleDay}
+              setScheduleDay={setScheduleDay}
+              scheduleTime={scheduleTime}
+              setScheduleTime={setScheduleTime}
+            />
           </div>
 
           <input
