@@ -447,6 +447,7 @@ export default {
     remmark: 'หมายเหตุ',
     tag: 'แท็ก',
     copyToken: 'คัดลอก โทเค็น',
+    installApp: 'วิธีการติดตั้งแอปพลิเคชั่น (APK)',
 
     // connect
     ipAddress: 'IP',

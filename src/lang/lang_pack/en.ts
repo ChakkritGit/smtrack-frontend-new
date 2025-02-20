@@ -448,6 +448,7 @@ export default {
     remmark: 'Remark',
     tag: 'Tag',
     copyToken: 'Copy Token',
+    installApp: 'How to Install App (APK)',
 
     // connect
     ipAddress: 'IP',

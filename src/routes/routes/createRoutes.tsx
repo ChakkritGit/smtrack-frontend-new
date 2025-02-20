@@ -6,6 +6,10 @@ import MainTms from '../../main/tms/main'
 import { AuthRoute } from '../../middleware/authprotect'
 import { LogoutAuth } from '../../middleware/Auth'
 import NotFound from '../error/notFound'
+import App from '../docs/app'
+import Support from '../docs/support'
+import TermsConditions from '../docs/termsConditions'
+import PrivacyPolicy from '../docs/privacyPolicy'
 
 const router = (role: string, tmsMode: boolean) =>
   createBrowserRouter([
@@ -31,20 +35,19 @@ const router = (role: string, tmsMode: boolean) =>
     },
     {
       path: '/privacy-policy',
-      element: <></>
+      element: <PrivacyPolicy />
     },
     {
       path: '/terms-conditions',
-      element: <></>
+      element: <TermsConditions />
     },
     {
       path: '/support',
-      element: <></>
+      element: <Support />
     },
     {
       path: 'app',
-      element: <></>,
-      errorElement: <></>
+      element: <App />
     },
     {
       path: '/login',

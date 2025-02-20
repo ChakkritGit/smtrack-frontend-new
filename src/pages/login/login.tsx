@@ -82,7 +82,7 @@ const Login = () => {
   }
 
   return (
-    <div className='h-dvh flex items-center justify-center'>
+    <div className='min-h-dvh flex items-center justify-center'>
       <div className='card bg-base-100 w-[350px] sm:w-[500px] md:w-[500px] lg:w-[500px] h-max shadow-xl'>
         <div className='px-5 pt-5'>
           <div className='text-end'>
@@ -182,6 +182,15 @@ const Login = () => {
             </div>
           </form>
           <div className='divider'>{t('contactUs')}</div>
+          <span className='text-center'>
+            {t('neddHelp')}{' '}
+            <span
+              onClick={() => navigate('/support')}
+              className='link link-primary'
+            >
+              {t('contactSupport')}
+            </span>
+          </span>
         </div>
       </div>
     </div>

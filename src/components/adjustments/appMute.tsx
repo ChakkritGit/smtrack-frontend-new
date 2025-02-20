@@ -2,8 +2,16 @@ import { Dispatch, SetStateAction } from 'react'
 import { Option } from '../../types/global/hospitalAndWard'
 import { useTranslation } from 'react-i18next'
 import Select, { SingleValue } from 'react-select'
-import { Schedule, ScheduleHour, ScheduleMinute } from '../../types/tms/devices/probeType'
-import { scheduleDayArray, scheduleMinuteArray, scheduleTimeArray } from '../../constants/utils/utilsConstants'
+import {
+  Schedule,
+  ScheduleHour,
+  ScheduleMinute
+} from '../../types/tms/devices/probeType'
+import {
+  scheduleDayArray,
+  scheduleMinuteArray,
+  scheduleTimeArray
+} from '../../constants/utils/utilsConstants'
 
 type AppMuteProps = {
   setMuteMode: Dispatch<
