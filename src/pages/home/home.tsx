@@ -5,7 +5,14 @@ import HomeCount from '../../components/pages/home/homeCount'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import { setDeviceKey, setSearch } from '../../redux/actions/utilsActions'
 import { DeviceCountType } from '../../types/smtrack/devices/deviceCount'
 import { AxiosError } from 'axios'
@@ -21,6 +28,8 @@ import { GlobalContext } from '../../contexts/globalContext'
 import { GlobalContextType } from '../../types/global/globalContext'
 import Loading from '../../components/skeleton/table/loading'
 import HomeDeviceCard from '../../components/pages/home/homeDeviceCard'
+import Adjustments from '../../components/adjustments/adjustments'
+import { ProbeType } from '../../types/smtrack/probe/probeType'
 
 const Home = () => {
   const { t } = useTranslation()
@@ -47,6 +56,9 @@ const Home = () => {
   const [totalRows, setTotalRows] = useState(0)
   const [perPage, setPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
+  const [probeData, setProbeData] = useState<ProbeType[]>([])
+  const [serial, setSerial] = useState<string>('')
+  const openAdjustModalRef = useRef<HTMLDialogElement>(null)
   const { token } = cookieDecode || {}
   const { role } = tokenDecode || {}
 
@@ -120,10 +132,6 @@ const Home = () => {
     window.scrollTo(0, 0)
   }
 
-  const openmodal = (deviceData: DeviceType) => {
-    console.log(deviceData)
-  }
-
   const handleFilterConnect = (status: string) => {
     if (deviceConnect === status) {
       setDeviceConnect('')
@@ -166,8 +174,16 @@ const Home = () => {
     }
   }, [])
 
+  const openAdjustModal = (probe: ProbeType[], sn: string) => {
+    setProbeData(probe)
+    setSerial(sn)
+    if (openAdjustModalRef.current) {
+      openAdjustModalRef.current.showModal()
+    }
+  }
+
   const columns: TableColumn<DeviceType>[] = useMemo(
-    () => columnData(t, handleRowClicked, openmodal),
+    () => columnData(t, handleRowClicked, openAdjustModal),
     [t, navigate]
   )
 
@@ -276,6 +292,14 @@ const Home = () => {
           loading={loading}
         />
       )}
+
+      <Adjustments
+        openAdjustModalRef={openAdjustModalRef}
+        probe={probeData}
+        serial={serial}
+        setProbeData={setProbeData}
+        fetchDevices={fetchDevices}
+      />
     </div>
   )
 }

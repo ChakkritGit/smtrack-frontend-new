@@ -663,9 +663,9 @@ const ManageProbe = () => {
 
   const channelArray = [
     { value: '1', name: t('probeChanel1') },
-    { value: '2', name: t('probeChanel2') },
-    { value: '3', name: t('probeChanel3') },
-    { value: '4', name: t('probeChanel4') }
+    { value: '2', name: t('probeChanel2') }
+    // { value: '3', name: t('probeChanel3') },
+    // { value: '4', name: t('probeChanel4') }
   ]
 
   useEffect(() => {

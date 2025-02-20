@@ -10,11 +10,12 @@ import {
 } from 'react-icons/ri'
 import { DoorKey } from '../../../types/global/doorQty'
 import { calulateDate } from '../../../constants/utils/utilsConstants'
+import { ProbeType } from '../../../types/smtrack/probe/probeType'
 
 const columnData = (
   t: TFunctionNonStrict<'translation', undefined>,
   handleRowClicked: (row: DeviceType) => void,
-  openmodal: (deviceData: DeviceType) => void
+  openAdjustModal: (probe: ProbeType[], sn: string) => void
 ): TableColumn<DeviceType>[] => {
   return [
     {
@@ -205,7 +206,7 @@ const columnData = (
         <RiSettings3Line
           size={24}
           className='hover:fill-primary duration-300'
-          onClick={() => openmodal(item)}
+          onClick={() => openAdjustModal(item.probe, item.id)}
         />
       ),
       sortable: false,

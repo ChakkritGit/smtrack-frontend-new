@@ -43,6 +43,7 @@ const Repair = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [repairData, setRepairData] = useState<RepairType[]>([])
   const [repairFilter, setRepairFilter] = useState<RepairType[]>([])
+  const [deviceList, setDeviceList] = useState<DeviceListType[]>([])
   const [repairForm, setRepairForm] = useState({
     id: '',
     devName: '',
@@ -57,7 +58,6 @@ const Repair = () => {
     warrantyStatus: '',
     remark: ''
   })
-  const [deviceList, setDeviceList] = useState<DeviceListType[]>([])
 
   const fetchDeviceList = useCallback(async () => {
     try {
