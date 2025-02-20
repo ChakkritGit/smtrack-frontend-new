@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate, useRouteError } from 'react-router-dom'
-import { cookieOptions, cookies } from '../constants/utils/utilsConstants'
+import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
 import { RiBugLine } from 'react-icons/ri'
 import { useTranslation } from 'react-i18next'
 

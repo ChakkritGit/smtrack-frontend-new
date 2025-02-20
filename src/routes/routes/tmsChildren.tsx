@@ -1,21 +1,21 @@
 import { lazy, Suspense } from 'react'
-import { HideSettingTms } from '../middleware/Auth'
+import { HideSettingTms } from '../../middleware/Auth'
 import {
   DashboardSkeletonTms,
   HomeSkeletonTms,
   ManageSkeleton,
   UserSkeleton
-} from '../components/skeleton'
+} from '../../components/skeleton'
 import { RouteObject } from 'react-router-dom'
-import FullDashboardSkeleton from '../components/skeleton/dashboard/fullDashboardSkeleton'
-import ErrorScreen from './error'
-const HomeTms = lazy(() => import('../pages/home/homeTms'))
-const DashboardTms = lazy(() => import('../pages/dashboard/tms/dashboardTms'))
-const Users = lazy(() => import('../pages/users/users'))
-const FullChartTms = lazy(() => import('../pages/dashboard/tms/fullChartTms'))
-const FullTableTms = lazy(() => import('../pages/dashboard/tms/fullTableTms'))
-const ManagementTms = lazy(() => import('../pages/management/tms/managementTms'))
-const PreviewPDF = lazy(() => import('../components/pdf/previewPdf'))
+import FullDashboardSkeleton from '../../components/skeleton/dashboard/fullDashboardSkeleton'
+import ErrorScreen from '.././error/error'
+const HomeTms = lazy(() => import('../../pages/home/homeTms'))
+const DashboardTms = lazy(() => import('../../pages/dashboard/tms/dashboardTms'))
+const Users = lazy(() => import('../../pages/users/users'))
+const FullChartTms = lazy(() => import('../../pages/dashboard/tms/fullChartTms'))
+const FullTableTms = lazy(() => import('../../pages/dashboard/tms/fullTableTms'))
+const ManagementTms = lazy(() => import('../../pages/management/tms/managementTms'))
+const PreviewPDF = lazy(() => import('../../components/pdf/previewPdf'))
 
 const tmsChildren: RouteObject[] = [
   {

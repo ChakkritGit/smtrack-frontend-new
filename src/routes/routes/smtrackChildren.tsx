@@ -5,18 +5,20 @@ import {
   DashboardSkeleton,
   UserSkeleton,
   ManageSkeleton
-} from '../components/skeleton'
-import { HideFlashFW, HideSetting } from '../middleware/Auth'
-import ErrorScreen from './error'
-const Home = lazy(() => import('../pages/home/home'))
-const Dashboard = lazy(() => import('../pages/dashboard/smtrack/dashboard'))
-const Users = lazy(() => import('../pages/users/users'))
-const Management = lazy(() => import('../pages/management/smtrack/management'))
-const Warranty = lazy(() => import('../pages/warranty/warranty'))
-const FullChart = lazy(() => import('../pages/dashboard/smtrack/fullChart'))
-const FullTable = lazy(() => import('../pages/dashboard/smtrack/fullTable'))
-const PreviewPDF = lazy(() => import('../components/pdf/previewPdf'))
-const Repair = lazy(() => import('../pages/repair/repair'))
+} from '../../components/skeleton'
+import { HideFlashFW, HideSetting } from '../../middleware/Auth'
+import ErrorScreen from '../error/error'
+const Home = lazy(() => import('../../pages/home/home'))
+const Dashboard = lazy(() => import('../../pages/dashboard/smtrack/dashboard'))
+const Users = lazy(() => import('../../pages/users/users'))
+const Management = lazy(
+  () => import('../../pages/management/smtrack/management')
+)
+const Warranty = lazy(() => import('../../pages/warranty/warranty'))
+const FullChart = lazy(() => import('../../pages/dashboard/smtrack/fullChart'))
+const FullTable = lazy(() => import('../../pages/dashboard/smtrack/fullTable'))
+const PreviewPDF = lazy(() => import('../../components/pdf/previewPdf'))
+const Repair = lazy(() => import('../../pages/repair/repair'))
 
 const smtrackChildren: RouteObject[] = [
   {

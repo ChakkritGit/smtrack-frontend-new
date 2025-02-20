@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { RouterProvider } from 'react-router-dom'
-import { router } from './createRoutes'
+import { router } from './routes/createRoutes'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../redux/reducers/rootReducer'
 import { setTokenDecode } from '../redux/actions/utilsActions'
