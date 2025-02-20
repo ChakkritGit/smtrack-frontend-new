@@ -185,11 +185,11 @@ const Sidebar = () => {
                     className='toggle toggle-md'
                     defaultChecked={tmsMode}
                     onClick={async () => {
-                      dispatch(setTmsMode())
                       navigate('/')
+                      dispatch(setTmsMode())
 
                       await new Promise(resolve => setTimeout(resolve, 500))
-
+                      
                       dispatch(setDeviceKey(''))
                       cookies.set('tmsMode', !tmsMode, cookieOptions)
                       cookies.remove('deviceKey', cookieOptions)

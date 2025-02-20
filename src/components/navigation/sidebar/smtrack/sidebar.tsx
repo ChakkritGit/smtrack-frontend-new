@@ -216,8 +216,8 @@ const Sidebar = () => {
                     className='toggle toggle-md'
                     defaultChecked={tmsMode}
                     onClick={async () => {
-                      dispatch(setTmsMode())
                       navigate('/')
+                      dispatch(setTmsMode())
 
                       await new Promise(resolve => setTimeout(resolve, 500))
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { RouterProvider } from 'react-router-dom'
-import { router } from './routes/createRoutes'
+import { router } from './createRoutes'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../redux/reducers/rootReducer'
 import { setTokenDecode } from '../redux/actions/utilsActions'
@@ -101,7 +101,9 @@ const Routes = () => {
   }, [])
 
   return (
-    <GlobalContext.Provider value={{ hospital, setHospital, ward, setWard, fetchHospital, fetchWard }}>
+    <GlobalContext.Provider
+      value={{ hospital, setHospital, ward, setWard, fetchHospital, fetchWard }}
+    >
       <RouterProvider router={router(role, tmsMode)} />
     </GlobalContext.Provider>
   )

@@ -1,15 +1,16 @@
 import { createBrowserRouter } from 'react-router-dom'
-import { smtrackChildren } from './smtrackChildren'
-import { tmsChildren } from './tmsChildren'
-import MainSmtrack from '../../main/smtrack/main'
-import MainTms from '../../main/tms/main'
-import { AuthRoute } from '../../middleware/authprotect'
-import { LogoutAuth } from '../../middleware/Auth'
-import NotFound from '../error/notFound'
-import App from '../docs/app'
-import Support from '../docs/support'
-import TermsConditions from '../docs/termsConditions'
-import PrivacyPolicy from '../docs/privacyPolicy'
+import { smtrackChildren } from './routes/smtrackChildren'
+import { tmsChildren } from './routes/tmsChildren'
+import MainSmtrack from '../main/smtrack/main'
+import MainTms from '../main/tms/main'
+import { AuthRoute } from '../middleware/authprotect'
+import { LogoutAuth } from '../middleware/Auth'
+import NotFound from './error/notFound'
+import App from './docs/app'
+import Support from './docs/support'
+import TermsConditions from './docs/termsConditions'
+import PrivacyPolicy from './docs/privacyPolicy'
+import ErrorScreen from './error/error'
 
 const router = (role: string, tmsMode: boolean) =>
   createBrowserRouter([
@@ -25,7 +26,7 @@ const router = (role: string, tmsMode: boolean) =>
             ) : (
               <MainTms />
             ),
-          errorElement: <></>,
+          errorElement: <ErrorScreen />,
           children:
             role !== 'LEGACY_ADMIN' && role !== 'LEGACY_USER' && !tmsMode
               ? smtrackChildren

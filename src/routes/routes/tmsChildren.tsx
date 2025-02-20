@@ -8,7 +8,7 @@ import {
 } from '../../components/skeleton'
 import { RouteObject } from 'react-router-dom'
 import FullDashboardSkeleton from '../../components/skeleton/dashboard/fullDashboardSkeleton'
-import ErrorScreen from '.././error/error'
+import ErrorScreen from '../error/error'
 const HomeTms = lazy(() => import('../../pages/home/homeTms'))
 const DashboardTms = lazy(() => import('../../pages/dashboard/tms/dashboardTms'))
 const Users = lazy(() => import('../../pages/users/users'))
