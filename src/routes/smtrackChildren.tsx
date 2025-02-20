@@ -7,6 +7,7 @@ import {
   ManageSkeleton
 } from '../components/skeleton'
 import { HideFlashFW, HideSetting } from '../middleware/Auth'
+import ErrorScreen from './error'
 const Home = lazy(() => import('../pages/home/home'))
 const Dashboard = lazy(() => import('../pages/dashboard/smtrack/dashboard'))
 const Users = lazy(() => import('../pages/users/users'))
@@ -25,7 +26,7 @@ const smtrackChildren: RouteObject[] = [
         <Home />
       </Suspense>
     ),
-    errorElement: <>error</>
+    errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard',
@@ -34,7 +35,7 @@ const smtrackChildren: RouteObject[] = [
         <Dashboard />
       </Suspense>
     ),
-    errorElement: <>error</>
+    errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard/chart',
@@ -43,7 +44,7 @@ const smtrackChildren: RouteObject[] = [
         <FullChart />
       </Suspense>
     ),
-    errorElement: <></>
+    errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard/chart/preview',
@@ -52,7 +53,7 @@ const smtrackChildren: RouteObject[] = [
         <PreviewPDF />
       </Suspense>
     ),
-    errorElement: <></>
+    errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard/table',
@@ -61,16 +62,16 @@ const smtrackChildren: RouteObject[] = [
         <FullTable />
       </Suspense>
     ),
-    errorElement: <></>
+    errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard/chart/compare',
     element: <>dashboard/chart/compare</>,
-    errorElement: <></>
+    errorElement: <ErrorScreen />
   },
   {
     element: <HideSetting />,
-    errorElement: <></>,
+    errorElement: <ErrorScreen />,
     children: [
       {
         path: 'permission',
@@ -79,7 +80,7 @@ const smtrackChildren: RouteObject[] = [
             <Users />
           </Suspense>
         ),
-        errorElement: <>error</>
+        errorElement: <ErrorScreen />
       },
       {
         path: 'management',
@@ -88,17 +89,17 @@ const smtrackChildren: RouteObject[] = [
             <Management />
           </Suspense>
         ),
-        errorElement: <></>
+        errorElement: <ErrorScreen />
       },
       {
         path: 'management/:id',
         element: <>management/:id</>,
-        errorElement: <></>
+        errorElement: <ErrorScreen />
       },
       {
         path: 'logs',
         element: <>logs</>,
-        errorElement: <></>
+        errorElement: <ErrorScreen />
       }
     ]
   },
@@ -109,7 +110,7 @@ const smtrackChildren: RouteObject[] = [
         <Warranty />
       </Suspense>
     ),
-    errorElement: <></>
+    errorElement: <ErrorScreen />
   },
   {
     path: 'repair',
@@ -118,17 +119,17 @@ const smtrackChildren: RouteObject[] = [
         <Repair />
       </Suspense>
     ),
-    errorElement: <></>
+    errorElement: <ErrorScreen />
   },
   {
     path: 'settings',
     element: <>settings</>,
-    errorElement: <></>
+    errorElement: <ErrorScreen />
   },
   {
     path: 'changeLog',
     element: <>changeLog</>,
-    errorElement: <></>
+    errorElement: <ErrorScreen />
   },
   ...(import.meta.env.VITE_APP_NODE_ENV === 'development'
     ? [
@@ -139,13 +140,13 @@ const smtrackChildren: RouteObject[] = [
               <></>
             </Suspense>
           ),
-          errorElement: <></>
+          errorElement: <ErrorScreen />
         }
       ]
     : []),
   {
     element: <HideFlashFW />,
-    errorElement: <></>,
+    errorElement: <ErrorScreen />,
     children: [
       {
         path: 'management/flasher',
@@ -154,7 +155,7 @@ const smtrackChildren: RouteObject[] = [
             <>management/flasher</>
           </Suspense>
         ),
-        errorElement: <></>
+        errorElement: <ErrorScreen />
       }
     ]
   }

@@ -8,6 +8,7 @@ import {
 } from '../components/skeleton'
 import { RouteObject } from 'react-router-dom'
 import FullDashboardSkeleton from '../components/skeleton/dashboard/fullDashboardSkeleton'
+import ErrorScreen from './error'
 const HomeTms = lazy(() => import('../pages/home/homeTms'))
 const DashboardTms = lazy(() => import('../pages/dashboard/tms/dashboardTms'))
 const Users = lazy(() => import('../pages/users/users'))
@@ -24,7 +25,7 @@ const tmsChildren: RouteObject[] = [
         <HomeTms />
       </Suspense>
     ),
-    errorElement: <></>
+    errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard',
@@ -33,7 +34,7 @@ const tmsChildren: RouteObject[] = [
         <DashboardTms />
       </Suspense>
     ),
-    errorElement: <></>
+    errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard/chart',
@@ -42,7 +43,7 @@ const tmsChildren: RouteObject[] = [
         <FullChartTms />
       </Suspense>
     ),
-    errorElement: <>err</>
+    errorElement:<ErrorScreen />
   },
   {
     path: 'dashboard/chart/preview',
@@ -51,7 +52,7 @@ const tmsChildren: RouteObject[] = [
         <PreviewPDF />
       </Suspense>
     ),
-    errorElement: <></>
+    errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard/table',
@@ -60,11 +61,11 @@ const tmsChildren: RouteObject[] = [
         <FullTableTms />
       </Suspense>
     ),
-    errorElement: <>err</>
+    errorElement: <ErrorScreen />
   },
   {
     element: <HideSettingTms />,
-    errorElement: <></>,
+    errorElement: <ErrorScreen />,
     children: [
       {
         path: 'permission',
@@ -73,7 +74,7 @@ const tmsChildren: RouteObject[] = [
             <Users />
           </Suspense>
         ),
-        errorElement: <></>
+        errorElement: <ErrorScreen />
       },
       {
         path: 'management',
@@ -82,7 +83,7 @@ const tmsChildren: RouteObject[] = [
             <ManagementTms />
           </Suspense>
         ),
-        errorElement: <></>
+        errorElement: <ErrorScreen />
       }
     ]
   },
@@ -93,7 +94,7 @@ const tmsChildren: RouteObject[] = [
         <>Setting</>
       </Suspense>
     ),
-    errorElement: <></>
+    errorElement: <ErrorScreen />
   }
 ]
 
