@@ -814,7 +814,9 @@ const Adjustments = (props: AdjustmentsProps) => {
                   <label className='label flex-col items-start'>
                     <span className='label-text mb-2'>{t('adjustTemp')}</span>
                     <ReactSlider
-                      className='relative flex items-center w-full h-2 bg-gray-300 rounded-btn my-3'
+                      className={`relative flex items-center w-full h-2 bg-gray-300 rounded-btn my-3 ${
+                        isLoadingMqtt ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
                       thumbClassName='flex items-center justify-center'
                       trackClassName='bg-orange-500/20 h-2 rounded-btn'
                       value={adjustmentsForm.adjustTemp}
@@ -833,7 +835,9 @@ const Adjustments = (props: AdjustmentsProps) => {
                       renderThumb={(props, state) => (
                         <div
                           {...props}
-                          className='flex items-center justify-center w-[42px] h-[32px] bg-orange-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50'
+                          className={`flex items-center justify-center w-[42px] h-[32px] bg-orange-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50 ${
+                            isLoadingMqtt ? 'cursor-not-allowed' : ''
+                          }`}
                         >
                           {state.valueNow}
                         </div>
@@ -847,7 +851,9 @@ const Adjustments = (props: AdjustmentsProps) => {
                   <label className='label flex-col items-start'>
                     <span className='label-text mb-2'>{t('adjustHumi')}</span>
                     <ReactSlider
-                      className='relative flex items-center w-full h-2 bg-gray-300 rounded-btn my-3'
+                      className={`relative flex items-center w-full h-2 bg-gray-300 rounded-btn my-3 ${
+                        isLoadingMqtt ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
                       thumbClassName='flex items-center justify-center'
                       trackClassName='bg-blue-500/20 h-2 rounded-btn'
                       value={adjustmentsForm.adjustHumi}
@@ -866,7 +872,9 @@ const Adjustments = (props: AdjustmentsProps) => {
                       renderThumb={(props, state) => (
                         <div
                           {...props}
-                          className='flex items-center justify-center w-[42px] h-[32px] bg-blue-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50'
+                          className={`flex items-center justify-center w-[42px] h-[32px] bg-blue-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50 ${
+                            isLoadingMqtt ? 'cursor-not-allowed' : ''
+                          }`}
                         >
                           {state.valueNow}
                         </div>

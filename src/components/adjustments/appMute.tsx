@@ -161,7 +161,7 @@ const AppMute = (props: AppMuteProps) => {
       }))[0]
 
   return (
-    <div className='w-full mt-4'>
+    <div className='w-full my-4'>
       <h3 className='font-bold text-base'>{t('notificationSettings')}</h3>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
         {/* Right Column - 2/3 of the grid (70%) */}

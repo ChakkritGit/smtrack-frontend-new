@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { FormEvent, useRef, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 import axiosInstance from '../../constants/axios/axiosInstance'
 import {
   accessToken,
@@ -21,6 +21,7 @@ const Login = () => {
   const passwordRef = useRef<HTMLInputElement>(null)
   const [alertMessage, setAlertMessage] = useState('')
   const [loading, setLoading] = useState(false)
+  const [currentDate, setCurrentDate] = useState(new Date())
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault()
@@ -81,10 +82,30 @@ const Login = () => {
     }
   }
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentDate(new Date())
+    }, 1000)
+
+    return () => clearInterval(intervalId)
+  }, [])
+
+  const formattedDate = currentDate.toLocaleDateString(t('thTime'), {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+  const formattedTime = currentDate.toLocaleTimeString(t('thTime'), {
+    hour: '2-digit',
+    minute: '2-digit'
+    // second: '2-digit'
+  })
+
   return (
-    <div className='min-h-dvh flex items-center justify-center'>
-      <div className='card bg-base-100 w-[350px] sm:w-[500px] md:w-[500px] lg:w-[500px] h-max shadow-xl'>
-        <div className='px-5 pt-5'>
+    <div className='min-h-dvh flex flex-col items-center justify-center gap-7'>
+      <div className='card bg-base-100 w-[370px] sm:w-[500px] md:w-[500px] lg:w-[600px] h-max shadow-xl'>
+        <div className='px-5 sm:px-7 lg:px-10 pt-5'>
           <div className='text-end'>
             <LanguageList />
           </div>
@@ -135,7 +156,7 @@ const Login = () => {
             </div>
           </div>
         </div>
-        <div className='card-body px-5'>
+        <div className='card-body px-5 sm:px-7 lg:px-10'>
           <form onSubmit={handleLogin} className='flex flex-col gap-4'>
             <label className='input input-bordered flex items-center gap-2'>
               <RiAtLine
@@ -192,6 +213,9 @@ const Login = () => {
             </span>
           </span>
         </div>
+      </div>
+      <div className='flex items-center justify-end w-[370px] sm:w-[500px] md:w-[500px] lg:w-[600px] px-10'>
+        <span>{`${formattedDate} ${formattedTime}`}</span>
       </div>
     </div>
   )
