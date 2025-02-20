@@ -504,8 +504,8 @@ const Repair = () => {
       </div>
       {DataTableComponent}
 
-      <dialog ref={addModalRef} className='modal'>
-        <form onSubmit={handleSubmit} className='modal-box w-5/6 max-w-[50rem]'>
+      <dialog ref={addModalRef} className='modal overflow-y-scroll py-10'>
+        <form onSubmit={handleSubmit} className='modal-box w-5/6 max-w-[50rem] h-max max-h-max'>
           <h3 className='font-bold text-lg'>{t('addRepair')}</h3>
           <div className='grid grid-cols-1 md:grid-cols-2 md:gap-4 mt-4 w-full'>
             <div>
@@ -754,8 +754,8 @@ const Repair = () => {
         </form>
       </dialog>
 
-      <dialog ref={editModalRef} className='modal'>
-        <form onSubmit={handleUpdate} className='modal-box w-5/6 max-w-[50rem]'>
+      <dialog ref={editModalRef} className='modal overflow-y-scroll py-10'>
+        <form onSubmit={handleUpdate} className='modal-box w-5/6 max-w-[50rem] h-max max-h-max'>
           <h3 className='font-bold text-lg'>{t('addRepair')}</h3>
           <div className='grid grid-cols-1 md:grid-cols-2 md:gap-4 mt-4 w-full'>
             <div>

@@ -295,8 +295,8 @@ const Home = () => {
 
       <Adjustments
         openAdjustModalRef={openAdjustModalRef}
-        probe={probeData}
         serial={serial}
+        probe={probeData}
         setProbeData={setProbeData}
         fetchDevices={fetchDevices}
       />

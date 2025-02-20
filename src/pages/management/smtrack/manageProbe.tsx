@@ -702,8 +702,8 @@ const ManageProbe = () => {
         />
       </div>
 
-      <dialog ref={addModalRef} className='modal'>
-        <form onSubmit={handleSubmit} className='modal-box max-w-[55rem]'>
+      <dialog ref={addModalRef} className='modal overflow-y-scroll py-10'>
+        <form onSubmit={handleSubmit} className='modal-box max-w-[55rem] h-max max-h-max'>
           <h3 className='font-bold text-lg'>{t('addProbe')}</h3>
           <div className='flex flex-col lg:flex-col xl:flex-row gap-4 mt-4 w-full'>
             <div className='w-full'>
@@ -1323,8 +1323,8 @@ const ManageProbe = () => {
         </form>
       </dialog>
 
-      <dialog ref={editModalRef} className='modal'>
-        <form onSubmit={handleUpdate} className='modal-box max-w-[85rem]'>
+      <dialog ref={editModalRef} className='modal overflow-y-scroll py-10'>
+        <form onSubmit={handleUpdate} className='modal-box max-w-[85rem] h-max max-h-max'>
           <h3 className='font-bold text-lg'>{t('editProbe')}</h3>
           <div className='flex flex-col lg:flex-col xl:flex-row gap-4 mt-4 w-full'>
             <div className='w-full'>

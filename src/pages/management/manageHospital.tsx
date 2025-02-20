@@ -679,10 +679,10 @@ const ManageHospital = () => {
         />
       </div>
 
-      <dialog ref={addHosModalRef} className='modal'>
+      <dialog ref={addHosModalRef} className='modal overflow-y-scroll py-10'>
         <form
           onSubmit={handleSubmitHospital}
-          className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
+          className='modal-box w-11/12 max-w-5xl h-max max-h-max'
         >
           <h3 className='font-bold text-lg'>{t('addHos')}</h3>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
@@ -861,10 +861,10 @@ const ManageHospital = () => {
         </form>
       </dialog>
 
-      <dialog ref={editHosModalRef} className='modal'>
+      <dialog ref={editHosModalRef} className='modal overflow-y-scroll py-10'>
         <form
           onSubmit={handleUpdateHospital}
-          className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
+          className='modal-box w-11/12 max-w-5xl h-max max-h-max'
         >
           <h3 className='font-bold text-lg'>{t('editHos')}</h3>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
@@ -1043,10 +1043,10 @@ const ManageHospital = () => {
         </form>
       </dialog>
 
-      <dialog ref={addWardModalRef} className='modal'>
+      <dialog ref={addWardModalRef} className='modal overflow-y-scroll py-10'>
         <form
           onSubmit={handleSubmitWard}
-          className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
+          className='modal-box w-11/12 max-w-5xl h-max max-h-max'
         >
           <h3 className='font-bold text-lg'>{t('editWard')}</h3>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
@@ -1102,10 +1102,10 @@ const ManageHospital = () => {
         </form>
       </dialog>
 
-      <dialog ref={editWardModalRef} className='modal'>
+      <dialog ref={editWardModalRef} className='modal overflow-y-scroll py-10'>
         <form
           onSubmit={handleUpdateWard}
-          className='modal-box w-4/5 md:overflow-y-visible'
+          className='modal-box w-4/5 h-max max-h-max'
         >
           <h3 className='font-bold text-lg'>{t('editWard')}</h3>
           <div className='grid grid-cols-1 gap-4 mt-4 w-full'>

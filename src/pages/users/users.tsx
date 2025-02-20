@@ -620,10 +620,10 @@ const Users = () => {
       {UserCard}
 
       {/* Add User Modal */}
-      <dialog ref={addModalRef} className='modal'>
+      <dialog ref={addModalRef} className='modal overflow-y-scroll py-10'>
         <form
           onSubmit={handleSubmit}
-          className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
+          className='modal-box w-11/12 max-w-5xl h-max max-h-max'
         >
           <h3 className='font-bold text-lg'>{t('addUserButton')}</h3>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
@@ -776,10 +776,10 @@ const Users = () => {
       </dialog>
 
       {/* Edit User Modal */}
-      <dialog ref={editModalRef} className='modal'>
+      <dialog ref={editModalRef} className='modal overflow-y-scroll py-10'>
         <form
           onSubmit={handleUpdate}
-          className='modal-box w-11/12 max-w-5xl md:overflow-y-visible'
+          className='modal-box w-11/12 max-w-5xl h-max max-h-max'
         >
           <h3 className='font-bold text-lg'>{t('editUserButton')}</h3>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
