@@ -132,6 +132,57 @@ const Adjustments = (props: AdjustmentsProps) => {
 
   const handleSubmitAppSetting = async (e: FormEvent) => {
     e.preventDefault()
+    dispatch(setSubmitLoading())
+
+    const body = {
+      firstDay: scheduleDay.firstDay,
+      secondDay: scheduleDay.seccondDay,
+      thirdDay: scheduleDay.thirdDay,
+      firstTime: `${scheduleTime.firstTime}${scheduleTime.firstMinute}`,
+      secondTime: `${scheduleTime.secondTime}${scheduleTime.seccondMinute}`,
+      thirdTime: `${scheduleTime.thirdTime}${scheduleTime.thirdMinute}`,
+      notiDelay: muteMode.choichOne === 'immediately' ? 0 : sendTime.after,
+      notiMobile: muteMode.choichfour === 'on' ? true : false,
+      notiRepeat: muteMode.choichthree === 'onetime' ? 0 : sendTime.every,
+      notiToNormal: muteMode.choichtwo === 'send' ? true : false
+    }
+    try {
+      await axiosInstance.put<responseType<ProbeListType>>(
+        `/devices/probe/${selectedProbe}`,
+        body
+      )
+      await fetchDevices(1, 10)
+      openAdjustModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderSuccess'),
+        text: t('submitSuccess'),
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => openAdjustModalRef.current?.showModal())
+    } catch (error) {
+      openAdjustModalRef.current?.close()
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: error.response?.data.message,
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2500
+        }).finally(() => openAdjustModalRef.current?.showModal())
+      } else {
+        console.error(error)
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: t('descriptionErrorWrong'),
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2500
+        }).finally(() => openAdjustModalRef.current?.showModal())
+      }
+    } finally {
+      dispatch(setSubmitLoading())
+    }
   }
 
   const mapOptions = <T, K extends keyof T>(
