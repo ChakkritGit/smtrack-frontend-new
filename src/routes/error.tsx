@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate, useRouteError } from 'react-router-dom'
 import { cookieOptions, cookies } from '../constants/utils/utilsConstants'
-import { RiAlertLine } from 'react-icons/ri'
+import { RiBugLine } from 'react-icons/ri'
 import { useTranslation } from 'react-i18next'
 
 const ErrorScreen = () => {
@@ -24,7 +24,7 @@ const ErrorScreen = () => {
     <div className='p-3 h-[calc(100dvh-64px)] flex items-center justify-center gap-3'>
       <div className='w-full fixed h-[64px] bg-red-500/40 blur-2xl top-0 shadow-2xl shadow-red-500/70 z-10'></div>
       <div className='flex items-center justify-center gap-3 flex-col'>
-        <RiAlertLine size={48} className='text-red-500' />
+        <RiBugLine size={48} className='text-red-500' />
         <span>{String(error)}</span>
         <button
           className='btn btn-ghost bg-base-300 text-base-content mt-5'

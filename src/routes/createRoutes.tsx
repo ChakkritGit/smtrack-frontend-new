@@ -5,6 +5,7 @@ import MainSmtrack from '../main/smtrack/main'
 import MainTms from '../main/tms/main'
 import { AuthRoute } from '../middleware/authprotect'
 import { LogoutAuth } from '../middleware/Auth'
+import NotFound from './notFound'
 
 const router = (role: string, tmsMode: boolean) =>
   createBrowserRouter([
@@ -41,17 +42,17 @@ const router = (role: string, tmsMode: boolean) =>
       element: <></>
     },
     {
+      path: 'app',
+      element: <></>,
+      errorElement: <></>
+    },
+    {
       path: '/login',
       element: <LogoutAuth />
     },
     {
       path: '*',
-      element: <></>
-    },
-    {
-      path: 'app',
-      element: <></>,
-      errorElement: <></>
+      element: <NotFound />
     }
   ])
 
