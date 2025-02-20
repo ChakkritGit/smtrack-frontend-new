@@ -92,6 +92,7 @@ const RoleSelect = (props: UserSelectRoleType) => {
       )}
       onChange={e => getRole(e?.value)}
       autoFocus={false}
+      menuPlacement='top'
       className='react-select-container w-full custom-role-select'
       classNamePrefix='react-select'
     />

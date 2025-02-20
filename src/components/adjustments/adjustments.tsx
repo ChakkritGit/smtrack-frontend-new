@@ -269,7 +269,6 @@ const Adjustments = (props: AdjustmentsProps) => {
 
   useEffect(() => {
     if (selectedProbe !== '' && tab === 1) {
-      setIsLoadingMqtt(true)
       const filter = probe
         .filter(item => item.id === selectedProbe)
         .find(item => item)
@@ -287,7 +286,7 @@ const Adjustments = (props: AdjustmentsProps) => {
           console.error('MQTT Suubscribe Error', err)
         }
       })
-
+      setIsLoadingMqtt(true)
       if (deviceModel === 'etemp') {
         client.publish(
           `siamatic/${deviceModel}/${version}/${serial}/${filter?.channel}/temp`,
@@ -1134,7 +1133,7 @@ const Adjustments = (props: AdjustmentsProps) => {
               </>
             ) : (
               <div className='mt-5'>
-                <Loading />
+                <Loading clear={isLoadingMqtt} />
               </div>
             )}
           </div>
