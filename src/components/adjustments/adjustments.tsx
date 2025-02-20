@@ -1133,7 +1133,7 @@ const Adjustments = (props: AdjustmentsProps) => {
               </>
             ) : (
               <div className='mt-5'>
-                <Loading clear={isLoadingMqtt} />
+                <Loading />
               </div>
             )}
           </div>

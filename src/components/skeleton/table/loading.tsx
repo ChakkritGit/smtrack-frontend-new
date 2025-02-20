@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface LoadingProps {
-  clear?: boolean
-}
-
-const Loading = (props: LoadingProps) => {
-  const { clear } = props
+const Loading = () => {
   const { t } = useTranslation()
   const [error, setError] = useState(false)
 
@@ -15,13 +10,8 @@ const Loading = (props: LoadingProps) => {
       setError(true)
     }, 60000)
 
-    if (clear) {
-      clearTimeout(timeout)
-      setError(false)
-    }
-
     return () => clearTimeout(timeout)
-  }, [clear])
+  }, [])
 
   if (error) {
     return (
