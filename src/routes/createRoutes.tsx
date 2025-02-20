@@ -21,14 +21,16 @@ const router = (role: string, tmsMode: boolean) =>
         {
           path: '/',
           element:
-            role !== 'LEGACY_ADMIN' && role !== 'LEGACY_USER' && !tmsMode ? (
+            (role !== 'LEGACY_ADMIN' && !tmsMode) ||
+            (role !== 'LEGACY_USER' && !tmsMode) ? (
               <MainSmtrack />
             ) : (
               <MainTms />
             ),
           errorElement: <ErrorScreen />,
           children:
-            role !== 'LEGACY_ADMIN' && role !== 'LEGACY_USER' && !tmsMode
+            (role !== 'LEGACY_ADMIN' && !tmsMode) ||
+            (role !== 'LEGACY_USER' && !tmsMode)
               ? smtrackChildren
               : tmsChildren
         }

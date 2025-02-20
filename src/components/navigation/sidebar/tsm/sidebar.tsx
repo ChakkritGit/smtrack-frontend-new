@@ -183,13 +183,13 @@ const Sidebar = () => {
                   <input
                     type='checkbox'
                     className='toggle toggle-md'
-                    defaultChecked={tmsMode}
+                    checked={tmsMode}
                     onClick={async () => {
                       navigate('/')
                       dispatch(setTmsMode())
 
                       await new Promise(resolve => setTimeout(resolve, 500))
-                      
+
                       dispatch(setDeviceKey(''))
                       cookies.set('tmsMode', !tmsMode, cookieOptions)
                       cookies.remove('deviceKey', cookieOptions)

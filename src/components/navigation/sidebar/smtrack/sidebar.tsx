@@ -214,7 +214,7 @@ const Sidebar = () => {
                   <input
                     type='checkbox'
                     className='toggle toggle-md'
-                    defaultChecked={tmsMode}
+                    checked={tmsMode}
                     onClick={async () => {
                       navigate('/')
                       dispatch(setTmsMode())
