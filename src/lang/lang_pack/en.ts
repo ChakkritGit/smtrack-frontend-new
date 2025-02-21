@@ -302,7 +302,7 @@ export default {
     endDate: 'Expired date',
 
     // notification
-    titleNotification: 'Notification',
+    titleNotification: 'Notifications',
     notRead: 'Unread',
     Readed: 'Readed',
     notificationAll: 'All',
@@ -319,6 +319,7 @@ export default {
     InternetBackToNormal: 'The Internet is back to normal',
     doorNum: 'Door',
     doorAlertText: 'Door Alert Settings',
+    notificationEmpty: 'No notification yet',
 
     // devices
     deviceDetail: 'Device Detail',

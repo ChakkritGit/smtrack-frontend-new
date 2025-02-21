@@ -318,6 +318,7 @@ export default {
     notificationAll: 'ทั้งหมด',
     notificationSound: 'เสียง',
     notificationPopup: 'การแจ้งเตือน',
+    notificationEmpty: 'ไม่มีการแจ้งเตือน',
 
     // devices
     deviceDetail: 'รายละเอียดอุปกรณ์',

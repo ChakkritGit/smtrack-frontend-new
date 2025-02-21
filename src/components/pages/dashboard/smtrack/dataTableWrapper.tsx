@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { RiFullscreenLine, RiPlayLine, RiStopLine } from 'react-icons/ri'
+import { RiArrowRightUpLine, RiPlayLine, RiStopLine } from 'react-icons/ri'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { Swiper as SwiperType } from 'swiper/types'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -109,7 +109,7 @@ const DataTableWrapper = (props: DataTableWrapperProps) => {
           )}
         </div>
         <button
-          className='btn btn-ghost flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
+          className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
           data-tip={t('fullTable')}
           onClick={() =>
             navigate('/dashboard/table', {
@@ -117,7 +117,7 @@ const DataTableWrapper = (props: DataTableWrapperProps) => {
             })
           }
         >
-          <RiFullscreenLine size={20} />
+          <RiArrowRightUpLine size={20} />
         </button>
       </div>
       <div className='h-full chart-h'>{DataTableFragment}</div>

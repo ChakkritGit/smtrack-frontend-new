@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
-  RiNotification4Line,
   RiSearchLine,
   RiArrowDownSLine,
   RiLayoutLeftLine,
@@ -34,6 +33,7 @@ import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import { DeviceListTmsType } from '../../../types/tms/devices/deviceType'
 import { AxiosError } from 'axios'
 import { DeviceListType } from '../../../types/smtrack/devices/deviceType'
+import Notifications from '../../notifications/notifications'
 
 type SearchType = {
   text: string
@@ -392,12 +392,7 @@ const Navbar = () => {
             <RiSearchLine size={24} />
           </div>
         </div>
-        <div className='indicator btn btn-ghost justify-end'>
-          <span className='indicator-item badge badge-secondary px-1 top-2 right-4 lg:right-2'>
-            99+
-          </span>
-          <RiNotification4Line size={24} />
-        </div>
+        <Notifications />
         <ThemeList />
         <LanguageList />
         <div className='lg:divider lg:divider-horizontal lg:!mx-2'></div>
