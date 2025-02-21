@@ -356,11 +356,12 @@ const Navbar = () => {
                   />
                 </svg>
                 <input
+                  name='Search'
                   onFocus={() => setIsFocused(true)}
                   onChange={e => dispatch(setSearch(e.target.value))}
                   value={globalSearch}
                   type='text'
-                  className='grow !w-28 md:w-auto caret-primary'
+                  className='grow !w-28 md:w-auto caret-primary placeholder:text-base-content/50'
                   placeholder='Search'
                   ref={searchRef}
                 />

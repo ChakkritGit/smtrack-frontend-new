@@ -212,6 +212,7 @@ const Sidebar = () => {
                 )}
                 <div className='flex items-center justify-center gap-2'>
                   <input
+                    name='TmsModeToggle'
                     type='checkbox'
                     className='toggle toggle-md'
                     checked={tmsMode}

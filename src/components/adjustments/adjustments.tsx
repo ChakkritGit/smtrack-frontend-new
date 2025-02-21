@@ -392,6 +392,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     -
                   </button>
                   <input
+                    name='tempMin'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
                     type='number'
@@ -455,6 +456,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     -
                   </button>
                   <input
+                    name='tempMax'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
                     type='number'
@@ -518,6 +520,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     -
                   </button>
                   <input
+                    name='humiMin'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
                     type='number'
@@ -581,6 +584,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     -
                   </button>
                   <input
+                    name='humiMax'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
                     type='number'
@@ -627,7 +631,7 @@ const Adjustments = (props: AdjustmentsProps) => {
               <div className='md:grid grid-cols-1 hidden md:grid-cols-2 gap-4 mt-4 w-full'>
                 {/* Temperature */}
                 <div className='form-control w-full'>
-                  <label className='label flex-col items-start'>
+                  <div className='label flex-col items-start'>
                     <span className='label-text mb-2'>
                       {t('probeTempSubTb')}
                     </span>
@@ -657,12 +661,12 @@ const Adjustments = (props: AdjustmentsProps) => {
                         </div>
                       )}
                     />
-                  </label>
+                  </div>
                 </div>
 
                 {/* Humidity */}
                 <div className='form-control w-full'>
-                  <label className='label flex-col items-start'>
+                  <div className='label flex-col items-start'>
                     <span className='label-text mb-2'>
                       {t('probeHumiSubTb')}
                     </span>
@@ -692,7 +696,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                         </div>
                       )}
                     />
-                  </label>
+                  </div>
                 </div>
               </div>
 
@@ -700,6 +704,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                 {/* Temperature */}
                 <div className='flex justify-between gap-2 w-full'>
                   <input
+                    name='tempMin'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
                     type='number'
@@ -725,6 +730,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     }}
                   />
                   <input
+                    name='tempMax'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
                     type='number'
@@ -754,6 +760,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                 {/* Humidity */}
                 <div className='flex justify-between gap-2 w-full'>
                   <input
+                    name='humiMin'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
                     type='number'
@@ -779,6 +786,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     }}
                   />
                   <input
+                    name='humiMax'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
                     type='number'
@@ -811,7 +819,7 @@ const Adjustments = (props: AdjustmentsProps) => {
               <div className='md:grid grid-cols-1 hidden md:grid-cols-2 gap-4 mt-4 w-full'>
                 {/* AdjustTemperature */}
                 <div className='form-control w-full'>
-                  <label className='label flex-col items-start'>
+                  <div className='label flex-col items-start'>
                     <span className='label-text mb-2'>{t('adjustTemp')}</span>
                     <ReactSlider
                       className={`relative flex items-center w-full h-2 bg-gray-300 rounded-btn my-3 ${
@@ -843,12 +851,12 @@ const Adjustments = (props: AdjustmentsProps) => {
                         </div>
                       )}
                     />
-                  </label>
+                  </div>
                 </div>
 
                 {/* AdjustHumidity */}
                 <div className='form-control w-full'>
-                  <label className='label flex-col items-start'>
+                  <div className='label flex-col items-start'>
                     <span className='label-text mb-2'>{t('adjustHumi')}</span>
                     <ReactSlider
                       className={`relative flex items-center w-full h-2 bg-gray-300 rounded-btn my-3 ${
@@ -880,7 +888,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                         </div>
                       )}
                     />
-                  </label>
+                  </div>
                 </div>
               </div>
 
@@ -888,6 +896,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                 {/* Temperature */}
                 <div className='flex justify-between gap-2 w-full'>
                   <input
+                    name='adjustTemp'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
                     type='number'
@@ -921,6 +930,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                 {/* Humidity */}
                 <div className='flex justify-between gap-2 w-full'>
                   <input
+                    name='adjustMumi'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
                     type='number'
@@ -973,6 +983,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     -
                   </button>
                   <input
+                    name='adjustTemp'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
                     type='number'
@@ -1040,6 +1051,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     -
                   </button>
                   <input
+                    name='adjustHumi'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
                     type='number'

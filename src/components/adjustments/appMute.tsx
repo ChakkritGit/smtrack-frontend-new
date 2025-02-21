@@ -174,7 +174,7 @@ const AppMute = (props: AppMuteProps) => {
                 <label className='flex items-center gap-2'>
                   <input
                     type='radio'
-                    // name='radio-1'
+                    name='immediately'
                     className='radio radio-primary'
                     checked={muteMode.choichOne === 'immediately'}
                     onChange={() =>
@@ -189,7 +189,7 @@ const AppMute = (props: AppMuteProps) => {
                 <label className='flex items-center gap-2'>
                   <input
                     type='radio'
-                    // name='radio-1'
+                    name='after'
                     className='radio radio-primary'
                     checked={muteMode.choichOne === 'after'}
                     onChange={() =>
@@ -201,6 +201,7 @@ const AppMute = (props: AppMuteProps) => {
                 {muteMode.choichOne === 'after' && (
                   <div className='join'>
                     <button
+                      name='after'
                       type='button'
                       className='btn join-item rounded-l-btn'
                       onClick={() => {
@@ -215,6 +216,7 @@ const AppMute = (props: AppMuteProps) => {
                       -
                     </button>
                     <input
+                      name='after'
                       className='input input-bordered join-item'
                       type='number'
                       min={5}
@@ -223,6 +225,7 @@ const AppMute = (props: AppMuteProps) => {
                       value={sendTime.after}
                     />
                     <button
+                      name='after'
                       type='button'
                       className='btn join-item rounded-r-btn'
                       onClick={() => {
@@ -250,7 +253,7 @@ const AppMute = (props: AppMuteProps) => {
                 <label className='flex items-center gap-2'>
                   <input
                     type='radio'
-                    // name='radio-1'
+                    name='send'
                     className='radio radio-primary'
                     checked={muteMode.choichtwo === 'send'}
                     onChange={() =>
@@ -262,7 +265,7 @@ const AppMute = (props: AppMuteProps) => {
                 <label className='flex items-center gap-2'>
                   <input
                     type='radio'
-                    // name='radio-1'
+                    name='donotsend'
                     className='radio radio-primary'
                     checked={muteMode.choichtwo === 'donotsend'}
                     onChange={() =>
@@ -288,7 +291,7 @@ const AppMute = (props: AppMuteProps) => {
                 <label className='flex items-center gap-2'>
                   <input
                     type='radio'
-                    // name='radio-1'
+                    name='onetime'
                     className='radio radio-primary'
                     checked={muteMode.choichthree === 'onetime'}
                     onChange={() =>
@@ -303,7 +306,7 @@ const AppMute = (props: AppMuteProps) => {
                 <label className='flex items-center gap-2'>
                   <input
                     type='radio'
-                    // name='radio-1'
+                    name='every'
                     className='radio radio-primary'
                     checked={muteMode.choichthree === 'every'}
                     onChange={() =>
@@ -315,6 +318,7 @@ const AppMute = (props: AppMuteProps) => {
                 {muteMode.choichthree === 'every' && (
                   <div className='join'>
                     <button
+                      name='every'
                       type='button'
                       className='btn join-item rounded-l-btn'
                       onClick={() => {
@@ -329,6 +333,7 @@ const AppMute = (props: AppMuteProps) => {
                       -
                     </button>
                     <input
+                      name='every'
                       className='input input-bordered join-item'
                       type='number'
                       min={5}
@@ -337,6 +342,7 @@ const AppMute = (props: AppMuteProps) => {
                       value={sendTime.every}
                     />
                     <button
+                      name='every'
                       type='button'
                       className='btn join-item rounded-r-btn'
                       onClick={() => {
@@ -364,7 +370,7 @@ const AppMute = (props: AppMuteProps) => {
                 <label className='flex items-center gap-2'>
                   <input
                     type='radio'
-                    // name='radio-1'
+                    name='off'
                     className='radio radio-primary'
                     checked={muteMode.choichfour === 'off'}
                     onChange={() =>
@@ -376,7 +382,7 @@ const AppMute = (props: AppMuteProps) => {
                 <label className='flex items-center gap-2'>
                   <input
                     type='radio'
-                    // name='radio-1'
+                    name='on'
                     className='radio radio-primary'
                     checked={muteMode.choichfour === 'on'}
                     onChange={() =>
@@ -396,9 +402,13 @@ const AppMute = (props: AppMuteProps) => {
       </div>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 w-full'>
         <div className='form-control w-full items-center justify-center'>
-          <label className='label flex-col items-center justify-center w-full'>
+          <label
+            className='label flex-col items-center justify-center w-full'
+            htmlFor='scheduleDayArray'
+          >
             <span className='label-text mb-2'>{t('firstDay')}</span>
             <Select
+              id='scheduleDayArray'
               isDisabled={scheduleDay.firstDay === 'ALL'}
               key={String(scheduleDay.firstDay)}
               options={filterOptions(
@@ -424,9 +434,13 @@ const AppMute = (props: AppMuteProps) => {
           </label>
         </div>
         <div className='form-control w-full items-center justify-center'>
-          <label className='label flex-col items-center justify-center w-full'>
+          <label
+            className='label flex-col items-center justify-center w-full'
+            htmlFor='scheduleDayArray'
+          >
             <span className='label-text mb-2'>{t('seccondDay')}</span>
             <Select
+              id='scheduleDayArray'
               isDisabled={scheduleDay.seccondDay === 'ALL'}
               key={String(scheduleDay.seccondDay)}
               options={filterOptions(
@@ -452,9 +466,13 @@ const AppMute = (props: AppMuteProps) => {
           </label>
         </div>
         <div className='form-control w-full items-center justify-center'>
-          <label className='label flex-col items-center justify-center w-full'>
+          <label
+            className='label flex-col items-center justify-center w-full'
+            htmlFor='scheduleDayArray'
+          >
             <span className='label-text mb-2'>{t('thirdDay')}</span>
             <Select
+              id='scheduleDayArray'
               isDisabled={scheduleDay.thirdDay === 'ALL'}
               key={String(scheduleDay.thirdDay)}
               options={filterOptions(
@@ -480,9 +498,13 @@ const AppMute = (props: AppMuteProps) => {
           </label>
         </div>
         <div className='form-control w-full items-center justify-center'>
-          <label className='label flex-col items-center justify-center'>
+          <label
+            className='label flex-col items-center justify-center'
+            htmlFor='toggle'
+          >
             <span className='label-text mb-2'>{t('everyDays')}</span>
             <input
+              id='toggle'
               type='checkbox'
               className='toggle toggle-md'
               checked={
@@ -517,6 +539,7 @@ const AppMute = (props: AppMuteProps) => {
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-5 w-full'>
         <span className='label-text mb-2'>{t('firstTime')}</span>
         <Select
+          name='scheduleTimeArray'
           // key={String(scheduleTime.firstTime)}
           options={filterOptions(
             mapOptions<ScheduleHour, keyof ScheduleHour>(
@@ -539,6 +562,7 @@ const AppMute = (props: AppMuteProps) => {
           classNamePrefix='react-select'
         />
         <Select
+          name='scheduleMinuteArray'
           // key={String(scheduleTime.firstMinute)}
           options={mapOptions<ScheduleMinute, keyof ScheduleMinute>(
             scheduleMinuteArray,
@@ -562,6 +586,7 @@ const AppMute = (props: AppMuteProps) => {
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4 w-full'>
         <span className='label-text mb-2'>{t('seccondTime')}</span>
         <Select
+          name='scheduleTimeArray'
           options={filterOptions(
             mapOptions<ScheduleHour, keyof ScheduleHour>(
               scheduleTimeArray,
@@ -583,6 +608,7 @@ const AppMute = (props: AppMuteProps) => {
           classNamePrefix='react-select'
         />
         <Select
+          name='scheduleMinuteArray'
           // key={String(scheduleTime.firstMinute)}
           options={mapOptions<ScheduleMinute, keyof ScheduleMinute>(
             scheduleMinuteArray,
@@ -606,6 +632,7 @@ const AppMute = (props: AppMuteProps) => {
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4 w-full'>
         <span className='label-text mb-2'>{t('thirdTime')}</span>
         <Select
+          name='scheduleTimeArray'
           // key={String(scheduleTime.firstTime)}
           options={filterOptions(
             mapOptions<ScheduleHour, keyof ScheduleHour>(
@@ -628,6 +655,7 @@ const AppMute = (props: AppMuteProps) => {
           classNamePrefix='react-select'
         />
         <Select
+          name='scheduleMinuteArray'
           // key={String(scheduleTime.firstMinute)}
           options={mapOptions<ScheduleMinute, keyof ScheduleMinute>(
             scheduleMinuteArray,

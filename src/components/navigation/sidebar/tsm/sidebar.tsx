@@ -181,6 +181,7 @@ const Sidebar = () => {
                 )}
                 <div className='flex items-center justify-center gap-2'>
                   <input
+                    name='TmsModeToggle'
                     type='checkbox'
                     className='toggle toggle-md'
                     checked={tmsMode}
@@ -211,7 +212,9 @@ const Sidebar = () => {
                 <RiSettings3Line size={24} />
               )}
               {!isExpand && (
-                <span className='text-[16px] leading-normal truncate'>{t('sideSetting')}</span>
+                <span className='text-[16px] leading-normal truncate'>
+                  {t('sideSetting')}
+                </span>
               )}
             </Link>
             <Link
