@@ -84,7 +84,7 @@ const Sidebar = () => {
                 <RiHome3Line size={24} />
               )}
               {!isExpand && (
-                <span className='text-[16px] truncate'>
+                <span className='text-[16px] leading-normal truncate'>
                   {t('sideShowAllBox')}
                 </span>
               )}
@@ -110,7 +110,7 @@ const Sidebar = () => {
                 <RiDashboardLine size={24} />
               )}
               {!isExpand && (
-                <span className='text-[16px] truncate'>
+                <span className='text-[16px] leading-normal truncate'>
                   {t('sideDashboard')}
                 </span>
               )}
@@ -134,7 +134,7 @@ const Sidebar = () => {
                     <RiUser6Line size={24} />
                   )}
                   {!isExpand && (
-                    <span className='text-[16px] truncate'>
+                    <span className='text-[16px] leading-normal truncate'>
                       {t('sidePermission')}
                     </span>
                   )}
@@ -159,7 +159,7 @@ const Sidebar = () => {
                       <RiListSettingsLine size={24} />
                     )}
                     {!isExpand && (
-                      <span className='text-[16px] truncate'>
+                      <span className='text-[16px] leading-normal truncate'>
                         {t('sideManage')}
                       </span>
                     )}
@@ -211,7 +211,7 @@ const Sidebar = () => {
                 <RiSettings3Line size={24} />
               )}
               {!isExpand && (
-                <span className='text-[16px] truncate'>{t('sideSetting')}</span>
+                <span className='text-[16px] leading-normal truncate'>{t('sideSetting')}</span>
               )}
             </Link>
             <Link

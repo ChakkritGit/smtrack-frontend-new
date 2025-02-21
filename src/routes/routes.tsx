@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './createRoutes'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,6 +15,9 @@ import { AxiosError } from 'axios'
 import { GlobalContext } from '../contexts/globalContext'
 import axiosInstance from '../constants/axios/axiosInstance'
 import { client } from '../services/mqtt'
+import sha256 from 'crypto-js/sha256'
+import hmacSHA512 from 'crypto-js/hmac-sha512'
+import Base64 from 'crypto-js/enc-base64'
 
 const Routes = () => {
   const dispatch = useDispatch()
@@ -100,14 +103,25 @@ const Routes = () => {
     client.connected
   }, [])
 
+  const routerInstance = useMemo(() => router(role, tmsMode), [role, tmsMode])
+  const contextValue = useMemo(
+    () => ({ hospital, setHospital, ward, setWard, fetchHospital, fetchWard }),
+    [hospital, ward]
+  )
+  const hashText = useCallback(
+    () =>
+      Base64.stringify(
+        hmacSHA512(
+          sha256(tmsMode ? `tms-${role}` : `smtrack-${role}`),
+          import.meta.env.VITE_APP_SECRETKEY
+        )
+      ),
+    [tmsMode, role]
+  )
+
   return (
-    <GlobalContext.Provider
-      value={{ hospital, setHospital, ward, setWard, fetchHospital, fetchWard }}
-    >
-      <RouterProvider
-        key={tmsMode ? `tms${role}` : `smtrack${role}`}
-        router={router(role, tmsMode)}
-      />
+    <GlobalContext.Provider value={contextValue}>
+      <RouterProvider key={hashText()} router={routerInstance} />
     </GlobalContext.Provider>
   )
 }
