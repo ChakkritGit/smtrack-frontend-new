@@ -12,43 +12,43 @@ import {
 const menuDataArraySmtrack = (t: TFunction) => {
   return [
     {
-      text: t('sideShowAllBox'),
+      text: 'sideShowAllBox',
       path: '/',
       tag: 'Show all Devices, แสดงกล่องทั้งหมด',
       icon: <RiHome3Line size={20} />
     },
     {
-      text: t('sideDashboard'),
+      text: 'sideDashboard',
       path: '/dashboard',
       tag: 'Dashboard, แดชบอร์ด',
       icon: <RiDashboardLine size={20} />
     },
     {
-      text: t('sidePermission'),
+      text: 'sidePermission',
       path: '/permission',
       tag: 'Manage Users, จัดการผู้ใช้',
       icon: <RiUser6Line size={20} />
     },
     {
-      text: t('sideManage'),
+      text: 'sideManage',
       path: '/management',
       tag: 'Manage, จัดการ',
       icon: <RiListSettingsLine size={20} />
     },
     {
-      text: t('sideRepair'),
+      text: 'sideRepair',
       path: '/repair',
       tag: 'Repairs, แจ้งซ่อม',
       icon: <RiFileSettingsLine size={20} />
     },
     {
-      text: t('sideWarranty'),
+      text: 'sideWarranty',
       path: '/warranty',
       tag: 'Warranties, การรับประกัน',
       icon: <RiShieldCheckLine size={20} />
     },
     {
-      text: t('sideSetting'),
+      text: 'sideSetting',
       path: '/settings',
       tag: 'Settings, การตั้งค่า',
       icon: <RiSettings3Line size={20} />

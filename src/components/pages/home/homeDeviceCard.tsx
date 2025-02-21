@@ -30,13 +30,14 @@ interface DeviceCardProps {
   handlePageChange: (page: number) => void
   handlePerRowsChange: (newPerPage: number, page: number) => Promise<void>
   loading: boolean
+  openAdjustModal: (probe: ProbeType[], sn: string) => void
 }
 
 const HomeDeviceCard = (props: DeviceCardProps) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { devicesFiltered, handlePageChange, handlePerRowsChange, loading } =
+  const { devicesFiltered, handlePageChange, handlePerRowsChange, loading, openAdjustModal } =
     props
 
   const doorComponent = (probe: ProbeType[], log: DeviceLogType[]) => {
@@ -105,6 +106,7 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                     <button
                       className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 tooltip tooltip-left'
                       data-tip={t('adjustMents')}
+                      onClick={() => openAdjustModal(item.probe, item.id)}
                     >
                       <RiSettings3Line size={24} />
                     </button>

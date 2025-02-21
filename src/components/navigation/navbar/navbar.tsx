@@ -179,18 +179,20 @@ const Navbar = () => {
             {searchHistory.map((item, index) => (
               <div
                 key={index}
-                className='flex items-center justify-between p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300'
+                className={`${
+                  index !== 0 ? 'mt-1' : ''
+                } flex items-center justify-between p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300`}
                 onClick={() => {
                   updateSearchHistory(item)
 
                   if (item.tag === 'menu') {
                     navigate(item.path)
-                    dispatch(setSearch(item.text))
+                    dispatch(setSearch(t(item.text)))
                     setIsFocused(false)
                   } else if (item.tag === 'device') {
                     cookies.set('deviceKey', item.path, cookieOptions) // it's mean setSerial
                     dispatch(setDeviceKey(item.path))
-                    dispatch(setSearch(item.text))
+                    dispatch(setSearch(t(item.text)))
                     navigate('/dashboard')
                     window.scrollTo(0, 0)
                     setIsFocused(false)
@@ -201,7 +203,9 @@ const Navbar = () => {
                   <div>
                     <RiHistoryLine size={18} />
                   </div>
-                  <span className='truncate  max-w-[300px]'>{item.text}</span>
+                  <span className='truncate  max-w-[300px]'>
+                    {t(item.text)}
+                  </span>
                 </div>
                 <button
                   className='p-1 rounded-full hover:bg-red-500 hover:text-white duration-300'
@@ -288,14 +292,16 @@ const Navbar = () => {
                         path: item.path,
                         tag: 'menu'
                       }
-                      dispatch(setSearch(item.text))
+                      dispatch(setSearch(t(item.text)))
                       navigate(item.path)
                       setIsFocused(false)
                       updateSearchHistory(newItem)
                     }}
                   >
                     <div>{item.icon}</div>
-                    <span className='truncate max-w-[150px]'>{item.text}</span>
+                    <span className='truncate max-w-[150px]'>
+                      {t(item.text)}
+                    </span>
                   </div>
                 ))
               ) : (

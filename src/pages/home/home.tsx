@@ -290,6 +290,7 @@ const Home = () => {
           handlePageChange={handlePageChange}
           handlePerRowsChange={handlePerRowsChange}
           loading={loading}
+          openAdjustModal={openAdjustModal}
         />
       )}
 

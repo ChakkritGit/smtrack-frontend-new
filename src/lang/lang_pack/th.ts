@@ -75,7 +75,7 @@ export default {
     currentHum: 'ความชื้นก่อนปรับชดเชย',
     adjustAfterHum: 'ความชื้นหลังปรับชดเชย',
     muteSetting: 'ตั้งค่าเสียง',
-    notificationSettings: 'ตั้งค่าการแจ้งเตือนแอพ',
+    notificationSettings: 'ตั้งค่าแอพ',
     muteSettings: 'ตั้งค่าการปิดเสียง',
     adjustButtonSubmit: 'บันทึก',
     mutsmtrackorary: 'ปิดเสียงแจ้งเตือน (ชั่วคราว)',
