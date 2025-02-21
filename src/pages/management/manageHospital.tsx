@@ -1046,39 +1046,41 @@ const ManageHospital = () => {
       <dialog ref={addWardModalRef} className='modal overflow-y-scroll py-10'>
         <form
           onSubmit={handleSubmitWard}
-          className='modal-box w-11/12 max-w-5xl h-max max-h-max'
+          className='modal-box w-11/12 max-w-5xl min-h-[30rem] justify-between flex flex-col'
         >
-          <h3 className='font-bold text-lg'>{t('editWard')}</h3>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
-            {/* Right Column - 2/3 of the grid (70%) */}
-            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
-              {/* Hospital */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>
-                    <span className='font-medium text-red-500 mr-1'>*</span>
-                    {t('userHospitals')}
-                  </span>
-                  <HopitalSelect />
-                </label>
-              </div>
+          <div>
+            <h3 className='font-bold text-lg'>{t('addWard')}</h3>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full'>
+              {/* Right Column - 2/3 of the grid (70%) */}
+              <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
+                {/* Hospital */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      <span className='font-medium text-red-500 mr-1'>*</span>
+                      {t('userHospitals')}
+                    </span>
+                    <HopitalSelect />
+                  </label>
+                </div>
 
-              {/* Ward */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>
-                    <span className='font-medium text-red-500 mr-1'>*</span>
-                    {t('userWard')}
-                  </span>
-                  <input
-                    name='wardName'
-                    type='text'
-                    value={wardForm.wardName}
-                    onChange={handleWardChange}
-                    className='input input-bordered w-full'
-                    maxLength={80}
-                  />
-                </label>
+                {/* Ward */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      <span className='font-medium text-red-500 mr-1'>*</span>
+                      {t('userWard')}
+                    </span>
+                    <input
+                      name='wardName'
+                      type='text'
+                      value={wardForm.wardName}
+                      onChange={handleWardChange}
+                      className='input input-bordered w-full'
+                      maxLength={80}
+                    />
+                  </label>
+                </div>
               </div>
             </div>
           </div>
@@ -1105,32 +1107,33 @@ const ManageHospital = () => {
       <dialog ref={editWardModalRef} className='modal overflow-y-scroll py-10'>
         <form
           onSubmit={handleUpdateWard}
-          className='modal-box w-4/5 h-max max-h-max'
+          className='modal-box w-4/5 min-h-[30rem] justify-between flex flex-col'
         >
-          <h3 className='font-bold text-lg'>{t('editWard')}</h3>
-          <div className='grid grid-cols-1 gap-4 mt-4 w-full'>
-            {/* Right Column - 2/3 of the grid (70%) */}
-            <div className='col-span-2 grid grid-cols-1 gap-2 md:gap-4'>
-              {/* Ward */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>
-                    <span className='font-medium text-red-500 mr-1'>*</span>
-                    {t('userWard')}
-                  </span>
-                  <input
-                    name='wardName'
-                    type='text'
-                    value={wardForm.wardName}
-                    onChange={handleWardChange}
-                    className='input input-bordered w-full'
-                    maxLength={80}
-                  />
-                </label>
+          <div>
+            <h3 className='font-bold text-lg'>{t('editWard')}</h3>
+            <div className='grid grid-cols-1 gap-4 mt-4 w-full'>
+              {/* Right Column - 2/3 of the grid (70%) */}
+              <div className='col-span-2 grid grid-cols-1 gap-2 md:gap-4'>
+                {/* Ward */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      <span className='font-medium text-red-500 mr-1'>*</span>
+                      {t('userWard')}
+                    </span>
+                    <input
+                      name='wardName'
+                      type='text'
+                      value={wardForm.wardName}
+                      onChange={handleWardChange}
+                      className='input input-bordered w-full'
+                      maxLength={80}
+                    />
+                  </label>
+                </div>
               </div>
             </div>
           </div>
-
           {/* Modal Actions */}
           <div className='modal-action mt-4 md:mt-6'>
             <button

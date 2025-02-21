@@ -369,6 +369,7 @@ const Navbar = () => {
                   type='text'
                   className='grow !w-28 md:w-auto caret-primary placeholder:text-base-content/50'
                   placeholder='Search'
+                  autoComplete='off'
                   ref={searchRef}
                 />
                 {clearText ? (

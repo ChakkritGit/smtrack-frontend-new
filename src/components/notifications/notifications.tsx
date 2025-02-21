@@ -156,9 +156,11 @@ const Notifications = () => {
         role='button'
         className='indicator btn btn-ghost justify-end'
       >
-        <span className='indicator-item badge badge-secondary px-1 top-2 right-4 lg:right-2'>
-          99+
-        </span>
+        {notificationList.length > 0 && (
+          <span className='indicator-item badge badge-secondary px-1 top-2 right-4 lg:right-3'>
+            {notificationList.length > 99 ? '99+' : notificationList.length}
+          </span>
+        )}
         <RiNotification4Line size={24} />
       </div>
       <ul
@@ -190,7 +192,7 @@ const Notifications = () => {
                     <div className='flex flex-col gap-1 w-full'>
                       <div className='flex items-center justify-between gap-3'>
                         <span>{item.message}</span>
-                        <div className='flex flex-col items-end'>
+                        <div className='flex flex-col items-end opacity-70'>
                           <span className='text-[14px]'>
                             {item.createdAt.substring(11, 16)}
                           </span>
@@ -199,7 +201,9 @@ const Notifications = () => {
                           </span>
                         </div>
                       </div>
-                      <span className='text-[14px]'>{item?.mcuId}</span>
+                      <span className='text-[14px] opacity-70'>
+                        {item?.mcuId}
+                      </span>
                     </div>
                   </li>
                 ))
@@ -227,7 +231,7 @@ const Notifications = () => {
                     <div className='flex flex-col gap-1 w-full'>
                       <div className='flex items-center justify-between gap-3'>
                         <span>{subTextNotiDetails(item.message)}</span>
-                        <div className='flex flex-col items-end'>
+                        <div className='flex flex-col items-end opacity-70'>
                           <span className='text-[14px]'>
                             {item.createAt.substring(11, 16)}
                           </span>
@@ -236,7 +240,9 @@ const Notifications = () => {
                           </span>
                         </div>
                       </div>
-                      <span className='text-[14px]'>{item.device.name}</span>
+                      <span className='text-[14px] opacity-70'>
+                        {item.device.name}
+                      </span>
                     </div>
                   </li>
                 ))
