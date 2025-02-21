@@ -109,6 +109,11 @@ const tmsChildren: RouteObject[] = [
       </Suspense>
     ),
     errorElement: <ErrorScreen />
+  },
+  {
+    path: 'log',
+    element: <>logs</>,
+    errorElement: <ErrorScreen />
   }
 ]
 

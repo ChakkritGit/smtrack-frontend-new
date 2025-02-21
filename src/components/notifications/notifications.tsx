@@ -191,8 +191,12 @@ const Notifications = () => {
                       <div className='flex items-center justify-between gap-3'>
                         <span>{item.message}</span>
                         <div className='flex flex-col items-end'>
-                          <span className='text-[14px]'>{item.createdAt.substring(11, 16)}</span>
-                          <span className='w-max text-[14px]'>{item.createdAt.substring(0, 10)}</span>
+                          <span className='text-[14px]'>
+                            {item.createdAt.substring(11, 16)}
+                          </span>
+                          <span className='w-max text-[14px]'>
+                            {item.createdAt.substring(0, 10)}
+                          </span>
                         </div>
                       </div>
                       <span className='text-[14px]'>{item?.mcuId}</span>
@@ -224,8 +228,12 @@ const Notifications = () => {
                       <div className='flex items-center justify-between gap-3'>
                         <span>{subTextNotiDetails(item.message)}</span>
                         <div className='flex flex-col items-end'>
-                          <span className='text-[14px]'>{item.createAt.substring(11, 16)}</span>
-                          <span className='w-max text-[14px]'>{item.createAt.substring(0, 10)}</span>
+                          <span className='text-[14px]'>
+                            {item.createAt.substring(11, 16)}
+                          </span>
+                          <span className='w-max text-[14px]'>
+                            {item.createAt.substring(0, 10)}
+                          </span>
                         </div>
                       </div>
                       <span className='text-[14px]'>{item.device.name}</span>

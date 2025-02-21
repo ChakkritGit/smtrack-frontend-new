@@ -160,6 +160,11 @@ const smtrackChildren: RouteObject[] = [
         errorElement: <ErrorScreen />
       }
     ]
+  },
+  {
+    path: 'log',
+    element: <>logs</>,
+    errorElement: <ErrorScreen />
   }
 ]
 
