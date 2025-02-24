@@ -1,13 +1,5 @@
-import { Suspense } from 'react'
 import { HideSettingManageTms, HideSettingTms } from '../../middleware/Auth'
-import {
-  DashboardSkeletonTms,
-  HomeSkeletonTms,
-  ManageSkeleton,
-  UserSkeleton
-} from '../../components/skeleton'
 import { RouteObject } from 'react-router-dom'
-import FullDashboardSkeleton from '../../components/skeleton/dashboard/fullDashboardSkeleton'
 import ErrorScreen from '../error/error'
 import HomeTms from '../../pages/home/homeTms'
 import DashboardTms from '../../pages/dashboard/tms/dashboardTms'
@@ -16,66 +8,31 @@ import PreviewPDF from '../../components/pdf/previewPdf'
 import FullTableTms from '../../pages/dashboard/tms/fullTableTms'
 import Users from '../../pages/users/users'
 import ManagementTms from '../../pages/management/tms/managementTms'
-// const HomeTms = lazy(() => import('../../pages/home/homeTms'))
-// const DashboardTms = lazy(
-//   () => import('../../pages/dashboard/tms/dashboardTms')
-// )
-// const Users = lazy(() => import('../../pages/users/users'))
-// const FullChartTms = lazy(
-//   () => import('../../pages/dashboard/tms/fullChartTms')
-// )
-// const FullTableTms = lazy(
-//   () => import('../../pages/dashboard/tms/fullTableTms')
-// )
-// const ManagementTms = lazy(
-//   () => import('../../pages/management/tms/managementTms')
-// )
-// const PreviewPDF = lazy(() => import('../../components/pdf/previewPdf'))
 
 const tmsChildren: RouteObject[] = [
   {
     path: '/',
-    element: (
-      <Suspense fallback={<HomeSkeletonTms />}>
-        <HomeTms />
-      </Suspense>
-    ),
+    element: <HomeTms />,
     errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard',
-    element: (
-      <Suspense fallback={<DashboardSkeletonTms />}>
-        <DashboardTms />
-      </Suspense>
-    ),
+    element: <DashboardTms />,
     errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard/chart',
-    element: (
-      <Suspense fallback={<FullDashboardSkeleton />}>
-        <FullChartTms />
-      </Suspense>
-    ),
+    element: <FullChartTms />,
     errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard/chart/preview',
-    element: (
-      <Suspense fallback={<FullDashboardSkeleton />}>
-        <PreviewPDF />
-      </Suspense>
-    ),
+    element: <PreviewPDF />,
     errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard/table',
-    element: (
-      <Suspense fallback={<FullDashboardSkeleton />}>
-        <FullTableTms />
-      </Suspense>
-    ),
+    element: <FullTableTms />,
     errorElement: <ErrorScreen />
   },
   {
@@ -84,11 +41,7 @@ const tmsChildren: RouteObject[] = [
     children: [
       {
         path: 'permission',
-        element: (
-          <Suspense fallback={<UserSkeleton />}>
-            <Users />
-          </Suspense>
-        ),
+        element: <Users />,
         errorElement: <ErrorScreen />
       }
     ]
@@ -99,22 +52,14 @@ const tmsChildren: RouteObject[] = [
     children: [
       {
         path: 'management',
-        element: (
-          <Suspense fallback={<ManageSkeleton />}>
-            <ManagementTms />
-          </Suspense>
-        ),
+        element: <ManagementTms />,
         errorElement: <ErrorScreen />
       }
     ]
   },
   {
     path: 'settings',
-    element: (
-      <Suspense fallback={<span>Loading...</span>}>
-        <>Setting</>
-      </Suspense>
-    ),
+    element: <>Setting</>,
     errorElement: <ErrorScreen />
   },
   {

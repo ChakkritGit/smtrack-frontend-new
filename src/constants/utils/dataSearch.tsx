@@ -1,4 +1,3 @@
-import { TFunction } from 'i18next'
 import {
   RiDashboardLine,
   RiFileSettingsLine,
@@ -9,7 +8,7 @@ import {
   RiUser6Line
 } from 'react-icons/ri'
 
-const menuDataArraySmtrack = (t: TFunction) => {
+const menuDataArraySmtrack = () => {
   return [
     {
       text: 'sideShowAllBox',

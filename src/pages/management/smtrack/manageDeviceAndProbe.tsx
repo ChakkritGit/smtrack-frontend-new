@@ -1,13 +1,11 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSearch } from '../../../redux/actions/utilsActions'
 import { RootState } from '../../../redux/reducers/rootReducer'
-import ManageDeviceSkeleton from '../../../components/skeleton/manage/manageDeviceSkeleton'
-import ManageHospitalSkeleton from '../../../components/skeleton/manage/manageHospitalSkeleton'
-const ManageDevice = lazy(() => import('./manageDevice'))
-const ManageProbe = lazy(() => import('./manageProbe'))
+import ManageProbe from './manageProbe'
+import ManageDevice from './manageDevice'
 
 const ManageDeviceAndProbe = () => {
   const dispatch = useDispatch()
@@ -61,13 +59,9 @@ const ManageDeviceAndProbe = () => {
       {manageMenu}
       <div className='mt-3'>
         {tab === 1 ? (
-          <Suspense fallback={<ManageDeviceSkeleton />}>
-            <ManageDevice />
-          </Suspense>
+          <ManageDevice />
         ) : (
-          <Suspense fallback={<ManageHospitalSkeleton />}>
-            <ManageProbe />
-          </Suspense>
+          <ManageProbe />
         )}
       </div>
     </div>

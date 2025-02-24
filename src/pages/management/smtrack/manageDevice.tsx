@@ -8,8 +8,6 @@ import {
   useState
 } from 'react'
 import DataTable, { TableColumn } from 'react-data-table-component'
-import Loading from '../../../components/skeleton/table/loading'
-import DataTableNoData from '../../../components/skeleton/table/noData'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import { AxiosError } from 'axios'
@@ -34,6 +32,8 @@ import defaultPic from '../../../assets/images/default-pic.png'
 import WardSelectDevice from '../../../components/selects/wardSelectDevice'
 import HopitalSelect from '../../../components/selects/hopitalSelect'
 import HospitalAndWard from '../../../components/filter/hospitalAndWard'
+import Loading from '../../../components/skeleton/table/loading'
+import DataTableNoData from '../../../components/skeleton/table/noData'
 
 const ManageDevice = () => {
   const dispatch = useDispatch()

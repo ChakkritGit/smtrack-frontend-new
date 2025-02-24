@@ -1,11 +1,4 @@
-import { Suspense } from 'react'
 import { RouteObject } from 'react-router-dom'
-import {
-  HomeSkeleton,
-  DashboardSkeleton,
-  UserSkeleton,
-  ManageSkeleton
-} from '../../components/skeleton'
 import { HideFlashFW, HideSetting } from '../../middleware/Auth'
 import ErrorScreen from '../error/error'
 import Home from '../../pages/home/home'
@@ -18,63 +11,31 @@ import Management from '../../pages/management/smtrack/management'
 import Warranty from '../../pages/warranty/warranty'
 import Repair from '../../pages/repair/repair'
 import Settings from '../../pages/settings/settings'
-// const Home = lazy(() => import('../../pages/home/home'))
-// const Dashboard = lazy(() => import('../../pages/dashboard/smtrack/dashboard'))
-// const Users = lazy(() => import('../../pages/users/users'))
-// const Management = lazy(
-//   () => import('../../pages/management/smtrack/management')
-// )
-// const Warranty = lazy(() => import('../../pages/warranty/warranty'))
-// const FullChart = lazy(() => import('../../pages/dashboard/smtrack/fullChart'))
-// const FullTable = lazy(() => import('../../pages/dashboard/smtrack/fullTable'))
-// const PreviewPDF = lazy(() => import('../../components/pdf/previewPdf'))
-// const Repair = lazy(() => import('../../pages/repair/repair'))
-// const Settings = lazy(() => import('../../pages/settings/settings'))
 
 const smtrackChildren: RouteObject[] = [
   {
     path: '/',
-    element: (
-      <Suspense fallback={<HomeSkeleton />}>
-        <Home />
-      </Suspense>
-    ),
+    element: <Home />,
     errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard',
-    element: (
-      <Suspense fallback={<DashboardSkeleton />}>
-        <Dashboard />
-      </Suspense>
-    ),
+    element: <Dashboard />,
     errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard/chart',
-    element: (
-      <Suspense fallback={<>123</>}>
-        <FullChart />
-      </Suspense>
-    ),
+    element: <FullChart />,
     errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard/chart/preview',
-    element: (
-      <Suspense fallback={<div>123</div>}>
-        <PreviewPDF />
-      </Suspense>
-    ),
+    element: <PreviewPDF />,
     errorElement: <ErrorScreen />
   },
   {
     path: 'dashboard/table',
-    element: (
-      <Suspense fallback={<>123</>}>
-        <FullTable />
-      </Suspense>
-    ),
+    element: <FullTable />,
     errorElement: <ErrorScreen />
   },
   {
@@ -88,20 +49,12 @@ const smtrackChildren: RouteObject[] = [
     children: [
       {
         path: 'permission',
-        element: (
-          <Suspense fallback={<UserSkeleton />}>
-            <Users />
-          </Suspense>
-        ),
+        element: <Users />,
         errorElement: <ErrorScreen />
       },
       {
         path: 'management',
-        element: (
-          <Suspense fallback={<ManageSkeleton />}>
-            <Management />
-          </Suspense>
-        ),
+        element: <Management />,
         errorElement: <ErrorScreen />
       },
       {
@@ -118,29 +71,17 @@ const smtrackChildren: RouteObject[] = [
   },
   {
     path: 'warranty',
-    element: (
-      <Suspense fallback={<>123</>}>
-        <Warranty />
-      </Suspense>
-    ),
+    element: <Warranty />,
     errorElement: <ErrorScreen />
   },
   {
     path: 'repair',
-    element: (
-      <Suspense fallback={<>123</>}>
-        <Repair />
-      </Suspense>
-    ),
+    element: <Repair />,
     errorElement: <ErrorScreen />
   },
   {
     path: 'settings',
-    element: (
-      <Suspense fallback={<div>123</div>}>
-        <Settings />
-      </Suspense>
-    ),
+    element: <Settings />,
     errorElement: <ErrorScreen />
   },
   {
@@ -152,11 +93,7 @@ const smtrackChildren: RouteObject[] = [
     ? [
         {
           path: 'test',
-          element: (
-            <Suspense fallback={<span>Loading...</span>}>
-              <></>
-            </Suspense>
-          ),
+          element: <></>,
           errorElement: <ErrorScreen />
         }
       ]
@@ -167,11 +104,7 @@ const smtrackChildren: RouteObject[] = [
     children: [
       {
         path: 'management/flasher',
-        element: (
-          <Suspense fallback={<span>Loading...</span>}>
-            <>management/flasher</>
-          </Suspense>
-        ),
+        element: <>management/flasher</>,
         errorElement: <ErrorScreen />
       }
     ]
