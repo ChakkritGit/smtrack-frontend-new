@@ -34,11 +34,16 @@ import { DeviceListTmsType } from '../../../types/tms/devices/deviceType'
 import { AxiosError } from 'axios'
 import { DeviceListType } from '../../../types/smtrack/devices/deviceType'
 import Notifications from '../../notifications/notifications'
+import ProfileComponent from '../../settings/profileComponent'
 
 type SearchType = {
   text: string
   path: string
   tag: string
+}
+
+interface FormState {
+  imagePreview: string | null
 }
 
 const Navbar = () => {
@@ -51,6 +56,7 @@ const Navbar = () => {
   const { pic, display, role } = userProfile || {}
   const searchRef = useRef<HTMLInputElement | null>(null)
   const searchWrapperRef = useRef<HTMLInputElement | null>(null)
+  const profileModalRef = useRef<HTMLDialogElement>(null)
   const parser = new UAParser()
   const os = parser.getOS().name
   const isMac = os === 'mac os'
@@ -59,6 +65,10 @@ const Navbar = () => {
   const [deviceList, setDeviceList] = useState<
     DeviceListType[] | DeviceListTmsType[]
   >([])
+  const [image, setImage] = useState<FormState>({
+    imagePreview: userProfile?.pic ?? null
+  })
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [searchHistory, setSearchHistory] = useState<SearchType[]>(() => {
     const storedHistory = cookies.get('searchHistory')
@@ -421,12 +431,14 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow'
+              className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-32 p-2 shadow'
             >
               <li>
-                <a className='justify-between'>
-                  Profile
-                  <span className='badge'>New</span>
+                <a
+                  onClick={() => profileModalRef?.current?.showModal()}
+                  className='justify-between'
+                >
+                  {t('profile')}
                 </a>
               </li>
               <li>
@@ -444,6 +456,30 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      <dialog ref={profileModalRef} className='modal overflow-y-scroll py-10'>
+        <div className='modal-box max-w-[60rem] h-max max-h-max'>
+          <ProfileComponent
+            userProfile={userProfile}
+            profileModalRef={profileModalRef}
+            fileInputRef={fileInputRef}
+            image={image}
+            setImage={setImage}
+          />
+        </div>
+        <form method='dialog' className='modal-backdrop'>
+          <button
+            onClick={() => {
+              setImage({
+                imagePreview: userProfile?.pic ?? null
+              })
+              if (fileInputRef.current) fileInputRef.current.value = ''
+            }}
+          >
+            close
+          </button>
+        </form>
+      </dialog>
     </div>
   )
 }

@@ -1,0 +1,303 @@
+import {
+  responseType,
+  UserProfileType
+} from '../../types/smtrack/utilsRedux/utilsReduxType'
+import Yosemite from '../../assets/images/bg-yosemite.jpg'
+import Default from '../../assets/images/default-user.jpg'
+import { RiCameraLine } from 'react-icons/ri'
+import { useTranslation } from 'react-i18next'
+import {
+  cookieOptions,
+  cookies,
+  getRoleLabel
+} from '../../constants/utils/utilsConstants'
+import {
+  Dispatch,
+  FormEvent,
+  RefObject,
+  SetStateAction,
+  useState
+} from 'react'
+import axiosInstance from '../../constants/axios/axiosInstance'
+import { useDispatch } from 'react-redux'
+import {
+  setSubmitLoading,
+  setUserProfile
+} from '../../redux/actions/utilsActions'
+import { AxiosError } from 'axios'
+import Swal from 'sweetalert2'
+import { resizeImage } from '../../constants/utils/image'
+
+interface ProfileProps {
+  userProfile: UserProfileType | undefined
+  profileModalRef: RefObject<HTMLDialogElement | null>
+  fileInputRef: RefObject<HTMLInputElement | null>
+  setImage: Dispatch<SetStateAction<FormState>>
+  image: FormState
+}
+
+interface FormState {
+  imagePreview: string | null
+}
+
+const ProfileComponent = (props: ProfileProps) => {
+  const dispatch = useDispatch()
+  const { t } = useTranslation()
+  const { userProfile, profileModalRef, fileInputRef, image, setImage } = props
+  const [edit, setEdit] = useState(false)
+  const [imageProcessing, setImageProcessing] = useState(false)
+  const [displayName, setDisplayName] = useState('')
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setImageProcessing(true)
+      await new Promise(resolve => setTimeout(resolve, 500))
+      const reSized = await resizeImage(file)
+      setImage({
+        ...image,
+        imagePreview: URL.createObjectURL(file)
+      })
+      handleUpdate(reSized)
+      setImageProcessing(false)
+    }
+  }
+
+  const fetchUserProfile = async () => {
+    if (userProfile?.id) {
+      try {
+        const response = await axiosInstance.get<responseType<UserProfileType>>(
+          `${
+            import.meta.env.VITE_APP_NODE_ENV === 'development'
+              ? import.meta.env.VITE_APP_AUTH
+              : ''
+          }/auth/user/${userProfile?.id}`
+        )
+        cookies.set('userProfile', response.data.data, cookieOptions)
+        dispatch(setUserProfile(response.data.data))
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+          } else {
+            console.error('Something wrong' + error)
+          }
+        } else {
+          console.error('Uknown error: ', error)
+        }
+      }
+    }
+  }
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    dispatch(setSubmitLoading())
+
+    if (displayName !== '') {
+      try {
+        await axiosInstance.put<responseType<UserProfileType>>(
+          `/auth/user/${userProfile?.id}`,
+          {
+            display: displayName
+          }
+        )
+        profileModalRef.current?.close()
+        resetForm()
+        setEdit(false)
+        await fetchUserProfile()
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: t('submitSuccess'),
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        }).finally(() => profileModalRef.current?.showModal())
+      } catch (error) {
+        profileModalRef.current?.close()
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          }).finally(() => profileModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    } else {
+      profileModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => profileModalRef.current?.showModal())
+      dispatch(setSubmitLoading())
+    }
+  }
+
+  const handleUpdate = async (reSized: File) => {
+    try {
+      const formDataObj = new FormData()
+      formDataObj.append('image', reSized)
+      await axiosInstance.put<responseType<UserProfileType>>(
+        `/auth/user/${userProfile?.id}`,
+        formDataObj,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }
+      )
+
+      resetForm()
+      await fetchUserProfile()
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: error.response?.data.message,
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2500
+        })
+      } else {
+        console.error(error)
+      }
+    }
+  }
+
+  const resetForm = () => {
+    setDisplayName('')
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  return (
+    <div>
+      <div className='relative mb-20'>
+        <div
+          className='w-full h-56 relative rounded-tl-btn rounded-tr-btn before:absolute before:inset-x-0 before:bottom-0 before:h-20 before:bg-gradient-to-t before:from-black/50 before:to-transparent'
+          style={{
+            backgroundImage: `url(${Yosemite})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        ></div>
+        <div className='form-control absolute bottom-0 rounded-full translate-y-[40%] translate-x-1/2 md:translate-x-[unset] md:left-7'>
+          <label htmlFor='imageFileSelect' className='cursor-pointer relative'>
+            <div className='avatar rounded-full border-[5px] border-base-100 relative'>
+              <div className='w-36 rounded'>
+                {!imageProcessing ? (
+                  <img
+                    src={image.imagePreview ?? Default}
+                    className='rounded-full bg-base-100'
+                    alt='user-avatar'
+                  />
+                ) : (
+                  <img
+                    src={Default}
+                    className='rounded-full bg-base-100'
+                    alt='user-avatar'
+                  />
+                )}
+              </div>
+
+              <div className='absolute hover:opacity-85 duration-300 flex items-center justify-center bottom-0 right-0 bg-base-200 p-2 rounded-full border-[3px] border-base-100'>
+                <RiCameraLine size={20} className='text-base-content/80' />
+              </div>
+            </div>
+
+            <input
+              ref={fileInputRef}
+              id='imageFileSelect'
+              name='imageFileSelect'
+              type='file'
+              accept='image/*'
+              onChange={handleImageChange}
+              className='hidden'
+            />
+          </label>
+        </div>
+      </div>
+
+      {!edit ? (
+        <div className='flex flex-col md:flex-row gap-5 md:gap-0 items-center justify-between'>
+          <div className='flex flex-col pl-3'>
+            <div className='flex items-center gap-2'>
+              <span className='text-[32px] md:text-[24px] font-medium'>
+                {userProfile?.display ?? '—'}
+              </span>
+              <span
+                className={`badge bg-opacity-15 border-1 font-bold h-[25px] ${
+                  userProfile?.role
+                    ? userProfile?.role === 'SUPER'
+                      ? 'badge-super'
+                      : userProfile?.role === 'SERVICE'
+                      ? 'badge-service'
+                      : userProfile?.role === 'ADMIN'
+                      ? 'badge-admin'
+                      : userProfile?.role === 'USER'
+                      ? 'badge-user'
+                      : 'badge-guest'
+                    : ''
+                }`}
+              >
+                {userProfile?.role ? getRoleLabel(userProfile?.role, t) : '—'}
+              </span>
+            </div>
+            <span className='opacity-70 text-center md:text-left'>
+              @{userProfile?.username}
+            </span>
+          </div>
+          <button
+            className='w-[70px] h-[40px] font-bold rounded-btn border-[2px] border-base-content text-base-content hover:opacity-50 duration-300'
+            onClick={() => {
+              setEdit(true)
+              setDisplayName(userProfile?.display ?? '—')
+            }}
+          >
+            {t('editButton')}
+          </button>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <div className='form-control'>
+            <label className='input input-bordered flex items-center gap-2'>
+              <span className='opacity-50'>{t('userDisplayName')}</span>
+              <input
+                type='text'
+                name='display'
+                autoComplete='off'
+                onChange={e => setDisplayName(e.target.value)}
+                value={displayName}
+                className='grow caret-primary'
+                autoFocus
+                maxLength={80}
+              />
+            </label>
+          </div>
+          {/* Modal Actions */}
+          <div className='modal-action mt-6'>
+            <button
+              type='button'
+              className='btn'
+              onClick={() => {
+                setEdit(false)
+                resetForm()
+              }}
+            >
+              {t('cancelButton')}
+            </button>
+            <button type='submit' className='btn btn-primary'>
+              {t('submitButton')}
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
+  )
+}
+
+export default ProfileComponent

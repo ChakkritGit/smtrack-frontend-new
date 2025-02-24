@@ -19,6 +19,7 @@ const FullChart = lazy(() => import('../../pages/dashboard/smtrack/fullChart'))
 const FullTable = lazy(() => import('../../pages/dashboard/smtrack/fullTable'))
 const PreviewPDF = lazy(() => import('../../components/pdf/previewPdf'))
 const Repair = lazy(() => import('../../pages/repair/repair'))
+const Settings = lazy(() => import('../../pages/settings/settings'))
 
 const smtrackChildren: RouteObject[] = [
   {
@@ -125,7 +126,11 @@ const smtrackChildren: RouteObject[] = [
   },
   {
     path: 'settings',
-    element: <>settings</>,
+    element: (
+      <Suspense fallback={<div>123</div>}>
+        <Settings />
+      </Suspense>
+    ),
     errorElement: <ErrorScreen />
   },
   {

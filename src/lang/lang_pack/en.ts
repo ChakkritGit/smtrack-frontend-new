@@ -444,12 +444,13 @@ export default {
     hospitalsName: 'Hospital',
     wardsName: 'Ward',
     pressPre1: 'Press',
-    pressPre2: 'to exit search',
+    pressPre2: 'to exit',
     token: 'Token',
     remmark: 'Remark',
     tag: 'Tag',
     copyToken: 'Copy Token',
     installApp: 'How to Install App (APK)',
+    profile: 'Profile',
 
     // connect
     ipAddress: 'IP',

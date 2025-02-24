@@ -443,12 +443,13 @@ export default {
     hospitalsName: 'โรงพยาบาล',
     wardsName: 'วอร์ด',
     pressPre1: 'กด',
-    pressPre2: 'เพื่อออกจากการค้นหา',
+    pressPre2: 'เพื่อออก',
     token: 'โทเค็น',
     remmark: 'หมายเหตุ',
     tag: 'แท็ก',
     copyToken: 'คัดลอก โทเค็น',
     installApp: 'วิธีการติดตั้งแอปพลิเคชั่น (APK)',
+    profile: 'โปรไฟล์',
 
     // connect
     ipAddress: 'IP',
