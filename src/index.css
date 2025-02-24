@@ -366,6 +366,10 @@ div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line] {
   overflow-y: hidden !important;
 }
 
+div:where(.swal2-container) div:where(.swal2-html-container) {
+  @apply !pt-2;
+}
+
 .image-hover:hover {
   .edit-icon {
     @apply bg-base-200/30 duration-300;

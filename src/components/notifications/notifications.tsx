@@ -26,7 +26,7 @@ import { RootState } from '../../redux/reducers/rootReducer'
 import { useSelector } from 'react-redux'
 
 const Notifications = () => {
-  const { tokenDecode, tmsMode } = useSelector(
+  const { tokenDecode, tmsMode, userProfile } = useSelector(
     (state: RootState) => state.utils
   )
   const { t } = useTranslation()
@@ -148,6 +148,75 @@ const Notifications = () => {
   useEffect(() => {
     fetchNotificaton()
   }, [])
+
+  useEffect(() => {
+    const changeFavicon = (href: string) => {
+      const link: HTMLLinkElement =
+        document.querySelector("link[rel*='icon']") ||
+        document.createElement('link')
+      link.type = 'image/png'
+      link.rel = 'icon'
+      link.href = href
+
+      const pathSegment = location.pathname.split('/')[1]
+      const capitalized =
+        pathSegment.charAt(0).toUpperCase() + pathSegment.slice(1)
+
+      document.getElementsByTagName('head')[0].appendChild(link)
+      document.title =
+        (notificationList.filter(n => n.status === false).length > 0
+          ? `(${notificationList.filter(n => n.status === false).length}) `
+          : '') +
+        userProfile?.ward.hospital.hosName +
+        ' - ' +
+        `${location.pathname.split('/')[1] !== '' ? capitalized : 'Home'}`
+    }
+
+    if (notificationList.length > 0) {
+      const addNotificationDotToFavicon = async () => {
+        const baseImageSrc = userProfile?.ward.hospital.hosPic
+          ? `${userProfile?.ward.hospital.hosPic}`
+          : 'Logo_SM_WBG.jpg'
+
+        const img = new Image()
+        img.src = baseImageSrc
+        img.crossOrigin = 'anonymous'
+
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          const ctx = canvas.getContext('2d')
+
+          if (!ctx) return
+
+          const size = 64
+          canvas.width = size
+          canvas.height = size
+
+          ctx.drawImage(img, 0, 0, size, size)
+
+          const dotSize = 24
+          const x = size - dotSize + 10
+          const y = dotSize / 5 + 10
+          ctx.fillStyle = '#e74c3c'
+          ctx.beginPath()
+          ctx.arc(x, y, dotSize / 2, 0, Math.PI * 2)
+          ctx.fill()
+
+          changeFavicon(canvas.toDataURL('image/png'))
+        }
+      }
+
+      if (notificationList.filter(n => n.status === false).length > 0) {
+        addNotificationDotToFavicon()
+      }
+    } else {
+      if (userProfile?.ward.hospital.hosPic) {
+        changeFavicon(
+          `${import.meta.env.VITE_APP_IMG}${userProfile?.ward.hospital.hosPic}`
+        )
+      }
+    }
+  }, [location, userProfile, notificationList])
 
   return (
     <div className='dropdown dropdown-end'>

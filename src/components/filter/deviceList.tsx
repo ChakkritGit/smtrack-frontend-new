@@ -83,7 +83,7 @@ const DeviceList = () => {
         dispatch(setDeviceKey(String(e?.value)))
       }}
       autoFocus={false}
-      className='react-select-container z-[75] min-w-full md:min-w-[315px]'
+      className='react-select-container custom-device-select z-[75] min-w-full md:min-w-[315px]'
       classNamePrefix='react-select'
     />
   )

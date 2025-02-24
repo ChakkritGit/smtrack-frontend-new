@@ -6,7 +6,10 @@ import {
   RiLayoutRightLine,
   RiCloseLine,
   RiHistoryLine,
-  RiDeviceLine
+  RiDeviceLine,
+  RiNotification4Line,
+  RiIdCardLine,
+  RiLogoutBoxRLine
 } from 'react-icons/ri'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
@@ -21,7 +24,8 @@ import { UAParser } from 'ua-parser-js'
 import {
   cookieOptions,
   cookies,
-  getRoleLabel
+  getRoleLabel,
+  swalWithBootstrapButtons
 } from '../../../constants/utils/utilsConstants'
 import { useTranslation } from 'react-i18next'
 import ThemeList from '../../theme/themeList'
@@ -71,6 +75,7 @@ const Navbar = () => {
     imagePreview: userProfile?.pic ?? null
   })
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [edit, setEdit] = useState(false)
 
   const [searchHistory, setSearchHistory] = useState<SearchType[]>(() => {
     const storedHistory = cookies.get('searchHistory')
@@ -159,7 +164,7 @@ const Navbar = () => {
   const searchRecommend = useMemo(() => {
     if (!isFocused) return null
 
-    const filter = menuDataArraySmtrack(t).filter(
+    const filter = menuDataArraySmtrack().filter(
       f =>
         f.text?.toLowerCase().includes(globalSearch?.toLowerCase()) ||
         f.tag?.toLowerCase().includes(globalSearch?.toLowerCase())
@@ -408,7 +413,6 @@ const Navbar = () => {
         <Notifications />
         <ThemeList />
         <LanguageList />
-        {/* <div className='lg:divider lg:divider-horizontal lg:!mx-2'></div> */}
         <div className='flex-none gap-2 hidden lg:block'>
           <div className='dropdown dropdown-end'>
             <div
@@ -433,28 +437,52 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-32 p-2 shadow'
+              className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-max p-2 shadow'
             >
-              <li>
-                <a
-                  onClick={() => profileModalRef?.current?.showModal()}
-                  className='justify-between'
-                >
+              <li
+                onClick={() => profileModalRef?.current?.showModal()}
+                className='h-9'
+              >
+                <a className='text-[16px] h-9 flex items-center gap-2'>
+                  <RiIdCardLine />
                   {t('profile')}
                 </a>
               </li>
-              <li>
-                <a onClick={() => settingModalRef?.current?.showModal()}>
+              <li
+                onClick={() => settingModalRef?.current?.showModal()}
+                className='h-9'
+              >
+                <a className='text-[16px] h-9 flex items-center gap-2'>
+                  <RiNotification4Line />
                   {t('titleNotification')}
                 </a>
               </li>
+              <div className='divider divider-vertical m-0 before:h-[1px] after:h-[1px]'></div>
               <li
-                onClick={() => {
-                  cookies.remove('tokenObject', cookieOptions)
-                  dispatch(setCookieEncode(undefined))
-                }}
+                onClick={() =>
+                  swalWithBootstrapButtons
+                    .fire({
+                      title: t('logoutDialog'),
+                      text: t('logoutDialogText'),
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonText: t('confirmButton'),
+                      cancelButtonText: t('cancelButton'),
+                      reverseButtons: false
+                    })
+                    .then(result => {
+                      if (result.isConfirmed) {
+                        cookies.remove('tokenObject', cookieOptions)
+                        dispatch(setCookieEncode(undefined))
+                      }
+                    })
+                }
+                className='text-red-500 h-9'
               >
-                <a>Logout</a>
+                <a className='text-[16px] h-9 flex items-center gap-2'>
+                  <RiLogoutBoxRLine />
+                  {t('tabLogout')}
+                </a>
               </li>
             </ul>
           </div>
@@ -469,11 +497,14 @@ const Navbar = () => {
             fileInputRef={fileInputRef}
             image={image}
             setImage={setImage}
+            edit={edit}
+            setEdit={setEdit}
           />
         </div>
         <form method='dialog' className='modal-backdrop'>
           <button
             onClick={() => {
+              setEdit(false)
               setImage({
                 imagePreview: userProfile?.pic ?? null
               })

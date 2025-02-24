@@ -281,7 +281,7 @@ const Adjustments = (props: AdjustmentsProps) => {
         adjustHumi: filter?.humiAdj ?? 0
       })
       setProbeBefore(filter)
-      client.subscribe(`${serial}/temp/real`, err => {
+      client.subscribe(`${serial}/${filter?.channel}/temp/real`, err => {
         if (err) {
           console.error('MQTT Suubscribe Error', err)
         }
@@ -1104,7 +1104,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                 <div className='flex flex-col md:flex-row items-center justify-around gap-5 md:gap-2 mt-5'>
                   <div className='flex flex-col items-center gap-2'>
                     <span className='md:text-[14px]'>{t('currentTemp')}</span>
-                    <div className='flex items-center justify-center h-[55px] min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
+                    <div className='flex items-center justify-center h-[55px] px-2 min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
                       {mqData.temp ? `${mqData.temp.toFixed(2)}°C` : '—'}
                     </div>
                   </div>
@@ -1114,7 +1114,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     <span className='md:text-[14px]'>
                       {t('adjustAfterTemp')}
                     </span>
-                    <div className='flex items-center justify-center h-[55px] min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
+                    <div className='flex items-center justify-center h-[55px] px-2 min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
                       {mqData.temp
                         ? `${(
                             mqData.temp +
@@ -1129,7 +1129,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                 <div className='flex flex-col md:flex-row items-center justify-around gap-5 md:gap-2 mt-5'>
                   <div className='flex flex-col items-center gap-2'>
                     <span className='md:text-[14px]'>{t('currentHum')}</span>
-                    <div className='flex items-center justify-center h-[55px] min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
+                    <div className='flex items-center justify-center h-[55px] px-2 min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
                       {mqData.humi ? `${mqData.humi.toFixed(2)}%` : '—'}
                     </div>
                   </div>
@@ -1139,7 +1139,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     <span className='md:text-[14px]'>
                       {t('adjustAfterHum')}
                     </span>
-                    <div className='flex items-center justify-center h-[55px] min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
+                    <div className='flex items-center justify-center h-[55px] px-2 min-w-[55px] w-max rounded-btn border-[2px] border-primary text-primary text-[18px] font-bold'>
                       {mqData.humi
                         ? `${(
                             mqData.humi +

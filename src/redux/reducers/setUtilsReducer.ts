@@ -34,8 +34,8 @@ const initialState: UtilsState = {
   deviceKey: cookies.get('deviceKey'),
   submitLoading: false,
   socketData: null,
-  popUpMode: false,
-  soundMode: false
+  popUpMode: cookies.get('popUpMode') ?? false,
+  soundMode: cookies.get('soundMode') ?? false
 }
 
 const utilsReducer = (

@@ -33,6 +33,8 @@ interface ProfileProps {
   fileInputRef: RefObject<HTMLInputElement | null>
   setImage: Dispatch<SetStateAction<FormState>>
   image: FormState
+  setEdit: Dispatch<SetStateAction<boolean>>
+  edit: boolean
 }
 
 interface FormState {
@@ -42,8 +44,16 @@ interface FormState {
 const ProfileComponent = (props: ProfileProps) => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const { userProfile, profileModalRef, fileInputRef, image, setImage } = props
-  const [edit, setEdit] = useState(false)
+  const {
+    userProfile,
+    profileModalRef,
+    fileInputRef,
+    image,
+    setImage,
+    edit,
+    setEdit
+  } = props
+
   const [imageProcessing, setImageProcessing] = useState(false)
   const [displayName, setDisplayName] = useState('')
 

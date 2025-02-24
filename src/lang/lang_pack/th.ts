@@ -450,6 +450,7 @@ export default {
     copyToken: 'คัดลอก โทเค็น',
     installApp: 'วิธีการติดตั้งแอปพลิเคชั่น (APK)',
     profile: 'โปรไฟล์',
+    allNotification: 'การแจ้งเตือนในหน้าเว็บทั้งหมด',
 
     // connect
     ipAddress: 'IP',

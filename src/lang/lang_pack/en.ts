@@ -451,6 +451,7 @@ export default {
     copyToken: 'Copy Token',
     installApp: 'How to Install App (APK)',
     profile: 'Profile',
+    allNotification: 'All Notifications on the Web',
 
     // connect
     ipAddress: 'IP',

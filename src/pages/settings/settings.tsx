@@ -1,11 +1,10 @@
 const Settings = () => {
   return (
-    <div className='h-dvh'>
-      {/* <iframe
-        src='https://drive.siamatic.co.th/'
-        width={'100%'}
-        height={'100%'}
-      ></iframe> */}
+    <div className='h-dvh bg-red-500'>
+      <div className='grid grid-cols-[20%_80%]'>
+        <div className='bg-blue-500'>Menu List</div>
+        <div className='bg-green-500'>Content</div>
+      </div>
     </div>
   )
 }

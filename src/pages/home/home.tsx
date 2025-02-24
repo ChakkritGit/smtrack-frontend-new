@@ -189,18 +189,23 @@ const Home = () => {
 
   return (
     <div className='p-3 px-[16px]'>
-      <div className='flex items-center justify-between mt-[16px]'>
-        <span className='font-bold text-[20px]'>{t('showAllBox')}</span>
-        {role === 'SUPER' && (
-          <span className='bg-base-300 p-2 px-3 rounded-btn'>
-            {`${
-              hospital?.filter(f => f.id?.includes(hosId))[0]?.hosName ??
-              userProfile?.ward?.hospital?.hosName
-            } - ${
-              ward?.filter(w => w.id?.includes(wardId))[0]?.wardName ?? 'ALL'
-            }`}
-          </span>
-        )}
+      <div className='grid grid-cols-1 md:grid-cols-2 content-between items-center gap-3 mt-[16px]'>
+        <span className='font-bold text-[20px] w-full'>{t('showAllBox')}</span>
+        <div className='flex items-center justify-end w-full'>
+          {role === 'SUPER' && (
+            <div className='flex items-center gap-2 bg-base-300 p-2 px-3 rounded-btn w-max'>
+              <span className='truncate max-w-[150px] md:max-w-[300px]'>
+                {hospital?.filter(f => f.id?.includes(hosId))[0]?.hosName ??
+                  userProfile?.ward?.hospital?.hosName}
+              </span>
+              <span>-</span>
+              <span className='truncate max-w-[100px] md:max-w-[250px]'>
+                {ward?.filter(w => w.id?.includes(wardId))[0]?.wardName ??
+                  'ALL'}
+              </span>
+            </div>
+          )}
+        </div>
       </div>
       <HomeCount
         deviceCount={deviceCount}
