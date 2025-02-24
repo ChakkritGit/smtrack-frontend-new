@@ -1,6 +1,8 @@
 const AppearanceComponents = () => {
   return (
-    <div>AppearanceComponents</div>
+    <div>
+      
+    </div>
   )
 }
 

@@ -2,8 +2,8 @@ import {
   responseType,
   UserProfileType
 } from '../../types/smtrack/utilsRedux/utilsReduxType'
-import Yosemite from '../../assets/images/bg-yosemite.jpg'
-import Default from '../../assets/images/default-user.jpg'
+import DefaultUser from '../../assets/images/default-user.jpg'
+import DefaultHos from '../../assets/images/default-pic.png'
 import { RiCameraLine } from 'react-icons/ri'
 import { useTranslation } from 'react-i18next'
 import {
@@ -11,13 +11,7 @@ import {
   cookies,
   getRoleLabel
 } from '../../constants/utils/utilsConstants'
-import {
-  Dispatch,
-  FormEvent,
-  RefObject,
-  SetStateAction,
-  useState
-} from 'react'
+import { Dispatch, FormEvent, RefObject, SetStateAction, useState } from 'react'
 import axiosInstance from '../../constants/axios/axiosInstance'
 import { useDispatch } from 'react-redux'
 import {
@@ -27,6 +21,11 @@ import {
 import { AxiosError } from 'axios'
 import Swal from 'sweetalert2'
 import { resizeImage } from '../../constants/utils/image'
+// import {
+//   RemoveBgResult,
+//   RemoveBgError,
+//   removeBackgroundFromImageFile
+// } from 'remove.bg'
 
 interface ProfileProps {
   userProfile: UserProfileType | undefined
@@ -174,15 +173,35 @@ const ProfileComponent = (props: ProfileProps) => {
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
+  // const removeBgWhite = (imgUrl: string) => {
+  //   removeBackgroundFromImageFile({
+  //     path: imgUrl,
+  //     apiKey: import.meta.env.VITE_APP_REMOVEBG_API,
+  //     size: 'regular',
+  //     type: 'auto',
+  //     scale: '50%'
+  //   })
+  //     .then((result: RemoveBgResult) => {
+  //       return result.base64img
+  //     })
+  //     .catch((errors: Array<RemoveBgError>) => {
+  //       console.log(JSON.stringify(errors))
+  //     })
+  // }
+
   return (
     <div>
       <div className='relative mb-20'>
         <div
-          className='w-full h-56 relative rounded-tl-btn rounded-tr-btn before:absolute before:inset-x-0 before:bottom-0 before:h-20 before:bg-gradient-to-t before:from-black/50 before:to-transparent'
+          className='w-full h-56 relative rounded-tl-btn rounded-tr-btn before:absolute before:inset-x-0 before:bottom-0 before:h-20 
+          before:bg-gradient-to-t before:from-base-content/50 before:to-transparent'
           style={{
-            backgroundImage: `url(${Yosemite})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
+            backgroundImage: `url(${
+              userProfile?.ward.hospital?.hosPic ?? DefaultHos
+            })`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
           }}
         ></div>
         <div className='form-control absolute bottom-0 rounded-full translate-y-[40%] translate-x-1/2 md:translate-x-[unset] md:left-7'>
@@ -191,13 +210,13 @@ const ProfileComponent = (props: ProfileProps) => {
               <div className='w-36 rounded'>
                 {!imageProcessing ? (
                   <img
-                    src={image.imagePreview ?? Default}
+                    src={image.imagePreview ?? DefaultUser}
                     className='rounded-full bg-base-100'
                     alt='user-avatar'
                   />
                 ) : (
                   <img
-                    src={Default}
+                    src={DefaultUser}
                     className='rounded-full bg-base-100'
                     alt='user-avatar'
                   />

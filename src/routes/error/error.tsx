@@ -16,7 +16,7 @@ const ErrorScreen = () => {
       return
     }
 
-    window.location.reload()
+    // window.location.reload()
     cookies.set('limitError', true, cookieOptions)
   }, [])
 

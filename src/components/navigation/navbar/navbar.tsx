@@ -35,6 +35,7 @@ import { AxiosError } from 'axios'
 import { DeviceListType } from '../../../types/smtrack/devices/deviceType'
 import Notifications from '../../notifications/notifications'
 import ProfileComponent from '../../settings/profileComponent'
+import SoundAndNotificationComponents from '../../settings/soundAndNotificationComponents'
 
 type SearchType = {
   text: string
@@ -57,6 +58,7 @@ const Navbar = () => {
   const searchRef = useRef<HTMLInputElement | null>(null)
   const searchWrapperRef = useRef<HTMLInputElement | null>(null)
   const profileModalRef = useRef<HTMLDialogElement>(null)
+  const settingModalRef = useRef<HTMLDialogElement>(null)
   const parser = new UAParser()
   const os = parser.getOS().name
   const isMac = os === 'mac os'
@@ -442,7 +444,9 @@ const Navbar = () => {
                 </a>
               </li>
               <li>
-                <a>Settings</a>
+                <a onClick={() => settingModalRef?.current?.showModal()}>
+                  {t('sideSetting')}
+                </a>
               </li>
               <li
                 onClick={() => {
@@ -458,7 +462,7 @@ const Navbar = () => {
       </div>
 
       <dialog ref={profileModalRef} className='modal overflow-y-scroll py-10'>
-        <div className='modal-box max-w-[60rem] h-max max-h-max'>
+        <div className='modal-box max-w-[50rem] h-max max-h-max'>
           <ProfileComponent
             userProfile={userProfile}
             profileModalRef={profileModalRef}
@@ -466,6 +470,24 @@ const Navbar = () => {
             image={image}
             setImage={setImage}
           />
+        </div>
+        <form method='dialog' className='modal-backdrop'>
+          <button
+            onClick={() => {
+              setImage({
+                imagePreview: userProfile?.pic ?? null
+              })
+              if (fileInputRef.current) fileInputRef.current.value = ''
+            }}
+          >
+            close
+          </button>
+        </form>
+      </dialog>
+
+      <dialog ref={settingModalRef} className='modal overflow-y-scroll py-10'>
+        <div className='modal-box max-w-[50rem] h-max max-h-max'>
+          <SoundAndNotificationComponents />
         </div>
         <form method='dialog' className='modal-backdrop'>
           <button
