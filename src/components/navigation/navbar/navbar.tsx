@@ -396,7 +396,7 @@ const Navbar = () => {
         <Notifications />
         <ThemeList />
         <LanguageList />
-        <div className='lg:divider lg:divider-horizontal lg:!mx-2'></div>
+        {/* <div className='lg:divider lg:divider-horizontal lg:!mx-2'></div> */}
         <div className='flex-none gap-2 hidden lg:block'>
           <div className='dropdown dropdown-end'>
             <div
