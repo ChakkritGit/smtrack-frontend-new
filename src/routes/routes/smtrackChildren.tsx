@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { Suspense } from 'react'
 import { RouteObject } from 'react-router-dom'
 import {
   HomeSkeleton,
@@ -8,18 +8,28 @@ import {
 } from '../../components/skeleton'
 import { HideFlashFW, HideSetting } from '../../middleware/Auth'
 import ErrorScreen from '../error/error'
-const Home = lazy(() => import('../../pages/home/home'))
-const Dashboard = lazy(() => import('../../pages/dashboard/smtrack/dashboard'))
-const Users = lazy(() => import('../../pages/users/users'))
-const Management = lazy(
-  () => import('../../pages/management/smtrack/management')
-)
-const Warranty = lazy(() => import('../../pages/warranty/warranty'))
-const FullChart = lazy(() => import('../../pages/dashboard/smtrack/fullChart'))
-const FullTable = lazy(() => import('../../pages/dashboard/smtrack/fullTable'))
-const PreviewPDF = lazy(() => import('../../components/pdf/previewPdf'))
-const Repair = lazy(() => import('../../pages/repair/repair'))
-const Settings = lazy(() => import('../../pages/settings/settings'))
+import Home from '../../pages/home/home'
+import Dashboard from '../../pages/dashboard/smtrack/dashboard'
+import FullChart from '../../pages/dashboard/smtrack/fullChart'
+import PreviewPDF from '../../components/pdf/previewPdf'
+import FullTable from '../../pages/dashboard/smtrack/fullTable'
+import Users from '../../pages/users/users'
+import Management from '../../pages/management/smtrack/management'
+import Warranty from '../../pages/warranty/warranty'
+import Repair from '../../pages/repair/repair'
+import Settings from '../../pages/settings/settings'
+// const Home = lazy(() => import('../../pages/home/home'))
+// const Dashboard = lazy(() => import('../../pages/dashboard/smtrack/dashboard'))
+// const Users = lazy(() => import('../../pages/users/users'))
+// const Management = lazy(
+//   () => import('../../pages/management/smtrack/management')
+// )
+// const Warranty = lazy(() => import('../../pages/warranty/warranty'))
+// const FullChart = lazy(() => import('../../pages/dashboard/smtrack/fullChart'))
+// const FullTable = lazy(() => import('../../pages/dashboard/smtrack/fullTable'))
+// const PreviewPDF = lazy(() => import('../../components/pdf/previewPdf'))
+// const Repair = lazy(() => import('../../pages/repair/repair'))
+// const Settings = lazy(() => import('../../pages/settings/settings'))
 
 const smtrackChildren: RouteObject[] = [
   {

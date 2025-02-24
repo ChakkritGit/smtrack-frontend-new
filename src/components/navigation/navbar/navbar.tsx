@@ -445,7 +445,7 @@ const Navbar = () => {
               </li>
               <li>
                 <a onClick={() => settingModalRef?.current?.showModal()}>
-                  {t('sideSetting')}
+                  {t('titleNotification')}
                 </a>
               </li>
               <li
@@ -486,7 +486,7 @@ const Navbar = () => {
       </dialog>
 
       <dialog ref={settingModalRef} className='modal overflow-y-scroll py-10'>
-        <div className='modal-box max-w-[50rem] h-max max-h-max'>
+        <div className='modal-box max-w-[40rem] h-max max-h-max'>
           <SoundAndNotificationComponents />
         </div>
         <form method='dialog' className='modal-backdrop'>

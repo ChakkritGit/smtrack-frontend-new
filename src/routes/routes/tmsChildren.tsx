@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { Suspense } from 'react'
 import { HideSettingManageTms, HideSettingTms } from '../../middleware/Auth'
 import {
   DashboardSkeletonTms,
@@ -9,21 +9,28 @@ import {
 import { RouteObject } from 'react-router-dom'
 import FullDashboardSkeleton from '../../components/skeleton/dashboard/fullDashboardSkeleton'
 import ErrorScreen from '../error/error'
-const HomeTms = lazy(() => import('../../pages/home/homeTms'))
-const DashboardTms = lazy(
-  () => import('../../pages/dashboard/tms/dashboardTms')
-)
-const Users = lazy(() => import('../../pages/users/users'))
-const FullChartTms = lazy(
-  () => import('../../pages/dashboard/tms/fullChartTms')
-)
-const FullTableTms = lazy(
-  () => import('../../pages/dashboard/tms/fullTableTms')
-)
-const ManagementTms = lazy(
-  () => import('../../pages/management/tms/managementTms')
-)
-const PreviewPDF = lazy(() => import('../../components/pdf/previewPdf'))
+import HomeTms from '../../pages/home/homeTms'
+import DashboardTms from '../../pages/dashboard/tms/dashboardTms'
+import FullChartTms from '../../pages/dashboard/tms/fullChartTms'
+import PreviewPDF from '../../components/pdf/previewPdf'
+import FullTableTms from '../../pages/dashboard/tms/fullTableTms'
+import Users from '../../pages/users/users'
+import ManagementTms from '../../pages/management/tms/managementTms'
+// const HomeTms = lazy(() => import('../../pages/home/homeTms'))
+// const DashboardTms = lazy(
+//   () => import('../../pages/dashboard/tms/dashboardTms')
+// )
+// const Users = lazy(() => import('../../pages/users/users'))
+// const FullChartTms = lazy(
+//   () => import('../../pages/dashboard/tms/fullChartTms')
+// )
+// const FullTableTms = lazy(
+//   () => import('../../pages/dashboard/tms/fullTableTms')
+// )
+// const ManagementTms = lazy(
+//   () => import('../../pages/management/tms/managementTms')
+// )
+// const PreviewPDF = lazy(() => import('../../components/pdf/previewPdf'))
 
 const tmsChildren: RouteObject[] = [
   {
