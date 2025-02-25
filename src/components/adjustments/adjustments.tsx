@@ -34,6 +34,14 @@ type AdjustmentsProps = {
   fetchDevices: (page: number, size?: number) => Promise<void>
 }
 
+interface MqttType {
+  tempAlarm: string
+  tempTemporary: string | boolean
+  tempDuration: string
+  doorAlarm: string
+  doorDuration: string
+}
+
 const Adjustments = (props: AdjustmentsProps) => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
@@ -49,6 +57,13 @@ const Adjustments = (props: AdjustmentsProps) => {
     adjustHumi: 0
   })
   const [mqData, setMqData] = useState({ temp: 0, humi: 0 })
+  const [muteDoor, setMuteDoor] = useState<MqttType>({
+    tempAlarm: '',
+    tempTemporary: '',
+    tempDuration: '',
+    doorAlarm: '',
+    doorDuration: ''
+  })
   const deviceModel = serial.substring(0, 3) === 'eTP' ? 'etemp' : 'items'
   const version = serial.substring(3, 5).toLowerCase()
   const [probeBefore, setProbeBefore] = useState<ProbeType | undefined>(
@@ -215,6 +230,8 @@ const Adjustments = (props: AdjustmentsProps) => {
       .filter(item => item.id === selectedProbe)
       .find(item => item)
     client.publish(`${serial}/${filter?.channel}/temp`, 'off')
+    client.unsubscribe(`${serial}/${filter?.channel}/temp/real`)
+    client.unsubscribe(`${serial}/${filter?.channel}/mute/status/receive`)
     setAdjustmentsForm({
       tempMin: 0,
       tempMax: 0,
@@ -268,51 +285,80 @@ const Adjustments = (props: AdjustmentsProps) => {
   }, [probe])
 
   useEffect(() => {
-    if (selectedProbe !== '' && tab === 1) {
+    if (selectedProbe !== '') {
       const filter = probe
         .filter(item => item.id === selectedProbe)
         .find(item => item)
-      setAdjustmentsForm({
-        tempMin: filter?.tempMin ?? 0,
-        tempMax: filter?.tempMax ?? 0,
-        humiMin: filter?.humiMin ?? 0,
-        humiMax: filter?.humiMax ?? 0,
-        adjustTemp: filter?.tempAdj ?? 0,
-        adjustHumi: filter?.humiAdj ?? 0
-      })
-      setProbeBefore(filter)
-      client.subscribe(`${serial}/${filter?.channel}/temp/real`, err => {
-        if (err) {
-          console.error('MQTT Suubscribe Error', err)
+      if (tab === 1) {
+        client.unsubscribe(`${serial}/${filter?.channel}/mute/status/receive`)
+        setAdjustmentsForm({
+          tempMin: filter?.tempMin ?? 0,
+          tempMax: filter?.tempMax ?? 0,
+          humiMin: filter?.humiMin ?? 0,
+          humiMax: filter?.humiMax ?? 0,
+          adjustTemp: filter?.tempAdj ?? 0,
+          adjustHumi: filter?.humiAdj ?? 0
+        })
+        setProbeBefore(filter)
+        client.subscribe(`${serial}/${filter?.channel}/temp/real`, err => {
+          if (err) {
+            console.error('MQTT Suubscribe Error', err)
+          }
+        })
+        setIsLoadingMqtt(true)
+        if (deviceModel === 'etemp') {
+          client.publish(
+            `siamatic/${deviceModel}/${version}/${serial}/${filter?.channel}/temp`,
+            'on'
+          )
+        } else {
+          client.publish(
+            `siamatic/${deviceModel}/${version}/${serial}/${filter?.channel}/temp`,
+            'on'
+          )
         }
-      })
-      setIsLoadingMqtt(true)
-      if (deviceModel === 'etemp') {
+        client.publish(`${serial}/${filter?.channel}/temp`, 'on')
+
+        client.on('message', (_topic, message) => {
+          setMqData(JSON.parse(message.toString()))
+          setIsLoadingMqtt(false)
+        })
+
+        client.on('error', err => {
+          console.error('MQTT Error: ', err)
+          client.end()
+        })
+
+        client.on('reconnect', () => {
+          console.error('MQTT Reconnecting...')
+        })
+      } else if (tab === 3) {
+        client.publish(`${serial}/${filter?.channel}/temp`, 'off')
+        client.unsubscribe(`${serial}/${filter?.channel}/temp/real`)
+        client.subscribe(
+          `${serial}/${filter?.channel}/mute/status/receive`,
+          err => {
+            if (err) {
+              console.error('MQTT Suubscribe Error', err)
+            }
+          }
+        )
         client.publish(
-          `siamatic/${deviceModel}/${version}/${serial}/${filter?.channel}/temp`,
+          `siamatic/${deviceModel}/${version}/${serial}/${filter?.channel}/mute/status`,
           'on'
         )
-      } else {
-        client.publish(
-          `siamatic/${deviceModel}/${version}/${serial}/${filter?.channel}/temp`,
-          'on'
-        )
+        client.on('message', (_topic, message) => {
+          setMuteDoor(JSON.parse(message.toString())) // set new state with mute noti
+        })
+        client.on('error', err => {
+          console.error('MQTT Error: ', err)
+          client.end()
+        })
+
+        client.on('reconnect', () => {
+          console.error('MQTT Reconnecting...')
+        })
       }
-      client.publish(`${serial}/${filter?.channel}/temp`, 'on')
-
-      client.on('message', (_topic, message) => {
-        setMqData(JSON.parse(message.toString()))
-        setIsLoadingMqtt(false)
-      })
-
-      client.on('error', err => {
-        console.error('MQTT Error: ', err)
-        client.end()
-      })
-
-      client.on('reconnect', () => {
-        console.error('MQTT Reconnecting...')
-      })
     }
   }, [probe, selectedProbe, serial, tab])
 
@@ -1190,7 +1236,7 @@ const Adjustments = (props: AdjustmentsProps) => {
             onClick={() => setTab(3)}
           />
           <div role='tabpanel' className='tab-content mt-3'>
-            Tab content 3
+            <pre>{JSON.stringify(muteDoor, null, 2)}</pre>
           </div>
         </div>
 
