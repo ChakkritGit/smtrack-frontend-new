@@ -8,6 +8,7 @@ import PreviewPDF from '../../components/pdf/previewPdf'
 import FullTableTms from '../../pages/dashboard/tms/fullTableTms'
 import Users from '../../pages/users/users'
 import ManagementTms from '../../pages/management/tms/managementTms'
+import Settings from '../../pages/settings/settings'
 
 const tmsChildren: RouteObject[] = [
   {
@@ -59,12 +60,7 @@ const tmsChildren: RouteObject[] = [
   },
   {
     path: 'settings',
-    element: <>Setting</>,
-    errorElement: <ErrorScreen />
-  },
-  {
-    path: 'log',
-    element: <>logs</>,
+    element: <Settings />,
     errorElement: <ErrorScreen />
   }
 ]

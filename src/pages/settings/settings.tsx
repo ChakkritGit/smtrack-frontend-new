@@ -57,7 +57,7 @@ const Settings = () => {
 
   const settingContent = useMemo(
     () => (
-      <div className='w-full p-3 bg-base-100 rounded-btn'>
+      <div className='w-full p-3 bg-base-100 rounded-btn max-h-[calc(100dvh-140px)] overflow-y-scroll'>
         {tab === 1 ? (
           settingProfile
         ) : tab === 2 ? (

@@ -93,7 +93,7 @@ const smtrackChildren: RouteObject[] = [
     ? [
         {
           path: 'test',
-          element: <></>,
+          element: <>TEST</>,
           errorElement: <ErrorScreen />
         }
       ]
@@ -108,11 +108,6 @@ const smtrackChildren: RouteObject[] = [
         errorElement: <ErrorScreen />
       }
     ]
-  },
-  {
-    path: 'log',
-    element: <>logs</>,
-    errorElement: <ErrorScreen />
   }
 ]
 

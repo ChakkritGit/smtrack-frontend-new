@@ -182,10 +182,10 @@ const ProfileComponent = (props: ProfileProps) => {
   }
 
   return (
-    <div>
+    <div className='w-[200px] md:w-auto'>
       <div className='relative mb-20'>
         <div
-          className='w-full h-56 relative rounded-tl-btn rounded-tr-btn before:absolute before:inset-x-0 before:bottom-0 before:h-20 
+          className='w-full h-56 relative rounded-tl-btn rounded-tr-btn before:absolute before:inset-x-0 before:bottom-0 before:h-20
           before:bg-gradient-to-t before:from-base-content/50 before:to-transparent'
           style={{
             backgroundImage: `url(${
@@ -199,7 +199,7 @@ const ProfileComponent = (props: ProfileProps) => {
         <div className='form-control absolute bottom-0 rounded-full translate-y-[40%] translate-x-1/2 md:translate-x-[unset] md:left-7'>
           <label htmlFor='imageFileSelect' className='cursor-pointer relative'>
             <div className='avatar rounded-full border-[5px] border-base-100 relative'>
-              <div className='w-36 rounded'>
+              <div className='w-28 md:w-36 rounded'>
                 {!imageProcessing ? (
                   <img
                     src={image.imagePreview ?? DefaultUser}
@@ -237,11 +237,11 @@ const ProfileComponent = (props: ProfileProps) => {
         <div className='flex flex-col md:flex-row gap-5 md:gap-0 items-center justify-between'>
           <div className='flex flex-col pl-3'>
             <div className='flex items-center gap-2'>
-              <span className='text-[32px] md:text-[24px] font-medium'>
+              <span className='text-[20px] lg:text-[32px] md:text-[24px] font-medium'>
                 {userProfile?.display ?? '—'}
               </span>
               <span
-                className={`badge bg-opacity-15 border-1 font-bold h-[25px] ${
+                className={`badge bg-opacity-15 border-1 font-bold text-[12px] md:text-[14px] h-[20px] md:h-[25px] ${
                   userProfile?.role
                     ? userProfile?.role === 'SUPER'
                       ? 'badge-super'
@@ -263,7 +263,7 @@ const ProfileComponent = (props: ProfileProps) => {
             </span>
           </div>
           <button
-            className='w-[70px] h-[40px] font-bold rounded-btn border-[2px] border-base-content text-base-content hover:opacity-50 duration-300'
+            className='w-[50px] h-[35px] md:w-[70px] md:h-[40px] font-bold rounded-btn border-[2px] border-base-content text-[14px] md:text-base-content hover:opacity-50 duration-300'
             onClick={() => {
               setEdit(true)
               setDisplayName(userProfile?.display ?? '—')
@@ -283,7 +283,7 @@ const ProfileComponent = (props: ProfileProps) => {
                 autoComplete='off'
                 onChange={e => setDisplayName(e.target.value)}
                 value={displayName}
-                className='grow caret-primary'
+                className='grow caret-primary w-[100px] md:w-auto'
                 autoFocus
                 maxLength={80}
               />
