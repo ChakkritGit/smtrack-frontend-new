@@ -16,7 +16,7 @@ import { Option } from '../../types/global/hospitalAndWard'
 import Select from 'react-select'
 import ReactSlider from 'react-slider'
 import { client } from '../../services/mqtt'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setSubmitLoading } from '../../redux/actions/utilsActions'
 import Swal from 'sweetalert2'
 import axiosInstance from '../../constants/axios/axiosInstance'
@@ -25,6 +25,13 @@ import { ProbeListType } from '../../types/tms/devices/probeType'
 import { AxiosError } from 'axios'
 import AppMute from './appMute'
 import Loading from '../skeleton/table/loading'
+import {
+  generateOptions,
+  generateOptionsOne,
+  generateOptionsTwo
+} from '../../constants/utils/muteNoti'
+import { RootState } from '../../redux/reducers/rootReducer'
+import { cookies } from '../../constants/utils/utilsConstants'
 
 type AdjustmentsProps = {
   setProbeData: (value: SetStateAction<ProbeType[]>) => void
@@ -42,9 +49,15 @@ interface MqttType {
   doorDuration: string
 }
 
+interface selectOption {
+  value: string
+  label: string
+}
+
 const Adjustments = (props: AdjustmentsProps) => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
+  const { tokenDecode } = useSelector((state: RootState) => state.utils)
   const { openAdjustModalRef, probe, serial, setProbeData, fetchDevices } =
     props
   const [selectedProbe, setSelectedProbe] = useState<string>('')
@@ -64,12 +77,26 @@ const Adjustments = (props: AdjustmentsProps) => {
     doorAlarm: '',
     doorDuration: ''
   })
+  const [muteDoorSelect, setMuteDoorSelect] = useState<MqttType>({
+    tempAlarm: '',
+    tempTemporary: false,
+    tempDuration: '',
+    doorAlarm: '',
+    doorDuration: ''
+  })
   const deviceModel = serial.substring(0, 3) === 'eTP' ? 'etemp' : 'items'
   const version = serial.substring(3, 5).toLowerCase()
   const [probeBefore, setProbeBefore] = useState<ProbeType | undefined>(
     undefined
   )
   const [tab, setTab] = useState(1)
+  const [muteEtemp, setMuteEtemp] = useState({
+    duration: cookies.get(serial) === 'duration' || false,
+    door: false
+  })
+  const { role } = tokenDecode ?? {}
+  const { doorAlarm, doorDuration, tempDuration, tempTemporary, tempAlarm } =
+    muteDoor
 
   const [muteMode, setMuteMode] = useState({
     choichOne: 'immediately',
@@ -202,6 +229,106 @@ const Adjustments = (props: AdjustmentsProps) => {
     }
   }
 
+  const muteAlways = (status: boolean) => {
+    const filter = probe
+      .filter(item => item.id === selectedProbe)
+      .find(item => item) as ProbeType
+    if (status) {
+      client.publish(
+        `siamatic/${deviceModel}/${version}/${serial}/${filter.channel}/mute/temp/duration`,
+        muteDoorSelect.tempDuration
+      )
+      resetSelct('tempDuration')
+    } else {
+      client.publish(
+        `siamatic/${deviceModel}/${version}/${serial}/${filter.channel}/mute/temp/duration`,
+        '0'
+      )
+    }
+  }
+
+  const muteAlarm = () => {
+    const filter = probe
+      .filter(item => item.id === selectedProbe)
+      .find(item => item) as ProbeType
+    setMuteEtemp({ ...muteEtemp, door: !muteEtemp.door })
+    if (!muteEtemp.door) {
+      client.publish(
+        `siamatic/${deviceModel}/${version}/${serial}/${filter.channel}/mute/door/sound`,
+        'on'
+      )
+      client.publish(`${serial}/mute/long`, 'on')
+    } else {
+      client.publish(
+        `siamatic/${deviceModel}/${version}/${serial}/${filter.channel}/mute/door/sound`,
+        'off'
+      )
+      client.publish(`${serial}/mute/long`, 'off')
+    }
+  }
+
+  const muteAlert = (status: boolean) => {
+    const filter = probe
+      .filter(item => item.id === selectedProbe)
+      .find(item => item) as ProbeType
+    if (status) {
+      client.publish(
+        `siamatic/${deviceModel}/${version}/${serial}/${filter.channel}/mute/door/alarm`,
+        muteDoorSelect.doorAlarm
+      )
+      resetSelct('doorAlarm')
+    } else {
+      client.publish(
+        `siamatic/${deviceModel}/${version}/${serial}/${filter.channel}/mute/door/alarm`,
+        '0'
+      )
+    }
+  }
+
+  const resetSelct = (text: string) => {
+    text === 'tempDuration'
+      ? setMuteDoorSelect({ ...muteDoorSelect, tempDuration: '' })
+      : text === 'doorAlarm'
+      ? setMuteDoorSelect({ ...muteDoorSelect, doorAlarm: '' })
+      : setMuteDoorSelect({ ...muteDoorSelect, doorDuration: '' })
+  }
+
+  const muteTemporary = () => {
+    const filter = probe
+      .filter(item => item.id === selectedProbe)
+      .find(item => item) as ProbeType
+    setMuteDoorSelect({
+      ...muteDoorSelect,
+      tempTemporary: !muteDoorSelect.tempTemporary
+    })
+    if (!muteDoorSelect.tempTemporary) {
+      client.publish(
+        `siamatic/${deviceModel}/${version}/${serial}/${filter.channel}/mute/temp/temporary`,
+        'on'
+      )
+      client.publish(`${serial}/mute/short`, 'on')
+    } else {
+      client.publish(
+        `siamatic/${deviceModel}/${version}/${serial}/${filter.channel}/mute/temp/temporary`,
+        'off'
+      )
+      client.publish(`${serial}/mute/short`, 'off')
+    }
+  }
+
+  const muteDoorDuration = (status: boolean) => {
+    const filter = probe
+      .filter(item => item.id === selectedProbe)
+      .find(item => item) as ProbeType
+    if (status) {
+      client.publish(
+        `siamatic/${deviceModel}/${version}/${serial}/${filter.channel}/door/alarm/duration`,
+        muteDoorSelect.doorDuration
+      )
+      resetSelct('doorDuration')
+    }
+  }
+
   const mapOptions = <T, K extends keyof T>(
     data: T[],
     valueKey: K,
@@ -248,6 +375,23 @@ const Adjustments = (props: AdjustmentsProps) => {
   }
 
   useEffect(() => {
+    const filter = probe
+      .filter(item => item.id === selectedProbe)
+      .find(item => item) as ProbeType
+    setMuteEtemp({
+      ...muteEtemp,
+      door: filter?.doorSound,
+      duration: filter?.muteDoorAlarmDuration === 'duration' || false
+    })
+  }, [probe, selectedProbe])
+
+  useEffect(() => {
+    if (tempTemporary === 'on') {
+      setMuteDoorSelect({ ...muteDoorSelect, tempTemporary: !tempTemporary })
+    }
+  }, [tempTemporary])
+
+  useEffect(() => {
     if (tab === 2) {
       const filter = probe
         .filter(item => item.id === selectedProbe)
@@ -259,8 +403,8 @@ const Adjustments = (props: AdjustmentsProps) => {
         choichfour: filter?.notiMobile ? 'on' : 'off'
       })
       setSendTime({
-        after: filter?.notiDelay < 5 ? 5 : filter.notiDelay,
-        every: filter?.notiRepeat < 5 ? 5 : filter.notiRepeat
+        after: filter?.notiDelay < 5 ? 5 : filter?.notiDelay,
+        every: filter?.notiRepeat < 5 ? 5 : filter?.notiRepeat
       })
       setScheduleDay({
         firstDay: filter?.firstDay,
@@ -418,6 +562,7 @@ const Adjustments = (props: AdjustmentsProps) => {
           />
           <div role='tabpanel' className='tab-content'>
             <div className='mt-3'>
+              <h3 className='font-bold text-base'>{t('adjustMents')}</h3>
               <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
                 <span>{t('tempMin')}</span>
                 <div className='flex items-center justify-center gap-2 w-full'>
@@ -1236,7 +1381,192 @@ const Adjustments = (props: AdjustmentsProps) => {
             onClick={() => setTab(3)}
           />
           <div role='tabpanel' className='tab-content mt-3'>
-            <pre>{JSON.stringify(muteDoor, null, 2)}</pre>
+            <h3 className='font-bold text-base'>{t('countProbe')}</h3>
+            <div className='flex flex-col gap-3 mt-3'>
+              {deviceModel === 'etemp' && (
+                <div className='flex items-center justify-between'>
+                  <span>{t('mutsmtrackorary')}</span>
+                  <input
+                    type='checkbox'
+                    className='toggle'
+                    onClick={muteTemporary}
+                    checked={muteDoorSelect.tempTemporary as boolean}
+                    disabled={tempAlarm === 'normal'}
+                  />
+                </div>
+              )}
+              <div className='flex items-center justify-between mt-3'>
+                <div className='flex flex-col gap-1'>
+                  <span>{t('muteAlways')}</span>
+                  <span className='text-primary text-[14px]'>
+                    {tempDuration}
+                  </span>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <div>
+                    <Select
+                      id='hours-one'
+                      key={JSON.stringify(muteDoorSelect)}
+                      options={mapOptions<selectOption, keyof selectOption>(
+                        generateOptionsOne(role),
+                        'value',
+                        'label'
+                      )}
+                      value={mapDefaultValue<selectOption, keyof selectOption>(
+                        generateOptionsOne(role),
+                        muteDoorSelect.tempDuration,
+                        'value',
+                        'label'
+                      )}
+                      onChange={e => {
+                        setMuteDoorSelect(prev => ({
+                          ...prev,
+                          tempDuration: String(e?.value)
+                        }))
+                        setMuteDoor(prev => ({
+                          ...prev,
+                          tempDuration: String(e?.value)
+                        }))
+                      }}
+                      autoFocus={false}
+                      menuPlacement='top'
+                      className='react-select-container w-full custom-menu-select z-[155] '
+                      classNamePrefix='react-select'
+                    />
+                  </div>
+                  <button
+                    type='button'
+                    className='btn btn-primary'
+                    onClick={() => muteAlways(true)}
+                  >
+                    {t('messageSend')}
+                  </button>
+                  {tempDuration !== '- -' && (
+                    <button
+                      type='button'
+                      className='btn btn-ghost bg-red-500 text-white hover:bg-red-600'
+                      onClick={() => muteAlways(false)}
+                    >
+                      {t('cancelButton')}
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className='divider divider-vertical before:h-[1px] after:h-[1px] my-2'></div>
+              <h3 className='font-bold text-base'>{t('dashDoor')}</h3>
+              <div className='flex items-center justify-between'>
+                <span>{t('muteDoor')}</span>
+                <input
+                  type='checkbox'
+                  className='toggle'
+                  onClick={muteAlarm}
+                  checked={muteEtemp.door}
+                />
+              </div>
+              <div className='flex items-center justify-between'>
+                <div className='flex flex-col gap-1'>
+                  <span>{t('muteDoorDuration')}</span>
+                  <span className='text-primary text-[14px]'>
+                    {doorDuration}
+                  </span>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <div>
+                    <Select
+                      id='hours-two'
+                      key={JSON.stringify(muteDoorSelect)}
+                      options={mapOptions<selectOption, keyof selectOption>(
+                        generateOptionsTwo(),
+                        'value',
+                        'label'
+                      )}
+                      value={mapDefaultValue<selectOption, keyof selectOption>(
+                        generateOptionsTwo(),
+                        muteDoorSelect.doorDuration,
+                        'value',
+                        'label'
+                      )}
+                      onChange={e => {
+                        setMuteDoorSelect(prev => ({
+                          ...prev,
+                          doorDuration: String(e?.value)
+                        }))
+                        setMuteDoor(prev => ({
+                          ...prev,
+                          doorDuration: String(e?.value)
+                        }))
+                      }}
+                      autoFocus={false}
+                      menuPlacement='top'
+                      className='react-select-container w-full custom-menu-select z-[155] '
+                      classNamePrefix='react-select'
+                    />
+                  </div>
+                  <button
+                    type='button'
+                    className='btn btn-primary'
+                    onClick={() => muteDoorDuration(true)}
+                  >
+                    {t('messageSend')}
+                  </button>
+                </div>
+              </div>
+              <div className='flex items-center justify-between'>
+                <div className='flex flex-col gap-1'>
+                  <span>{t('muteAlert')}</span>
+                  <span className='text-primary text-[14px]'>{doorAlarm}</span>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <div>
+                    <Select
+                      id='hours-three'
+                      key={JSON.stringify(muteDoorSelect)}
+                      options={mapOptions<selectOption, keyof selectOption>(
+                        generateOptions(role),
+                        'value',
+                        'label'
+                      )}
+                      value={mapDefaultValue<selectOption, keyof selectOption>(
+                        generateOptions(role),
+                        muteDoorSelect.doorAlarm,
+                        'value',
+                        'label'
+                      )}
+                      onChange={e => {
+                        setMuteDoorSelect(prev => ({
+                          ...prev,
+                          doorAlarm: String(e?.value)
+                        }))
+                        setMuteDoor(prev => ({
+                          ...prev,
+                          doorAlarm: String(e?.value)
+                        }))
+                      }}
+                      autoFocus={false}
+                      menuPlacement='top'
+                      className='react-select-container w-full custom-menu-select z-[155] '
+                      classNamePrefix='react-select'
+                    />
+                  </div>
+                  <button
+                    type='button'
+                    className='btn btn-primary'
+                    onClick={() => muteAlert(true)}
+                  >
+                    {t('messageSend')}
+                  </button>
+                  {doorAlarm !== '- -' && (
+                    <button
+                      type='button'
+                      className='btn btn-ghost bg-red-500 text-white hover:bg-red-600'
+                      onClick={() => muteAlert(false)}
+                    >
+                      {t('cancelButton')}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
