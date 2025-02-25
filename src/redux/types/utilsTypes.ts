@@ -21,6 +21,7 @@ const SUBMIT_LOADING = 'SUBMIT_LOADING'
 const SOCKET_DATA = 'SOCKET_DATA'
 const POPUP_MODE = 'POPUP_MODE'
 const SOUND_MODE = 'SOUND_MODE'
+const RESET_UTILS = 'RESET_UTILS'
 
 interface UtilsState {
   cookieEncode?: string
@@ -44,7 +45,7 @@ type UtilsAction =
   | { type: typeof COOKIE_ENCODE; payload: string }
   | { type: typeof COOKIE_DECODE; payload: TokenDecodeType }
   | { type: typeof TOKEN_DECODE; payload: TokenType }
-  | { type: typeof USER_PROFILE; payload: UserProfileType }
+  | { type: typeof USER_PROFILE; payload: UserProfileType | undefined }
   | { type: typeof GLOBAL_SEARCH; payload: string }
   | { type: typeof THEME_MODE; payload: string }
   | { type: typeof TMS_MODE }
@@ -56,6 +57,7 @@ type UtilsAction =
   | { type: typeof SOCKET_DATA; payload: SocketResponseType }
   | { type: typeof POPUP_MODE }
   | { type: typeof SOUND_MODE }
+  | { type: typeof RESET_UTILS }
 
 export {
   COOKIE_ENCODE,
@@ -72,6 +74,7 @@ export {
   SUBMIT_LOADING,
   SOCKET_DATA,
   POPUP_MODE,
-  SOUND_MODE
+  SOUND_MODE,
+  RESET_UTILS
 }
 export type { UtilsState, UtilsAction }

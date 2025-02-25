@@ -17,7 +17,8 @@ import {
   DEVICE_KEY,
   SOCKET_DATA,
   SOUND_MODE,
-  POPUP_MODE
+  POPUP_MODE,
+  RESET_UTILS
 } from '../types/utilsTypes'
 
 const initialState: UtilsState = {
@@ -73,6 +74,8 @@ const utilsReducer = (
       return { ...state, popUpMode: !state.popUpMode }
     case SOUND_MODE:
       return { ...state, soundMode: !state.soundMode }
+    case RESET_UTILS:
+      return initialState
     default:
       return state
   }

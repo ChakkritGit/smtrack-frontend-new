@@ -14,10 +14,12 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import {
+  resetUtils,
   setCookieEncode,
   setDeviceKey,
   setIsExpand,
-  setSearch
+  setSearch,
+  setUserProfile
 } from '../../../redux/actions/utilsActions'
 import DefaultPic from '../../../assets/images/default-pic.png'
 import { UAParser } from 'ua-parser-js'
@@ -474,7 +476,15 @@ const Navbar = () => {
                     .then(result => {
                       if (result.isConfirmed) {
                         cookies.remove('tokenObject', cookieOptions)
+                        cookies.remove('userProfile', cookieOptions)
+                        cookies.remove('tmsMode', cookieOptions)
+                        cookies.remove('hosId', cookieOptions)
+                        cookies.remove('wardId', cookieOptions)
+                        cookies.remove('deviceKey', cookieOptions)
+                        dispatch(resetUtils())
                         dispatch(setCookieEncode(undefined))
+                        dispatch(setUserProfile(undefined))
+                        cookies.update()
                       }
                     })
                 }

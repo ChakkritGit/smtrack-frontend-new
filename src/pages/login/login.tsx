@@ -65,6 +65,7 @@ const Login = () => {
         String(accessToken(tokenObject)),
         cookieOptions
       )
+      cookies.update()
       dispatch(setCookieEncode(String(accessToken(tokenObject))))
       navigate(`/`)
     } catch (error) {

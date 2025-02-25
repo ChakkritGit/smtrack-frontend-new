@@ -1,13 +1,13 @@
 import { Outlet, Navigate } from 'react-router-dom'
-import Login from '../pages/login/login'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/reducers/rootReducer'
 import Notacess from './notacess'
+import Login from '../pages/login/login'
 
 export const LogoutAuth = () => {
   const { cookieEncode } = useSelector((state: RootState) => state.utils)
 
-  if (cookieEncode !== '') {
+  if (cookieEncode !== undefined) {
     return <Navigate to='/' />
   }
 

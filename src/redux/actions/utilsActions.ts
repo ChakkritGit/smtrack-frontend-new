@@ -20,7 +20,8 @@ import {
   DEVICE_KEY,
   SOCKET_DATA,
   SOUND_MODE,
-  POPUP_MODE
+  POPUP_MODE,
+  RESET_UTILS
 } from '../types/utilsTypes'
 
 const setCookieEncode = (dataEncode?: string) => ({
@@ -38,7 +39,7 @@ const setTokenDecode = (tokenDecode: TokenType) => ({
   payload: tokenDecode
 })
 
-const setUserProfile = (userData: UserProfileType) => ({
+const setUserProfile = (userData: UserProfileType | undefined) => ({
   type: USER_PROFILE,
   payload: userData
 })
@@ -93,6 +94,10 @@ const setSoundMode = () => ({
   type: SOUND_MODE
 })
 
+const resetUtils = () => ({
+  type: RESET_UTILS
+})
+
 export {
   setCookieEncode,
   setCookieDecode,
@@ -108,5 +113,6 @@ export {
   setSubmitLoading,
   setSocketData,
   setPopUpMode,
-  setSoundMode
+  setSoundMode,
+  resetUtils
 }
