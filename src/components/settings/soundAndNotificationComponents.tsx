@@ -20,7 +20,7 @@ const SoundAndNotificationComponents = () => {
         <input
           type='checkbox'
           className='toggle'
-          checked={popUpMode}
+          checked={!popUpMode}
           onClick={() => {
             dispatch(setPopUpMode())
             cookies.set('popUpMode', !popUpMode, cookieOptions)

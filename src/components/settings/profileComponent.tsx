@@ -21,11 +21,6 @@ import {
 import { AxiosError } from 'axios'
 import Swal from 'sweetalert2'
 import { resizeImage } from '../../constants/utils/image'
-// import {
-//   RemoveBgResult,
-//   RemoveBgError,
-//   removeBackgroundFromImageFile
-// } from 'remove.bg'
 
 interface ProfileProps {
   userProfile: UserProfileType | undefined
@@ -35,6 +30,8 @@ interface ProfileProps {
   image: FormState
   setEdit: Dispatch<SetStateAction<boolean>>
   edit: boolean
+  setImageProcessing: Dispatch<SetStateAction<boolean>>
+  imageProcessing: boolean
 }
 
 interface FormState {
@@ -51,10 +48,11 @@ const ProfileComponent = (props: ProfileProps) => {
     image,
     setImage,
     edit,
-    setEdit
+    setEdit,
+    setImageProcessing,
+    imageProcessing
   } = props
 
-  const [imageProcessing, setImageProcessing] = useState(false)
   const [displayName, setDisplayName] = useState('')
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -182,22 +180,6 @@ const ProfileComponent = (props: ProfileProps) => {
     setDisplayName('')
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
-
-  // const removeBgWhite = (imgUrl: string) => {
-  //   removeBackgroundFromImageFile({
-  //     path: imgUrl,
-  //     apiKey: import.meta.env.VITE_APP_REMOVEBG_API,
-  //     size: 'regular',
-  //     type: 'auto',
-  //     scale: '50%'
-  //   })
-  //     .then((result: RemoveBgResult) => {
-  //       return result.base64img
-  //     })
-  //     .catch((errors: Array<RemoveBgError>) => {
-  //       console.log(JSON.stringify(errors))
-  //     })
-  // }
 
   return (
     <div>

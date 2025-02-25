@@ -9,7 +9,10 @@ import {
   RiSignalWifiErrorLine
 } from 'react-icons/ri'
 import axiosInstance from '../../constants/axios/axiosInstance'
-import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
+import {
+  responseType,
+  UserProfileType
+} from '../../types/smtrack/utilsRedux/utilsReduxType'
 import { AxiosError } from 'axios'
 import Loading from '../skeleton/table/loading'
 import { useTranslation } from 'react-i18next'
@@ -24,11 +27,13 @@ import { MdOutlineSdCard, MdOutlineSdCardAlert } from 'react-icons/md'
 import { extractValues } from '../../constants/utils/utilsConstants'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useSelector } from 'react-redux'
+import { Location, useLocation } from 'react-router-dom'
 
 const Notifications = () => {
   const { tokenDecode, tmsMode, userProfile } = useSelector(
     (state: RootState) => state.utils
   )
+  const location = useLocation()
   const { t } = useTranslation()
   const [notificationList, setNotification] = useState<NotificationType[]>([])
   const [loading, setLoading] = useState(false)
@@ -145,12 +150,18 @@ const Notifications = () => {
     }
   }
 
-  useEffect(() => {
-    fetchNotificaton()
-  }, [])
+  const changeFavicon = (
+    href: string,
+    notificationarray: NotificationType[],
+    path: Location<any>,
+    Profile: UserProfileType | undefined
+  ) => {
+    const pathSegment = path.pathname.split('/')[1]
+    const capitalized =
+      pathSegment.charAt(0).toUpperCase() + pathSegment.slice(1)
 
-  useEffect(() => {
-    const changeFavicon = (href: string) => {
+    if (notificationarray.length > 0) {
+      console.log('If123')
       const link: HTMLLinkElement =
         document.querySelector("link[rel*='icon']") ||
         document.createElement('link')
@@ -158,65 +169,88 @@ const Notifications = () => {
       link.rel = 'icon'
       link.href = href
 
-      const pathSegment = location.pathname.split('/')[1]
-      const capitalized =
-        pathSegment.charAt(0).toUpperCase() + pathSegment.slice(1)
+      document.getElementsByTagName('head')[0].appendChild(link)
+      document.title =
+        (notificationarray.length > 0 ? `(${notificationarray.length}) ` : '') +
+        Profile?.ward.hospital.hosName +
+        ' - ' +
+        `${path.pathname.split('/')[1] !== '' ? capitalized : 'Home'}`
+    } else {
+      console.log('Else123')
+      const link: HTMLLinkElement =
+        document.querySelector("link[rel*='icon']") ||
+        document.createElement('link')
+      link.type = 'image/png'
+      link.rel = 'icon'
+      link.href = href
 
       document.getElementsByTagName('head')[0].appendChild(link)
       document.title =
-        (notificationList.filter(n => n.status === false).length > 0
-          ? `(${notificationList.filter(n => n.status === false).length}) `
-          : '') +
-        userProfile?.ward.hospital.hosName +
+        Profile?.ward.hospital.hosName +
         ' - ' +
-        `${location.pathname.split('/')[1] !== '' ? capitalized : 'Home'}`
+        `${path.pathname.split('/')[1] !== '' ? capitalized : 'Home'}`
     }
+  }
 
+  useEffect(() => {
     if (notificationList.length > 0) {
-      const addNotificationDotToFavicon = async () => {
-        const baseImageSrc = userProfile?.ward.hospital.hosPic
-          ? `${userProfile?.ward.hospital.hosPic}`
-          : 'Logo_SM_WBG.jpg'
+      const baseImageSrc = userProfile?.ward.hospital.hosPic
+        ? `${userProfile?.ward.hospital.hosPic}`
+        : 'app-logo.png'
 
-        const img = new Image()
-        img.src = baseImageSrc
-        img.crossOrigin = 'anonymous'
+      const img = new Image()
+      img.src = baseImageSrc
+      img.crossOrigin = 'anonymous'
 
-        img.onload = () => {
-          const canvas = document.createElement('canvas')
-          const ctx = canvas.getContext('2d')
+      img.onload = () => {
+        console.log('✅ Image loaded successfully:', img.src)
 
-          if (!ctx) return
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
 
-          const size = 64
-          canvas.width = size
-          canvas.height = size
-
-          ctx.drawImage(img, 0, 0, size, size)
-
-          const dotSize = 24
-          const x = size - dotSize + 10
-          const y = dotSize / 5 + 10
-          ctx.fillStyle = '#e74c3c'
-          ctx.beginPath()
-          ctx.arc(x, y, dotSize / 2, 0, Math.PI * 2)
-          ctx.fill()
-
-          changeFavicon(canvas.toDataURL('image/png'))
+        if (!ctx) {
+          console.error('❌ Canvas context is null')
+          return
         }
-      }
 
-      if (notificationList.filter(n => n.status === false).length > 0) {
-        addNotificationDotToFavicon()
+        const size = 64
+        canvas.width = size
+        canvas.height = size
+
+        ctx.drawImage(img, 0, 0, size, size)
+
+        const dotSize = 24
+        const x = size - dotSize + 10
+        const y = dotSize / 5 + 10
+        ctx.fillStyle = '#e74c3c'
+        ctx.beginPath()
+        ctx.arc(x, y, dotSize / 2, 0, Math.PI * 2)
+        ctx.fill()
+
+        console.log('🎨 Image drawn on canvas')
+
+        changeFavicon(
+          canvas.toDataURL('image/png'),
+          [...notificationList],
+          location,
+          userProfile
+        )
       }
     } else {
       if (userProfile?.ward.hospital.hosPic) {
         changeFavicon(
-          `${import.meta.env.VITE_APP_IMG}${userProfile?.ward.hospital.hosPic}`
+          `${import.meta.env.VITE_APP_IMG}${userProfile?.ward.hospital.hosPic}`,
+          [...notificationList],
+          location,
+          userProfile
         )
       }
     }
   }, [location, userProfile, notificationList])
+
+  useEffect(() => {
+    fetchNotificaton()
+  }, [])
 
   return (
     <div className='dropdown dropdown-end'>

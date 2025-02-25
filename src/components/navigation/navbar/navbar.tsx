@@ -76,6 +76,7 @@ const Navbar = () => {
   })
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [edit, setEdit] = useState(false)
+  const [imageProcessing, setImageProcessing] = useState(false)
 
   const [searchHistory, setSearchHistory] = useState<SearchType[]>(() => {
     const storedHistory = cookies.get('searchHistory')
@@ -492,6 +493,7 @@ const Navbar = () => {
       <dialog ref={profileModalRef} className='modal overflow-y-scroll py-10'>
         <div className='modal-box max-w-[50rem] h-max max-h-max'>
           <ProfileComponent
+            key={'Navbar'}
             userProfile={userProfile}
             profileModalRef={profileModalRef}
             fileInputRef={fileInputRef}
@@ -499,6 +501,8 @@ const Navbar = () => {
             setImage={setImage}
             edit={edit}
             setEdit={setEdit}
+            imageProcessing={imageProcessing}
+            setImageProcessing={setImageProcessing}
           />
         </div>
         <form method='dialog' className='modal-backdrop'>

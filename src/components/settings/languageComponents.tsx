@@ -1,6 +1,17 @@
+import { useTranslation } from 'react-i18next'
+import LanguageList from '../language/languageList'
+
 const LanguageComponents = () => {
+  const { t } = useTranslation()
+
   return (
-    <div>LanguageComponents</div>
+    <div>
+      <span className='text-[24px]'>{t('tabLanguage')}</span>
+      <div className='flex items-center justify-between'>
+        <span>{t('changeLanguage')}</span>
+        <LanguageList />
+      </div>
+    </div>
   )
 }
 
