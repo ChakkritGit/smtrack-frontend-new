@@ -6,11 +6,21 @@ import { Dispatch, FormEvent, RefObject, SetStateAction, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AxiosError } from 'axios'
 import Swal from 'sweetalert2'
-import { responseType, UserProfileType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
+import {
+  responseType,
+  UserProfileType
+} from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import { resizeImage } from '../../../constants/utils/image'
 import axiosInstance from '../../../constants/axios/axiosInstance'
-import { cookieOptions, cookies, getRoleLabel } from '../../../constants/utils/utilsConstants'
-import { setSubmitLoading, setUserProfile } from '../../../redux/actions/utilsActions'
+import {
+  cookieOptions,
+  cookies,
+  getRoleLabel
+} from '../../../constants/utils/utilsConstants'
+import {
+  setSubmitLoading,
+  setUserProfile
+} from '../../../redux/actions/utilsActions'
 
 interface ProfileProps {
   userProfile: UserProfileType | undefined
@@ -169,6 +179,7 @@ const ProfileComponent = (props: ProfileProps) => {
   const resetForm = () => {
     setDisplayName('')
     if (fileInputRef.current) fileInputRef.current.value = ''
+    setEdit(false)
   }
 
   return (
@@ -281,14 +292,7 @@ const ProfileComponent = (props: ProfileProps) => {
           </div>
           {/* Modal Actions */}
           <div className='modal-action mt-6'>
-            <button
-              type='button'
-              className='btn'
-              onClick={() => {
-                setEdit(false)
-                resetForm()
-              }}
-            >
+            <button type='button' className='btn' onClick={() => resetForm()}>
               {t('cancelButton')}
             </button>
             <button type='submit' className='btn btn-primary'>

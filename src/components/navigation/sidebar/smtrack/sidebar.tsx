@@ -214,7 +214,7 @@ const Sidebar = () => {
               <div className='flex flex-col items-center gap-2'>
                 {!isExpand && (
                   <span className='text-[12px] truncate'>
-                    *Switch mode eTEMP and Line
+                    *Switch mode SMTrack and Line
                   </span>
                 )}
                 <div className='flex items-center justify-center gap-2'>

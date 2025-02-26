@@ -79,7 +79,7 @@ const Settings = () => {
   return (
     <div className='min-h-[calc(100dvh-64px)] p-3'>
       <div className='flex gap-1 md:gap-3 p-3'>
-        <ul className='flex flex-col md:min-w-[200px] gap-2'>
+        <ul className='flex flex-col md:min-w-[200px] gap-1'>
           <li
             onClick={() => setTab(1)}
             className={`${
