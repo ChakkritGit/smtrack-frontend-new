@@ -89,11 +89,13 @@ const Adjustments = (props: AdjustmentsProps) => {
   const [probeBefore, setProbeBefore] = useState<ProbeType | undefined>(
     undefined
   )
+  const [beforeSelectProbe, setBeforeSelectProbe] = useState<string>('1')
   const [tab, setTab] = useState(1)
   const [muteEtemp, setMuteEtemp] = useState({
     duration: cookies.get(serial) === 'duration' || false,
     door: false
   })
+  const [probeFiltered, setProbeFiltered] = useState<ProbeType | undefined>()
   const { role } = tokenDecode ?? {}
   const { doorAlarm, doorDuration, tempDuration, tempTemporary, tempAlarm } =
     muteDoor
@@ -434,38 +436,41 @@ const Adjustments = (props: AdjustmentsProps) => {
 
   useEffect(() => {
     if (selectedProbe !== '') {
-      const filter = probe
-        .filter(item => item.id === selectedProbe)
-        .find(item => item)
       if (tab === 1) {
-        client.unsubscribe(`${serial}/${filter?.channel}/mute/status/receive`)
-        setAdjustmentsForm({
-          tempMin: filter?.tempMin ?? 0,
-          tempMax: filter?.tempMax ?? 0,
-          humiMin: filter?.humiMin ?? 0,
-          humiMax: filter?.humiMax ?? 0,
-          adjustTemp: filter?.tempAdj ?? 0,
-          adjustHumi: filter?.humiAdj ?? 0
-        })
-        setProbeBefore(filter)
-        client.subscribe(`${serial}/${filter?.channel}/temp/real`, err => {
-          if (err) {
-            console.error('MQTT Suubscribe Error', err)
-          }
-        })
-        setIsLoadingMqtt(true)
-        if (deviceModel === 'etemp') {
+        if (beforeSelectProbe && beforeSelectProbe !== probeFiltered?.channel) {
           client.publish(
-            `siamatic/${deviceModel}/${version}/${serial}/${filter?.channel}/temp`,
-            'on'
+            `siamatic/${deviceModel}/${version}/${serial}/${beforeSelectProbe}/temp`,
+            'off'
           )
-        } else {
-          client.publish(
-            `siamatic/${deviceModel}/${version}/${serial}/${filter?.channel}/temp`,
-            'on'
-          )
+          client.unsubscribe(`${serial}/${beforeSelectProbe}/temp/real`)
         }
-        client.publish(`${serial}/${filter?.channel}/temp`, 'on')
+
+        setAdjustmentsForm({
+          tempMin: probeFiltered?.tempMin ?? 0,
+          tempMax: probeFiltered?.tempMax ?? 0,
+          humiMin: probeFiltered?.humiMin ?? 0,
+          humiMax: probeFiltered?.humiMax ?? 0,
+          adjustTemp: probeFiltered?.tempAdj ?? 0,
+          adjustHumi: probeFiltered?.humiAdj ?? 0
+        })
+        setProbeBefore(probeFiltered)
+
+        client.subscribe(
+          `${serial}/${probeFiltered?.channel}/temp/real`,
+          err => {
+            if (err) console.error('MQTT Subscribe Error', err)
+          }
+        )
+
+        setIsLoadingMqtt(true)
+
+        client.publish(
+          `siamatic/${deviceModel}/${version}/${serial}/${probeFiltered?.channel}/temp`,
+          'on'
+        )
+        client.publish(`${serial}/${probeFiltered?.channel}/temp`, 'on')
+
+        setBeforeSelectProbe(probeFiltered?.channel as string)
 
         client.on('message', (_topic, message) => {
           setMqData(JSON.parse(message.toString()))
@@ -481,23 +486,25 @@ const Adjustments = (props: AdjustmentsProps) => {
           console.error('MQTT Reconnecting...')
         })
       } else if (tab === 3) {
-        client.publish(`${serial}/${filter?.channel}/temp`, 'off')
-        client.unsubscribe(`${serial}/${filter?.channel}/temp/real`)
+        client.publish(`${serial}/${probeFiltered?.channel}/temp`, 'off')
+        client.unsubscribe(`${serial}/${probeFiltered?.channel}/temp/real`)
+
         client.subscribe(
-          `${serial}/${filter?.channel}/mute/status/receive`,
+          `${serial}/${probeFiltered?.channel}/mute/status/receive`,
           err => {
-            if (err) {
-              console.error('MQTT Suubscribe Error', err)
-            }
+            if (err) console.error('MQTT Subscribe Error', err)
           }
         )
+
         client.publish(
-          `siamatic/${deviceModel}/${version}/${serial}/${filter?.channel}/mute/status`,
+          `siamatic/${deviceModel}/${version}/${serial}/${probeFiltered?.channel}/mute/status`,
           'on'
         )
+
         client.on('message', (_topic, message) => {
-          setMuteDoor(JSON.parse(message.toString())) // set new state with mute noti
+          setMuteDoor(JSON.parse(message.toString()))
         })
+
         client.on('error', err => {
           console.error('MQTT Error: ', err)
           client.end()
@@ -508,7 +515,14 @@ const Adjustments = (props: AdjustmentsProps) => {
         })
       }
     }
-  }, [probe, selectedProbe, serial, tab])
+  }, [probe, selectedProbe, serial, tab, probeFiltered, beforeSelectProbe])
+
+  useEffect(() => {
+    const filter = probe
+      .filter(item => item.id === selectedProbe)
+      .find(item => item)
+    setProbeFiltered(filter)
+  }, [probe, selectedProbe])
 
   return (
     <dialog ref={openAdjustModalRef} className='modal overflow-y-scroll py-10'>
@@ -574,7 +588,10 @@ const Adjustments = (props: AdjustmentsProps) => {
                     className='btn btn-ghost bg-orange-500 text-white text-lg'
                     type='button'
                     onClick={() => {
-                      if (adjustmentsForm.tempMin > -40) {
+                      if (
+                        adjustmentsForm.tempMin >
+                        (probeFiltered?.name === 'PT100' ? -200 : -40)
+                      ) {
                         setAdjustmentsForm({
                           ...adjustmentsForm,
                           tempMin: parseFloat(
@@ -592,8 +609,8 @@ const Adjustments = (props: AdjustmentsProps) => {
                     className='input input-bordered text-center w-full'
                     type='number'
                     step={0.01}
-                    min={-40}
-                    max={120}
+                    min={probeFiltered?.name === 'PT100' ? -200 : -40}
+                    max={probeFiltered?.name === 'PT100' ? 200 : 120}
                     value={adjustmentsForm.tempMin}
                     onChange={e => {
                       let value = e.target.value
@@ -616,7 +633,10 @@ const Adjustments = (props: AdjustmentsProps) => {
                     className='btn btn-ghost bg-orange-500 text-white text-lg'
                     type='button'
                     onClick={() => {
-                      if (adjustmentsForm.tempMin < 120) {
+                      if (
+                        adjustmentsForm.tempMin <
+                        (probeFiltered?.name === 'PT100' ? 200 : 120)
+                      ) {
                         setAdjustmentsForm({
                           ...adjustmentsForm,
                           tempMin: parseFloat(

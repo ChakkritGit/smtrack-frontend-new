@@ -483,11 +483,24 @@ const ManageProbe = () => {
     }
   }
 
+  const selectProbeName = (e: SingleValue<Option>) => {
+    const selectedValue = e?.value
+    if (!selectedValue) return
+    setFormData({ ...formData, name: selectedValue })
+  }
+
+  const selectProbeType = (e: SingleValue<Option>) => {
+    const selectedValue = e?.value
+    if (!selectedValue) return
+    setFormData({ ...formData, type: selectedValue })
+  }
+
   const delayTime = (e: SingleValue<Option>) => {
     const selectedValue = e?.value
     if (!selectedValue) return
     setFormData({ ...formData, stampTime: selectedValue })
   }
+
   const doorSelected = (e: SingleValue<Option>) => {
     const selectedValue = e?.value
     if (!selectedValue) return
@@ -668,6 +681,16 @@ const ManageProbe = () => {
     // { value: '4', name: t('probeChanel4') }
   ]
 
+  const ProbeName = [
+    { value: 'SHT-31', name: 'SHT-31' },
+    { value: 'PT100', name: 'PT100' }
+  ]
+
+  const ProbeType = [
+    { value: 'Digital Sensor', name: 'Digital Sensor' },
+    { value: 'Analog Sensor', name: 'Analog Sensor' }
+  ]
+
   useEffect(() => {
     console.table(formData)
   }, [formData])
@@ -703,7 +726,10 @@ const ManageProbe = () => {
       </div>
 
       <dialog ref={addModalRef} className='modal overflow-y-scroll py-10'>
-        <form onSubmit={handleSubmit} className='modal-box max-w-[55rem] h-max max-h-max'>
+        <form
+          onSubmit={handleSubmit}
+          className='modal-box max-w-[55rem] h-max max-h-max'
+        >
           <h3 className='font-bold text-lg'>{t('addProbe')}</h3>
           <div className='flex flex-col lg:flex-col xl:flex-row gap-4 mt-4 w-full'>
             <div className='w-full'>
@@ -745,13 +771,23 @@ const ManageProbe = () => {
                         <span className='font-medium text-red-500 mr-1'>*</span>
                         {t('probeName')}
                       </span>
-                      <input
-                        name='name'
-                        type='text'
-                        value={formData.name}
-                        onChange={handleChange}
-                        className='input input-bordered w-full'
-                        maxLength={23}
+                      <Select
+                        options={mapOptions<OptionData, keyof OptionData>(
+                          ProbeName,
+                          'value',
+                          'name'
+                        )}
+                        value={mapDefaultValue<OptionData, keyof OptionData>(
+                          ProbeName,
+                          String(formData.name),
+                          'value',
+                          'name'
+                        )}
+                        onChange={selectProbeName}
+                        autoFocus={false}
+                        menuPlacement='top'
+                        className='react-select-container custom-menu-select z-[75] min-w-full'
+                        classNamePrefix='react-select'
                       />
                     </label>
                   </div>
@@ -763,13 +799,23 @@ const ManageProbe = () => {
                         <span className='font-medium text-red-500 mr-1'>*</span>
                         {t('probeType')}
                       </span>
-                      <input
-                        name='type'
-                        type='text'
-                        value={formData.type}
-                        onChange={handleChange}
-                        className='input input-bordered w-full'
-                        maxLength={23}
+                      <Select
+                        options={mapOptions<OptionData, keyof OptionData>(
+                          ProbeType,
+                          'value',
+                          'name'
+                        )}
+                        value={mapDefaultValue<OptionData, keyof OptionData>(
+                          ProbeType,
+                          String(formData.type),
+                          'value',
+                          'name'
+                        )}
+                        onChange={selectProbeType}
+                        autoFocus={false}
+                        menuPlacement='top'
+                        className='react-select-container custom-menu-select z-[75] min-w-full'
+                        classNamePrefix='react-select'
                       />
                     </label>
                   </div>
@@ -1324,7 +1370,10 @@ const ManageProbe = () => {
       </dialog>
 
       <dialog ref={editModalRef} className='modal overflow-y-scroll py-10'>
-        <form onSubmit={handleUpdate} className='modal-box max-w-[85rem] h-max max-h-max'>
+        <form
+          onSubmit={handleUpdate}
+          className='modal-box max-w-[85rem] h-max max-h-max'
+        >
           <h3 className='font-bold text-lg'>{t('editProbe')}</h3>
           <div className='flex flex-col lg:flex-col xl:flex-row gap-4 mt-4 w-full'>
             <div className='w-full'>
@@ -1366,13 +1415,23 @@ const ManageProbe = () => {
                         <span className='font-medium text-red-500 mr-1'>*</span>
                         {t('probeName')}
                       </span>
-                      <input
-                        name='name'
-                        type='text'
-                        value={formData.name}
-                        onChange={handleChange}
-                        className='input input-bordered w-full'
-                        maxLength={23}
+                      <Select
+                        options={mapOptions<OptionData, keyof OptionData>(
+                          ProbeName,
+                          'value',
+                          'name'
+                        )}
+                        value={mapDefaultValue<OptionData, keyof OptionData>(
+                          ProbeName,
+                          String(formData.name),
+                          'value',
+                          'name'
+                        )}
+                        onChange={selectProbeName}
+                        autoFocus={false}
+                        menuPlacement='top'
+                        className='react-select-container custom-menu-select z-[75] min-w-full'
+                        classNamePrefix='react-select'
                       />
                     </label>
                   </div>
@@ -1384,13 +1443,23 @@ const ManageProbe = () => {
                         <span className='font-medium text-red-500 mr-1'>*</span>
                         {t('probeType')}
                       </span>
-                      <input
-                        name='type'
-                        type='text'
-                        value={formData.type}
-                        onChange={handleChange}
-                        className='input input-bordered w-full'
-                        maxLength={23}
+                      <Select
+                        options={mapOptions<OptionData, keyof OptionData>(
+                          ProbeType,
+                          'value',
+                          'name'
+                        )}
+                        value={mapDefaultValue<OptionData, keyof OptionData>(
+                          ProbeType,
+                          String(formData.type),
+                          'value',
+                          'name'
+                        )}
+                        onChange={selectProbeType}
+                        autoFocus={false}
+                        menuPlacement='top'
+                        className='react-select-container custom-menu-select z-[75] min-w-full'
+                        classNamePrefix='react-select'
                       />
                     </label>
                   </div>

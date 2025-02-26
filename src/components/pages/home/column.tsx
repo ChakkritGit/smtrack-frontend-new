@@ -215,4 +215,140 @@ const columnData = (
   ]
 }
 
-export { columnData }
+const subColumnData = (
+  t: TFunctionNonStrict<'translation', undefined>,
+  devicesFiltered: DeviceType[]
+): TableColumn<ProbeType>[] => {
+  return [
+    {
+      name: t('probeChannelSubTb'),
+      cell: (items, index) => <span key={index}>{items.channel}</span>,
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('probeNameSubTb'),
+      cell: (items, index) => (
+        <span key={index}>{items.name ?? 'Name is not assigned'}</span>
+      ),
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('probeTypeSubTb'),
+      cell: (items, index) => (
+        <span key={index}>{items.type ?? 'Type is not assigned'}</span>
+      ),
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('devicTemperatureTb'),
+      cell: (items, index) => {
+        const deviceLog = devicesFiltered
+          .find(dev => dev.id === items.sn)
+          ?.log.find(log => log.probe === items.channel)
+
+        return (
+          <span key={index}>
+            {deviceLog?.tempDisplay
+              ? `${deviceLog?.tempDisplay.toFixed(2)}°C`
+              : '- -'}
+          </span>
+        )
+      },
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('probeHumiSubTb'),
+      cell: (items, index) => {
+        const deviceLog = devicesFiltered
+          .find(dev => dev.id === items.sn)
+          ?.log.find(log => log.probe === items.channel)
+
+        return (
+          <span key={index}>
+            {deviceLog?.humidityDisplay
+              ? `${deviceLog?.humidityDisplay.toFixed(2)}%`
+              : '- -'}
+          </span>
+        )
+      },
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('deviceProbeTb'),
+      cell: (items, index) => {
+        if (!devicesFiltered?.length) return null
+
+        const logData = devicesFiltered[0]?.log ?? []
+        const probeData = devicesFiltered[0]?.probe ?? []
+
+        const [temp] = logData.filter(log => log.serial === items.sn)
+        const [probe] = probeData.filter(probe => probe.sn === items.sn)
+
+        const isTempOutOfRange =
+          temp?.tempDisplay >= probe?.tempMax ||
+          temp?.tempDisplay <= probe?.tempMin
+
+        return (
+          <div
+            key={index}
+            className={`w-[24px] h-[24px] flex items-center justify-center rounded-btn ${
+              isTempOutOfRange
+                ? 'bg-red-500 text-white'
+                : 'border border-primary text-primary'
+            } duration-300`}
+          >
+            {isTempOutOfRange ? (
+              <RiErrorWarningLine size={14} />
+            ) : (
+              <RiTempColdLine size={14} />
+            )}
+          </div>
+        )
+      },
+      sortable: false,
+      center: true,
+      width: '80px'
+    },
+    {
+      name: t('probeDoorSubTb'),
+      cell: items => {
+        const deviceLog = devicesFiltered
+          .find(dev => dev.id === items.sn)
+          ?.log.find(log => log.probe === items.channel)
+
+        const doorCount: number = items.doorQty || 1
+        const doors: DoorKey[] = ['door1', 'door2', 'door3']
+
+        return (
+          <div className='flex items-center gap-2'>
+            {doors.slice(0, doorCount).map(doorKey => (
+              <div
+                key={doorKey}
+                className={`w-[24px] h-[24px] flex items-center justify-center rounded-btn ${
+                  deviceLog?.door1 || deviceLog?.door2 || deviceLog?.door3
+                    ? 'bg-red-500 text-white'
+                    : 'border border-primary text-primary'
+                } duration-300`}
+              >
+                {deviceLog?.door1 || deviceLog?.door2 || deviceLog?.door3 ? (
+                  <RiDoorOpenLine size={14} />
+                ) : (
+                  <RiDoorClosedLine size={14} />
+                )}
+              </div>
+            ))}
+          </div>
+        )
+      },
+      sortable: false,
+      center: true
+    }
+  ]
+}
+
+export { columnData, subColumnData }

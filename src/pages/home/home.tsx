@@ -23,7 +23,7 @@ import { useNavigate } from 'react-router-dom'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
 import { DeviceResponseType } from '../../types/global/deviceResponseType'
 import { DeviceType } from '../../types/smtrack/devices/deviceType'
-import { columnData } from '../../components/pages/home/column'
+import { columnData, subColumnData } from '../../components/pages/home/column'
 import { GlobalContext } from '../../contexts/globalContext'
 import { GlobalContextType } from '../../types/global/globalContext'
 import Loading from '../../components/skeleton/table/loading'
@@ -187,6 +187,25 @@ const Home = () => {
     [t, navigate]
   )
 
+  const subColumns: TableColumn<ProbeType>[] = useMemo(
+    () => subColumnData(t, devicesFiltered),
+    [t, devicesFiltered]
+  )
+
+  const ExpandedComponent = ({ data }: { data: DeviceType }) => {
+    const { probe } = data
+    return (
+      <div>
+        <DataTable
+          columns={subColumns}
+          data={probe}
+          noDataComponent={<DataTableNoData />}
+          responsive
+        />
+      </div>
+    )
+  }
+
   return (
     <div className='p-3 px-[16px]'>
       <div className='grid grid-cols-1 md:grid-cols-2 content-between items-center gap-3 mt-[16px]'>
@@ -275,6 +294,7 @@ const Home = () => {
             pagination
             paginationServer
             pointerOnHover
+            expandableRows
             columns={columns}
             data={devicesFiltered}
             paginationTotalRows={totalRows}
@@ -282,6 +302,7 @@ const Home = () => {
             progressPending={loading}
             progressComponent={<Loading />}
             noDataComponent={<DataTableNoData />}
+            expandableRowsComponent={ExpandedComponent}
             onChangeRowsPerPage={handlePerRowsChange}
             onChangePage={handlePageChange}
             onRowClicked={handleRowClicked}
