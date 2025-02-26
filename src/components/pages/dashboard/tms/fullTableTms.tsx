@@ -48,7 +48,11 @@ const FullTableTmsComponent = (props: FullTablePropType) => {
   ]
 
   useEffect(() => {
-    setReverseArray(dataLog.reverse())
+    setReverseArray(
+      [...dataLog].sort(
+        (a, b) => new Date(b._time).getTime() - new Date(a._time).getTime()
+      )
+    )
   }, [dataLog])
 
   return (

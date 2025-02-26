@@ -22,25 +22,24 @@ const ChartMiniTms = (props: ChartMiniProps) => {
     ? deviceLogs.log.map(item => ({
         time: new Date(item.createdAt).getTime(),
         tempAvg: item.tempValue,
-        door: item.door ? 1 : 0,
-        mcuId: item.mcuId
+        probe: item.mcuId
       }))
-    : [{ time: 0, tempAvg: 0, door: 0, mcuId: '' }]
+    : [{ time: 0, tempAvg: 0, probe: '' }]
 
-  const groupedByDevice: Record<string, { x: number; y: number }[]> = {}
+  const groupedByProbe: Record<string, { x: number; y: number }[]> = {}
 
   mappedData.forEach(item => {
-    if (!groupedByDevice[item.mcuId]) {
-      groupedByDevice[item.mcuId] = []
+    if (!groupedByProbe[item.probe]) {
+      groupedByProbe[item.probe] = []
     }
-    groupedByDevice[item.mcuId].push({ x: item.time, y: item.tempAvg })
+    groupedByProbe[item.probe].push({ x: item.time, y: item.tempAvg })
   })
 
-  const series: ApexAxisChartSeries = Object.keys(groupedByDevice).map(
-    mcuId => ({
+  const series: ApexAxisChartSeries = Object.keys(groupedByProbe).map(
+    probe => ({
       type: 'area',
-      name: `${mcuId} - ${t('temperatureName')}`,
-      data: groupedByDevice[mcuId],
+      name: probe,
+      data: groupedByProbe[probe],
       zIndex: 50
     })
   )
@@ -57,12 +56,6 @@ const ChartMiniTms = (props: ChartMiniProps) => {
       name: t('tempMax'),
       zIndex: 60,
       data: mappedData.map(data => ({ x: data.time, y: maxTemp }))
-    },
-    {
-      type: 'area',
-      name: t('dashDoor'),
-      zIndex: 30,
-      data: mappedData.map(data => ({ x: data.time, y: data.door }))
     }
   )
 
@@ -78,13 +71,11 @@ const ChartMiniTms = (props: ChartMiniProps) => {
 
   const dynamicColors = generateColors(series.length)
 
-  const dynamicStrokeCurves = Array.from({ length: series.length }, (_, i) =>
-    i === series.length - 1 ? 'stepline' : 'smooth'
+  const dynamicStrokeWidths = Array.from({ length: series.length }, (_, i) =>
+    i === 0 ? 2.0 : 1.0
   )
 
-  const dynamicStrokeWidths = Array.from({ length: series.length }, (_, i) =>
-    i === 0 ? 2.0 : i === series.length - 1 ? 1.5 : 0.8
-  )
+  const dynamicStrokeCurves = Array(series.length).fill('smooth')
 
   const dynamicYaxis = Array.from({ length: series.length }, (_, i) => ({
     show: i === 0,
@@ -92,11 +83,11 @@ const ChartMiniTms = (props: ChartMiniProps) => {
       show: i === 0
     },
     axisBorder: {
-      show: i === 0,
+      show: false,
       color: 'oklch(73.24% 0.1973 44.47 / 1)'
     },
-    min: i === series.length - 1 ? 5 : minTempAvg,
-    max: i === series.length - 1 ? 0 : maxTempAvg
+    min: minTempAvg,
+    max: maxTempAvg
   }))
 
   const options: ApexCharts.ApexOptions = {
@@ -104,7 +95,8 @@ const ChartMiniTms = (props: ChartMiniProps) => {
       animations: {
         enabled: true,
         animateGradually: {
-          enabled: true
+          enabled: true,
+          delay: 300
         },
         dynamicAnimation: {
           speed: 500

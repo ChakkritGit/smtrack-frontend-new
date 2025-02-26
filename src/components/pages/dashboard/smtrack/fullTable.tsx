@@ -52,8 +52,12 @@ const FullTableComponent = (props: FullTablePropType) => {
   ]
 
   useEffect(() => {
-      setReverseArray(dataLog.reverse())
-    }, [dataLog])
+    setReverseArray(
+      [...dataLog].sort(
+        (a, b) => new Date(b._time).getTime() - new Date(a._time).getTime()
+      )
+    )
+  }, [dataLog])
 
   return (
     <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300 mt-5'>

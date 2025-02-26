@@ -73,7 +73,12 @@ const DataTableMiniTms = (props: TableMiniProps) => {
   ]
 
   useEffect(() => {
-    setReverseArray(tableData.reverse())
+    setReverseArray(
+      [...tableData].sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+    )
   }, [tableData])
 
   return (
