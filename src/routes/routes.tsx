@@ -14,7 +14,6 @@ import { WardType } from '../types/smtrack/wards/wardType'
 import { AxiosError } from 'axios'
 import { GlobalContext } from '../contexts/globalContext'
 import axiosInstance from '../constants/axios/axiosInstance'
-import { client } from '../services/mqtt'
 import sha256 from 'crypto-js/sha256'
 import hmacSHA512 from 'crypto-js/hmac-sha512'
 import Base64 from 'crypto-js/enc-base64'
@@ -98,10 +97,6 @@ const Routes = () => {
         `${location.pathname.split('/')[1] !== '' ? capitalized : 'Home'}`
       : 'SMTrack+'
   }, [location, cookieDecode, userProfile])
-
-  useEffect(() => {
-    client.connected
-  }, [])
 
   const routerInstance = useMemo(() => router(role, tmsMode), [role, tmsMode])
   const contextValue = useMemo(

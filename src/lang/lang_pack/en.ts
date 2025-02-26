@@ -278,7 +278,7 @@ export default {
     titleProfile: 'Profile',
     titleSecurity: 'Security',
     titlePassword: 'Password',
-    changPassword: 'Change',
+    changPassword: 'Change Password',
     newPassword: 'New Password',
     oldPassword: 'Old Password',
     passLower: 'Lower',
@@ -462,7 +462,7 @@ export default {
     titleError: 'Oops!',
     descriptionError: 'Page Not Found',
     descriptionErrorWrong: 'Something wrong please try again',
-    buttonErrorBack: 'Back to home',
+    buttonErrorBack: 'Back',
     titleNotAccess: 'Access denied',
     descriptionNotAccess: `You don't have permission to access this page!`,
 

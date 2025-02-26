@@ -377,7 +377,7 @@ div:where(.swal2-container) div:where(.swal2-html-container) {
 }
 
 .swal2-actions {
-  @apply flex items-center gap-3;
+  @apply flex items-center gap-1;
 }
 
 .modal:not(dialog:not(.modal-open)),

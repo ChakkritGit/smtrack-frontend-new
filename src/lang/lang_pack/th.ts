@@ -287,7 +287,7 @@ export default {
     titleProfile: 'โปรไฟล์',
     titleSecurity: 'ความปลอดภัย',
     titlePassword: 'รหัสผ่าน',
-    changPassword: 'เปลี่ยน',
+    changPassword: 'เปลี่ยนรหัสผ่าน',
     newPassword: 'รหัสผ่านใหม่',
     oldPassword: 'รหัสผ่านเดิม',
     passLower: 'ต่ำมาก',
@@ -461,7 +461,7 @@ export default {
     titleError: 'อุ๊ปส์!',
     descriptionError: 'ไม่พบหน้า',
     descriptionErrorWrong: 'มีบางอย่างผิดพลาด โปรดลองอีกครั้ง',
-    buttonErrorBack: 'กลับไปหน้าแรก',
+    buttonErrorBack: 'กลับไป',
     titleNotAccess: 'ปฏิเสธการเข้าใช้',
     descriptionNotAccess: 'คุณไม่ได้รับอนุญาตให้เข้าถึงหน้านี้!',
 

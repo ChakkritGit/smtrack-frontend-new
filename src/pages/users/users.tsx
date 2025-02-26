@@ -11,8 +11,12 @@ import {
 } from 'react'
 import { FormState, UsersType } from '../../types/smtrack/users/usersType'
 import axiosInstance from '../../constants/axios/axiosInstance'
-import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
 import {
+  responseType,
+  UserProfileType
+} from '../../types/smtrack/utilsRedux/utilsReduxType'
+import {
+  RiArrowLeftSLine,
   RiDeleteBin7Line,
   RiEditLine,
   RiKey2Line,
@@ -47,6 +51,8 @@ const Users = () => {
   const [usersFilter, setUsersFilter] = useState<UsersType[]>([])
   const [imageProcessing, setImageProcessing] = useState(false)
   const [deviceConnect, setDeviceConnect] = useState('')
+  const [onEdit, setOnEdit] = useState(false)
+  const [userPassword, setUserPassword] = useState('')
 
   const [formData, setFormData] = useState<FormState>({
     username: '',
@@ -177,7 +183,7 @@ const Users = () => {
         resetForm()
         await fetchUsers()
         Swal.fire({
-          title: t('alertHeaderError'),
+          title: t('alertHeaderSuccess'),
           text: t('submitSuccess'),
           icon: 'success',
           showConfirmButton: false,
@@ -333,6 +339,65 @@ const Users = () => {
     } else {
       setDeviceConnect(status)
     }
+  }
+
+  const handleSubmitPass = async (e: FormEvent) => {
+    e.preventDefault()
+    dispatch(setSubmitLoading())
+
+    if (userPassword !== '') {
+      try {
+        await axiosInstance.patch<responseType<UserProfileType>>(
+          `/auth/reset/${formData.username}`,
+          {
+            password: userPassword
+          }
+        )
+        resetFormPass()
+        setOnEdit(false)
+        editModalRef.current?.close()
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: t('submitSuccess'),
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        }).finally(() => {
+          editModalRef.current?.showModal()
+        })
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          })
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    } else {
+      editModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => {
+        editModalRef.current?.showModal()
+      })
+      dispatch(setSubmitLoading())
+    }
+  }
+
+  const resetFormPass = () => {
+    setUserPassword('')
+    setOnEdit(false)
   }
 
   useEffect(() => {
@@ -778,125 +843,172 @@ const Users = () => {
       {/* Edit User Modal */}
       <dialog ref={editModalRef} className='modal overflow-y-scroll py-10'>
         <form
-          onSubmit={handleUpdate}
+          onSubmit={!onEdit ? handleUpdate : handleSubmitPass}
           className='modal-box w-11/12 max-w-5xl h-max max-h-max'
         >
           <h3 className='font-bold text-lg'>{t('editUserButton')}</h3>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
-            {/* Image Upload - Left Column (30%) */}
-            <div className='col-span-1 flex justify-center'>
-              <div className='form-control'>
-                <label className='label cursor-pointer image-hover flex flex-col justify-center'>
-                  <span className='label-text'>{t('userPicture')}</span>
-                  <input
-                    ref={fileInputRef}
-                    type='file'
-                    accept='image/*'
-                    onChange={handleImageChange}
-                    className='hidden'
-                  />
-                  {imageProcessing ? (
-                    <div className='mt-4 flex justify-center w-32 h-32 md:w-48 md:h-48'>
-                      <span className='loading loading-ring loading-md'></span>
-                    </div>
-                  ) : (
-                    <div className='mt-4 relative'>
-                      <img
-                        src={formData.imagePreview || defaultPic}
-                        alt='Preview'
-                        className={`w-32 h-32 md:w-48 md:h-48 rounded-btn object-cover border-2 border-dashed border-base-300 ${
-                          formData.imagePreview || defaultPic
-                            ? 'border-none'
-                            : ''
-                        }`}
-                      />
-                      <div className='absolute edit-icon bottom-1 right-1 bg-base-100/50 backdrop-blur rounded-full p-2 shadow-sm'>
-                        <RiEditLine size={20} />
+          {!onEdit ? (
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
+              {/* Image Upload - Left Column (30%) */}
+              <div className='col-span-1 flex justify-center'>
+                <div className='form-control'>
+                  <label className='label cursor-pointer image-hover flex flex-col justify-center'>
+                    <span className='label-text'>{t('userPicture')}</span>
+                    <input
+                      ref={fileInputRef}
+                      type='file'
+                      accept='image/*'
+                      onChange={handleImageChange}
+                      className='hidden'
+                    />
+                    {imageProcessing ? (
+                      <div className='mt-4 flex justify-center w-32 h-32 md:w-48 md:h-48'>
+                        <span className='loading loading-ring loading-md'></span>
                       </div>
-                    </div>
-                  )}
-                </label>
+                    ) : (
+                      <div className='mt-4 relative'>
+                        <img
+                          src={formData.imagePreview || defaultPic}
+                          alt='Preview'
+                          className={`w-32 h-32 md:w-48 md:h-48 rounded-btn object-cover border-2 border-dashed border-base-300 ${
+                            formData.imagePreview || defaultPic
+                              ? 'border-none'
+                              : ''
+                          }`}
+                        />
+                        <div className='absolute edit-icon bottom-1 right-1 bg-base-100/50 backdrop-blur rounded-full p-2 shadow-sm'>
+                          <RiEditLine size={20} />
+                        </div>
+                      </div>
+                    )}
+                  </label>
+                </div>
+              </div>
+
+              {/* Right Column - Form Fields (70%) */}
+              <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
+                {/* Ward */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>{t('ward')}</span>
+                    <WardSelect formData={formData} setFormData={setFormData} />
+                  </label>
+                </div>
+
+                {/* Status */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>{t('userStatus')}</span>
+                    <StatusSelect
+                      formData={formData}
+                      setFormData={setFormData}
+                    />
+                  </label>
+                </div>
+
+                {/* Username */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      <span className='font-medium text-red-500 mr-1'>*</span>
+                      {t('userNameForm')}
+                    </span>
+                    <input
+                      type='text'
+                      name='username'
+                      value={formData.username}
+                      onChange={handleChange}
+                      className='input input-bordered w-full'
+                      maxLength={50}
+                    />
+                  </label>
+                </div>
+
+                {/* Display Name */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      <span className='font-medium text-red-500 mr-1'>*</span>
+                      {t('userDisplayName')}
+                    </span>
+                    <input
+                      type='text'
+                      name='display'
+                      value={formData.display}
+                      onChange={handleChange}
+                      className='input input-bordered w-full'
+                      maxLength={80}
+                    />
+                  </label>
+                </div>
+
+                {/* Role */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>{t('userRole')}</span>
+                    <RoleSelect
+                      formData={formData}
+                      roleToken={role}
+                      setFormData={setFormData}
+                    />
+                  </label>
+                </div>
+
+                {/* Password reset */}
+                {role === 'SUPER' &&
+                  <div className='form-control w-full'>
+                    <label className='label flex-col items-start'>
+                      <span className='label-text mb-2'>
+                        {t('titleSecurity')}
+                      </span>
+                      <button
+                        type='button'
+                        className='btn btn-primary w-full'
+                        onClick={() => setOnEdit(true)}
+                      >
+                        <RiKey2Line size={20} />
+                        {t('changPassword')}
+                      </button>
+                    </label>
+                  </div>
+                }
               </div>
             </div>
-
-            {/* Right Column - Form Fields (70%) */}
-            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
-              {/* Ward */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('ward')}</span>
-                  <WardSelect formData={formData} setFormData={setFormData} />
-                </label>
-              </div>
-
-              {/* Status */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('userStatus')}</span>
-                  <StatusSelect formData={formData} setFormData={setFormData} />
-                </label>
-              </div>
-
-              {/* Username */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>
-                    <span className='font-medium text-red-500 mr-1'>*</span>
-                    {t('userNameForm')}
-                  </span>
-                  <input
-                    type='text'
-                    name='username'
-                    value={formData.username}
-                    onChange={handleChange}
-                    className='input input-bordered w-full'
-                    maxLength={50}
-                  />
-                </label>
-              </div>
-
-              {/* Display Name */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>
-                    <span className='font-medium text-red-500 mr-1'>*</span>
-                    {t('userDisplayName')}
-                  </span>
-                  <input
-                    type='text'
-                    name='display'
-                    value={formData.display}
-                    onChange={handleChange}
-                    className='input input-bordered w-full'
-                    maxLength={80}
-                  />
-                </label>
-              </div>
-
-              {/* Role */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('userRole')}</span>
-                  <RoleSelect
-                    formData={formData}
-                    roleToken={role}
-                    setFormData={setFormData}
-                  />
-                </label>
-              </div>
-
-              {/* Password reset */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('titleSecurity')}</span>
-                  <button type='button' className='btn btn-primary w-full'>
-                    <RiKey2Line size={20} />
-                    {t('userPassword')}
-                  </button>
-                </label>
+          ) : (
+            <div className='mt-4'>
+              <button
+                onClick={() => {
+                  setOnEdit(false)
+                  resetFormPass()
+                }}
+                className='btn btn-ghost outline-none flex p-0 px-1 min-w-[30px] min-h-[30px] max-w-[150px] max-h-[30px] duration-300 mb-3'
+              >
+                <RiArrowLeftSLine size={24} />
+                <span>{t('buttonErrorBack')}</span>
+              </button>
+              <div className='mt-3'>
+                <div className='form-control w-full'>
+                  <label className='input input-bordered flex items-center gap-2'>
+                    <span className='hidden md:block opacity-50'>
+                      {t('newPassword')}
+                    </span>
+                    <input
+                      type='password'
+                      name='oldPassword'
+                      autoComplete='off'
+                      placeholder={t('newPassword')}
+                      onChange={e => setUserPassword(e.target.value)}
+                      value={userPassword}
+                      className='grow caret-primary w-[100px] md:w-auto md:placeholder:opacity-0'
+                      autoFocus
+                      max={20}
+                      min={4}
+                    />
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Modal Actions */}
           <div className='modal-action mt-4 md:mt-6'>
@@ -906,6 +1018,8 @@ const Users = () => {
               onClick={() => {
                 editModalRef.current?.close()
                 resetForm()
+                resetFormPass()
+                setOnEdit(false)
               }}
             >
               {t('cancelButton')}

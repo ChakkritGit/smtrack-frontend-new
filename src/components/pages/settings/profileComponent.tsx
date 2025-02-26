@@ -183,7 +183,7 @@ const ProfileComponent = (props: ProfileProps) => {
   }
 
   return (
-    <div className='w-[200px] md:w-auto'>
+    <div className='w-full'>
       <div className='relative mb-20'>
         <div
           className='w-full h-56 relative rounded-tl-btn rounded-tr-btn before:absolute before:inset-x-0 before:bottom-0 before:h-20
@@ -197,7 +197,7 @@ const ProfileComponent = (props: ProfileProps) => {
             backgroundRepeat: 'no-repeat'
           }}
         ></div>
-        <div className='form-control absolute bottom-0 rounded-full translate-y-[40%] translate-x-1/2 md:translate-x-[unset] md:left-7'>
+        <div className='form-control absolute bottom-0 rounded-full translate-y-[40%] w-full md:w-auto flex justify-center items-center md:items-start md:left-7'>
           <label htmlFor='imageFileSelect' className='cursor-pointer relative'>
             <div className='avatar rounded-full border-[5px] border-base-100 relative'>
               <div className='w-28 md:w-36 rounded'>

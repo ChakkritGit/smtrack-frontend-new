@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
 import { setSubmitLoading } from '../../../redux/actions/utilsActions'
 import { AxiosError } from 'axios'
@@ -9,23 +9,29 @@ import {
   responseType,
   UserProfileType
 } from '../../../types/smtrack/utilsRedux/utilsReduxType'
+import { RootState } from '../../../redux/reducers/rootReducer'
 
 const ResetPassword = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const [userPassword, setUserPassword] = useState('')
+  const { userProfile } = useSelector((state: RootState) => state.utils)
+  const [userPassword, setUserPassword] = useState({
+    oldPassword: '',
+    newPassWord: ''
+  })
   const [onEdit, setOnEdit] = useState(false)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     dispatch(setSubmitLoading())
 
-    if (userPassword !== '') {
+    if (userPassword.oldPassword !== '' && userPassword.newPassWord) {
       try {
-        await axiosInstance.put<responseType<UserProfileType>>(
-          `/auth/user/${''}`,
+        await axiosInstance.patch<responseType<UserProfileType>>(
+          `/auth/reset/${userProfile?.username}`,
           {
-            password: userPassword
+            oldPassword: userPassword.oldPassword,
+            password: userPassword.newPassWord
           }
         )
         resetForm()
@@ -65,7 +71,10 @@ const ResetPassword = () => {
   }
 
   const resetForm = () => {
-    setUserPassword('')
+    setUserPassword({
+      oldPassword: '',
+      newPassWord: ''
+    })
     setOnEdit(false)
   }
 
@@ -77,20 +86,51 @@ const ResetPassword = () => {
       {onEdit ? (
         <div className='mt-3'>
           <form onSubmit={handleSubmit}>
-            <div className='form-control'>
-              <label className='input input-bordered flex items-center gap-2'>
-                <span className='opacity-50'>{t('titlePassword')}</span>
-                <input
-                  type='text'
-                  name='userPassword'
-                  autoComplete='off'
-                  onChange={e => setUserPassword(e.target.value)}
-                  value={userPassword}
-                  className='grow caret-primary w-[100px] md:w-auto'
-                  autoFocus
-                  maxLength={80}
-                />
-              </label>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+              <div className='form-control w-full'>
+                <label className='input input-bordered flex items-center gap-2'>
+                  <span className='hidden md:block opacity-50'>{t('oldPassword')}</span>
+                  <input
+                    type='password'
+                    name='oldPassword'
+                    autoComplete='off'
+                    placeholder={t('oldPassword')}
+                    onChange={e =>
+                      setUserPassword({
+                        ...userPassword,
+                        oldPassword: e.target.value
+                      })
+                    }
+                    value={userPassword.oldPassword}
+                    className='grow caret-primary w-[100px] md:placeholder:opacity-0 md:w-auto'
+                    autoFocus
+                    max={20}
+                    min={4}
+                  />
+                </label>
+              </div>
+              <div className='form-control w-full'>
+                <label className='input input-bordered flex items-center gap-2'>
+                  <span className='hidden md:block opacity-50'>{t('newPassword')}</span>
+                  <input
+                    type='password'
+                    name='newPassword'
+                    autoComplete='off'
+                    placeholder={t('newPassword')}
+                    onChange={e =>
+                      setUserPassword({
+                        ...userPassword,
+                        newPassWord: e.target.value
+                      })
+                    }
+                    value={userPassword.newPassWord}
+                    className='grow caret-primary w-[100px] md:placeholder:opacity-0 md:w-auto'
+                    autoFocus
+                    max={20}
+                    min={4}
+                  />
+                </label>
+              </div>
             </div>
             {/* Modal Actions */}
             <div className='modal-action mt-6'>
@@ -108,7 +148,7 @@ const ResetPassword = () => {
           <span className='ml-5'>{t('titlePassword')}</span>
           <button
             onClick={() => setOnEdit(true)}
-            className='w-[50px] h-[35px] md:w-[70px] md:h-[40px] font-bold rounded-btn border-[2px] border-base-content text-[14px] md:text-base-content hover:opacity-50 duration-300'
+            className='w-[100px] h-[45px] md:w-max md:h-[40px] px-2 font-bold rounded-btn border-[2px] border-base-content text-[14px] md:text-base-content hover:opacity-50 duration-300'
           >
             {t('changPassword')}
           </button>

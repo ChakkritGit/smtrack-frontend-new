@@ -119,50 +119,54 @@ const Sidebar = () => {
                 </span>
               )}
             </Link>
-            <Link
-              to={'/permission'}
-              className={`btn font-normal flex-nowrap justify-start w-full ${
-                location.pathname === '/permission'
-                  ? 'btn-primary'
-                  : 'btn-ghost'
-              } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
-              data-tip={t('sidePermission')}
-            >
-              {location.pathname === '/permission' ? (
-                <RiUser6Fill size={24} />
-              ) : (
-                <RiUser6Line size={24} />
-              )}
-              {!isExpand && (
-                <span className='text-[16px] leading-normal truncate'>
-                  {t('sidePermission')}
-                </span>
-              )}
-            </Link>
-            <Link
-              to={'/management'}
-              className={`btn font-normal flex-nowrap justify-start w-full ${
-                location.pathname === '/management' ||
-                location.pathname === '/management/logadjust' ||
-                location.pathname === '/management/flasher'
-                  ? 'btn-primary'
-                  : 'btn-ghost'
-              } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
-              data-tip={t('sideManage')}
-            >
-              {location.pathname === '/management' ||
-              location.pathname === '/management/logadjust' ||
-              location.pathname === '/management/flasher' ? (
-                <RiListSettingsFill size={24} />
-              ) : (
-                <RiListSettingsLine size={24} />
-              )}
-              {!isExpand && (
-                <span className='text-[16px] leading-normal truncate'>
-                  {t('sideManage')}
-                </span>
-              )}
-            </Link>
+            {(role === 'SUPER' || role === 'SERVICE' || role === 'ADMIN') && (
+              <>
+                <Link
+                  to={'/permission'}
+                  className={`btn font-normal flex-nowrap justify-start w-full ${
+                    location.pathname === '/permission'
+                      ? 'btn-primary'
+                      : 'btn-ghost'
+                  } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
+                  data-tip={t('sidePermission')}
+                >
+                  {location.pathname === '/permission' ? (
+                    <RiUser6Fill size={24} />
+                  ) : (
+                    <RiUser6Line size={24} />
+                  )}
+                  {!isExpand && (
+                    <span className='text-[16px] leading-normal truncate'>
+                      {t('sidePermission')}
+                    </span>
+                  )}
+                </Link>
+                <Link
+                  to={'/management'}
+                  className={`btn font-normal flex-nowrap justify-start w-full ${
+                    location.pathname === '/management' ||
+                    location.pathname === '/management/logadjust' ||
+                    location.pathname === '/management/flasher'
+                      ? 'btn-primary'
+                      : 'btn-ghost'
+                  } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
+                  data-tip={t('sideManage')}
+                >
+                  {location.pathname === '/management' ||
+                  location.pathname === '/management/logadjust' ||
+                  location.pathname === '/management/flasher' ? (
+                    <RiListSettingsFill size={24} />
+                  ) : (
+                    <RiListSettingsLine size={24} />
+                  )}
+                  {!isExpand && (
+                    <span className='text-[16px] leading-normal truncate'>
+                      {t('sideManage')}
+                    </span>
+                  )}
+                </Link>
+              </>
+            )}
           </div>
           <div className='divider mb-0'></div>
           <div className='flex items-center justify-center flex-col gap-2 p-3'>
