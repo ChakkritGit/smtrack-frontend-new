@@ -2,16 +2,20 @@ import { useTranslation } from 'react-i18next'
 import { LogChartTms } from '../../../../types/tms/devices/deviceType'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import DataTableNoData from '../../../skeleton/table/noData'
+import { useEffect, useState } from 'react'
+import Loading from '../../../skeleton/table/loading'
 
 interface FullTablePropType {
   dataLog: LogChartTms[]
   tempMin: number
   tempMax: number
+  isLoading: boolean
 }
 
 const FullTableTmsComponent = (props: FullTablePropType) => {
   const { t } = useTranslation()
-  const { dataLog } = props
+  const { dataLog, isLoading } = props
+  const [reverseArray, setReverseArray] = useState<LogChartTms[]>([])
 
   const columns: TableColumn<LogChartTms>[] = [
     {
@@ -43,17 +47,23 @@ const FullTableTmsComponent = (props: FullTablePropType) => {
     }
   ]
 
+  useEffect(() => {
+    setReverseArray(dataLog.reverse())
+  }, [dataLog])
+
   return (
     <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300 mt-5'>
       <DataTable
         pagination
         fixedHeader
         responsive={true}
+        progressPending={isLoading}
         columns={columns}
-        data={dataLog}
+        data={reverseArray}
         noDataComponent={<DataTableNoData />}
-        paginationPerPage={12}
-        paginationRowsPerPageOptions={[12, 30, 50, 100]}
+        progressComponent={<Loading />}
+        paginationPerPage={10}
+        paginationRowsPerPageOptions={[10, 30, 50, 100]}
         fixedHeaderScrollHeight='580px'
       />
     </div>

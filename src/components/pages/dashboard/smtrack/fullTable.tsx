@@ -5,17 +5,21 @@ import {
   DeviceLog,
   DeviceLogs
 } from '../../../../types/smtrack/devices/deviceType'
+import Loading from '../../../skeleton/table/loading'
+import { useEffect, useState } from 'react'
 
 interface FullTablePropType {
   dataLog: DeviceLogs[]
   deviceLogs: DeviceLog
   tempMin: number
   tempMax: number
+  isLoading: boolean
 }
 
 const FullTableComponent = (props: FullTablePropType) => {
   const { t } = useTranslation()
-  const { dataLog, deviceLogs } = props
+  const { dataLog, deviceLogs, isLoading } = props
+  const [reverseArray, setReverseArray] = useState<DeviceLogs[]>([])
 
   const columns: TableColumn<DeviceLogs>[] = [
     {
@@ -47,15 +51,21 @@ const FullTableComponent = (props: FullTablePropType) => {
     }
   ]
 
+  useEffect(() => {
+      setReverseArray(dataLog.reverse())
+    }, [dataLog])
+
   return (
     <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300 mt-5'>
       <DataTable
         pagination
         fixedHeader
         responsive={true}
+        progressPending={isLoading}
         columns={columns}
-        data={dataLog}
+        data={reverseArray}
         noDataComponent={<DataTableNoData />}
+        progressComponent={<Loading />}
         paginationPerPage={12}
         paginationRowsPerPageOptions={[12, 30, 50, 100]}
         fixedHeaderScrollHeight='580px'

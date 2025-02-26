@@ -17,7 +17,7 @@ const DataTableWrapperTms = (props: DataTableWrapperProps) => {
     <div className='flex flex-col gap-3 bg-base-100 w-full h-full rounded-btn p-3'>
       <div className='flex items-center justify-between px-3'>
         <div className='flex items-center gap-3'>
-          <span className='text-[20px] font-bold'>{t('pageChart')}</span>
+          <span className='text-[20px] font-bold'>{t('pageTable')}</span>
         </div>
         <button
           className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'

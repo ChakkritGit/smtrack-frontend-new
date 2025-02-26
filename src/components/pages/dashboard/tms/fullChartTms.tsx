@@ -1,16 +1,18 @@
 import Chart from 'react-apexcharts'
 import { useTranslation } from 'react-i18next'
 import { LogChartTms } from '../../../../types/tms/devices/deviceType'
+import Loading from '../../../skeleton/table/loading'
 
 interface FullChartPropType {
   dataLog: LogChartTms[]
   tempMin: number
   tempMax: number
+  isLoading: boolean
 }
 
 const FullChartTmsComponent = (props: FullChartPropType) => {
   const { t } = useTranslation()
-  const { dataLog, tempMin, tempMax } = props
+  const { dataLog, tempMin, tempMax, isLoading } = props
 
   const tempAvgValues = dataLog ? dataLog.map(item => item._value) : [0]
   const minTempAvg = Math.min(...tempAvgValues) - 2
@@ -18,7 +20,7 @@ const FullChartTmsComponent = (props: FullChartPropType) => {
 
   const mappedData = dataLog
     ? dataLog.map(item => ({
-        time: new Date(item._time.substring(0, 16)).getTime(),
+        time: new Date(item._time).getTime(),
         tempAvg: item._value,
         probe: item.probe
       }))
@@ -246,8 +248,12 @@ const FullChartTmsComponent = (props: FullChartPropType) => {
   }
 
   return (
-    <div className='mt-3'>
-      <Chart options={options} series={series} height={680} />
+    <div className={`mt-3 ${isLoading ? 'h-[calc(100dvh-200px)]' : ''}`}>
+      {isLoading ? (
+          <Loading />
+      ) : (
+        <Chart options={options} series={series} height={680} />
+      )}
     </div>
   )
 }

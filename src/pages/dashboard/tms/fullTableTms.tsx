@@ -32,6 +32,7 @@ const FullTableTms = () => {
   }
   const [pageNumber, setPagenumber] = useState(1)
   const [dataLog, setDataLog] = useState<LogChartTms[]>([])
+  const [isLoading, setIsLoading] = useState(false)
   const [filterDate, setFilterDate] = useState({
     startDate: '',
     endDate: ''
@@ -48,6 +49,7 @@ const FullTableTms = () => {
   const logDay = async () => {
     setPagenumber(1)
     setDataLog([])
+    setIsLoading(true)
     try {
       const response = await axiosInstance.get<responseType<LogChartTms[]>>(
         `/legacy/graph?filter=day&sn=${
@@ -61,12 +63,15 @@ const FullTableTms = () => {
       } else {
         console.error(error)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const logWeek = async () => {
     setPagenumber(2)
     setDataLog([])
+    setIsLoading(true)
     try {
       const response = await axiosInstance.get<responseType<LogChartTms[]>>(
         `/legacy/graph?filter=week&sn=${
@@ -80,12 +85,15 @@ const FullTableTms = () => {
       } else {
         console.error(error)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const logMonth = async () => {
     setPagenumber(3)
     setDataLog([])
+    setIsLoading(true)
     try {
       const response = await axiosInstance.get<responseType<LogChartTms[]>>(
         `/legacy/graph?filter=month&sn=${
@@ -99,6 +107,8 @@ const FullTableTms = () => {
       } else {
         console.error(error)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -112,6 +122,7 @@ const FullTableTms = () => {
       if (diffDays <= 31) {
         try {
           setDataLog([])
+          setIsLoading(true)
           const responseData = await axiosInstance.get<
             responseType<LogChartTms[]>
           >(
@@ -130,6 +141,8 @@ const FullTableTms = () => {
           } else {
             console.error('Uknown error: ', error)
           }
+        } finally {
+          setIsLoading(false)
         }
       } else {
         Swal.fire({
@@ -315,9 +328,10 @@ const FullTableTms = () => {
         </div>
       )}
       <FullTableTmsComponent
-        dataLog={dataLog}
+        dataLog={dataLog.reverse()}
         tempMin={deviceLogs?.minTemp}
         tempMax={deviceLogs?.maxTemp}
+        isLoading={isLoading}
       />
     </div>
   )

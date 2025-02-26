@@ -1,16 +1,18 @@
 import Chart from 'react-apexcharts'
 import { useTranslation } from 'react-i18next'
 import { DeviceLogs } from '../../../../types/smtrack/devices/deviceType'
+import Loading from '../../../skeleton/table/loading'
 
 interface FullChartPropType {
   dataLog: DeviceLogs[]
   tempMin: number
   tempMax: number
+  isLoading: boolean
 }
 
 const FullChartComponent = (props: FullChartPropType) => {
   const { t } = useTranslation()
-  const { dataLog, tempMin, tempMax } = props
+  const { dataLog, tempMin, tempMax, isLoading } = props
 
   const tempAvgValues = dataLog ? dataLog.map(item => item.temp) : [0]
   const minTempAvg = Math.min(...tempAvgValues) - 2
@@ -281,8 +283,12 @@ const FullChartComponent = (props: FullChartPropType) => {
   }
 
   return (
-    <div className='mt-3'>
-      <Chart options={options} series={series} height={680} />
+    <div className={`mt-3 ${isLoading ? 'h-[calc(100dvh-200px)]' : ''}`}>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Chart options={options} series={series} height={680} />
+      )}
     </div>
   )
 }

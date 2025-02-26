@@ -158,7 +158,9 @@ const Sidebar = () => {
                 <RiListSettingsLine size={24} />
               )}
               {!isExpand && (
-                <span className='text-[16px] leading-normal truncate'>{t('sideManage')}</span>
+                <span className='text-[16px] leading-normal truncate'>
+                  {t('sideManage')}
+                </span>
               )}
             </Link>
           </div>
@@ -177,7 +179,9 @@ const Sidebar = () => {
                 <RiFileSettingsLine size={24} />
               )}
               {!isExpand && (
-                <span className='text-[16px] leading-normal truncate'>{t('sideRepair')}</span>
+                <span className='text-[16px] leading-normal truncate'>
+                  {t('sideRepair')}
+                </span>
               )}
             </Link>
             <Link
@@ -203,11 +207,14 @@ const Sidebar = () => {
         <div className='w-full'>
           <div className='divider mb-0'></div>
           <div className='flex justify-center flex-col gap-3 p-3'>
-            {(role === 'SUPER' || role === 'SERVICE' || role === 'ADMIN' || role === 'LEGACY_ADMIN') && (
+            {(role === 'SUPER' ||
+              role === 'SERVICE' ||
+              role === 'ADMIN' ||
+              role === 'LEGACY_ADMIN') && (
               <div className='flex flex-col items-center gap-2'>
                 {!isExpand && (
                   <span className='text-[12px] truncate'>
-                    *Switch mode eTEMP and TMS
+                    *Switch mode eTEMP and Line
                   </span>
                 )}
                 <div className='flex items-center justify-center gap-2'>
@@ -243,7 +250,9 @@ const Sidebar = () => {
                 <RiSettings3Line size={24} />
               )}
               {!isExpand && (
-                <span className='text-[16px] leading-normal truncate'>{t('sideSetting')}</span>
+                <span className='text-[16px] leading-normal truncate'>
+                  {t('sideSetting')}
+                </span>
               )}
             </Link>
             <Link

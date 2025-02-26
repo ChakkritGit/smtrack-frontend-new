@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../redux/reducers/rootReducer'
-import { setTheme } from '../../redux/actions/utilsActions'
+import { RootState } from '../../../redux/reducers/rootReducer'
+import { setTheme } from '../../../redux/actions/utilsActions'
 
 const AppearanceComponents = () => {
   const { t } = useTranslation()

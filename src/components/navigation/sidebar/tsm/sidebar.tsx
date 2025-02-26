@@ -172,11 +172,14 @@ const Sidebar = () => {
         <div className='w-full'>
           <div className='divider mb-0'></div>
           <div className='flex justify-center flex-col gap-3 p-3'>
-            {(role === 'SUPER' || role === 'SERVICE' || role === 'ADMIN' || role === 'LEGACY_ADMIN') && (
+            {(role === 'SUPER' ||
+              role === 'SERVICE' ||
+              role === 'ADMIN' ||
+              role === 'LEGACY_ADMIN') && (
               <div className='flex flex-col items-center gap-2'>
                 {!isExpand && (
                   <span className='text-[12px] truncate'>
-                    *Switch mode eTEMP and TMS
+                    *Switch mode eTEMP and Line
                   </span>
                 )}
                 <div className='flex items-center justify-center gap-2'>

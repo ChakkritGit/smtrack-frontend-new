@@ -40,8 +40,8 @@ import { DeviceListTmsType } from '../../../types/tms/devices/deviceType'
 import { AxiosError } from 'axios'
 import { DeviceListType } from '../../../types/smtrack/devices/deviceType'
 import Notifications from '../../notifications/notifications'
-import ProfileComponent from '../../settings/profileComponent'
-import SoundAndNotificationComponents from '../../settings/soundAndNotificationComponents'
+import ProfileComponent from '../../pages/settings/profileComponent'
+import SoundAndNotificationComponents from '../../pages/settings/soundAndNotificationComponents'
 
 type SearchType = {
   text: string

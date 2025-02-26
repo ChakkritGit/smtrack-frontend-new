@@ -4,11 +4,9 @@ const Loading = () => {
   const { t } = useTranslation()
 
   return (
-    <div className='w-full p-3'>
-      <div className='flex items-center justify-center gap-3'>
-        <span className='loading loading-ring loading-md'></span>
-        <span>{t('loading')}</span>
-      </div>
+    <div className='flex items-center justify-center w-full p-3 h-full gap-3'>
+      <span className='loading loading-ring loading-md'></span>
+      <span>{t('loading')}</span>
     </div>
   )
 }

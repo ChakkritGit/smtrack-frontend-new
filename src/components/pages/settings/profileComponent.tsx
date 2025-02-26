@@ -1,26 +1,16 @@
-import {
-  responseType,
-  UserProfileType
-} from '../../types/smtrack/utilsRedux/utilsReduxType'
-import DefaultUser from '../../assets/images/default-user.jpg'
-import DefaultHos from '../../assets/images/default-pic.png'
+import DefaultUser from '../../../assets/images/default-user.jpg'
+import DefaultHos from '../../../assets/images/default-pic.png'
 import { RiCameraLine } from 'react-icons/ri'
 import { useTranslation } from 'react-i18next'
-import {
-  cookieOptions,
-  cookies,
-  getRoleLabel
-} from '../../constants/utils/utilsConstants'
 import { Dispatch, FormEvent, RefObject, SetStateAction, useState } from 'react'
-import axiosInstance from '../../constants/axios/axiosInstance'
 import { useDispatch } from 'react-redux'
-import {
-  setSubmitLoading,
-  setUserProfile
-} from '../../redux/actions/utilsActions'
 import { AxiosError } from 'axios'
 import Swal from 'sweetalert2'
-import { resizeImage } from '../../constants/utils/image'
+import { responseType, UserProfileType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
+import { resizeImage } from '../../../constants/utils/image'
+import axiosInstance from '../../../constants/axios/axiosInstance'
+import { cookieOptions, cookies, getRoleLabel } from '../../../constants/utils/utilsConstants'
+import { setSubmitLoading, setUserProfile } from '../../../redux/actions/utilsActions'
 
 interface ProfileProps {
   userProfile: UserProfileType | undefined

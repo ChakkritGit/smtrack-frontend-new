@@ -15,6 +15,7 @@ const DataTableMini = (props: TableMiniProps) => {
   const { logData } = props
   const { globalSearch } = useSelector((state: RootState) => state.utils)
   const [tableData, setTableData] = useState<DeviceLogType[]>([])
+  const [reverseArray, setReverseArray] = useState<DeviceLogType[]>([])
 
   useEffect(() => {
     const filtered = logData.filter(
@@ -72,6 +73,10 @@ const DataTableMini = (props: TableMiniProps) => {
     }
   ]
 
+  useEffect(() => {
+    setReverseArray(tableData.reverse())
+  }, [tableData])
+
   return (
     <div className='dataTableWrapper mb-5'>
       <DataTable
@@ -80,7 +85,7 @@ const DataTableMini = (props: TableMiniProps) => {
         fixedHeader
         responsive={true}
         columns={columns}
-        data={tableData}
+        data={reverseArray}
         noDataComponent={<DataTableNoData />}
         paginationPerPage={12}
         paginationRowsPerPageOptions={[12, 30, 50, 100]}

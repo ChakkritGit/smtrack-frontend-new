@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import LanguageList from '../language/languageList'
+import LanguageList from '../../language/languageList'
 
 const LanguageComponents = () => {
   const { t } = useTranslation()

@@ -268,7 +268,8 @@ const Notifications = () => {
       </div>
       <ul
         tabIndex={0}
-        className='dropdown-content bg-base-100 text-base-content rounded-box top-px mt-16 max-h-[520px] w-[480px] overflow-y-auto border border-white/5 shadow-2xl outline outline-1 outline-black/5'
+        className='dropdown-content bg-base-100 text-base-content rounded-box top-px mt-16 max-h-[520px] w-[480px] overflow-y-auto 
+        border border-white/5 shadow-2xl outline outline-1 outline-black/5'
       >
         <div className='flex items-center justify-between p-2 h-[49px]'>
           <span className='text-base ml-2'>{t('titleNotification')}</span>

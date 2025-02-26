@@ -58,6 +58,7 @@ const FullChart = () => {
     startDate: '',
     endDate: ''
   })
+  const [isLoading, setIsLoading] = useState(false)
   const canvasChartRef = useRef<HTMLDivElement | null>(null)
   const tableInfoRef = useRef<HTMLDivElement | null>(null)
   const [isPause, setIsPaused] = useState(false)
@@ -77,6 +78,7 @@ const FullChart = () => {
   const logDay = async () => {
     setPagenumber(1)
     setDataLog([])
+    setIsLoading(true)
     try {
       const response = await axiosInstance.get<responseType<DeviceLogs[]>>(
         `/log/graph?sn=${
@@ -90,12 +92,15 @@ const FullChart = () => {
       } else {
         console.error(error)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const logWeek = async () => {
     setPagenumber(2)
     setDataLog([])
+    setIsLoading(true)
     try {
       const response = await axiosInstance.get<responseType<DeviceLogs[]>>(
         `/log/graph?sn=${
@@ -109,12 +114,15 @@ const FullChart = () => {
       } else {
         console.error(error)
       }
+    }finally {
+      setIsLoading(false)
     }
   }
 
   const logMonth = async () => {
     setPagenumber(3)
     setDataLog([])
+    setIsLoading(true)
     try {
       const response = await axiosInstance.get<responseType<DeviceLogs[]>>(
         `/log/graph?sn=${
@@ -128,6 +136,8 @@ const FullChart = () => {
       } else {
         console.error(error)
       }
+    }finally {
+      setIsLoading(false)
     }
   }
 
@@ -141,6 +151,7 @@ const FullChart = () => {
       if (diffDays <= 31) {
         try {
           setDataLog([])
+          setIsLoading(true)
           const responseData = await axiosInstance.get<
             responseType<DeviceLogs[]>
           >(
@@ -159,6 +170,8 @@ const FullChart = () => {
           } else {
             console.error('Uknown error: ', error)
           }
+        }finally {
+          setIsLoading(false)
         }
       } else {
         Swal.fire({
@@ -360,6 +373,7 @@ const FullChart = () => {
                   dataLog={filterItem}
                   tempMin={item.tempMin}
                   tempMax={item.tempMax}
+                  isLoading={isLoading}
                 />
               </SwiperSlide>
             )

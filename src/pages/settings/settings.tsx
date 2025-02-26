@@ -11,10 +11,11 @@ import {
 } from 'react-icons/ri'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useSelector } from 'react-redux'
-import ProfileComponent from '../../components/settings/profileComponent'
-import SoundAndNotificationComponents from '../../components/settings/soundAndNotificationComponents'
-import LanguageComponents from '../../components/settings/languageComponents'
-import AppearanceComponents from '../../components/settings/appearanceComponents'
+import ProfileComponent from '../../components/pages/settings/profileComponent'
+import SoundAndNotificationComponents from '../../components/pages/settings/soundAndNotificationComponents'
+import AppearanceComponents from '../../components/pages/settings/appearanceComponents'
+import LanguageComponents from '../../components/pages/settings/languageComponents'
+import ResetPassword from '../../components/pages/settings/resetPassword'
 
 interface FormState {
   imagePreview: string | null
@@ -39,18 +40,21 @@ const Settings = () => {
 
   const settingProfile = useMemo(
     () => (
-      <ProfileComponent
-        key={'Setting'}
-        userProfile={userProfile}
-        profileModalRef={profileModalRef}
-        fileInputRef={fileInputRef}
-        image={image}
-        setImage={setImage}
-        edit={edit}
-        setEdit={setEdit}
-        imageProcessing={imageProcessing}
-        setImageProcessing={setImageProcessing}
-      />
+      <>
+        <ProfileComponent
+          key={'Setting'}
+          userProfile={userProfile}
+          profileModalRef={profileModalRef}
+          fileInputRef={fileInputRef}
+          image={image}
+          setImage={setImage}
+          edit={edit}
+          setEdit={setEdit}
+          imageProcessing={imageProcessing}
+          setImageProcessing={setImageProcessing}
+        />
+        <ResetPassword />
+      </>
     ),
     [userProfile, image, edit, imageProcessing]
   )

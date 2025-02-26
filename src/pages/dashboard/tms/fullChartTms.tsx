@@ -53,12 +53,14 @@ const FullChartTms = () => {
     startDate: '',
     endDate: ''
   })
+  const [isLoading, setIsLoading] = useState(false)
   const canvasChartRef = useRef<HTMLDivElement | null>(null)
   const tableInfoRef = useRef<HTMLDivElement | null>(null)
 
   const logDay = async () => {
     setPagenumber(1)
     setDataLog([])
+    setIsLoading(true)
     try {
       const response = await axiosInstance.get<responseType<LogChartTms[]>>(
         `/legacy/graph?filter=day&sn=${
@@ -72,12 +74,15 @@ const FullChartTms = () => {
       } else {
         console.error(error)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const logWeek = async () => {
     setPagenumber(2)
     setDataLog([])
+    setIsLoading(true)
     try {
       const response = await axiosInstance.get<responseType<LogChartTms[]>>(
         `/legacy/graph?filter=week&sn=${
@@ -91,12 +96,15 @@ const FullChartTms = () => {
       } else {
         console.error(error)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const logMonth = async () => {
     setPagenumber(3)
     setDataLog([])
+    setIsLoading(true)
     try {
       const response = await axiosInstance.get<responseType<LogChartTms[]>>(
         `/legacy/graph?filter=month&sn=${
@@ -110,6 +118,8 @@ const FullChartTms = () => {
       } else {
         console.error(error)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -123,6 +133,7 @@ const FullChartTms = () => {
       if (diffDays <= 31) {
         try {
           setDataLog([])
+          setIsLoading(true)
           const responseData = await axiosInstance.get<
             responseType<LogChartTms[]>
           >(
@@ -141,6 +152,8 @@ const FullChartTms = () => {
           } else {
             console.error('Uknown error: ', error)
           }
+        } finally {
+          setIsLoading(false)
         }
       } else {
         Swal.fire({
@@ -431,6 +444,7 @@ const FullChartTms = () => {
           dataLog={dataLog}
           tempMin={deviceLogs?.minTemp}
           tempMax={deviceLogs?.maxTemp}
+          isLoading={isLoading}
         />
       </div>
       {submitLoading && <Loading />}

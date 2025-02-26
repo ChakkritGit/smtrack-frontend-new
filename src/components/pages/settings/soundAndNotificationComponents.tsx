@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import { RiSpeakerLine } from 'react-icons/ri'
-import { RootState } from '../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { setPopUpMode, setSoundMode } from '../../redux/actions/utilsActions'
-import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
+import { RootState } from '../../../redux/reducers/rootReducer'
+import { setPopUpMode, setSoundMode } from '../../../redux/actions/utilsActions'
+import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
 
 const SoundAndNotificationComponents = () => {
   const dispatch = useDispatch()

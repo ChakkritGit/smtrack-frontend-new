@@ -76,22 +76,6 @@ const columnTms = (
       center: true
     },
     {
-      name: t('deviceConnectTb'),
-      cell: item => (
-        <div
-          className={`w-max h-[24px] px-2 flex items-center justify-center rounded-btn ${
-            item.log[0]?.internet
-              ? 'bg-green-500 text-white'
-              : 'bg-red-500 text-white'
-          } duration-300`}
-        >
-          {item.log[0]?.internet ? t('deviceOnline') : t('deviceOffline')}
-        </div>
-      ),
-      sortable: false,
-      center: true
-    },
-    {
       name: t('devicePlugTb'),
       selector: item =>
         !item.log[0]?.plugin ? t('stateNormal') : t('stateProblem'),

@@ -4,14 +4,29 @@ import { RiSettings3Line } from 'react-icons/ri'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, EffectCreative, Pagination } from 'swiper/modules'
 import DefaultPic from '../../../../assets/images/default-pic.png'
+import Adjustments from '../../../adjustments/adjustments'
+import { useRef, useState } from 'react'
+import { ProbeType } from '../../../../types/smtrack/probe/probeType'
 
 type PropsType = {
   deviceData: DeviceLogsType | undefined
+  fetchDevices: () => Promise<void>
 }
 
 const CardInFoComponent = (props: PropsType) => {
   const { t } = useTranslation()
-  const { deviceData } = props
+  const { deviceData, fetchDevices } = props
+  const [serial, setSerial] = useState<string>('')
+  const [probeData, setProbeData] = useState<ProbeType[]>([])
+  const openAdjustModalRef = useRef<HTMLDialogElement>(null)
+
+  const openAdjustModal = (probe: ProbeType[], sn: string) => {
+    setProbeData(probe)
+    setSerial(sn)
+    if (openAdjustModalRef.current) {
+      openAdjustModalRef.current.showModal()
+    }
+  }
 
   return (
     <div className='p-5 h-full'>
@@ -39,6 +54,12 @@ const CardInFoComponent = (props: PropsType) => {
         <button
           className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 tooltip tooltip-left'
           data-tip={t('adjustMents')}
+          onClick={() =>
+            openAdjustModal(
+              deviceData?.probe as ProbeType[],
+              deviceData?.id as string
+            )
+          }
         >
           <RiSettings3Line size={24} />
         </button>
@@ -148,6 +169,14 @@ const CardInFoComponent = (props: PropsType) => {
           </div>
         </div>
       </div>
+
+      <Adjustments
+        openAdjustModalRef={openAdjustModalRef}
+        serial={serial}
+        probe={probeData}
+        setProbeData={setProbeData}
+        fetchDevices={fetchDevices}
+      />
     </div>
   )
 }

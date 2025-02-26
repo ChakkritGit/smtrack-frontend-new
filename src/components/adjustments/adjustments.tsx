@@ -140,7 +140,6 @@ const Adjustments = (props: AdjustmentsProps) => {
         `/devices/probe/${selectedProbe}`,
         body
       )
-      await fetchDevices(1, 10)
       openAdjustModalRef.current?.close()
       Swal.fire({
         title: t('alertHeaderSuccess'),
@@ -148,7 +147,10 @@ const Adjustments = (props: AdjustmentsProps) => {
         icon: 'success',
         showConfirmButton: false,
         timer: 2500
-      }).finally(() => openAdjustModalRef.current?.showModal())
+      }).finally(async () => {
+        await fetchDevices(1, 10)
+        openAdjustModalRef.current?.showModal()
+      })
     } catch (error) {
       openAdjustModalRef.current?.close()
       if (error instanceof AxiosError) {
@@ -195,7 +197,6 @@ const Adjustments = (props: AdjustmentsProps) => {
         `/devices/probe/${selectedProbe}`,
         body
       )
-      await fetchDevices(1, 10)
       openAdjustModalRef.current?.close()
       Swal.fire({
         title: t('alertHeaderSuccess'),
@@ -203,7 +204,10 @@ const Adjustments = (props: AdjustmentsProps) => {
         icon: 'success',
         showConfirmButton: false,
         timer: 2500
-      }).finally(() => openAdjustModalRef.current?.showModal())
+      }).finally(async () => {
+        await fetchDevices(1, 10)
+        openAdjustModalRef.current?.showModal()
+      })
     } catch (error) {
       openAdjustModalRef.current?.close()
       if (error instanceof AxiosError) {
