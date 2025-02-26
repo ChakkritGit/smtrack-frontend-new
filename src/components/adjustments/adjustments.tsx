@@ -2,6 +2,7 @@ import {
   FormEvent,
   RefObject,
   SetStateAction,
+  useCallback,
   useEffect,
   useState
 } from 'react'
@@ -358,11 +359,17 @@ const Adjustments = (props: AdjustmentsProps) => {
         label: (item[labelKey] as unknown as string) ?? t('nameNotRegister')
       }))[0]
 
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     const filter = probe
       .filter(item => item.id === selectedProbe)
       .find(item => item)
-    client.publish(`${serial}/${filter?.channel}/temp`, 'off')
+    client.publish(
+      `siamatic/${deviceModel}/${version}/${serial}/${probeFiltered?.channel}/temp`,
+      'off'
+    )
+    client.unsubscribe(
+      `${serial}/${probeFiltered?.channel}/mute/status/receive`
+    )
     client.unsubscribe(`${serial}/${filter?.channel}/temp/real`)
     client.unsubscribe(`${serial}/${filter?.channel}/mute/status/receive`)
     setAdjustmentsForm({
@@ -378,7 +385,7 @@ const Adjustments = (props: AdjustmentsProps) => {
     setTab(1)
     setProbeData([])
     openAdjustModalRef.current?.close()
-  }
+  }, [probeFiltered])
 
   useEffect(() => {
     const filter = probe
@@ -435,8 +442,12 @@ const Adjustments = (props: AdjustmentsProps) => {
   }, [probe])
 
   useEffect(() => {
-    if (selectedProbe !== '') {
+    if (selectedProbe !== '' && probeFiltered) {
       if (tab === 1) {
+        client.unsubscribe(
+          `${serial}/${probeFiltered?.channel}/mute/status/receive`
+        )
+
         if (beforeSelectProbe && beforeSelectProbe !== probeFiltered?.channel) {
           client.publish(
             `siamatic/${deviceModel}/${version}/${serial}/${beforeSelectProbe}/temp`,
@@ -465,12 +476,11 @@ const Adjustments = (props: AdjustmentsProps) => {
         setIsLoadingMqtt(true)
 
         client.publish(
-          `siamatic/${deviceModel}/${version}/${serial}/${probeFiltered?.channel}/temp`,
+          `siamatic/${deviceModel}/${version}/${serial}/${probeFiltered.channel}/temp`,
           'on'
         )
-        client.publish(`${serial}/${probeFiltered?.channel}/temp`, 'on')
 
-        setBeforeSelectProbe(probeFiltered?.channel as string)
+        setBeforeSelectProbe(probeFiltered?.channel)
 
         client.on('message', (_topic, message) => {
           setMqData(JSON.parse(message.toString()))
@@ -486,7 +496,10 @@ const Adjustments = (props: AdjustmentsProps) => {
           console.error('MQTT Reconnecting...')
         })
       } else if (tab === 3) {
-        client.publish(`${serial}/${probeFiltered?.channel}/temp`, 'off')
+        client.publish(
+          `siamatic/${deviceModel}/${version}/${serial}/${probeFiltered.channel}/temp`,
+          'off'
+        )
         client.unsubscribe(`${serial}/${probeFiltered?.channel}/temp/real`)
 
         client.subscribe(
@@ -590,7 +603,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     onClick={() => {
                       if (
                         adjustmentsForm.tempMin >
-                        (probeFiltered?.name === 'PT100' ? -200 : -40)
+                        (probeFiltered?.name === 'PT100' ? -180 : -40)
                       ) {
                         setAdjustmentsForm({
                           ...adjustmentsForm,
@@ -609,7 +622,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                     className='input input-bordered text-center w-full'
                     type='number'
                     step={0.01}
-                    min={probeFiltered?.name === 'PT100' ? -200 : -40}
+                    min={probeFiltered?.name === 'PT100' ? -180 : -40}
                     max={probeFiltered?.name === 'PT100' ? 200 : 120}
                     value={adjustmentsForm.tempMin}
                     onChange={e => {
@@ -658,7 +671,10 @@ const Adjustments = (props: AdjustmentsProps) => {
                     className='btn btn-ghost bg-orange-500 text-white text-lg'
                     type='button'
                     onClick={() => {
-                      if (adjustmentsForm.tempMax > -40) {
+                      if (
+                        adjustmentsForm.tempMax >
+                        (probeFiltered?.name === 'PT100' ? -180 : -40)
+                      ) {
                         setAdjustmentsForm({
                           ...adjustmentsForm,
                           tempMax: parseFloat(
@@ -676,8 +692,8 @@ const Adjustments = (props: AdjustmentsProps) => {
                     className='input input-bordered text-center w-full'
                     type='number'
                     step={0.01}
-                    min={-40}
-                    max={120}
+                    min={probeFiltered?.name === 'PT100' ? -180 : -40}
+                    max={probeFiltered?.name === 'PT100' ? 200 : 120}
                     value={adjustmentsForm.tempMax}
                     onChange={e => {
                       let value = e.target.value
@@ -700,7 +716,10 @@ const Adjustments = (props: AdjustmentsProps) => {
                     className='btn btn-ghost bg-orange-500 text-white text-lg'
                     type='button'
                     onClick={() => {
-                      if (adjustmentsForm.tempMax < 120) {
+                      if (
+                        adjustmentsForm.tempMax <
+                        (probeFiltered?.name === 'PT100' ? 200 : 120)
+                      ) {
                         setAdjustmentsForm({
                           ...adjustmentsForm,
                           tempMax: parseFloat(
@@ -865,8 +884,8 @@ const Adjustments = (props: AdjustmentsProps) => {
                       pearling
                       minDistance={1}
                       step={0.01}
-                      min={-40}
-                      max={120}
+                      min={probeFiltered?.name === 'PT100' ? -180 : -40}
+                      max={probeFiltered?.name === 'PT100' ? 200 : 120}
                       renderThumb={(props, state) => (
                         <div
                           {...props}
@@ -924,8 +943,8 @@ const Adjustments = (props: AdjustmentsProps) => {
                     className='input input-bordered text-center w-full'
                     type='number'
                     step={0.01}
-                    min={-40}
-                    max={120}
+                    min={probeFiltered?.name === 'PT100' ? -180 : -40}
+                    max={probeFiltered?.name === 'PT100' ? 200 : 120}
                     value={adjustmentsForm.tempMin}
                     onChange={e => {
                       let value = e.target.value
@@ -950,8 +969,8 @@ const Adjustments = (props: AdjustmentsProps) => {
                     className='input input-bordered text-center w-full'
                     type='number'
                     step={0.01}
-                    min={-40}
-                    max={120}
+                    min={probeFiltered?.name === 'PT100' ? -180 : -40}
+                    max={probeFiltered?.name === 'PT100' ? 200 : 120}
                     value={adjustmentsForm.tempMax}
                     onChange={e => {
                       let value = e.target.value
@@ -1052,8 +1071,8 @@ const Adjustments = (props: AdjustmentsProps) => {
                       pearling
                       minDistance={1}
                       step={0.01}
-                      min={-40}
-                      max={120}
+                      min={probeFiltered?.name === 'PT100' ? -180 : -40}
+                      max={probeFiltered?.name === 'PT100' ? 200 : 120}
                       disabled={isLoadingMqtt}
                       renderThumb={(props, state) => (
                         <div
@@ -1116,8 +1135,8 @@ const Adjustments = (props: AdjustmentsProps) => {
                     className='input input-bordered text-center w-full'
                     type='number'
                     step={0.01}
-                    min={-40}
-                    max={120}
+                    min={probeFiltered?.name === 'PT100' ? -180 : -40}
+                    max={probeFiltered?.name === 'PT100' ? 200 : 120}
                     value={adjustmentsForm.adjustTemp}
                     disabled={isLoadingMqtt}
                     onChange={e => {
@@ -1203,6 +1222,8 @@ const Adjustments = (props: AdjustmentsProps) => {
                     className='input input-bordered text-center w-full'
                     type='number'
                     step={0.01}
+                    min={probeFiltered?.name === 'PT100' ? -180 : -40}
+                    max={probeFiltered?.name === 'PT100' ? 200 : 120}
                     value={adjustmentsForm.adjustTemp}
                     disabled={isLoadingMqtt}
                     onChange={e => {
@@ -1271,6 +1292,8 @@ const Adjustments = (props: AdjustmentsProps) => {
                     className='input input-bordered text-center w-full'
                     type='number'
                     step={0.01}
+                    min={0}
+                    max={100}
                     value={adjustmentsForm.adjustHumi}
                     disabled={isLoadingMqtt}
                     onChange={e => {
