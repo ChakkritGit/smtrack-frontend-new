@@ -413,9 +413,11 @@ const Navbar = () => {
             <RiSearchLine size={24} />
           </div>
         </div>
-        <Notifications />
-        <ThemeList />
-        <LanguageList />
+        <div className='flex items-center flex-row-reverse md:flex-row'>
+          <Notifications />
+          <ThemeList />
+          <LanguageList />
+        </div>
         <div className='flex-none gap-2 hidden lg:block'>
           <div className='dropdown dropdown-end'>
             <div

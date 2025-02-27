@@ -16,7 +16,6 @@ import {
   UserProfileType
 } from '../../types/smtrack/utilsRedux/utilsReduxType'
 import {
-  RiArrowLeftSLine,
   RiDeleteBin7Line,
   RiEditLine,
   RiKey2Line,
@@ -844,7 +843,9 @@ const Users = () => {
       <dialog ref={editModalRef} className='modal overflow-y-scroll py-10'>
         <form
           onSubmit={!onEdit ? handleUpdate : handleSubmitPass}
-          className='modal-box w-11/12 max-w-5xl h-max max-h-max'
+          className={`modal-box ${
+            onEdit ? 'max-w-[40rem]' : 'max-w-5xl'
+          } w-11/12 h-max max-h-max`}
         >
           <h3 className='font-bold text-lg'>{t('editUserButton')}</h3>
           {!onEdit ? (
@@ -955,7 +956,7 @@ const Users = () => {
                 </div>
 
                 {/* Password reset */}
-                {role === 'SUPER' &&
+                {role === 'SUPER' && (
                   <div className='form-control w-full'>
                     <label className='label flex-col items-start'>
                       <span className='label-text mb-2'>
@@ -971,21 +972,11 @@ const Users = () => {
                       </button>
                     </label>
                   </div>
-                }
+                )}
               </div>
             </div>
           ) : (
             <div className='mt-4'>
-              <button
-                onClick={() => {
-                  setOnEdit(false)
-                  resetFormPass()
-                }}
-                className='btn btn-ghost outline-none flex p-0 px-1 min-w-[30px] min-h-[30px] max-w-[150px] max-h-[30px] duration-300 mb-3'
-              >
-                <RiArrowLeftSLine size={24} />
-                <span>{t('buttonErrorBack')}</span>
-              </button>
               <div className='mt-3'>
                 <div className='form-control w-full'>
                   <label className='input input-bordered flex items-center gap-2'>
@@ -1012,18 +1003,31 @@ const Users = () => {
 
           {/* Modal Actions */}
           <div className='modal-action mt-4 md:mt-6'>
-            <button
-              type='button'
-              className='btn'
-              onClick={() => {
-                editModalRef.current?.close()
-                resetForm()
-                resetFormPass()
-                setOnEdit(false)
-              }}
-            >
-              {t('cancelButton')}
-            </button>
+            {!onEdit ? (
+              <button
+                type='button'
+                className='btn'
+                onClick={() => {
+                  editModalRef.current?.close()
+                  resetForm()
+                  resetFormPass()
+                  setOnEdit(false)
+                }}
+              >
+                {t('cancelButton')}
+              </button>
+            ) : (
+              <button
+                type='button'
+                className='btn'
+                onClick={() => {
+                  resetFormPass()
+                  setOnEdit(false)
+                }}
+              >
+                {t('buttonErrorBack')}
+              </button>
+            )}
             <button type='submit' className='btn btn-primary'>
               {t('submitButton')}
             </button>

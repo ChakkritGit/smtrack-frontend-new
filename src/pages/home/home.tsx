@@ -195,7 +195,7 @@ const Home = () => {
   const ExpandedComponent = ({ data }: { data: DeviceType }) => {
     const { probe } = data
     return (
-      <div>
+      <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300'>
         <DataTable
           columns={subColumns}
           data={probe}

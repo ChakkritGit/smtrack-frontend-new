@@ -194,9 +194,9 @@ const Notifications = () => {
 
   useEffect(() => {
     if (notificationList.length > 0) {
-      const baseImageSrc = userProfile?.ward.hospital.hosPic
-        ? `${userProfile?.ward.hospital.hosPic}`
-        : 'app-logo.png'
+      const baseImageSrc = `/api/proxy?url=${encodeURIComponent(
+        userProfile?.ward.hospital.hosPic || 'app-logo.png'
+      )}`
 
       const img = new Image()
       img.src = baseImageSrc
@@ -239,7 +239,7 @@ const Notifications = () => {
     } else {
       if (userProfile?.ward.hospital.hosPic) {
         changeFavicon(
-          `${import.meta.env.VITE_APP_IMG}${userProfile?.ward.hospital.hosPic}`,
+          `${userProfile?.ward.hospital.hosPic}`,
           [...notificationList],
           location,
           userProfile
@@ -267,8 +267,8 @@ const Notifications = () => {
         <RiNotification4Line size={24} />
       </div>
       <ul
-        tabIndex={0}
-        className='dropdown-content bg-base-100 text-base-content rounded-box top-px mt-16 max-h-[520px] w-[480px] overflow-y-auto 
+        tabIndex={1}
+        className='dropdown-content bg-base-100 text-base-content rounded-box top-px mt-16 right-0 max-h-[720px] w-[360px] md:max-h-[520px] md:w-[480px] overflow-y-auto
         border border-white/5 shadow-2xl outline outline-1 outline-black/5'
       >
         <div className='flex items-center justify-between p-2 h-[49px]'>

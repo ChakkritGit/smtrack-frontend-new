@@ -89,7 +89,9 @@ const ResetPassword = () => {
             <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
               <div className='form-control w-full'>
                 <label className='input input-bordered flex items-center gap-2'>
-                  <span className='hidden md:block opacity-50'>{t('oldPassword')}</span>
+                  <span className='hidden md:block opacity-50'>
+                    {t('oldPassword')}
+                  </span>
                   <input
                     type='password'
                     name='oldPassword'
@@ -111,7 +113,9 @@ const ResetPassword = () => {
               </div>
               <div className='form-control w-full'>
                 <label className='input input-bordered flex items-center gap-2'>
-                  <span className='hidden md:block opacity-50'>{t('newPassword')}</span>
+                  <span className='hidden md:block opacity-50'>
+                    {t('newPassword')}
+                  </span>
                   <input
                     type='password'
                     name='newPassword'

@@ -1073,7 +1073,14 @@ const Adjustments = (props: AdjustmentsProps) => {
                       step={0.01}
                       min={probeFiltered?.name === 'PT100' ? -180 : -40}
                       max={probeFiltered?.name === 'PT100' ? 200 : 120}
-                      disabled={isLoadingMqtt || (role === 'ADMIN' || role === 'USER' || role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || role === 'GUEST')}
+                      disabled={
+                        isLoadingMqtt ||
+                        role === 'ADMIN' ||
+                        role === 'USER' ||
+                        role === 'LEGACY_ADMIN' ||
+                        role === 'LEGACY_USER' ||
+                        role === 'GUEST'
+                      }
                       renderThumb={(props, state) => (
                         <div
                           {...props}
@@ -1110,7 +1117,14 @@ const Adjustments = (props: AdjustmentsProps) => {
                       step={0.01}
                       min={0}
                       max={100}
-                      disabled={isLoadingMqtt || (role === 'ADMIN' || role === 'USER' || role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || role === 'GUEST')}
+                      disabled={
+                        isLoadingMqtt ||
+                        role === 'ADMIN' ||
+                        role === 'USER' ||
+                        role === 'LEGACY_ADMIN' ||
+                        role === 'LEGACY_USER' ||
+                        role === 'GUEST'
+                      }
                       renderThumb={(props, state) => (
                         <div
                           {...props}
@@ -1138,7 +1152,14 @@ const Adjustments = (props: AdjustmentsProps) => {
                     min={probeFiltered?.name === 'PT100' ? -180 : -40}
                     max={probeFiltered?.name === 'PT100' ? 200 : 120}
                     value={adjustmentsForm.adjustTemp}
-                    disabled={isLoadingMqtt || (role === 'ADMIN' || role === 'USER' || role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || role === 'GUEST')}
+                    disabled={
+                      isLoadingMqtt ||
+                      role === 'ADMIN' ||
+                      role === 'USER' ||
+                      role === 'LEGACY_ADMIN' ||
+                      role === 'LEGACY_USER' ||
+                      role === 'GUEST'
+                    }
                     onChange={e => {
                       let value = e.target.value
 
@@ -1172,7 +1193,14 @@ const Adjustments = (props: AdjustmentsProps) => {
                     min={0}
                     max={100}
                     value={adjustmentsForm.adjustHumi}
-                    disabled={isLoadingMqtt || (role === 'ADMIN' || role === 'USER' || role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || role === 'GUEST')}
+                    disabled={
+                      isLoadingMqtt ||
+                      role === 'ADMIN' ||
+                      role === 'USER' ||
+                      role === 'LEGACY_ADMIN' ||
+                      role === 'LEGACY_USER' ||
+                      role === 'GUEST'
+                    }
                     onChange={e => {
                       let value = e.target.value
 
@@ -1200,7 +1228,14 @@ const Adjustments = (props: AdjustmentsProps) => {
                 <span>{t('adjustTemp')}</span>
                 <div className='flex items-center justify-center gap-2 w-full'>
                   <button
-                    disabled={isLoadingMqtt || (role === 'ADMIN' || role === 'USER' || role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || role === 'GUEST')}
+                    disabled={
+                      isLoadingMqtt ||
+                      role === 'ADMIN' ||
+                      role === 'USER' ||
+                      role === 'LEGACY_ADMIN' ||
+                      role === 'LEGACY_USER' ||
+                      role === 'GUEST'
+                    }
                     className='btn btn-ghost bg-orange-500 text-white text-lg'
                     type='button'
                     onClick={() => {
@@ -1225,7 +1260,14 @@ const Adjustments = (props: AdjustmentsProps) => {
                     min={probeFiltered?.name === 'PT100' ? -180 : -40}
                     max={probeFiltered?.name === 'PT100' ? 200 : 120}
                     value={adjustmentsForm.adjustTemp}
-                    disabled={isLoadingMqtt || (role === 'ADMIN' || role === 'USER' || role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || role === 'GUEST')}
+                    disabled={
+                      isLoadingMqtt ||
+                      role === 'ADMIN' ||
+                      role === 'USER' ||
+                      role === 'LEGACY_ADMIN' ||
+                      role === 'LEGACY_USER' ||
+                      role === 'GUEST'
+                    }
                     onChange={e => {
                       let value = e.target.value
 
@@ -1247,7 +1289,14 @@ const Adjustments = (props: AdjustmentsProps) => {
                     }}
                   />
                   <button
-                    disabled={isLoadingMqtt || (role === 'ADMIN' || role === 'USER' || role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || role === 'GUEST')}
+                    disabled={
+                      isLoadingMqtt ||
+                      role === 'ADMIN' ||
+                      role === 'USER' ||
+                      role === 'LEGACY_ADMIN' ||
+                      role === 'LEGACY_USER' ||
+                      role === 'GUEST'
+                    }
                     className='btn btn-ghost bg-orange-500 text-white text-lg'
                     type='button'
                     onClick={() => {
@@ -1270,7 +1319,14 @@ const Adjustments = (props: AdjustmentsProps) => {
                 <span>{t('adjustHumi')}</span>
                 <div className='flex items-center justify-center gap-2 w-full'>
                   <button
-                    disabled={isLoadingMqtt || (role === 'ADMIN' || role === 'USER' || role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || role === 'GUEST')}
+                    disabled={
+                      isLoadingMqtt ||
+                      role === 'ADMIN' ||
+                      role === 'USER' ||
+                      role === 'LEGACY_ADMIN' ||
+                      role === 'LEGACY_USER' ||
+                      role === 'GUEST'
+                    }
                     className='btn btn-ghost bg-blue-500 text-white text-lg'
                     type='button'
                     onClick={() => {
@@ -1295,7 +1351,14 @@ const Adjustments = (props: AdjustmentsProps) => {
                     min={0}
                     max={100}
                     value={adjustmentsForm.adjustHumi}
-                    disabled={isLoadingMqtt || (role === 'ADMIN' || role === 'USER' || role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || role === 'GUEST')}
+                    disabled={
+                      isLoadingMqtt ||
+                      role === 'ADMIN' ||
+                      role === 'USER' ||
+                      role === 'LEGACY_ADMIN' ||
+                      role === 'LEGACY_USER' ||
+                      role === 'GUEST'
+                    }
                     onChange={e => {
                       let value = e.target.value
 
@@ -1317,7 +1380,14 @@ const Adjustments = (props: AdjustmentsProps) => {
                     }}
                   />
                   <button
-                    disabled={isLoadingMqtt || (role === 'ADMIN' || role === 'USER' || role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || role === 'GUEST')}
+                    disabled={
+                      isLoadingMqtt ||
+                      role === 'ADMIN' ||
+                      role === 'USER' ||
+                      role === 'LEGACY_ADMIN' ||
+                      role === 'LEGACY_USER' ||
+                      role === 'GUEST'
+                    }
                     className='btn btn-ghost bg-blue-500 text-white text-lg'
                     type='button'
                     onClick={() => {
