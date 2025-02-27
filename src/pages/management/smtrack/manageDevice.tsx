@@ -11,19 +11,23 @@ import DataTable, { TableColumn } from 'react-data-table-component'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import { AxiosError } from 'axios'
-import { DevicesType } from '../../../types/smtrack/devices/deviceType'
+import { DeviceType } from '../../../types/smtrack/devices/deviceType'
 import axiosInstance from '../../../constants/axios/axiosInstance'
 import {
   RiDeleteBin7Line,
   RiEditLine,
   RiFileCopyLine,
+  RiSettings4Line,
   RiShutDownLine,
   RiTimeLine
 } from 'react-icons/ri'
 import { setHosId, setSubmitLoading } from '../../../redux/actions/utilsActions'
 import toast from 'react-hot-toast'
 import { socket } from '../../../services/websocket'
-import { AddDeviceForm } from '../../../types/tms/devices/deviceType'
+import {
+  AddDeviceForm,
+  NetworkFormInit
+} from '../../../types/tms/devices/deviceType'
 import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import { swalWithBootstrapButtons } from '../../../constants/utils/utilsConstants'
 import { resizeImage } from '../../../constants/utils/image'
@@ -34,6 +38,7 @@ import HopitalSelect from '../../../components/selects/hopitalSelect'
 import HospitalAndWard from '../../../components/filter/hospitalAndWard'
 import Loading from '../../../components/skeleton/table/loading'
 import DataTableNoData from '../../../components/skeleton/table/noData'
+import { ConfigType } from '../../../types/smtrack/configs/configType'
 
 const ManageDevice = () => {
   const dispatch = useDispatch()
@@ -41,13 +46,15 @@ const ManageDevice = () => {
   const { wardId, globalSearch, cookieDecode, tokenDecode } = useSelector(
     (state: RootState) => state.utils
   )
-  const [devices, setDevices] = useState<DevicesType[]>([])
-  const [devicesFiltered, setDevicesFiltered] = useState<DevicesType[]>([])
+  const [devices, setDevices] = useState<DeviceType[]>([])
+  const [devicesFiltered, setDevicesFiltered] = useState<DeviceType[]>([])
   const [loading, setLoading] = useState(false)
   const [totalRows, setTotalRows] = useState(0)
   const [perPage, setPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
+  const [currentTab, setCurrentTab] = useState(1)
   const [imageProcessing, setImageProcessing] = useState(false)
+  const [onNetwork, setOnNetwork] = useState(false)
   const addModalRef = useRef<HTMLDialogElement>(null)
   const editModalRef = useRef<HTMLDialogElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -63,7 +70,33 @@ const ManageDevice = () => {
     remark: '',
     tag: '',
     image: null,
-    imagePreview: null
+    imagePreview: null,
+    config: null
+  })
+  const [networkObject, setNetworkObject] = useState({
+    selectWifi: true,
+    selectLan: true,
+    selectSim: ''
+  })
+  const [networkForm, setNetworkForm] = useState<NetworkFormInit>({
+    wifi: {
+      ssid: '',
+      password: '',
+      macAddress: '',
+      ip: '',
+      subnet: '',
+      gateway: '',
+      dns: ''
+    },
+    lan: {
+      ip: '',
+      subnet: '',
+      gateway: '',
+      dns: ''
+    },
+    sim: {
+      simSp: ''
+    }
   })
 
   const fetchDevices = useCallback(
@@ -110,7 +143,7 @@ const ManageDevice = () => {
         name: formData.name
       }
       try {
-        await axiosInstance.post<responseType<DevicesType>>(
+        await axiosInstance.post<responseType<DeviceType>>(
           '/devices/device',
           body
         )
@@ -182,7 +215,7 @@ const ManageDevice = () => {
       try {
         const formDataObj = createFormData()
         formDataObj.delete('id')
-        await axiosInstance.put<responseType<DevicesType>>(
+        await axiosInstance.put<responseType<DeviceType>>(
           `/devices/device/${formData.id}`,
           formDataObj,
           {
@@ -272,7 +305,7 @@ const ManageDevice = () => {
       const reSized = await resizeImage(file)
       setFormData(prev => ({
         ...prev,
-        imageFile: reSized,
+        image: reSized,
         imagePreview: URL.createObjectURL(file)
       }))
       setImageProcessing(false)
@@ -294,7 +327,7 @@ const ManageDevice = () => {
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
-  const openEditModal = (device: DevicesType) => {
+  const openEditModal = (device: DeviceType) => {
     dispatch(setHosId(device.hospital))
     setFormData({
       id: device.id,
@@ -306,7 +339,8 @@ const ManageDevice = () => {
       remark: device.remark,
       tag: device.tag,
       image: null,
-      imagePreview: device.positionPic || null
+      imagePreview: device.positionPic || null,
+      config: device.config
     })
     editModalRef.current?.showModal()
   }
@@ -314,7 +348,7 @@ const ManageDevice = () => {
   const deactiveDevices = async (id: string, status: boolean) => {
     dispatch(setSubmitLoading())
     try {
-      const response = await axiosInstance.put<responseType<DevicesType>>(
+      const response = await axiosInstance.put<responseType<DeviceType>>(
         `/devices/device/${id}`,
         { status }
       )
@@ -352,7 +386,7 @@ const ManageDevice = () => {
   const deleteDevices = async (id: string) => {
     dispatch(setSubmitLoading())
     try {
-      const response = await axiosInstance.delete<responseType<DevicesType>>(
+      const response = await axiosInstance.delete<responseType<DeviceType>>(
         `/devices/device/${id}`
       )
       await fetchDevices(1)
@@ -380,6 +414,103 @@ const ManageDevice = () => {
     }
   }
 
+  const handleWifi = async (e: FormEvent) => {
+    e.preventDefault()
+    let body = null
+    if (networkObject.selectWifi) {
+      body = {
+        dhcp: true,
+        ssid: networkForm?.wifi?.ssid,
+        password: networkForm?.wifi?.password,
+        ip: null,
+        subnet: null,
+        gateway: null,
+        dns: null,
+        mac: null
+      }
+    } else {
+      body = {
+        dhcp: false,
+        ssid: networkForm?.wifi?.ssid,
+        password: networkForm?.wifi?.password,
+        ip: networkForm?.wifi?.ip,
+        subnet: networkForm?.wifi?.subnet,
+        gateway: networkForm?.wifi?.gateway,
+        dns: networkForm?.wifi?.dns,
+        mac: networkForm?.wifi?.macAddress
+      }
+    }
+
+    try {
+      await axiosInstance.put<responseType<DeviceType>>(
+        `/devices/configs/${formData.id}`,
+        body
+      )
+      editModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderSuccess'),
+        text: t('submitSuccess'),
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(async () => {
+        await fetchDevices(1)
+        setOnNetwork(false)
+      })
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        editModalRef.current?.close()
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: error.response?.data.message,
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2500
+        }).finally(() => editModalRef.current?.showModal())
+      }
+      console.error(error)
+    }
+  }
+
+  const handleLan = (e: FormEvent) => {
+    e.preventDefault()
+    console.log('LAN')
+  }
+
+  const handleSim = (e: FormEvent) => {
+    e.preventDefault()
+    console.log('SIM')
+  }
+
+  const openEdit = (config: ConfigType | null | undefined) => {
+    setNetworkObject({
+      selectWifi: config?.dhcp ?? true,
+      selectLan: config?.dhcpEth ?? true,
+      selectSim: ''
+    })
+    setNetworkForm({
+      wifi: {
+        ssid: config?.ssid ?? '—',
+        password: config?.password ?? '—',
+        macAddress: config?.mac ?? '—',
+        ip: config?.ip ?? '—',
+        subnet: config?.subnet ?? '—',
+        gateway: config?.gateway ?? '—',
+        dns: config?.dns ?? '—'
+      },
+      lan: {
+        ip: config?.ipEth ?? '—',
+        subnet: config?.subnetEth ?? '—',
+        gateway: config?.gatewayEth ?? '—',
+        dns: config?.dnsEth ?? '—'
+      },
+      sim: {
+        simSp: config?.simSP ?? '—'
+      }
+    })
+    setOnNetwork(true)
+  }
+
   useEffect(() => {
     if (!token) return
     fetchDevices(1)
@@ -398,7 +529,7 @@ const ManageDevice = () => {
     setDevicesFiltered(filter)
   }, [devices, globalSearch])
 
-  const columns: TableColumn<DevicesType>[] = [
+  const columns: TableColumn<DeviceType>[] = [
     {
       name: t('deviceSerialTb'),
       cell: item => (
@@ -723,172 +854,632 @@ const ManageDevice = () => {
       {/* Edit User Modal */}
       <dialog ref={editModalRef} className='modal overflow-y-scroll py-10'>
         <form
-          onSubmit={handleUpdate}
+          onSubmit={
+            !onNetwork
+              ? handleUpdate
+              : currentTab === 1
+              ? handleWifi
+              : currentTab === 2
+              ? handleLan
+              : handleSim
+          }
           className='modal-box w-11/12 max-w-5xl h-max max-h-max'
         >
           <h3 className='font-bold text-lg'>{t('editDeviceButton')}</h3>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
-            {/* Image Upload - Left Column (30%) */}
-            <div className='col-span-1 flex justify-center'>
-              <div className='form-control'>
-                <label className='label cursor-pointer image-hover flex flex-col justify-center'>
-                  <span className='label-text'>{t('userPicture')}</span>
-                  <input
-                    ref={fileInputRef}
-                    type='file'
-                    accept='image/*'
-                    onChange={handleImageChange}
-                    className='hidden'
-                  />
-                  {imageProcessing ? (
-                    <div className='mt-4 flex justify-center w-32 h-32 md:w-48 md:h-48'>
-                      <span className='loading loading-ring loading-md'></span>
+          {!onNetwork ? (
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full'>
+              {/* Image Upload - Left Column (30%) */}
+              <div className='col-span-1 flex justify-center'>
+                <div className='form-control'>
+                  <label className='label cursor-pointer image-hover flex flex-col justify-center'>
+                    <span className='label-text'>{t('userPicture')}</span>
+                    <input
+                      ref={fileInputRef}
+                      type='file'
+                      accept='image/*'
+                      onChange={handleImageChange}
+                      className='hidden'
+                    />
+                    {imageProcessing ? (
+                      <div className='mt-4 flex justify-center w-32 h-32 md:w-48 md:h-48'>
+                        <span className='loading loading-ring loading-md'></span>
+                      </div>
+                    ) : (
+                      <div className='mt-4 relative'>
+                        <img
+                          src={formData.imagePreview || defaultPic}
+                          alt='Preview'
+                          className={`w-32 h-32 md:w-48 md:h-48 rounded-btn object-cover border-2 border-dashed border-base-300 ${
+                            formData.imagePreview || defaultPic
+                              ? 'border-none'
+                              : ''
+                          }`}
+                        />
+                        <div className='absolute edit-icon bottom-1 right-1 bg-base-100/50 backdrop-blur rounded-full p-2 shadow-sm'>
+                          <RiEditLine size={20} />
+                        </div>
+                      </div>
+                    )}
+                  </label>
+                </div>
+              </div>
+
+              {/* Right Column - Form Fields (70%) */}
+              <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
+                {/* Hospital */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      <span className='font-medium text-red-500 mr-1'>*</span>
+                      {t('hospitalsName')}
+                    </span>
+                    <HopitalSelect />
+                  </label>
+                </div>
+
+                {/* Ward */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      <span className='font-medium text-red-500 mr-1'>*</span>
+                      {t('ward')}
+                    </span>
+                    <WardSelectDevice
+                      formData={formData}
+                      setFormData={setFormData}
+                    />
+                  </label>
+                </div>
+
+                {/* name */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      <span className='font-medium text-red-500 mr-1'>*</span>
+                      {t('deviceNameTb')}
+                    </span>
+                    <input
+                      type='text'
+                      name='name'
+                      value={formData.name}
+                      onChange={handleChange}
+                      className='input input-bordered w-full'
+                      maxLength={50}
+                    />
+                  </label>
+                </div>
+
+                {/* location */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      <span className='font-medium text-red-500 mr-1'>*</span>
+                      {t('deviceLocationTb')}
+                    </span>
+                    <input
+                      type='text'
+                      name='location'
+                      value={formData.location}
+                      onChange={handleChange}
+                      className='input input-bordered w-full'
+                      maxLength={80}
+                    />
+                  </label>
+                </div>
+
+                {/* position */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      <span className='font-medium text-red-500 mr-1'>*</span>
+                      {t('deviceLocationDeviceTb')}
+                    </span>
+                    <input
+                      type='text'
+                      name='position'
+                      value={formData.position}
+                      onChange={handleChange}
+                      className='input input-bordered w-full'
+                      maxLength={80}
+                    />
+                  </label>
+                </div>
+
+                {/* remark */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>{t('remmark')}</span>
+                    <input
+                      type='text'
+                      name='remark'
+                      value={formData.remark}
+                      onChange={handleChange}
+                      className='input input-bordered w-full'
+                      maxLength={80}
+                    />
+                  </label>
+                </div>
+
+                {/* tag */}
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>{t('tag')}</span>
+                    <input
+                      type='text'
+                      name='tag'
+                      value={formData.tag}
+                      onChange={handleChange}
+                      className='input input-bordered w-full'
+                      maxLength={80}
+                    />
+                  </label>
+                </div>
+
+                <div className='form-control w-full'>
+                  <label className='label flex-col items-start'>
+                    <span className='label-text mb-2'>
+                      {t('deviceNetwork')}
+                    </span>
+                    <button
+                      type='button'
+                      className='btn btn-primary w-full'
+                      onClick={() => openEdit(formData.config)}
+                    >
+                      <RiSettings4Line size={20} />
+                      {t('deviceNetwork')}
+                    </button>
+                  </label>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div role='tablist' className='tabs tabs-bordered mt-4'>
+                <a
+                  role='tab'
+                  className={`tab ${currentTab === 1 ? 'tab-active' : ''}`}
+                  onClick={() => setCurrentTab(1)}
+                >
+                  Wi-Fi
+                </a>
+                <a
+                  role='tab'
+                  className={`tab ${currentTab === 2 ? 'tab-active' : ''}`}
+                  onClick={() => setCurrentTab(2)}
+                >
+                  Lan
+                </a>
+                <a
+                  role='tab'
+                  className={`tab ${currentTab === 3 ? 'tab-active' : ''}`}
+                  onClick={() => setCurrentTab(3)}
+                >
+                  Sim
+                </a>
+              </div>
+              {currentTab === 1 ? (
+                <div className='mt-5'>
+                  <div>
+                    <div className='flex items-center justify-center gap-4'>
+                      <label
+                        htmlFor='radio-1'
+                        className='flex items-center gap-2'
+                      >
+                        <input
+                          type='radio'
+                          name='radio-1'
+                          className='radio'
+                          checked={networkObject.selectWifi}
+                          onClick={() => {
+                            setNetworkObject({
+                              ...networkObject,
+                              selectWifi: true
+                            })
+                          }}
+                        />
+                        <span>DHCP</span>
+                      </label>
+                      <label
+                        htmlFor='radio-1'
+                        className='flex items-center gap-2'
+                      >
+                        <input
+                          type='radio'
+                          name='radio-1'
+                          className='radio'
+                          checked={!networkObject.selectWifi}
+                          onClick={() =>
+                            setNetworkObject({
+                              ...networkObject,
+                              selectWifi: false
+                            })
+                          }
+                        />
+                        <span>Manual</span>
+                      </label>
                     </div>
-                  ) : (
-                    <div className='mt-4 relative'>
-                      <img
-                        src={formData.imagePreview || defaultPic}
-                        alt='Preview'
-                        className={`w-32 h-32 md:w-48 md:h-48 rounded-btn object-cover border-2 border-dashed border-base-300 ${
-                          formData.imagePreview || defaultPic
-                            ? 'border-none'
-                            : ''
-                        }`}
-                      />
-                      <div className='absolute edit-icon bottom-1 right-1 bg-base-100/50 backdrop-blur rounded-full p-2 shadow-sm'>
-                        <RiEditLine size={20} />
+
+                    <div className='mt-3'>
+                      <div className='form-control w-full'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 md:gap-3'>
+                          <label className='label flex-col items-start'>
+                            <span className='label-text mb-2'>
+                              <span className='font-medium text-red-500 mr-1'>
+                                *
+                              </span>
+                              SSID
+                            </span>
+                            <input
+                              type='text'
+                              name='ssid'
+                              required
+                              value={networkForm?.wifi?.ssid}
+                              onChange={e =>
+                                setNetworkForm({
+                                  ...networkForm,
+                                  wifi: {
+                                    ...networkForm.wifi,
+                                    ssid: e.target.value
+                                  }
+                                })
+                              }
+                              className='input input-bordered w-full'
+                              maxLength={50}
+                            />
+                          </label>
+                          <label className='label flex-col items-start'>
+                            <span className='label-text mb-2'>
+                              <span className='font-medium text-red-500 mr-1'>
+                                *
+                              </span>
+                              Password
+                            </span>
+                            <input
+                              type='text'
+                              name='password'
+                              required
+                              value={networkForm?.wifi?.password}
+                              onChange={e =>
+                                setNetworkForm({
+                                  ...networkForm,
+                                  wifi: {
+                                    ...networkForm.wifi,
+                                    password: e.target.value
+                                  }
+                                })
+                              }
+                              className='input input-bordered w-full'
+                              maxLength={50}
+                            />
+                          </label>
+                        </div>
                       </div>
                     </div>
-                  )}
-                </label>
-              </div>
+
+                    <div
+                      className={`mt-3 ${
+                        networkObject.selectWifi ? 'opacity-50' : ''
+                      }`}
+                    >
+                      <div className='form-control w-full'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 md:gap-3'>
+                          <label className='label flex-col items-start'>
+                            <span className='label-text mb-2'>
+                              {!networkObject.selectWifi && (
+                                <span className='font-medium text-red-500 mr-1'>
+                                  *
+                                </span>
+                              )}
+                              Ip
+                            </span>
+                            <input
+                              type='text'
+                              name='ip'
+                              required
+                              disabled={networkObject.selectWifi}
+                              value={networkForm?.wifi?.ip}
+                              onChange={e =>
+                                setNetworkForm({
+                                  ...networkForm,
+                                  wifi: {
+                                    ...networkForm.wifi,
+                                    ip: e.target.value
+                                  }
+                                })
+                              }
+                              className='input input-bordered w-full'
+                              maxLength={50}
+                            />
+                          </label>
+                          <label className='label flex-col items-start'>
+                            <span className='label-text mb-2'>
+                              {!networkObject.selectWifi && (
+                                <span className='font-medium text-red-500 mr-1'>
+                                  *
+                                </span>
+                              )}
+                              Subnet
+                            </span>
+                            <input
+                              type='text'
+                              name='subnet'
+                              required
+                              disabled={networkObject.selectWifi}
+                              value={networkForm?.wifi?.subnet}
+                              onChange={e =>
+                                setNetworkForm({
+                                  ...networkForm,
+                                  wifi: {
+                                    ...networkForm.wifi,
+                                    subnet: e.target.value
+                                  }
+                                })
+                              }
+                              className='input input-bordered w-full'
+                              maxLength={50}
+                            />
+                          </label>
+                          <label className='label flex-col items-start'>
+                            <span className='label-text mb-2'>
+                              {!networkObject.selectWifi && (
+                                <span className='font-medium text-red-500 mr-1'>
+                                  *
+                                </span>
+                              )}
+                              MAC address
+                            </span>
+                            <input
+                              type='text'
+                              name='name'
+                              required
+                              disabled={networkObject.selectWifi}
+                              value={networkForm?.wifi?.macAddress}
+                              onChange={e =>
+                                setNetworkForm({
+                                  ...networkForm,
+                                  wifi: {
+                                    ...networkForm.wifi,
+                                    macAddress: e.target.value
+                                  }
+                                })
+                              }
+                              className='input input-bordered w-full'
+                              maxLength={50}
+                            />
+                          </label>
+
+                          <label className='label flex-col items-start'>
+                            <span className='label-text mb-2'>
+                              {!networkObject.selectWifi && (
+                                <span className='font-medium text-red-500 mr-1'>
+                                  *
+                                </span>
+                              )}
+                              Gateway
+                            </span>
+                            <input
+                              type='text'
+                              name='gatway'
+                              required
+                              disabled={networkObject.selectWifi}
+                              value={networkForm?.wifi?.gateway}
+                              onChange={e =>
+                                setNetworkForm({
+                                  ...networkForm,
+                                  wifi: {
+                                    ...networkForm.wifi,
+                                    gateway: e.target.value
+                                  }
+                                })
+                              }
+                              className='input input-bordered w-full'
+                              maxLength={50}
+                            />
+                          </label>
+                          <label className='label flex-col items-start'>
+                            <span className='label-text mb-2'>
+                              {!networkObject.selectWifi && (
+                                <span className='font-medium text-red-500 mr-1'>
+                                  *
+                                </span>
+                              )}
+                              Dns
+                            </span>
+                            <input
+                              type='text'
+                              name='gatway'
+                              required
+                              disabled={networkObject.selectWifi}
+                              value={networkForm?.wifi?.dns}
+                              onChange={e =>
+                                setNetworkForm({
+                                  ...networkForm,
+                                  wifi: {
+                                    ...networkForm.wifi,
+                                    dns: e.target.value
+                                  }
+                                })
+                              }
+                              className='input input-bordered w-full'
+                              maxLength={50}
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : currentTab === 2 ? (
+                <div className='mt-5'>
+                  <div>
+                    <div className='flex items-center justify-center gap-4'>
+                      <label
+                        htmlFor='radio-1'
+                        className='flex items-center gap-2'
+                      >
+                        <input
+                          type='radio'
+                          name='radio-1'
+                          className='radio'
+                          checked={!networkObject.selectLan}
+                          onClick={() =>
+                            setNetworkObject({
+                              ...networkObject,
+                              selectLan: false
+                            })
+                          }
+                        />
+                        <span>Auto</span>
+                      </label>
+                      <label
+                        htmlFor='radio-1'
+                        className='flex items-center gap-2'
+                      >
+                        <input
+                          type='radio'
+                          name='radio-1'
+                          className='radio'
+                          checked={networkObject.selectLan}
+                          onClick={() =>
+                            setNetworkObject({
+                              ...networkObject,
+                              selectLan: true
+                            })
+                          }
+                        />
+                        <span>Manual</span>
+                      </label>
+                    </div>
+                    {networkObject.selectLan && (
+                      <div className='mt-3'>
+                        <div className='form-control w-full'>
+                          <div className='grid grid-cols-1 md:grid-cols-2 md:gap-3'>
+                            <label className='label flex-col items-start'>
+                              <span className='label-text mb-2'>
+                                <span className='font-medium text-red-500 mr-1'>
+                                  *
+                                </span>
+                                Ip
+                              </span>
+                              <input
+                                type='text'
+                                name='ip'
+                                required
+                                value={networkForm?.lan?.ip}
+                                onChange={e =>
+                                  setNetworkForm({
+                                    ...networkForm,
+                                    lan: {
+                                      ...networkForm.lan,
+                                      ip: e.target.value
+                                    }
+                                  })
+                                }
+                                className='input input-bordered w-full'
+                                maxLength={50}
+                              />
+                            </label>
+                            <label className='label flex-col items-start'>
+                              <span className='label-text mb-2'>
+                                <span className='font-medium text-red-500 mr-1'>
+                                  *
+                                </span>
+                                Subnet
+                              </span>
+                              <input
+                                type='text'
+                                name='subnet'
+                                required
+                                value={networkForm?.lan?.subnet}
+                                onChange={e =>
+                                  setNetworkForm({
+                                    ...networkForm,
+                                    lan: {
+                                      ...networkForm.lan,
+                                      subnet: e.target.value
+                                    }
+                                  })
+                                }
+                                className='input input-bordered w-full'
+                                maxLength={50}
+                              />
+                            </label>
+                          </div>
+                          <div className='grid grid-cols-1 md:grid-cols-2 md:gap-3'>
+                            <label className='label flex-col items-start'>
+                              <span className='label-text mb-2'>Gateway</span>
+                              <input
+                                type='text'
+                                name='gatway'
+                                value={networkForm?.lan?.gateway}
+                                onChange={e =>
+                                  setNetworkForm({
+                                    ...networkForm,
+                                    lan: {
+                                      ...networkForm.lan,
+                                      gateway: e.target.value
+                                    }
+                                  })
+                                }
+                                className='input input-bordered w-full'
+                                maxLength={50}
+                              />
+                            </label>
+                            <label className='label flex-col items-start'>
+                              <span className='label-text mb-2'>Dns</span>
+                              <input
+                                type='text'
+                                name='gatway'
+                                value={networkForm?.lan?.dns}
+                                onChange={e =>
+                                  setNetworkForm({
+                                    ...networkForm,
+                                    lan: {
+                                      ...networkForm.lan,
+                                      dns: e.target.value
+                                    }
+                                  })
+                                }
+                                className='input input-bordered w-full'
+                                maxLength={50}
+                              />
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className='mt-3'>3</div>
+              )}
             </div>
-
-            {/* Right Column - Form Fields (70%) */}
-            <div className='col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
-              {/* Hospital */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>
-                    <span className='font-medium text-red-500 mr-1'>*</span>
-                    {t('hospitalsName')}
-                  </span>
-                  <HopitalSelect />
-                </label>
-              </div>
-
-              {/* Ward */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>
-                    <span className='font-medium text-red-500 mr-1'>*</span>
-                    {t('ward')}
-                  </span>
-                  <WardSelectDevice
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </label>
-              </div>
-
-              {/* name */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>
-                    <span className='font-medium text-red-500 mr-1'>*</span>
-                    {t('deviceNameTb')}
-                  </span>
-                  <input
-                    type='text'
-                    name='name'
-                    value={formData.name}
-                    onChange={handleChange}
-                    className='input input-bordered w-full'
-                    maxLength={50}
-                  />
-                </label>
-              </div>
-
-              {/* location */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>
-                    <span className='font-medium text-red-500 mr-1'>*</span>
-                    {t('deviceLocationTb')}
-                  </span>
-                  <input
-                    type='text'
-                    name='location'
-                    value={formData.location}
-                    onChange={handleChange}
-                    className='input input-bordered w-full'
-                    maxLength={80}
-                  />
-                </label>
-              </div>
-
-              {/* position */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>
-                    <span className='font-medium text-red-500 mr-1'>*</span>
-                    {t('deviceLocationDeviceTb')}
-                  </span>
-                  <input
-                    type='text'
-                    name='position'
-                    value={formData.position}
-                    onChange={handleChange}
-                    className='input input-bordered w-full'
-                    maxLength={80}
-                  />
-                </label>
-              </div>
-
-              {/* remark */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('remmark')}</span>
-                  <input
-                    type='text'
-                    name='remark'
-                    value={formData.remark}
-                    onChange={handleChange}
-                    className='input input-bordered w-full'
-                    maxLength={80}
-                  />
-                </label>
-              </div>
-
-              {/* tag */}
-              <div className='form-control w-full'>
-                <label className='label flex-col items-start'>
-                  <span className='label-text mb-2'>{t('tag')}</span>
-                  <input
-                    type='text'
-                    name='tag'
-                    value={formData.tag}
-                    onChange={handleChange}
-                    className='input input-bordered w-full'
-                    maxLength={80}
-                  />
-                </label>
-              </div>
-            </div>
-          </div>
+          )}
 
           {/* Modal Actions */}
           <div className='modal-action mt-4 md:mt-6'>
-            <button
-              type='button'
-              className='btn'
-              onClick={() => {
-                editModalRef.current?.close()
-                resetForm()
-              }}
-            >
-              {t('cancelButton')}
-            </button>
+            {!onNetwork ? (
+              <button
+                type='button'
+                className='btn'
+                onClick={() => {
+                  editModalRef.current?.close()
+                  resetForm()
+                }}
+              >
+                {t('cancelButton')}
+              </button>
+            ) : (
+              <button
+                type='button'
+                className='btn'
+                onClick={() => {
+                  setOnNetwork(false)
+                }}
+              >
+                {t('buttonErrorBack')}
+              </button>
+            )}
             <button type='submit' className='btn btn-primary'>
               {t('submitButton')}
             </button>

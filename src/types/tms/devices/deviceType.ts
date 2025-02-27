@@ -1,3 +1,5 @@
+import { ConfigType } from "../../smtrack/configs/configType"
+
 type DeviceTmsType = {
   adjTemp: number
   hospital: string
@@ -101,6 +103,28 @@ type AddDeviceForm = {
   tag?: string
   image?: File | null
   imagePreview?: string | null
+  config?: ConfigType | null
+}
+
+type NetworkFormInit = {
+  wifi?: {
+    ssid?: string,
+    password?: string,
+    macAddress?: string,
+    ip?: string,
+    subnet?: string,
+    gateway?: string,
+    dns?: string
+  },
+  lan?: {
+    ip?: string,
+    subnet?: string,
+    gateway?: string,
+    dns?: string
+  },
+  sim?: {
+    simSp?: string
+  }
 }
 
 export type {
@@ -111,5 +135,6 @@ export type {
   DeviceLogsTms,
   LogChartTms,
   AddDeviceType,
-  AddDeviceForm
+  AddDeviceForm,
+  NetworkFormInit
 }
