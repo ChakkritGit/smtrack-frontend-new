@@ -17,6 +17,7 @@ import axiosInstance from '../constants/axios/axiosInstance'
 import sha256 from 'crypto-js/sha256'
 import hmacSHA512 from 'crypto-js/hmac-sha512'
 import Base64 from 'crypto-js/enc-base64'
+import { getOKLCHColor } from '../constants/utils/color'
 
 const Routes = () => {
   const dispatch = useDispatch()
@@ -71,6 +72,36 @@ const Routes = () => {
   useEffect(() => {
     const htmlElement = document.documentElement
     htmlElement.setAttribute('data-theme', themeMode)
+
+    const themeColorMetaTag = document.querySelector('meta[name="theme-color"]')
+    const system = window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light'
+    const currentColor = getOKLCHColor(themeMode, system)
+
+    if (themeColorMetaTag) {
+      themeColorMetaTag.setAttribute('content', currentColor)
+    } else {
+      const newMetaTag = document.createElement('meta')
+      newMetaTag.setAttribute('name', 'theme-color')
+      newMetaTag.setAttribute('content', currentColor)
+      document.head.appendChild(newMetaTag)
+    }
+
+    const statusBarMetaTag = document.querySelector(
+      'meta[name="apple-mobile-web-app-status-bar-style"]'
+    )
+    if (statusBarMetaTag) {
+      statusBarMetaTag.setAttribute('content', currentColor)
+    } else {
+      const newStatusBarMetaTag = document.createElement('meta')
+      newStatusBarMetaTag.setAttribute(
+        'name',
+        'apple-mobile-web-app-status-bar-style'
+      )
+      newStatusBarMetaTag.setAttribute('content', currentColor)
+      document.head.appendChild(newStatusBarMetaTag)
+    }
   }, [themeMode])
 
   useEffect(() => {
