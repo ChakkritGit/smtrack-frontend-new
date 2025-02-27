@@ -1,71 +1,71 @@
 const getOKLCHColor = (themeMode: string, system: string): string => {
   switch (themeMode) {
     case 'light':
-      return 'oklch(100% 0 0)'
+      return 'oklch(1 0 0 / 0.8)'
     case 'dark':
-      return 'oklch(16% 0 255)'
+      return 'oklch(0.25 0.02 252.42 / 0.8)'
     case 'cupcake':
-      return 'oklch(97% 0.02 20)'
+      return 'oklch(0.98 0 0 / 0.8)'
     case 'bumblebee':
-      return 'oklch(100% 0.03 90)'
+      return 'oklch(1 0 0 / 0.8)'
     case 'emerald':
-      return 'oklch(100% 0 0)'
+      return 'oklch(1 0 0 / 0.8)'
     case 'corporate':
-      return 'oklch(98% 0.01 220)'
+      return 'oklch(1 0 0 / 0.8)'
     case 'synthwave':
-      return 'oklch(28% 0.2 290)'
+      return 'oklch(0.22 0.08 287.84 / 0.8)'
     case 'retro':
-      return 'oklch(92% 0.03 85)'
+      return 'oklch(0.92 0.03 90.52 / 0.8)'
     case 'cyberpunk':
-      return 'oklch(94% 0.12 100)'
+      return 'oklch(0.95 0.18 104.32 / 0.8)'
     case 'valentine':
-      return 'oklch(97% 0.05 345)'
+      return 'oklch(0.95 0.03 337.06 / 0.8)'
     case 'halloween':
-      return 'oklch(14% 0 0)'
+      return 'oklch(0.25 0 0 / 0.8)'
     case 'garden':
-      return 'oklch(95% 0.03 150)'
+      return 'oklch(0.93 0 0 / 0.8)'
     case 'forest':
-      return 'oklch(10% 0.01 180)'
+      return 'oklch(0.19 0.01 0 / 0.8)'
     case 'aqua':
-      return 'oklch(50% 0.3 250)'
+      return 'oklch(0.49 0.13 261.18 / 0.8)'
     case 'lofi':
-      return 'oklch(100% 0 0)'
+      return 'oklch(1 0 0 / 0.8)'
     case 'pastel':
-      return 'oklch(98% 0.02 30)'
+      return 'oklch(1 0 0 / 0.8)'
     case 'fantasy':
-      return 'oklch(100% 0 0)'
+      return 'oklch(1 0 0 / 0.8)'
     case 'wireframe':
-      return 'oklch(100% 0 0)'
+      return 'oklch(1 0 0 / 0.8)'
     case 'black':
-      return 'oklch(0% 0 0)'
+      return 'oklch(0 0 0 / 0.8)'
     case 'luxury':
-      return 'oklch(5% 0.01 300)'
+      return 'oklch(0.14 0 0 / 0.8)'
     case 'dracula':
-      return 'oklch(20% 0.05 280)'
+      return 'oklch(0.29 0.02 277.51 / 0.8)'
     case 'cmyk':
-      return 'oklch(100% 0 0)'
+      return 'oklch(1 0 0 / 0.8)'
     case 'autumn':
-      return 'oklch(94% 0.03 40)'
+      return 'oklch(0.96 0 0 / 0.8)'
     case 'business':
-      return 'oklch(13% 0 0)'
+      return 'oklch(0.24 0 0 / 0.8)'
     case 'acid':
-      return 'oklch(97% 0.05 130)'
+      return 'oklch(0.99 0 0 / 0.8)'
     case 'lemonade':
-      return 'oklch(98% 0.02 95)'
+      return 'oklch(0.99 0.02 123.72 / 0.8)'
     case 'night':
-      return 'oklch(7% 0.02 270)'
+      return 'oklch(0.21 0.04 265.75 / 0.8)'
     case 'coffee':
-      return 'oklch(12% 0.01 30)'
+      return 'oklch(0.22 0.02 329.71 / 0.8)'
     case 'winter':
-      return 'oklch(100% 0 0)'
+      return 'oklch(1 0 0 / 0.8)'
     case 'dim':
-      return 'oklch(18% 0.02 250)'
+      return 'oklch(0.31 0.02 264.15 / 0.8)'
     case 'nord':
-      return 'oklch(94% 0.01 220)'
+      return 'oklch(0.95 0.01 0 / 0.8)'
     case 'sunset':
-      return 'oklch(8% 0.05 20)'
+      return 'oklch(0.22 0.02 237.69 / 0.8)'
     default:
-      return system === 'dark' ? 'oklch(16% 0 255)' : 'oklch(100% 0 0)'
+      return system === 'dark' ? 'oklch(0.25 0.02 252.42 / 0.8)' : 'oklch(1 0 0 / 0.8)'
   }
 }
 

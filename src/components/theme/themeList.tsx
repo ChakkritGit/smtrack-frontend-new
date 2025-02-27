@@ -87,7 +87,7 @@ const ThemeList = () => {
                 </div>
               </span>
               <span
-                className='bg-black text-white rounded-r-btn h-[44px] flex flex-col items-center justify-center gap-1 p-4'
+                className='bg-[oklch(0.25 0.02 252.42 / 0.8)] text-white rounded-r-btn h-[44px] flex flex-col items-center justify-center gap-1 p-4'
                 data-theme='dark'
               >
                 <span className='text-sm font-medium'>Dark</span>

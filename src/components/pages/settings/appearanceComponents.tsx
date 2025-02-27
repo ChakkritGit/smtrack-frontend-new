@@ -55,7 +55,7 @@ const AppearanceComponents = () => {
               </div>
             </span>
             <span
-              className='bg-black text-white rounded-r-btn flex flex-col items-center h-[70px] justify-center gap-1 p-4'
+              className='bg-[oklch(0.25 0.02 252.42 / 0.8)] text-white rounded-r-btn flex flex-col items-center h-[70px] justify-center gap-1 p-4'
               data-theme='dark'
             >
               <span className='text-sm font-medium'>Dark</span>
