@@ -575,13 +575,13 @@ const ManageProbe = () => {
   useEffect(() => {
     const filter = probeList?.filter(f => {
       const matchesSearch =
-        f.sn?.toLocaleLowerCase().includes(globalSearch.toLocaleLowerCase()) ||
+        f.sn?.toLowerCase().includes(globalSearch.toLowerCase()) ||
         f.name
-          ?.toLocaleLowerCase()
-          .includes(globalSearch.toLocaleLowerCase()) ||
+          ?.toLowerCase()
+          .includes(globalSearch.toLowerCase()) ||
         f.channel
-          ?.toLocaleLowerCase()
-          .includes(globalSearch.toLocaleLowerCase())
+          ?.toLowerCase()
+          .includes(globalSearch.toLowerCase())
 
       return matchesSearch
     })

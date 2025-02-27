@@ -143,13 +143,13 @@ const Home = () => {
   useEffect(() => {
     const filter = devices?.filter(f => {
       const matchesSearch =
-        f.id?.toLocaleLowerCase().includes(globalSearch.toLocaleLowerCase()) ||
+        f.id?.toLowerCase().includes(globalSearch.toLowerCase()) ||
         f.name
-          ?.toLocaleLowerCase()
-          .includes(globalSearch.toLocaleLowerCase()) ||
+          ?.toLowerCase()
+          .includes(globalSearch.toLowerCase()) ||
         f.location
-          ?.toLocaleLowerCase()
-          .includes(globalSearch.toLocaleLowerCase())
+          ?.toLowerCase()
+          .includes(globalSearch.toLowerCase())
 
       const matchesConnection =
         deviceConnect === '' ||

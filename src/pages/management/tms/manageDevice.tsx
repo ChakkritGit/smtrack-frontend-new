@@ -177,8 +177,8 @@ const ManageDevice = () => {
   useEffect(() => {
     const filter = devices?.filter(f => {
       const matchesSearch =
-        f.id?.toLocaleLowerCase().includes(globalSearch.toLocaleLowerCase()) ||
-        f.name?.toLocaleLowerCase().includes(globalSearch.toLocaleLowerCase())
+        f.id?.toLowerCase().includes(globalSearch.toLowerCase()) ||
+        f.name?.toLowerCase().includes(globalSearch.toLowerCase())
 
       return matchesSearch
     })
