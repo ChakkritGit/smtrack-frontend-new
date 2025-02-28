@@ -27,6 +27,9 @@ const Routes = () => {
   const [ward, setWard] = useState<WardType[]>([])
   const { role = 'USER' } = tokenDecode || {}
   const { token } = cookieDecode || {}
+  const system = window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light'
 
   const decodeToken = async (getToken: string) => {
     const decoded: TokenType = await jwtDecode(getToken)
@@ -72,11 +75,7 @@ const Routes = () => {
   useEffect(() => {
     const htmlElement = document.documentElement
     htmlElement.setAttribute('data-theme', themeMode)
-
     const themeColorMetaTag = document.querySelector('meta[name="theme-color"]')
-    const system = window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light'
     const currentColor = getOKLCHColor(themeMode, system)
 
     if (themeColorMetaTag) {
@@ -102,7 +101,7 @@ const Routes = () => {
       newStatusBarMetaTag.setAttribute('content', currentColor)
       document.head.appendChild(newStatusBarMetaTag)
     }
-  }, [themeMode])
+  }, [themeMode, system])
 
   useEffect(() => {
     if (!token) return
