@@ -63,7 +63,7 @@ const ManageHospital = () => {
     wardName: '',
     hosId: ''
   })
-  const { wardId } = tokenDecode ?? {}
+  const { wardId, role } = tokenDecode ?? {}
 
   const addHosModalRef = useRef<HTMLDialogElement>(null)
   const editHosModalRef = useRef<HTMLDialogElement>(null)
@@ -566,17 +566,19 @@ const ManageHospital = () => {
             key={index}
           >
             <button
-              onClick={() => deleteHospital(item.id)}
-              className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
-            >
-              <RiDeleteBin7Line size={20} />
-            </button>
-            <button
               onClick={() => openEditHosModal(item)}
               className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
             >
               <RiEditLine size={20} />
             </button>
+            {role === 'SUPER' && (
+              <button
+                onClick={() => deleteHospital(item.id)}
+                className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
+              >
+                <RiDeleteBin7Line size={20} />
+              </button>
+            )}
           </div>
         ),
       center: true,
@@ -608,17 +610,19 @@ const ManageHospital = () => {
             key={index}
           >
             <button
-              onClick={() => deleteWard(item.id)}
-              className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
-            >
-              <RiDeleteBin7Line size={20} />
-            </button>
-            <button
               onClick={() => openEditWardModal(item)}
               className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
             >
               <RiEditLine size={20} />
             </button>
+            {role === 'SUPER' && (
+              <button
+                onClick={() => deleteWard(item.id)}
+                className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
+              >
+                <RiDeleteBin7Line size={20} />
+              </button>
+            )}
           </div>
         ),
       center: true,

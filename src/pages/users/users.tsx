@@ -38,6 +38,7 @@ import RoleSelect from '../../components/selects/roleSelect'
 import { UserRole } from '../../types/global/users/usersType'
 import { AxiosError } from 'axios'
 import StatusSelect from '../../components/selects/statusSelect'
+import RoleButtons from '../../components/pages/users/users'
 
 const Users = () => {
   const dispatch = useDispatch()
@@ -582,103 +583,13 @@ const Users = () => {
       </div>
 
       <div className='flex items-center justify-start flex-wrap gap-3 mt-5'>
-        {role !== 'LEGACY_ADMIN' && !tmsMode ? (
-          <>
-            <button
-              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
-                deviceConnect === 'SUPER'
-                  ? 'btn-primary text-white'
-                  : 'btn-ghost border border-gray-500/50 text-gray-500'
-              }`}
-              onClick={() => handleFilterConnect('SUPER')}
-            >
-              <span>{t('levelSuper')}</span>
-            </button>
-            <button
-              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
-                deviceConnect === 'SERVICE'
-                  ? 'btn-primary text-white'
-                  : 'btn-ghost border border-gray-500/50 text-gray-500'
-              }`}
-              onClick={() => handleFilterConnect('SERVICE')}
-            >
-              <span>{t('levelService')}</span>
-            </button>
-            <button
-              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
-                deviceConnect === 'ADMIN'
-                  ? 'btn-primary text-white'
-                  : 'btn-ghost border border-gray-500/50 text-gray-500'
-              }`}
-              onClick={() => handleFilterConnect('ADMIN')}
-            >
-              <span>{t('levelAdmin')}</span>
-            </button>
-            <button
-              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
-                deviceConnect === 'USER'
-                  ? 'btn-primary text-white'
-                  : 'btn-ghost border border-gray-500/50 text-gray-500'
-              }`}
-              onClick={() => handleFilterConnect('USER')}
-            >
-              <span>{t('levelUser')}</span>
-            </button>
-            <button
-              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
-                deviceConnect === 'LEGACY_ADMIN'
-                  ? 'btn-primary text-white'
-                  : 'btn-ghost border border-gray-500/50 text-gray-500'
-              }`}
-              onClick={() => handleFilterConnect('LEGACY_ADMIN')}
-            >
-              <span>{t('legacyAdmin')}</span>
-            </button>
-            <button
-              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
-                deviceConnect === 'LEGACY_USER'
-                  ? 'btn-primary text-white'
-                  : 'btn-ghost border border-gray-500/50 text-gray-500'
-              }`}
-              onClick={() => handleFilterConnect('LEGACY_USER')}
-            >
-              <span>{t('legacyUser')}</span>
-            </button>
-            <button
-              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
-                deviceConnect === 'GUEST'
-                  ? 'btn-primary text-white'
-                  : 'btn-ghost border border-gray-500/50 text-gray-500'
-              }`}
-              onClick={() => handleFilterConnect('GUEST')}
-            >
-              <span>{t('levelGuest')}</span>
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
-                deviceConnect === 'LEGACY_ADMIN'
-                  ? 'btn-primary text-white'
-                  : 'btn-ghost border border-gray-500/50 text-gray-500'
-              }`}
-              onClick={() => handleFilterConnect('LEGACY_ADMIN')}
-            >
-              <span>{t('legacyAdmin')}</span>
-            </button>
-            <button
-              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
-                deviceConnect === 'LEGACY_USER'
-                  ? 'btn-primary text-white'
-                  : 'btn-ghost border border-gray-500/50 text-gray-500'
-              }`}
-              onClick={() => handleFilterConnect('LEGACY_USER')}
-            >
-              <span>{t('legacyUser')}</span>
-            </button>
-          </>
-        )}
+        <RoleButtons
+          deviceConnect={deviceConnect}
+          handleFilterConnect={handleFilterConnect}
+          role={role}
+          t={t}
+          tmsMode={tmsMode}
+        />
       </div>
 
       {UserCard}

@@ -42,19 +42,19 @@ const getRoleLabel = (
 ): string => {
   switch (role) {
     case UserRole.SUPER:
-      return t('levelSuper')
+      return t('levelSUPER')
     case UserRole.SERVICE:
-      return t('levelService')
+      return t('levelSERVICE')
     case UserRole.ADMIN:
-      return t('levelAdmin')
+      return t('levelADMIN')
     case UserRole.USER:
-      return t('levelUser')
+      return t('levelUSER')
     case UserRole.LEGACY_ADMIN:
-      return t('legacyAdmin')
+      return t('levelLEGACY_ADMIN')
     case UserRole.LEGACY_USER:
-      return t('legacyUser')
+      return t('levelLEGACY_USER')
     default:
-      return t('levelGuest')
+      return t('levelGUEST')
   }
 }
 

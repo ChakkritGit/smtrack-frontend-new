@@ -53,7 +53,7 @@ type ScheduleMinute = {
 const ManageProbe = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const { globalSearch } = useSelector((state: RootState) => state.utils)
+  const { globalSearch, tokenDecode } = useSelector((state: RootState) => state.utils)
   const addModalRef = useRef<HTMLDialogElement>(null)
   const editModalRef = useRef<HTMLDialogElement>(null)
   const [loading, setLoading] = useState(false)
@@ -113,6 +113,7 @@ const ManageProbe = () => {
     seccondMinute: '',
     thirdMinute: ''
   })
+  const { role } = tokenDecode ?? {}
 
   const mapOptions = <T, K extends keyof T>(
     data: T[],
@@ -630,7 +631,9 @@ const ManageProbe = () => {
           >
             <RiEditLine size={20} />
           </button>
-          <button
+          {
+            role === 'SUPER' &&
+            <button
             className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
             onClick={() =>
               swalWithBootstrapButtons
@@ -652,6 +655,7 @@ const ManageProbe = () => {
           >
             <RiDeleteBin7Line size={20} />
           </button>
+          }
         </div>
       ),
       sortable: false,

@@ -11,13 +11,13 @@ export default {
     sideSetting: 'Settings',
 
     // role
-    levelSuper: 'Super',
-    levelService: 'Service',
-    levelAdmin: 'Admin',
-    levelUser: 'User',
-    legacyAdmin: 'Admin (Legacy)',
-    legacyUser: 'User (Legacy)',
-    levelGuest: 'Guest',
+    levelSUPER: 'Super',
+    levelSERVICE: 'Service',
+    levelADMIN: 'Admin',
+    levelUSER: 'User',
+    levelLEGACY_ADMIN: 'Admin (Legacy)',
+    levelLEGACY_USER: 'User (Legacy)',
+    levelGUEST: 'Guest',
 
     // card count
     countProbe: 'Temperatures',

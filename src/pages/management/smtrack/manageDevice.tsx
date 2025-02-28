@@ -39,6 +39,7 @@ import HospitalAndWard from '../../../components/filter/hospitalAndWard'
 import Loading from '../../../components/skeleton/table/loading'
 import DataTableNoData from '../../../components/skeleton/table/noData'
 import { ConfigType } from '../../../types/smtrack/configs/configType'
+import { client } from '../../../services/mqtt'
 
 const ManageDevice = () => {
   const dispatch = useDispatch()
@@ -75,8 +76,7 @@ const ManageDevice = () => {
   })
   const [networkObject, setNetworkObject] = useState({
     selectWifi: true,
-    selectLan: true,
-    selectSim: ''
+    selectLan: true
   })
   const [networkForm, setNetworkForm] = useState<NetworkFormInit>({
     wifi: {
@@ -98,6 +98,9 @@ const ManageDevice = () => {
       simSp: ''
     }
   })
+  const deviceModel =
+    formData?.id?.substring(0, 3) === 'eTP' ? 'etemp' : 'items'
+  const version = formData?.id?.substring(3, 5).toLowerCase()
 
   const fetchDevices = useCallback(
     async (page: number, size = perPage) => {
@@ -456,6 +459,12 @@ const ManageDevice = () => {
       }).finally(async () => {
         await fetchDevices(1)
         setOnNetwork(false)
+        setCurrentTab(1)
+
+        client.publish(
+          `siamatic/${deviceModel}/${version}/${formData.id}/adj`,
+          'on'
+        )
       })
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -472,21 +481,111 @@ const ManageDevice = () => {
     }
   }
 
-  const handleLan = (e: FormEvent) => {
+  const handleLan = async (e: FormEvent) => {
     e.preventDefault()
-    console.log('LAN')
+    let body = null
+    if (networkObject.selectLan) {
+      body = {
+        dhcpEth: true,
+        ip: null,
+        subnet: null,
+        gateway: null,
+        dns: null
+      }
+    } else {
+      body = {
+        dhcpEth: false,
+        ip: networkForm?.lan?.ip,
+        subnet: networkForm?.lan?.subnet,
+        gateway: networkForm?.lan?.gateway,
+        dns: networkForm?.lan?.dns
+      }
+    }
+
+    try {
+      await axiosInstance.put<responseType<DeviceType>>(
+        `/devices/configs/${formData.id}`,
+        body
+      )
+      editModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderSuccess'),
+        text: t('submitSuccess'),
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(async () => {
+        await fetchDevices(1)
+        setOnNetwork(false)
+        setCurrentTab(1)
+
+        client.publish(
+          `siamatic/${deviceModel}/${version}/${formData.id}/adj`,
+          'on'
+        )
+      })
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        editModalRef.current?.close()
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: error.response?.data.message,
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2500
+        }).finally(() => editModalRef.current?.showModal())
+      }
+      console.error(error)
+    }
   }
 
-  const handleSim = (e: FormEvent) => {
+  const handleSim = async (e: FormEvent) => {
     e.preventDefault()
-    console.log('SIM')
+    let body = {
+      simSP: networkForm?.sim?.simSp
+    }
+
+    try {
+      await axiosInstance.put<responseType<DeviceType>>(
+        `/devices/configs/${formData.id}`,
+        body
+      )
+      editModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderSuccess'),
+        text: t('submitSuccess'),
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(async () => {
+        await fetchDevices(1)
+        setOnNetwork(false)
+        setCurrentTab(1)
+
+        client.publish(
+          `siamatic/${deviceModel}/${version}/${formData.id}/adj`,
+          'on'
+        )
+      })
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        editModalRef.current?.close()
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: error.response?.data.message,
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2500
+        }).finally(() => editModalRef.current?.showModal())
+      }
+      console.error(error)
+    }
   }
 
   const openEdit = (config: ConfigType | null | undefined) => {
     setNetworkObject({
       selectWifi: config?.dhcp ?? true,
-      selectLan: config?.dhcpEth ?? true,
-      selectSim: ''
+      selectLan: config?.dhcpEth ?? true
     })
     setNetworkForm({
       wifi: {
@@ -1071,6 +1170,17 @@ const ManageDevice = () => {
                           className='radio'
                           checked={networkObject.selectWifi}
                           onClick={() => {
+                            setNetworkForm({
+                              ...networkForm,
+                              wifi: {
+                                ...networkForm.wifi,
+                                ip: '',
+                                subnet: '',
+                                macAddress: '',
+                                gateway: '',
+                                dns: ''
+                              }
+                            })
                             setNetworkObject({
                               ...networkObject,
                               selectWifi: true
@@ -1170,7 +1280,7 @@ const ManageDevice = () => {
                                   *
                                 </span>
                               )}
-                              Ip
+                              IP
                             </span>
                             <input
                               type='text'
@@ -1283,7 +1393,7 @@ const ManageDevice = () => {
                                   *
                                 </span>
                               )}
-                              Dns
+                              DNS
                             </span>
                             <input
                               type='text'
@@ -1321,13 +1431,23 @@ const ManageDevice = () => {
                           type='radio'
                           name='radio-1'
                           className='radio'
-                          checked={!networkObject.selectLan}
-                          onClick={() =>
+                          checked={networkObject.selectLan}
+                          onClick={() => {
+                            setNetworkForm({
+                              ...networkForm,
+                              lan: {
+                                ...networkForm.lan,
+                                dns: '',
+                                gateway: '',
+                                ip: '',
+                                subnet: ''
+                              }
+                            })
                             setNetworkObject({
                               ...networkObject,
-                              selectLan: false
+                              selectLan: true
                             })
-                          }
+                          }}
                         />
                         <span>Auto</span>
                       </label>
@@ -1339,18 +1459,18 @@ const ManageDevice = () => {
                           type='radio'
                           name='radio-1'
                           className='radio'
-                          checked={networkObject.selectLan}
+                          checked={!networkObject.selectLan}
                           onClick={() =>
                             setNetworkObject({
                               ...networkObject,
-                              selectLan: true
+                              selectLan: false
                             })
                           }
                         />
                         <span>Manual</span>
                       </label>
                     </div>
-                    {networkObject.selectLan && (
+                    {!networkObject.selectLan && (
                       <div className='mt-3'>
                         <div className='form-control w-full'>
                           <div className='grid grid-cols-1 md:grid-cols-2 md:gap-3'>
@@ -1359,7 +1479,7 @@ const ManageDevice = () => {
                                 <span className='font-medium text-red-500 mr-1'>
                                   *
                                 </span>
-                                Ip
+                                IP
                               </span>
                               <input
                                 type='text'
@@ -1451,7 +1571,75 @@ const ManageDevice = () => {
                   </div>
                 </div>
               ) : (
-                <div className='mt-3'>3</div>
+                <div className='mt-5'>
+                  <div>
+                    <div className='flex items-center justify-center gap-4'>
+                      <label
+                        htmlFor='radio-1'
+                        className='flex items-center gap-2'
+                      >
+                        <input
+                          type='radio'
+                          name='radio-1'
+                          className='radio'
+                          checked={networkForm?.sim?.simSp === 'AIS'}
+                          onClick={() => {
+                            setNetworkForm({
+                              ...networkForm,
+                              sim: {
+                                ...networkForm.sim,
+                                simSp: 'AIS'
+                              }
+                            })
+                          }}
+                        />
+                        <span>AIS</span>
+                      </label>
+                      <label
+                        htmlFor='radio-1'
+                        className='flex items-center gap-2'
+                      >
+                        <input
+                          type='radio'
+                          name='radio-1'
+                          className='radio'
+                          checked={networkForm?.sim?.simSp === 'DTAC'}
+                          onClick={() =>
+                            setNetworkForm({
+                              ...networkForm,
+                              sim: {
+                                ...networkForm.sim,
+                                simSp: 'DTAC'
+                              }
+                            })
+                          }
+                        />
+                        <span>DTAC</span>
+                      </label>
+                      <label
+                        htmlFor='radio-1'
+                        className='flex items-center gap-2'
+                      >
+                        <input
+                          type='radio'
+                          name='radio-1'
+                          className='radio'
+                          checked={networkForm?.sim?.simSp === 'TRUE'}
+                          onClick={() =>
+                            setNetworkForm({
+                              ...networkForm,
+                              sim: {
+                                ...networkForm.sim,
+                                simSp: 'TRUE'
+                              }
+                            })
+                          }
+                        />
+                        <span>TRUE</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           )}
@@ -1474,6 +1662,7 @@ const ManageDevice = () => {
                 type='button'
                 className='btn'
                 onClick={() => {
+                  setCurrentTab(1)
                   setOnNetwork(false)
                 }}
               >

@@ -161,7 +161,6 @@ const Notifications = () => {
       pathSegment.charAt(0).toUpperCase() + pathSegment.slice(1)
 
     if (notificationarray.length > 0) {
-      console.log('If123')
       const link: HTMLLinkElement =
         document.querySelector("link[rel*='icon']") ||
         document.createElement('link')
@@ -176,7 +175,6 @@ const Notifications = () => {
         ' - ' +
         `${path.pathname.split('/')[1] !== '' ? capitalized : 'Home'}`
     } else {
-      console.log('Else123')
       const link: HTMLLinkElement =
         document.querySelector("link[rel*='icon']") ||
         document.createElement('link')

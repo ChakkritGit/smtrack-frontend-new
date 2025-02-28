@@ -48,32 +48,32 @@ const RoleSelect = (props: UserSelectRoleType) => {
 
   const roleLevels: Record<UserRole, { key: UserRole; value: string }[]> = {
     [UserRole.SUPER]: [
-      { key: UserRole.SUPER, value: t('levelSuper') },
-      { key: UserRole.SERVICE, value: t('levelService') },
-      { key: UserRole.ADMIN, value: t('levelAdmin') },
-      { key: UserRole.USER, value: t('levelUser') },
-      { key: UserRole.LEGACY_ADMIN, value: t('legacyAdmin') },
-      { key: UserRole.LEGACY_USER, value: t('legacyUser') },
-      { key: UserRole.GUEST, value: t('levelGuest') }
+      { key: UserRole.SUPER, value: t('levelSUPER') },
+      { key: UserRole.SERVICE, value: t('levelSERVICE') },
+      { key: UserRole.ADMIN, value: t('levelADMIN') },
+      { key: UserRole.USER, value: t('levelUSER') },
+      { key: UserRole.LEGACY_ADMIN, value: t('levelLEGACY_ADMIN') },
+      { key: UserRole.LEGACY_USER, value: t('levelLEGACY_USER') },
+      { key: UserRole.GUEST, value: t('levelGUEST') }
     ],
     [UserRole.SERVICE]: [
-      { key: UserRole.SERVICE, value: t('levelService') },
-      { key: UserRole.ADMIN, value: t('levelAdmin') },
-      { key: UserRole.USER, value: t('levelUser') }
+      { key: UserRole.SERVICE, value: t('levelSERVICE') },
+      { key: UserRole.ADMIN, value: t('levelADMIN') },
+      { key: UserRole.USER, value: t('levelUSER') }
     ],
     [UserRole.ADMIN]: [
-      { key: UserRole.ADMIN, value: t('levelAdmin') },
-      { key: UserRole.USER, value: t('levelUser') }
+      { key: UserRole.ADMIN, value: t('levelADMIN') },
+      { key: UserRole.USER, value: t('levelUSER') }
     ],
     [UserRole.LEGACY_ADMIN]: [
-      { key: UserRole.LEGACY_ADMIN, value: t('legacyAdmin') },
-      { key: UserRole.LEGACY_USER, value: t('legacyUser') }
+      { key: UserRole.LEGACY_ADMIN, value: t('levelLEGACY_ADMIN') },
+      { key: UserRole.LEGACY_USER, value: t('levelLEGACY_USER') }
     ],
     [UserRole.LEGACY_USER]: [
-      { key: UserRole.LEGACY_USER, value: t('legacyUser') }
+      { key: UserRole.LEGACY_USER, value: t('levelLEGACY_USER') }
     ],
-    [UserRole.GUEST]: [{ key: UserRole.GUEST, value: t('levelGuest') }],
-    [UserRole.USER]: [{ key: UserRole.USER, value: t('levelUser') }]
+    [UserRole.GUEST]: [{ key: UserRole.GUEST, value: t('levelGUEST') }],
+    [UserRole.USER]: [{ key: UserRole.USER, value: t('levelUSER') }]
   }
 
   const RoleData =

@@ -11,13 +11,13 @@ export default {
     sideSetting: 'การตั้งค่า',
 
     // role
-    levelSuper: 'ซุปเปอร์',
-    levelService: 'เซอร์วิซ',
-    levelAdmin: 'แอดมิน',
-    levelUser: 'ยูสเซอร์',
-    legacyAdmin: 'แอดมิน (ผู้ใช้เก่า)',
-    legacyUser: 'ยูสเซอร์ (ผู้ใช้เก่า)',
-    levelGuest: 'ผู้ใช้',
+    levelSUPER: 'ซุปเปอร์',
+    levelSERVICE: 'เซอร์วิซ',
+    levelADMIN: 'แอดมิน',
+    levelUSER: 'ยูสเซอร์',
+    levelLEGACY_ADMIN: 'แอดมิน (ผู้ใช้เก่า)',
+    levelLEGACY_USER: 'ยูสเซอร์ (ผู้ใช้เก่า)',
+    levelGUEST: 'ผู้ใช้',
 
     // card count
     countProbe: 'อุณหภูมิ',
