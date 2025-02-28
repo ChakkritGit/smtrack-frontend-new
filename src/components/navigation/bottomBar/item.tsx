@@ -29,15 +29,15 @@ const BottomNavItem = (props: BottomItemProps) => {
 
   return (
     <div
-      className={`btm-nav overflow-hidden sm:hidden bg-base-100/80 backdrop-blur duration-300 z-[89]
+      className={`btm-nav overflow-hidden px-3 pb-2 sm:hidden bg-base-100/80 backdrop-blur duration-300 z-[89]
         ${
           isScrollingDown
             ? 'h-[0px] opacity-0'
-            : 'h-[60px] shadow-md opacity-100'
+            : 'h-[75px] shadow-md opacity-100'
         }
         ${
           ['cupcake', 'valentine', 'forest', 'pastel'].includes(themeMode)
-            ? 'z-[88] bottom-3 mx-auto w-[95%] rounded-btn px-3'
+            ? 'z-[88] bottom-3 mx-auto w-[95%] rounded-btn'
             : ''
         }`}
     >

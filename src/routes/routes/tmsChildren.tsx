@@ -9,6 +9,7 @@ import FullTableTms from '../../pages/dashboard/tms/fullTableTms'
 import Users from '../../pages/users/users'
 import ManagementTms from '../../pages/management/tms/managementTms'
 import Settings from '../../pages/settings/settings'
+import Notification from '../../pages/notification/notification'
 
 const tmsChildren: RouteObject[] = [
   {
@@ -61,6 +62,11 @@ const tmsChildren: RouteObject[] = [
   {
     path: 'settings',
     element: <Settings />,
+    errorElement: <ErrorScreen />
+  },
+  {
+    path: 'notification',
+    element: <Notification />,
     errorElement: <ErrorScreen />
   }
 ]

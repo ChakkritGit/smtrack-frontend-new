@@ -27,7 +27,7 @@ import { MdOutlineSdCard, MdOutlineSdCardAlert } from 'react-icons/md'
 import { extractValues } from '../../constants/utils/utilsConstants'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useSelector } from 'react-redux'
-import { Location, useLocation } from 'react-router-dom'
+import { Location, useLocation, useNavigate } from 'react-router-dom'
 
 const Notifications = () => {
   const { tokenDecode, tmsMode, userProfile } = useSelector(
@@ -35,6 +35,7 @@ const Notifications = () => {
   )
   const location = useLocation()
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [notificationList, setNotification] = useState<NotificationType[]>([])
   const [loading, setLoading] = useState(false)
   const { role = 'USER' } = tokenDecode || {}
@@ -266,14 +267,17 @@ const Notifications = () => {
       </div>
       <ul
         tabIndex={1}
-        className='dropdown-content bg-base-100 text-base-content rounded-box top-px mt-16 right-0 max-h-[720px] w-[360px] md:max-h-[520px] md:w-[480px] overflow-y-auto
+        className='dropdown-content bg-base-100 text-base-content rounded-box top-px mt-16 right-0 max-h-[720px]
+        w-[360px] md:max-h-[520px] md:w-[480px] overflow-y-auto
         border border-white/5 shadow-2xl outline outline-1 outline-black/5'
       >
         <div className='flex items-center justify-between p-2 h-[49px]'>
           <span className='text-base ml-2'>{t('titleNotification')}</span>
           <button
-            className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
+            className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 max-h-[34px] min-h-[34px]
+             max-w-[34px] min-w-[34px] tooltip tooltip-left'
             data-tip={t('isExapndText')}
+            onClick={() => navigate('/notification')}
           >
             <RiArrowRightUpLine size={20} />
           </button>
@@ -285,7 +289,7 @@ const Notifications = () => {
               notificationList.length > 0 ? (
                 notificationList.map((item, index) => (
                   <li
-                    className='flex items-center gap-3 bg-primary/5 py-2 px-3'
+                    className='flex items-center gap-3 py-2 px-3'
                     key={index}
                   >
                     <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
@@ -324,7 +328,7 @@ const Notifications = () => {
               notificationList.length > 0 ? (
                 notificationList.map((item, index) => (
                   <li
-                    className='flex items-center gap-3 bg-primary/5 py-2 px-3'
+                    className='flex items-center gap-3 py-2 px-3'
                     key={index}
                   >
                     <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>

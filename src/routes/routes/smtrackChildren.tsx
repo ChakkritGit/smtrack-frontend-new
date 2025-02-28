@@ -11,6 +11,7 @@ import Management from '../../pages/management/smtrack/management'
 import Warranty from '../../pages/warranty/warranty'
 import Repair from '../../pages/repair/repair'
 import Settings from '../../pages/settings/settings'
+import Notification from '../../pages/notification/notification'
 
 const smtrackChildren: RouteObject[] = [
   {
@@ -82,6 +83,11 @@ const smtrackChildren: RouteObject[] = [
   {
     path: 'settings',
     element: <Settings />,
+    errorElement: <ErrorScreen />
+  },
+  {
+    path: 'notification',
+    element: <Notification />,
     errorElement: <ErrorScreen />
   },
   {
