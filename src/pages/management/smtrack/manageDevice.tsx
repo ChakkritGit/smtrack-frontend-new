@@ -44,9 +44,8 @@ import { client } from '../../../services/mqtt'
 const ManageDevice = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const { wardId, globalSearch, cookieDecode, tokenDecode } = useSelector(
-    (state: RootState) => state.utils
-  )
+  const { wardId, globalSearch, cookieDecode, tokenDecode, hosId } =
+    useSelector((state: RootState) => state.utils)
   const [devices, setDevices] = useState<DeviceType[]>([])
   const [devicesFiltered, setDevicesFiltered] = useState<DeviceType[]>([])
   const [loading, setLoading] = useState(false)
@@ -202,6 +201,8 @@ const ManageDevice = () => {
       } else {
         if (key === 'remark' || key === 'tag') {
           formDataObj.append(key, value as string)
+        } else if (key === 'hospital') {
+          formDataObj.append(key, hosId)
         } else {
           formDataObj.append(key, value as string)
         }
@@ -632,21 +633,27 @@ const ManageDevice = () => {
     {
       name: t('deviceSerialTb'),
       cell: item => (
-        <div
-          className='flex items-center gap-1 cursor-pointer hover:opacity-50 duration-300'
-          onClick={() => {
-            try {
-              navigator.clipboard.writeText(item.id)
-              toast.success(t('copyToClip'))
-            } catch (error) {
-              console.error('Failed to copy: ', error)
-              toast.error(t('copyToClipFaile'))
-            }
-          }}
-        >
-          <span>{item.id}</span>
-          <RiFileCopyLine size={18} className='text-base-content/70' />
-        </div>
+        <>
+          {role === 'SUPER' ? (
+            <div
+              className='flex items-center gap-1 cursor-pointer hover:opacity-50 duration-300'
+              onClick={() => {
+                try {
+                  navigator.clipboard.writeText(item.id)
+                  toast.success(t('copyToClip'))
+                } catch (error) {
+                  console.error('Failed to copy: ', error)
+                  toast.error(t('copyToClipFaile'))
+                }
+              }}
+            >
+              <span>{item.id}</span>
+              <RiFileCopyLine size={18} className='text-base-content/70' />
+            </div>
+          ) : (
+            <span>{item.id}</span>
+          )}
+        </>
       ),
       sortable: false,
       center: true,
@@ -707,28 +714,32 @@ const ManageDevice = () => {
       center: true,
       width: '130px'
     },
-    {
-      name: t('token'),
-      cell: item => (
-        <div
-          className='flex items-center gap-1 cursor-pointer hover:opacity-50 duration-300'
-          onClick={() => {
-            try {
-              navigator.clipboard.writeText(item.token)
-              toast.success(t('copyToClip'))
-            } catch (error) {
-              console.error('Failed to copy: ', error)
-              toast.error(t('copyToClipFaile'))
-            }
-          }}
-        >
-          <span className='truncate max-w-[80px]'>{item.token}</span>
-          <RiFileCopyLine size={18} className='text-base-content/70' />
-        </div>
-      ),
-      sortable: false,
-      center: true
-    },
+    ...(role === 'SUPER'
+      ? [
+          {
+            name: t('token'),
+            cell: (item: DeviceType) => (
+              <div
+                className='flex items-center gap-1 cursor-pointer hover:opacity-50 duration-300'
+                onClick={() => {
+                  try {
+                    navigator.clipboard.writeText(item.token)
+                    toast.success(t('copyToClip'))
+                  } catch (error) {
+                    console.error('Failed to copy: ', error)
+                    toast.error(t('copyToClipFaile'))
+                  }
+                }}
+              >
+                <span className='truncate max-w-[80px]'>{item.token}</span>
+                <RiFileCopyLine size={18} className='text-base-content/70' />
+              </div>
+            ),
+            sortable: false,
+            center: true
+          }
+        ]
+      : []),
     {
       name: t('action'),
       cell: item => (

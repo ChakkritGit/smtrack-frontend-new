@@ -113,10 +113,10 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                   </div>
                   <div
                     className={`badge text-white border-none h-[30px] ${
-                      item.status ? 'bg-green-500' : 'bg-red-500'
+                      item.online ? 'bg-green-500' : 'bg-red-500'
                     }`}
                   >
-                    {item.status ? t('deviceOnline') : t('deviceOffline')}
+                    {item.online ? t('deviceOnline') : t('deviceOffline')}
                   </div>
                 </div>
               </div>

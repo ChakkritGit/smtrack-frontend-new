@@ -29,7 +29,7 @@ const BottomNavItem = (props: BottomItemProps) => {
 
   return (
     <div
-      className={`btm-nav overflow-hidden px-3 pb-2 sm:hidden bg-base-100/80 backdrop-blur duration-300 z-[89]
+      className={`btm-nav overflow-hidden px-3 pb-2 sm:hidden bg-base-100/80 backdrop-blur ease-in-out duration-300 z-[89]
         ${
           isScrollingDown
             ? 'h-[0px] opacity-0'

@@ -29,7 +29,7 @@ import {
   handleApiError
 } from '../../constants/utils/utilsConstants'
 import UserPagination from '../../components/pagination/userPagination'
-import { setSearch, setSubmitLoading } from '../../redux/actions/utilsActions'
+import { setHosId, setSearch, setSubmitLoading } from '../../redux/actions/utilsActions'
 import Swal from 'sweetalert2'
 import { resizeImage } from '../../constants/utils/image'
 import HopitalSelect from '../../components/selects/hopitalSelect'
@@ -181,6 +181,7 @@ const Users = () => {
 
         addModalRef.current?.close()
         resetForm()
+        dispatch(setHosId(''))
         await fetchUsers()
         Swal.fire({
           title: t('alertHeaderSuccess'),

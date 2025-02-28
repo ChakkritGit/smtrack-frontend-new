@@ -33,7 +33,10 @@ const Management = () => {
         >
           {t('tabManageDevice')}
         </a>
-        {(role === 'SUPER' || role === 'SERVICE') && (
+        {(role === 'SUPER' ||
+          role === 'SERVICE' ||
+          role === 'ADMIN' ||
+          role === 'LEGACY_ADMIN') && (
           <a
             role='tab'
             className={`tab text-sm md:text-lg ${

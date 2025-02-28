@@ -219,7 +219,7 @@ const Navbar = () => {
                   }
                 }}
               >
-                <div className='flex items-center gap-3'>
+                <div className='flex items-center gap-2'>
                   <div>
                     <RiHistoryLine size={18} />
                   </div>
@@ -259,7 +259,7 @@ const Navbar = () => {
                 devive.map((item, index) => (
                   <div
                     key={index}
-                    className='flex items-center gap-3 p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300'
+                    className='flex items-center gap-2 p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300'
                     onClick={() => {
                       const newItem = {
                         text: item.name,
@@ -305,7 +305,7 @@ const Navbar = () => {
                 filter.map((item, index) => (
                   <div
                     key={index}
-                    className='flex items-center gap-3 p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300'
+                    className='flex items-center gap-2 p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300'
                     onClick={() => {
                       const newItem = {
                         text: item.text,

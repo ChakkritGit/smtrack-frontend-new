@@ -646,12 +646,14 @@ const ManageHospital = () => {
       <div className='flex flex-col lg:flex-row lg:items-center justify-between mt-3'>
         <span></span>
         <div className='flex flex-col lg:flex-row mt-3 lg:mt-0 lg:items-center items-end gap-3'>
-          <button
-            className='btn btn-primary'
-            onClick={() => addHosModalRef.current?.showModal()}
-          >
-            {t('addHos')}
-          </button>
+          {(role === 'SUPER' || role === 'SERVICE') && (
+            <button
+              className='btn btn-primary'
+              onClick={() => addHosModalRef.current?.showModal()}
+            >
+              {t('addHos')}
+            </button>
+          )}
           <button
             className='btn btn-primary'
             onClick={() => addWardModalRef.current?.showModal()}

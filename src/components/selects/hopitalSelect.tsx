@@ -45,6 +45,7 @@ const HopitalSelect = () => {
 
   return (
     <Select
+      key={hosId}
       options={mapOptions<Hospital, keyof Hospital>(hospital, 'id', 'hosName')}
       value={mapDefaultValue<Hospital, keyof Hospital>(
         hospital,

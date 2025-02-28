@@ -63,6 +63,7 @@ const WardSelect = (props: WardSelectType) => {
 
   return (
     <Select
+      key={formData.wardId}
       options={mapOptions<Ward, keyof Ward>(filterWard, 'id', 'wardName')}
       value={mapDefaultValue<Ward, keyof Ward>(
         filterWard,
