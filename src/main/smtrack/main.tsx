@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { socket } from '../../services/websocket'
 import { SocketResponseType } from '../../types/global/socketType'
 import notificationSound from '../../assets/sounds/notification.mp3'
+import BottomBar from '../../components/navigation/bottomBar/bottomBar'
 
 const MainSmtrack = () => {
   const { t } = useTranslation()
@@ -207,9 +208,10 @@ const MainSmtrack = () => {
         <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content'>
           <Navbar />
-          <div className='min-h-[calc(100dvh-64px)]'>
+          <div className='min-h-[calc(100dvh-64px)] pb-[64px]'>
             <Outlet />
           </div>
+          <BottomBar />
         </div>
         <Sidebar />
       </div>

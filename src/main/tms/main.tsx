@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { changIcon, changText } from '../../constants/utils/webSocket'
 import notificationSound from '../../assets/sounds/notification.mp3'
 import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
+import BottomBar from '../../components/navigation/bottomBar/bottomBar'
 
 const MainTms = () => {
   const { t } = useTranslation()
@@ -206,9 +207,10 @@ const MainTms = () => {
         <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content'>
           <Navbar />
-          <div className='min-h-[calc(100dvh-64px)]'>
+          <div className='min-h-[calc(100dvh-64px)] pb-[64px]'>
             <Outlet />
           </div>
+          <BottomBar />
         </div>
         <Sidebar />
       </div>

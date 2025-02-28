@@ -434,3 +434,7 @@ input[type=number] {
 .swal2-confirm {
   @apply !bg-red-500 !text-white hover:!bg-red-700 !duration-300;
 }
+
+.btm-nav > *:where(.active) {
+  @apply bg-transparent;
+}
