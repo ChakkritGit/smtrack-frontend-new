@@ -72,7 +72,7 @@ const FullTableComponent = (props: FullTablePropType) => {
         progressComponent={<Loading />}
         paginationPerPage={12}
         paginationRowsPerPageOptions={[12, 30, 50, 100]}
-        fixedHeaderScrollHeight='580px'
+        className='md:!max-h-[calc(100dvh-580px)]'
       />
     </div>
   )

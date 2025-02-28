@@ -406,7 +406,7 @@ const ManageDevice = () => {
           onChangeRowsPerPage={handlePerRowsChange}
           onChangePage={handlePageChange}
           paginationRowsPerPageOptions={[10, 20, 50, 100, 150, 200]}
-          fixedHeaderScrollHeight='calc(100dvh - 490px)'
+          className='md:!max-h-[calc(100dvh-490px)]'
         />
       </div>
 

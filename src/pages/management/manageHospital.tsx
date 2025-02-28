@@ -673,7 +673,7 @@ const ManageHospital = () => {
           pagination
           responsive
           fixedHeader
-          fixedHeaderScrollHeight='calc(100dvh - 400px)'
+          className='md:!max-h-[calc(100dvh-400px)]'
           expandableIcon={{
             collapsed: (
               <RiArrowRightSLine size={24} className='text-base-content' />

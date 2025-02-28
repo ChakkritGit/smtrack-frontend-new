@@ -94,7 +94,7 @@ const DataTableMini = (props: TableMiniProps) => {
         noDataComponent={<DataTableNoData />}
         paginationPerPage={12}
         paginationRowsPerPageOptions={[12, 30, 50, 100]}
-        fixedHeaderScrollHeight='270px'
+        className='md:!max-h-[calc(100dvh-270px)]'
       />
     </div>
   )
