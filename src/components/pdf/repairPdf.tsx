@@ -414,7 +414,7 @@ const RepairPdf = () => {
             <View style={style.notic}>
               <View style={style.noticText}>
                 <Text style={style.noticTextBold}>หมายเหตุ*</Text>
-                <Text>กรุณาพิมพ์สำเนาสองฉบับเพื่อนำส่งและเก็บไว้</Text>
+                <Text>กรุณาพิมพ์สำเนาสองฉบับเพื่อนำส่งและเก็บไว้ </Text>
               </View>
               <Text>{formatDate(state?.createAt)} Rev.01</Text>
             </View>

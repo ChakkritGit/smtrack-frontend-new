@@ -173,11 +173,15 @@ const Sidebar = () => {
             <Link
               to={'/repair'}
               className={`btn font-normal flex-nowrap justify-start w-full ${
-                location.pathname === '/repair' ? 'btn-primary' : 'btn-ghost'
+                location.pathname === '/repair' ||
+                location.pathname === '/repair/preview'
+                  ? 'btn-primary'
+                  : 'btn-ghost'
               } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
               data-tip={t('sideRepair')}
             >
-              {location.pathname === '/repair' ? (
+              {location.pathname === '/repair' ||
+              location.pathname === '/repair/preview' ? (
                 <RiFileSettingsFill size={24} />
               ) : (
                 <RiFileSettingsLine size={24} />

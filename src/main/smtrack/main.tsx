@@ -134,8 +134,8 @@ const MainSmtrack = () => {
       !popUpMode &&
       !soundMode &&
       isMessageValid &&
-      !isMessageValid.includes('device offline') &&
-      !isMessageValid.includes('device online')
+      !isMessageValid?.includes('device offline') &&
+      !isMessageValid?.includes('device online')
     ) {
       if (!isPlaying) {
         notiSound.play()
@@ -150,8 +150,8 @@ const MainSmtrack = () => {
     if (
       socketData &&
       !popUpMode &&
-      !socketData.message.includes('Device offline') &&
-      !socketData.message.includes('Device online')
+      !socketData.message?.includes('Device offline') &&
+      !socketData.message?.includes('Device online')
     ) {
       toast(
         (_t: ToastOptions) => (
