@@ -392,13 +392,7 @@ body {
 }
 
 .go2072408551 {
-  @apply !bg-base-100 !text-base-content;
-}
-
-.go2072408551 {
-  &>svg {
-    @apply !py-0 !px-2;
-  }
+  @apply !bg-base-100 !text-base-content !pl-4;
 }
 
 input::-webkit-outer-spin-button,

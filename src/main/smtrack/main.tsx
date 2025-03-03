@@ -155,12 +155,12 @@ const MainSmtrack = () => {
     ) {
       toast(
         (_t: ToastOptions) => (
-          <div className='flex items-center gap-4 rounded-full min-w-[280px]'>
+          <div className='flex items-center gap-4 rounded-full w-max max-w-[280px]'>
             <div className='flex flex-col'>
-              <span className='text-sm font-bold'>
+              <span className='text-base font-bold'>
                 {socketData.device ? socketData.device : '- -'}
               </span>
-              <span className='text-sm'>
+              <span className='text-[1rem]'>
                 {changText(socketData.message, t)}
               </span>
               <span className='text-sm'>
@@ -185,7 +185,7 @@ const MainSmtrack = () => {
         ),
         {
           icon: changIcon(socketData.message),
-          duration: 10000,
+          duration: 100000000000,
           style: {
             backgroundColor:
               'var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity, 1)))',
