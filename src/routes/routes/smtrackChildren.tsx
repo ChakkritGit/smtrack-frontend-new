@@ -12,6 +12,7 @@ import Warranty from '../../pages/warranty/warranty'
 import Repair from '../../pages/repair/repair'
 import Settings from '../../pages/settings/settings'
 import Notification from '../../pages/notification/notification'
+import RepairPdf from '../../components/pdf/repairPdf'
 
 const smtrackChildren: RouteObject[] = [
   {
@@ -78,6 +79,11 @@ const smtrackChildren: RouteObject[] = [
   {
     path: 'repair',
     element: <Repair />,
+    errorElement: <ErrorScreen />
+  },
+  {
+    path: 'repair/preview',
+    element: <RepairPdf />,
     errorElement: <ErrorScreen />
   },
   {

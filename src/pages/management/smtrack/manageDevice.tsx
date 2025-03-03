@@ -1279,7 +1279,7 @@ const ManageDevice = () => {
 
                     <div
                       className={`mt-3 ${
-                        networkObject.selectWifi ? 'opacity-50' : ''
+                        networkObject.selectWifi ? 'opacity-70' : ''
                       }`}
                     >
                       <div className='form-control w-full'>

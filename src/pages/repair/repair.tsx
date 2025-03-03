@@ -30,9 +30,11 @@ import { DeviceListType } from '../../types/smtrack/devices/deviceType'
 import { AxiosError } from 'axios'
 import { setSubmitLoading } from '../../redux/actions/utilsActions'
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
 
 const Repair = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { t } = useTranslation()
   const { globalSearch, userProfile } = useSelector(
     (state: RootState) => state.utils
@@ -452,7 +454,7 @@ const Repair = () => {
           <button
             className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
             key={items.id}
-            // onClick={() => }
+            onClick={() => navigate('/repair/preview', { state: items })}
           >
             <RiPrinterLine size={16} />
           </button>
@@ -505,7 +507,10 @@ const Repair = () => {
       {DataTableComponent}
 
       <dialog ref={addModalRef} className='modal overflow-y-scroll py-10'>
-        <form onSubmit={handleSubmit} className='modal-box w-5/6 max-w-[50rem] h-max max-h-max'>
+        <form
+          onSubmit={handleSubmit}
+          className='modal-box w-5/6 max-w-[50rem] h-max max-h-max'
+        >
           <h3 className='font-bold text-lg'>{t('addRepair')}</h3>
           <div className='grid grid-cols-1 md:grid-cols-2 md:gap-4 mt-4 w-full'>
             <div>
@@ -755,7 +760,10 @@ const Repair = () => {
       </dialog>
 
       <dialog ref={editModalRef} className='modal overflow-y-scroll py-10'>
-        <form onSubmit={handleUpdate} className='modal-box w-5/6 max-w-[50rem] h-max max-h-max'>
+        <form
+          onSubmit={handleUpdate}
+          className='modal-box w-5/6 max-w-[50rem] h-max max-h-max'
+        >
           <h3 className='font-bold text-lg'>{t('addRepair')}</h3>
           <div className='grid grid-cols-1 md:grid-cols-2 md:gap-4 mt-4 w-full'>
             <div>

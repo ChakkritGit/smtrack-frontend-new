@@ -5,12 +5,12 @@ Font.register({
   family: 'Anuphan',
   fonts: [
     {
-      src: AnuphanRegular,
-    },
+      src: AnuphanRegular
+    }
   ]
 })
 
-export const StylesPdf = StyleSheet.create({
+const StylesPdf = StyleSheet.create({
   body: {
     fontFamily: 'Anuphan',
     paddingTop: 35,
@@ -31,14 +31,14 @@ export const StylesPdf = StyleSheet.create({
   left: {
     flexGrow: 0,
     flexShrink: 1,
-    flexBasis: 800,
+    flexBasis: 800
   },
   right: {
     flexDirection: 'column',
     alignItems: 'center'
   },
   tag: {
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   img: {
     objectFit: 'contain',
@@ -47,7 +47,7 @@ export const StylesPdf = StyleSheet.create({
     height: 80,
     maxWidth: 100,
     maxHeight: 100,
-    padding: 3,
+    padding: 3
   },
   left_row: {
     fontSize: 12
@@ -57,10 +57,12 @@ export const StylesPdf = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  img_width : {
+  img_width: {
     objectFit: 'contain',
     aspectRatio: 750 / 320,
     width: 750,
     height: 320
   }
 })
+
+export { StylesPdf }
