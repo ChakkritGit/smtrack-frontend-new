@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   RiAlarmWarningFill,
   RiArrowRightUpLine,
@@ -14,7 +14,6 @@ import {
   UserProfileType
 } from '../../types/smtrack/utilsRedux/utilsReduxType'
 import { AxiosError } from 'axios'
-import Loading from '../skeleton/table/loading'
 import { useTranslation } from 'react-i18next'
 import { NotificationType } from '../../types/global/notification'
 import { FaTemperatureArrowDown, FaTemperatureArrowUp } from 'react-icons/fa6'
@@ -30,19 +29,18 @@ import { useSelector } from 'react-redux'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 
 const Notifications = () => {
-  const { tokenDecode, tmsMode, userProfile } = useSelector(
+  const { tokenDecode, tmsMode, userProfile, socketData } = useSelector(
     (state: RootState) => state.utils
   )
   const location = useLocation()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [notificationList, setNotification] = useState<NotificationType[]>([])
-  const [loading, setLoading] = useState(false)
   const { role = 'USER' } = tokenDecode || {}
+  let notiLenght = 0
 
   const fetchNotificaton = async () => {
     try {
-      setLoading(true)
       const response = await axiosInstance.get<
         responseType<NotificationType[]>
       >(
@@ -51,14 +49,13 @@ const Notifications = () => {
           : `/log/notification`
       )
       setNotification(response.data.data)
+      notiLenght = response.data.data.length
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error.message)
       } else {
         console.error(error)
       }
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -249,22 +246,10 @@ const Notifications = () => {
 
   useEffect(() => {
     fetchNotificaton()
-  }, [])
+  }, [socketData])
 
-  return (
-    <div className='dropdown dropdown-end'>
-      <div
-        tabIndex={0}
-        role='button'
-        className='indicator btn btn-ghost justify-end'
-      >
-        {notificationList.length > 0 && (
-          <span className='indicator-item badge badge-secondary px-1 top-2 right-4 lg:right-3'>
-            {notificationList.length > 99 ? '99+' : notificationList.length}
-          </span>
-        )}
-        <RiNotification4Line size={24} />
-      </div>
+  const NotificationList = useMemo(
+    () => (
       <ul
         tabIndex={1}
         className='dropdown-content bg-base-100 text-base-content rounded-box top-px mt-16 right-0 max-h-[calc(100dvh-180px)]
@@ -285,78 +270,89 @@ const Notifications = () => {
         <div className='divider divider-vertical before:h-[1px] after:h-[1px] m-0 h-0'></div>
         {role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode ? (
           <div>
-            {!loading ? (
-              notificationList.length > 0 ? (
-                notificationList.map((item, index) => (
-                  <li className='flex items-center gap-3 py-2 px-3' key={index}>
-                    <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
-                      <RiAlarmWarningFill size={24} />
-                    </div>
-                    <div className='flex flex-col gap-1 w-full'>
-                      <div className='flex items-center justify-between gap-3'>
-                        <span>{item.message}</span>
-                        <div className='flex flex-col items-end opacity-70'>
-                          <span className='text-[14px]'>
-                            {item.createdAt.substring(11, 16)}
-                          </span>
-                          <span className='w-max text-[14px]'>
-                            {item.createdAt.substring(0, 10)}
-                          </span>
-                        </div>
+            {notificationList.length > 0 ? (
+              notificationList.map((item, index) => (
+                <li className='flex items-center gap-3 py-2 px-3' key={index}>
+                  <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
+                    <RiAlarmWarningFill size={24} />
+                  </div>
+                  <div className='flex flex-col gap-1 w-full'>
+                    <div className='flex items-center justify-between gap-3'>
+                      <span>{item.message}</span>
+                      <div className='flex flex-col items-end opacity-70'>
+                        <span className='text-[14px]'>
+                          {item.createdAt.substring(11, 16)}
+                        </span>
+                        <span className='w-max text-[14px]'>
+                          {item.createdAt.substring(0, 10)}
+                        </span>
                       </div>
-                      <span className='text-[14px] opacity-70'>
-                        {item?.mcuId}
-                      </span>
                     </div>
-                  </li>
-                ))
-              ) : (
-                <div className='flex items-center justify-center loading-hieght-full'>
-                  <div>{t('notificationEmpty')}</div>
-                </div>
-              )
+                    <span className='text-[14px] opacity-70'>
+                      {item?.mcuId}
+                    </span>
+                  </div>
+                </li>
+              ))
             ) : (
-              <Loading />
+              <div className='flex items-center justify-center loading-hieght-full'>
+                <div>{t('notificationEmpty')}</div>
+              </div>
             )}
           </div>
         ) : (
           <div>
-            {!loading ? (
-              notificationList.length > 0 ? (
-                notificationList.map((item, index) => (
-                  <li className='flex items-center gap-3 py-2 px-3' key={index}>
-                    <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
-                      {subTextNotiDetailsIcon(item.message)}
-                    </div>
-                    <div className='flex flex-col gap-1 w-full'>
-                      <div className='flex items-center justify-between gap-3'>
-                        <span>{subTextNotiDetails(item.message)}</span>
-                        <div className='flex flex-col items-end opacity-70'>
-                          <span className='text-[14px]'>
-                            {item.createAt.substring(11, 16)}
-                          </span>
-                          <span className='w-max text-[14px]'>
-                            {item.createAt.substring(0, 10)}
-                          </span>
-                        </div>
+            {notificationList.length > 0 ? (
+              notificationList.map((item, index) => (
+                <li className='flex items-center gap-3 py-2 px-3' key={index}>
+                  <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
+                    {subTextNotiDetailsIcon(item.message)}
+                  </div>
+                  <div className='flex flex-col gap-1 w-full'>
+                    <div className='flex items-center justify-between gap-3'>
+                      <span>{subTextNotiDetails(item.message)}</span>
+                      <div className='flex flex-col items-end opacity-70'>
+                        <span className='text-[14px]'>
+                          {item.createAt.substring(11, 16)}
+                        </span>
+                        <span className='w-max text-[14px]'>
+                          {item.createAt.substring(0, 10)}
+                        </span>
                       </div>
-                      <span className='text-[14px] opacity-70'>
-                        {item.device.name}
-                      </span>
                     </div>
-                  </li>
-                ))
-              ) : (
-                <div className='flex items-center justify-center loading-hieght-full'>
-                  <div>{t('notificationEmpty')}</div>
-                </div>
-              )
+                    <span className='text-[14px] opacity-70'>
+                      {item.device.name}
+                    </span>
+                  </div>
+                </li>
+              ))
             ) : (
-              <Loading />
+              <div className='flex items-center justify-center loading-hieght-full'>
+                <div>{t('notificationEmpty')}</div>
+              </div>
             )}
           </div>
         )}
       </ul>
+    ),
+    [notificationList]
+  )
+
+  return (
+    <div className='dropdown dropdown-end'>
+      <div
+        tabIndex={0}
+        role='button'
+        className='indicator btn btn-ghost justify-end'
+      >
+        {notificationList.length > 0 && (
+          <span className='indicator-item badge badge-secondary px-1 top-2 right-4 lg:right-3'>
+            {notificationList.length > 99 ? '99+' : notificationList.length}
+          </span>
+        )}
+        <RiNotification4Line size={24} />
+      </div>
+      {NotificationList}
     </div>
   )
 }
