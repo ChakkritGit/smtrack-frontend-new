@@ -38,7 +38,7 @@ const RepairPdf = () => {
   }
 
   return (
-    <div className='h-[calc(100dvh-140px)] p-3 px-[16px]'>
+    <div className='h-[calc(100dvh-200px)] sm:h-[calc(100dvh-140px)] p-3 px-[16px]'>
       <div className='breadcrumbs text-sm mb-2'>
         <ul>
           <li>

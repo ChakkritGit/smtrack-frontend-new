@@ -372,6 +372,14 @@ const Adjustments = (props: AdjustmentsProps) => {
     )
     client.unsubscribe(`${serial}/${filter?.channel}/temp/real`)
     client.unsubscribe(`${serial}/${filter?.channel}/mute/status/receive`)
+
+    // รอลบ
+    client.publish(`siamatic/${deviceModel}/${version}/${serial}/temp`, 'off')
+    client.unsubscribe(`${serial}/mute/status/receive`)
+    client.unsubscribe(`${serial}/temp/real`)
+    client.unsubscribe(`${serial}/mute/status/receive`)
+    //
+
     setAdjustmentsForm({
       tempMin: 0,
       tempMax: 0,
@@ -448,12 +456,28 @@ const Adjustments = (props: AdjustmentsProps) => {
           `${serial}/${probeFiltered?.channel}/mute/status/receive`
         )
 
+        // รอลบ
+        client.unsubscribe(`${serial}/mute/status/receive`)
+        //
+
         if (beforeSelectProbe && beforeSelectProbe !== probeFiltered?.channel) {
           client.publish(
             `siamatic/${deviceModel}/${version}/${serial}/${beforeSelectProbe}/temp`,
             'off'
           )
+
+          // รอลบ
+          client.publish(
+            `siamatic/${deviceModel}/${version}/${serial}/temp`,
+            'off'
+          )
+          //
+
           client.unsubscribe(`${serial}/${beforeSelectProbe}/temp/real`)
+
+          // รอลบ
+          client.unsubscribe(`${serial}/temp/real`)
+          //
         }
 
         setAdjustmentsForm({
@@ -473,12 +497,28 @@ const Adjustments = (props: AdjustmentsProps) => {
           }
         )
 
+        // รอลบ
+        client.subscribe(
+          `${serial}/temp/real`,
+          err => {
+            if (err) console.error('MQTT Subscribe Error', err)
+          }
+        )
+        //
+
         setIsLoadingMqtt(true)
 
         client.publish(
           `siamatic/${deviceModel}/${version}/${serial}/${probeFiltered.channel}/temp`,
           'on'
         )
+
+        // รอลบ
+        client.publish(
+          `siamatic/${deviceModel}/${version}/${serial}/temp`,
+          'on'
+        )
+        //
 
         setBeforeSelectProbe(probeFiltered?.channel)
 
@@ -513,6 +553,26 @@ const Adjustments = (props: AdjustmentsProps) => {
           `siamatic/${deviceModel}/${version}/${serial}/${probeFiltered?.channel}/mute/status`,
           'on'
         )
+
+        // รอลบ
+        client.publish(
+          `siamatic/${deviceModel}/${version}/${serial}/temp`,
+          'off'
+        )
+        client.unsubscribe(`${serial}/temp/real`)
+
+        client.subscribe(
+          `${serial}/mute/status/receive`,
+          err => {
+            if (err) console.error('MQTT Subscribe Error', err)
+          }
+        )
+
+        client.publish(
+          `siamatic/${deviceModel}/${version}/${serial}/mute/status`,
+          'on'
+        )
+        //
 
         client.on('message', (_topic, message) => {
           setMuteDoor(JSON.parse(message.toString()))

@@ -267,7 +267,7 @@ const Notifications = () => {
       </div>
       <ul
         tabIndex={1}
-        className='dropdown-content bg-base-100 text-base-content rounded-box top-px mt-16 right-0 max-h-[720px]
+        className='dropdown-content bg-base-100 text-base-content rounded-box top-px mt-16 right-0 max-h-[calc(100dvh-180px)]
         w-[360px] md:max-h-[520px] md:w-[480px] overflow-y-auto
         border border-white/5 shadow-2xl outline outline-1 outline-black/5'
       >
@@ -288,10 +288,7 @@ const Notifications = () => {
             {!loading ? (
               notificationList.length > 0 ? (
                 notificationList.map((item, index) => (
-                  <li
-                    className='flex items-center gap-3 py-2 px-3'
-                    key={index}
-                  >
+                  <li className='flex items-center gap-3 py-2 px-3' key={index}>
                     <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
                       <RiAlarmWarningFill size={24} />
                     </div>
@@ -327,10 +324,7 @@ const Notifications = () => {
             {!loading ? (
               notificationList.length > 0 ? (
                 notificationList.map((item, index) => (
-                  <li
-                    className='flex items-center gap-3 py-2 px-3'
-                    key={index}
-                  >
+                  <li className='flex items-center gap-3 py-2 px-3' key={index}>
                     <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
                       {subTextNotiDetailsIcon(item.message)}
                     </div>

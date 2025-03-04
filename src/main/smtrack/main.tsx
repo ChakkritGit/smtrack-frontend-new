@@ -208,7 +208,7 @@ const MainSmtrack = () => {
         <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content'>
           <Navbar />
-          <div className='min-h-[calc(100dvh-64px)] pb-[75px]'>
+          <div className='min-h-[calc(100dvh-64px)] pb-[84px]'>
             <Outlet />
           </div>
           <BottomBar />
