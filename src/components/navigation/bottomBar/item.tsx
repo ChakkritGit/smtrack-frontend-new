@@ -84,7 +84,7 @@ const BottomNavItem = (props: BottomItemProps) => {
               {isActive
                 ? React.createElement(icon[0], { size: 24 })
                 : React.createElement(icon[1], { size: 24 })}
-              <span className='text-[12px] leading-normal truncate max-w-[64px]'>
+              <span className='text-[10px] leading-normal truncate max-w-[64px]'>
                 {text}
               </span>
               <span
@@ -110,7 +110,7 @@ const BottomNavItem = (props: BottomItemProps) => {
             <img src={userProfile?.pic ?? DefaultPic} alt='Profile' />
           </div>
         </div>
-        <span className='text-[12px] leading-normal truncate max-w-[64px]'>
+        <span className='text-[10px] leading-normal truncate max-w-[64px]'>
           {t('tabAccount')}
         </span>
         <span

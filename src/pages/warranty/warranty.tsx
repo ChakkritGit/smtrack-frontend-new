@@ -19,7 +19,7 @@ import axiosInstance from '../../constants/axios/axiosInstance'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
 import { WarrantiesType } from '../../types/smtrack/warranties/warranties'
 import { RootState } from '../../redux/reducers/rootReducer'
-import { RiDeleteBin7Line, RiEditLine } from 'react-icons/ri'
+import { RiDeleteBin7Line, RiEditLine, RiPrinterLine } from 'react-icons/ri'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import Loading from '../../components/skeleton/table/loading'
 import DataTableNoData from '../../components/skeleton/table/noData'
@@ -31,6 +31,7 @@ import { GlobalContext } from '../../contexts/globalContext'
 import { GlobalContextType } from '../../types/global/globalContext'
 import { HospitalsType } from '../../types/global/hospitals/hospitalType'
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
 
 type Company = {
   key: number
@@ -39,6 +40,7 @@ type Company = {
 
 const Warranty = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { t } = useTranslation()
   const { globalSearch, tokenDecode } = useSelector(
     (state: RootState) => state.utils
@@ -542,6 +544,22 @@ const Warranty = () => {
               </button>
             )}
           </div>
+        )
+      },
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('print'),
+      cell: items => {
+        return (
+          <button
+            className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
+            key={items.id}
+            onClick={() => navigate('/warranty/preview', { state: items })}
+          >
+            <RiPrinterLine size={16} />
+          </button>
         )
       },
       sortable: false,

@@ -195,7 +195,7 @@ const Sidebar = () => {
             <Link
               to={'/warranty'}
               className={`btn font-normal flex-nowrap justify-start w-full ${
-                location.pathname === '/warranty' ? 'btn-primary' : 'btn-ghost'
+                location.pathname === '/warranty' || location.pathname === '/warranty/preview' ? 'btn-primary' : 'btn-ghost'
               } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
               data-tip={t('sideWarranty')}
             >
