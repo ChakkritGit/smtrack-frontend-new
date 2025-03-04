@@ -200,6 +200,10 @@
     @apply rounded-none;
   }
 
+  &>div>div>div>div>div>div>button {
+    @apply text-inherit;
+  }
+
   &>div>div>div>div {
     @apply bg-base-100 duration-300 h-full;
   }
