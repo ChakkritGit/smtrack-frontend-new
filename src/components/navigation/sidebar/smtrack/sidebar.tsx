@@ -73,8 +73,8 @@ const Sidebar = () => {
                 : '—'}
             </h3>
           </div>
-          <div className='divider mt-0 mb-0'></div>
-          <div className='flex items-center justify-center flex-col gap-2 p-3'>
+          <div className='divider mt-0 mb-0 hidden sm:flex'></div>
+          <div className='hidden sm:flex items-center justify-center flex-col gap-2 p-3'>
             <Link
               to={'/'}
               className={`btn font-normal flex-nowrap justify-start w-full ${
@@ -247,7 +247,7 @@ const Sidebar = () => {
             )}
             <Link
               to={'/settings'}
-              className={`btn font-normal flex-nowrap justify-start w-full ${
+              className={`btn hidden sm:flex font-normal flex-nowrap justify-start w-full ${
                 location.pathname === '/settings' ? 'btn-primary' : 'btn-ghost'
               } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
               data-tip={t('sideSetting')}
