@@ -37,11 +37,7 @@ const BottomNavItem = (props: BottomItemProps) => {
         }
         ${
           ['cupcake', 'valentine', 'forest', 'pastel', 'acid'].includes(themeMode)
-            ? `bottom-5 mx-auto w-[95%] rounded-btn ${
-          isScrollingDown
-            ? '!h-[0px] opacity-0'
-            : 'h-[75px] shadow-md opacity-100'
-        } !pb-0`
+            ? `bottom-5 mx-auto w-[95%] rounded-btn !pb-0`
             : ''
         }`}
     >
