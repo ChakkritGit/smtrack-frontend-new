@@ -32,7 +32,8 @@ const MainTms = () => {
     tokenDecode,
     socketData,
     soundMode,
-    popUpMode
+    popUpMode,
+    themeMode
   } = useSelector((state: RootState) => state.utils)
   const { token } = cookieDecode || {}
   const { id, hosId, role } = tokenDecode || {}
@@ -207,7 +208,7 @@ const MainTms = () => {
         <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content'>
           <Navbar />
-          <div className='min-h-[calc(100dvh-64px)] pb-[84px]'>
+          <div className={`min-h-[calc(100dvh-64px)] pb-[84px] ${['cupcake', 'valentine', 'forest', 'pastel', 'acid'].includes(themeMode) ? 'pb-[100px]' : ''}`}>
             <Outlet />
           </div>
           <BottomBar />

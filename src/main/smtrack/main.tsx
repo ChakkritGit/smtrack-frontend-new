@@ -33,7 +33,8 @@ const MainSmtrack = () => {
     submitLoading,
     socketData,
     soundMode,
-    popUpMode
+    popUpMode,
+    themeMode
   } = useSelector((state: RootState) => state.utils)
   const { token } = cookieDecode || {}
   const { id, role, hosId } = tokenDecode || {}
@@ -208,7 +209,7 @@ const MainSmtrack = () => {
         <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content'>
           <Navbar />
-          <div className='min-h-[calc(100dvh-64px)] pb-[84px]'>
+          <div className={`min-h-[calc(100dvh-64px)] pb-[84px] ${['cupcake', 'valentine', 'forest', 'pastel', 'acid'].includes(themeMode) ? 'pb-[100px]' : ''}`}>
             <Outlet />
           </div>
           <BottomBar />
