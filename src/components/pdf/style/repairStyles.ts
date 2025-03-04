@@ -186,7 +186,7 @@ const style = StyleSheet.create({
   },
   tableSignatureRight: {
     width: '50%',
-    padding: 5,
+    paddingVertical: 5,
     paddingHorizontal: 10
   },
   signatureWrapper: {
@@ -283,15 +283,20 @@ const style = StyleSheet.create({
   },
   footerLeft: {
     width: '50%',
-    padding: 5
+    paddingVertical: 5,
+    paddingHorizontal: 15
   },
   footerRight: {
     width: '50%',
-    padding: 5
+    paddingVertical: 5,
+    paddingHorizontal: 15
   },
   notic: {
+    position: 'absolute',
+    bottom: 30,
+    left: 35,
+    right: 35,
     fontSize: 10,
-    marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'

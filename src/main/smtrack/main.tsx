@@ -185,7 +185,7 @@ const MainSmtrack = () => {
         ),
         {
           icon: changIcon(socketData.message),
-          duration: 100000000000,
+          duration: 10000,
           style: {
             backgroundColor:
               'var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity, 1)))',
