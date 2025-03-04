@@ -461,7 +461,7 @@ export default {
     titleError: 'อุ๊ปส์!',
     descriptionError: 'ไม่พบหน้า',
     descriptionErrorWrong: 'มีบางอย่างผิดพลาด โปรดลองอีกครั้ง',
-    buttonErrorBack: 'กลับไป',
+    buttonErrorBack: 'กลับ',
     titleNotAccess: 'ปฏิเสธการเข้าใช้',
     descriptionNotAccess: 'คุณไม่ได้รับอนุญาตให้เข้าถึงหน้านี้!',
 
