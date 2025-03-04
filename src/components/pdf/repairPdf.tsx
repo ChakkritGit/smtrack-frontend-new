@@ -83,12 +83,12 @@ const RepairPdf = () => {
           >
             <View style={style.headerColumn}>
               <Text style={style.headerTextSq}>
-                ลำดับที่{' '}
+                ลำดับที่{' '}{' '}
                 <Text style={style.headerTextSqColor}>{state?.seq ?? '—'}</Text>
               </Text>
               <Text style={style.headerTitle}>ใบแจ้งซ่อม</Text>
               <Text style={style.headerTextNumber}>
-                เลขที่{' '}
+                เลขที่{' '}{' '}
                 <Text style={style.headerTextNumberColor}>
                   {state?.id ? state?.id.substring(0, 10) : '—'}
                 </Text>
@@ -414,7 +414,7 @@ const RepairPdf = () => {
             <View style={style.notic}>
               <View style={style.noticText}>
                 <Text style={style.noticTextBold}>หมายเหตุ*</Text>
-                <Text>กรุณาพิมพ์สำเนาสองฉบับเพื่อนำส่งและเก็บไว้ </Text>
+                <Text>กรุณาพิมพ์สำเนาสองฉบับเพื่อนำส่งและเก็บไว้ {' '}</Text>
               </View>
               <Text>{formatDate(state?.createAt)} Rev.01</Text>
             </View>
