@@ -32,12 +32,16 @@ const BottomNavItem = (props: BottomItemProps) => {
       className={`btm-nav overflow-hidden bottom-0 px-3 pb-2 sm:hidden bg-base-100/80 backdrop-blur ease-in-out duration-300 z-[89]
         ${
           isScrollingDown
-            ? '!h-[0px] opacity-0'
+            ? 'h-[0px] opacity-0'
             : 'h-[80px] shadow-md opacity-100'
         }
         ${
           ['cupcake', 'valentine', 'forest', 'pastel', 'acid'].includes(themeMode)
-            ? 'bottom-5 mx-auto w-[95%] rounded-btn !h-[75px] !pb-0'
+            ? `bottom-5 mx-auto w-[95%] rounded-btn ${
+          isScrollingDown
+            ? 'h-[0px] opacity-0'
+            : 'h-[75px] shadow-md opacity-100'
+        } !pb-0`
             : ''
         }`}
     >
