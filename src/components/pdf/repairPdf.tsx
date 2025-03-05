@@ -432,7 +432,7 @@ const RepairPdf = () => {
         <Loading />
       ) : os === 'iOS' ? (
         <Worker
-          workerUrl={`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js`}
+          workerUrl={`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`}
         >
           <div className='w-full h-full'>
             <Viewer
