@@ -29,6 +29,7 @@ const WarrantyPdf = () => {
   const parser = new UAParser()
   const os = parser.getOS().name
   const defaultLayoutPluginInstance = defaultLayoutPlugin()
+  const pdfUrl = '/pdf.worker.min.js'
 
   useEffect(() => {
     if (state === null) navigate('/warranty')
@@ -292,9 +293,7 @@ const WarrantyPdf = () => {
       {instance.loading ? (
         <Loading />
       ) : os === 'iOS' ? (
-        <Worker
-          workerUrl={`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`}
-        >
+        <Worker workerUrl={pdfUrl}>
           <div className='w-full h-full'>
             <Viewer
               fileUrl={instance?.url ?? ''}
