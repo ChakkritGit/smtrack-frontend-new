@@ -12,7 +12,6 @@ import {
 } from 'react-icons/ri'
 import { HiOutlineArrowsUpDown } from 'react-icons/hi2'
 import { tempOfDayTms } from '../../../../constants/utils/dashboardCardStatus'
-// import { GaugeComponent } from 'react-gauge-component'
 
 type PropsType = {
   deviceData: DeviceLogTms | undefined
@@ -65,49 +64,6 @@ const CardStatusTms = (props: PropsType) => {
                 : '—'}
             </span>
             <sub> °C</sub>
-            {/* {deviceData && deviceData.log.length > 0 && (
-              <GaugeComponent
-                type='semicircle'
-                pointer={{
-                  color: '#345243',
-                  length: 0.8,
-                  width: 15
-                }}
-                labels={{
-                  valueLabel: {
-                    formatTextValue: value => value + 'ºC',
-                    style: {
-                      fill:
-                        (deviceData?.log &&
-                          deviceData?.log[0]?.tempValue >
-                            deviceData?.maxTemp) ||
-                        (deviceData?.log &&
-                          deviceData?.log[0]?.tempValue < deviceData?.minTemp)
-                          ? '#e92a2a'
-                          : ''
-                    }
-                  },
-                  tickLabels: {
-                    type: 'outer',
-                    defaultTickValueConfig: {
-                      formatTextValue: (value: any) => value + 'ºC',
-                      style: {
-                        fontSize: 10
-                      }
-                    },
-                    ticks: [
-                      { value: Number(deviceData?.minTemp) },
-                      { value: Number(deviceData?.maxTemp) }
-                    ]
-                  }
-                }}
-                value={parseFloat(
-                  String(deviceData?.log[0]?.tempValue?.toFixed(2))
-                )}
-                minValue={-40}
-                maxValue={120}
-              />
-            )} */}
           </div>
         </div>
       </div>
