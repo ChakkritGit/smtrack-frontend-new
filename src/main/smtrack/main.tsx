@@ -130,13 +130,14 @@ const MainSmtrack = () => {
 
   useEffect(() => {
     const isMessageValid = socketData?.message?.toLowerCase()
+
     if (
       socketData &&
       !popUpMode &&
       !soundMode &&
       isMessageValid &&
-      !isMessageValid?.includes('device offline') &&
-      !isMessageValid?.includes('device online')
+      (!isMessageValid?.includes('device offline') ||
+        !isMessageValid?.includes('device online'))
     ) {
       if (!isPlaying) {
         notiSound.play()
@@ -151,8 +152,8 @@ const MainSmtrack = () => {
     if (
       socketData &&
       !popUpMode &&
-      !socketData.message?.includes('Device offline') &&
-      !socketData.message?.includes('Device online')
+      (!isMessageValid?.includes('device offline') ||
+        !isMessageValid?.includes('device online'))
     ) {
       toast(
         (_t: ToastOptions) => (
@@ -177,7 +178,7 @@ const MainSmtrack = () => {
               </span>
             </div>
             <button
-              className='flex items-center justify-center bg-base-300/30 text-base-content/50 border-none rounded-full p-2 cursor-pointer hover:opacity-50 duration-300'
+              className='flex items-center justify-center bg-base-300/50 text-base-content/70 border-none rounded-full p-2 cursor-pointer hover:bg-red-500/50 hover:text-red-500/70 hover:opacity-50 duration-300'
               onClick={() => toast.dismiss(_t.id)}
             >
               <RiCloseLargeFill size={24} />
@@ -209,7 +210,15 @@ const MainSmtrack = () => {
         <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content'>
           <Navbar />
-          <div className={`min-h-[calc(100dvh-64px)] pb-[84px] ${['cupcake', 'valentine', 'forest', 'pastel', 'acid'].includes(themeMode) ? 'pb-[100px]' : ''}`}>
+          <div
+            className={`min-h-[calc(100dvh-64px)] pb-[84px] sm:pb-0 ${
+              ['cupcake', 'valentine', 'forest', 'pastel', 'acid'].includes(
+                themeMode
+              )
+                ? 'pb-[100px] sm:pb-0'
+                : ''
+            }`}
+          >
             <Outlet />
           </div>
           <BottomBar />
