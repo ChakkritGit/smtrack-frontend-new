@@ -398,10 +398,6 @@ body {
   @apply !bg-base-100 !text-base-content !pl-4 !py-3 !max-w-[430px];
 }
 
-.go3958317564 {
-  @apply !justify-between;
-}
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

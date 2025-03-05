@@ -164,7 +164,7 @@ const MainTms = () => {
               <span className='text-sm max-w-[320px] break-words'>
                 {changText(socketData.message, t)}
               </span>
-              <span className='text-sm'>
+              <span className='text-sm mt-1'>
                 {new Date(socketData.time).toLocaleString('th-TH', {
                   day: '2-digit',
                   month: '2-digit',
