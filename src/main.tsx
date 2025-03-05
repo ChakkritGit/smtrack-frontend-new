@@ -1,4 +1,5 @@
 import './index.css'
+import '@react-pdf-viewer/core/lib/styles/index.css'
 import 'react-loading-skeleton/dist/skeleton.css'
 import 'swiper/css'
 import 'swiper/css/pagination'

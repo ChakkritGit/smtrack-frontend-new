@@ -19,6 +19,7 @@ import ThanesBannerLogo from '../../assets/images/ts-logo.png'
 import ThanesSciBannerLogo from '../../assets/images/Thanesscience.png'
 import Loading from '../skeleton/table/loading'
 import { UAParser } from 'ua-parser-js'
+import { Worker, Viewer } from '@react-pdf-viewer/core'
 
 const WarrantyPdf = () => {
   const { t } = useTranslation()
@@ -289,12 +290,13 @@ const WarrantyPdf = () => {
       {instance.loading ? (
         <Loading />
       ) : os === 'iOS' ? (
-        <iframe
-          src={instance?.url || ''}
-          width='100%'
-          height='100%'
-          style={{ border: 'none' }}
-        />
+        <Worker
+          workerUrl={`https://unpkg.com/pdfjs-dist@1.7/build/pdf.worker.min.js`}
+        >
+          <div style={{ height: '100%', width: '100%' }}>
+            <Viewer fileUrl={instance?.url ?? ''} />
+          </div>
+        </Worker>
       ) : (
         <PDFViewer
           width={'100%'}

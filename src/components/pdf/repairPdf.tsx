@@ -16,6 +16,7 @@ import { RiFilePdf2Fill, RiFileSettingsLine } from 'react-icons/ri'
 import { style } from './style/repairStyles'
 import Loading from '../skeleton/table/loading'
 import { UAParser } from 'ua-parser-js'
+import { Worker, Viewer } from '@react-pdf-viewer/core'
 
 const RepairPdf = () => {
   const { t } = useTranslation()
@@ -428,12 +429,13 @@ const RepairPdf = () => {
       {instance.loading ? (
         <Loading />
       ) : os === 'iOS' ? (
-        <iframe
-          src={instance?.url || ''}
-          width='100%'
-          height='100%'
-          style={{ border: 'none' }}
-        />
+        <Worker
+          workerUrl={`https://unpkg.com/pdfjs-dist@1.7/build/pdf.worker.min.js`}
+        >
+          <div style={{ height: '100%', width: '100%' }}>
+            <Viewer fileUrl={instance?.url ?? ''} />
+          </div>
+        </Worker>
       ) : (
         <PDFViewer
           width={'100%'}
