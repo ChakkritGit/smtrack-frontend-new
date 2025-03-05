@@ -19,34 +19,34 @@ import { TFunction } from 'i18next'
 const changIcon = (text: string) => {
   if (text.split(':')[1]?.substring(1, 5) === 'DOOR') {
     if (text.split(' ')[3] === 'opened') {
-      return <RiDoorOpenLine className='text-red-500 text-[28px] xl:text-[32px]' />
+      return <RiDoorOpenLine className='text-red-500 text-[28px] xl:text-[32px] w-[15%]' />
     } else {
-      return <RiDoorClosedLine className='text-primary text-[28px] xl:text-[32px]' />
+      return <RiDoorClosedLine className='text-primary text-[28px] xl:text-[32px] w-[15%]' />
     }
   } else if (text.split(' ')[0] === 'Power') {
     if (text.split(' ')[1] === 'off') {
-      return <TbPlugConnectedX className='text-red-500 text-[28px] xl:text-[32px]' />
+      return <TbPlugConnectedX className='text-red-500 text-[28px] xl:text-[32px] w-[15%]' />
     } else {
-      return <TbPlugConnected className='text-primary text-[28px] xl:text-[32px]' />
+      return <TbPlugConnected className='text-primary text-[28px] xl:text-[32px] w-[15%]' />
     }
   } else if (text.split(' ')[0] === 'SDCard') {
     if (text.split(' ')[1] === 'failed') {
-      return <MdOutlineSdCardAlert className='text-red-500 text-[28px] xl:text-[32px]' />
+      return <MdOutlineSdCardAlert className='text-red-500 text-[28px] xl:text-[32px] w-[15%]' />
     } else {
-      return <MdOutlineSdCard className='text-primary text-[28px] xl:text-[32px]' />
+      return <MdOutlineSdCard className='text-primary text-[28px] xl:text-[32px] w-[15%]' />
     }
   } else if (text.split(' ')[0]?.substring(0, 5) === 'PROBE') {
     if (text.split(' ')[4] === 'high') {
-      return <FaTemperatureArrowUp className='text-red-500 text-[28px] xl:text-[32px]' />
+      return <FaTemperatureArrowUp className='text-red-500 text-[28px] xl:text-[32px] w-[15%]' />
     } else if (text.split(' ')[4] === 'low') {
-      return <FaTemperatureArrowDown className='text-red-500 text-[28px] xl:text-[32px]' />
+      return <FaTemperatureArrowDown className='text-red-500 text-[28px] xl:text-[32px] w-[15%]' />
     } else {
-      return <FaTemperatureEmpty className='text-primary text-[28px] xl:text-[32px]' />
+      return <FaTemperatureEmpty className='text-primary text-[28px] xl:text-[32px] w-[15%]' />
     }
   } else if (text.split('/')[0] === 'REPORT') {
-    return <TbReportAnalytics className='text-primary text-[28px] xl:text-[32px]' />
+    return <TbReportAnalytics className='text-primary text-[28px] xl:text-[32px] w-[15%]' />
   } else {
-    return <RiAlarmWarningFill className='text-red-500 text-[28px] xl:text-[32px]' />
+    return <RiAlarmWarningFill className='text-red-500 text-[28px] xl:text-[32px] w-[15%]' />
   }
 }
 

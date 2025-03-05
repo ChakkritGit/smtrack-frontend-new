@@ -156,12 +156,12 @@ const MainTms = () => {
     ) {
       toast(
         (_t: ToastOptions) => (
-          <div className='flex items-center justify-between gap-4 rounded-full min-w-[230px]'>
+          <div className='flex items-center justify-between gap-4 rounded-full min-w-[220px]'>
             <div className='flex flex-col'>
-              <span className='text-sm font-bold max-w-[280px] break-words'>
+              <span className='text-sm font-bold max-w-[320px] break-words'>
                 {socketData.device ? socketData.device : '- -'}
               </span>
-              <span className='text-sm max-w-[280px] break-words'>
+              <span className='text-sm max-w-[320px] break-words'>
                 {changText(socketData.message, t)}
               </span>
               <span className='text-sm'>
@@ -177,7 +177,7 @@ const MainTms = () => {
               </span>
             </div>
             <button
-              className='flex items-center justify-center bg-base-300/50 text-base-content/70 border-none rounded-full p-2 cursor-pointer hover:bg-red-500/50 hover:text-red-500/70 hover:opacity-50 duration-300'
+              className='flex items-center justify-center bg-base-300/50 text-base-content/60 border-none rounded-full p-2 cursor-pointer hover:bg-red-500/20 hover:text-red-700 duration-300'
               onClick={() => toast.dismiss(_t.id)}
             >
               <RiCloseLargeFill size={24} />
@@ -186,7 +186,7 @@ const MainTms = () => {
         ),
         {
           icon: changIcon(socketData.message),
-          duration: 10000,
+          duration: 15000,
           style: {
             backgroundColor:
               'var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity, 1)))',
