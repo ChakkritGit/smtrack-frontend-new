@@ -129,7 +129,6 @@ const ResetPassword = () => {
                     }
                     value={userPassword.newPassWord}
                     className='grow caret-primary w-[100px] md:placeholder:opacity-0 md:w-auto'
-                    autoFocus
                     max={20}
                     min={4}
                   />
