@@ -61,7 +61,10 @@ export default function Fullchartpdf (pdftype: pdftype) {
             </View>
           </View>
           <View style={StylesPdf.right}>
-            <Image src={hosImg ? hosImg : defaultImg} style={StylesPdf.img} />
+            <Image
+              source={hosImg ? hosImg : defaultImg}
+              style={StylesPdf.img}
+            />
             <Text>{hospital}</Text>
             <Text>{ward}</Text>
           </View>

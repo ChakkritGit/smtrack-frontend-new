@@ -1,4 +1,4 @@
-import { PDFViewer } from '@react-pdf/renderer'
+import { PDFViewer, usePDF } from '@react-pdf/renderer'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   RiBarChart2Line,
@@ -7,6 +7,11 @@ import {
 } from 'react-icons/ri'
 import { useTranslation } from 'react-i18next'
 import Fullchartpdf from './fullChartPdf'
+import { useMemo } from 'react'
+import { UAParser } from 'ua-parser-js'
+import Loading from '../skeleton/table/loading'
+import { Worker, Viewer } from '@react-pdf-viewer/core'
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'
 
 function PreviewPDF () {
   const { t } = useTranslation()
@@ -25,6 +30,29 @@ function PreviewPDF () {
     tempMin,
     tempMax
   } = state
+  const parser = new UAParser()
+  const os = parser.getOS().name
+  const defaultLayoutPluginInstance = defaultLayoutPlugin()
+  const pdfUrl = '/pdf.worker.min.js'
+
+  const pdfViewer = useMemo(
+    () => (
+      <Fullchartpdf
+        title={title}
+        image={image}
+        chartIMG={chartIMG}
+        devSn={devSn}
+        devName={devName}
+        hospital={hospital}
+        ward={ward}
+        dateTime={dateTime}
+        hosImg={hosImg}
+      />
+    ),
+    [state]
+  )
+
+  const [instance, _update] = usePDF({ document: pdfViewer })
 
   return (
     <div className='container mx-auto p-3 h-[calc(100dvh-130px)]'>
@@ -66,23 +94,27 @@ function PreviewPDF () {
         </ul>
       </div>
       <div className='h-full mt-3'>
-        <PDFViewer
-          width={'100%'}
-          height={'100%'}
-          style={{ borderRadius: 'var(--border-radius-small)' }}
-        >
-          <Fullchartpdf
-            title={title}
-            image={image}
-            chartIMG={chartIMG}
-            devSn={devSn}
-            devName={devName}
-            hospital={hospital}
-            ward={ward}
-            dateTime={dateTime}
-            hosImg={hosImg}
-          />
-        </PDFViewer>
+        {instance.loading ? (
+          <Loading />
+        ) : os !== 'iOS' ? (
+          <Worker workerUrl={pdfUrl}>
+            <div className='w-full h-full'>
+              <Viewer
+                fileUrl={instance?.url ?? ''}
+                plugins={[defaultLayoutPluginInstance]}
+              />
+            </div>
+          </Worker>
+        ) : (
+          <PDFViewer
+            width={'100%'}
+            height={'100%'}
+            style={{ borderRadius: 'var(--border-radius-small)' }}
+            className='!rounded-md'
+          >
+            {pdfViewer}
+          </PDFViewer>
+        )}
       </div>
     </div>
   )
