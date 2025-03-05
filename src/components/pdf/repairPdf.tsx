@@ -7,7 +7,7 @@ import {
   Text,
   View
 } from '@react-pdf/renderer'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { RepairType } from '../../types/smtrack/repair/repairType'
 import { useTranslation } from 'react-i18next'
@@ -37,24 +37,8 @@ const RepairPdf = () => {
     }).format(date)
   }
 
-  return (
-    <div className='h-[calc(100dvh-200px)] sm:h-[calc(100dvh-140px)] p-3 px-[16px]'>
-      <div className='breadcrumbs text-sm mb-2'>
-        <ul>
-          <li>
-            <a onClick={() => navigate('/repair')}>
-              <RiFileSettingsLine size={16} className='mr-1' />
-              {t('sideRepair')}
-            </a>
-          </li>
-          <li>
-            <span className='inline-flex items-center gap-2'>
-              <RiFilePdf2Fill size={16} className='mr-1' />
-              {t('pagePDF')}
-            </span>
-          </li>
-        </ul>
-      </div>
+  const pdfViewer = useMemo(
+    () => (
       <PDFViewer
         width={'100%'}
         height={'100%'}
@@ -83,12 +67,12 @@ const RepairPdf = () => {
           >
             <View style={style.headerColumn}>
               <Text style={style.headerTextSq}>
-                ลำดับที่{' '}{' '}
+                ลำดับที่{' '}
                 <Text style={style.headerTextSqColor}>{state?.seq ?? '—'}</Text>
               </Text>
               <Text style={style.headerTitle}>ใบแจ้งซ่อม</Text>
               <Text style={style.headerTextNumber}>
-                เลขที่{' '}{' '}
+                เลขที่{' '}
                 <Text style={style.headerTextNumberColor}>
                   {state?.id ? state?.id.substring(0, 10) : '—'}
                 </Text>
@@ -414,13 +398,36 @@ const RepairPdf = () => {
             <View style={style.notic} fixed>
               <View style={style.noticText}>
                 <Text style={style.noticTextBold}>หมายเหตุ*</Text>
-                <Text>กรุณาพิมพ์สำเนาสองฉบับเพื่อนำส่งและเก็บไว้ {' '}</Text>
+                <Text>กรุณาพิมพ์สำเนาสองฉบับเพื่อนำส่งและเก็บไว้ </Text>
               </View>
               <Text>{formatDate(state?.createAt)} Rev.01</Text>
             </View>
           </Page>
         </Document>
       </PDFViewer>
+    ),
+    []
+  )
+
+  return (
+    <div className='h-[calc(100dvh-200px)] sm:h-[calc(100dvh-140px)] p-3 px-[16px]'>
+      <div className='breadcrumbs text-sm mb-2'>
+        <ul>
+          <li>
+            <a onClick={() => navigate('/repair')}>
+              <RiFileSettingsLine size={16} className='mr-1' />
+              {t('sideRepair')}
+            </a>
+          </li>
+          <li>
+            <span className='inline-flex items-center gap-2'>
+              <RiFilePdf2Fill size={16} className='mr-1' />
+              {t('pagePDF')}
+            </span>
+          </li>
+        </ul>
+      </div>
+      {pdfViewer}
     </div>
   )
 }

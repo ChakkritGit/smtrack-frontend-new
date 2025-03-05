@@ -21,7 +21,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { RepairType } from '../../types/smtrack/repair/repairType'
-import { RiDeleteBin2Line, RiEditLine, RiPrinterLine } from 'react-icons/ri'
+import { RiDeleteBin7Line, RiEditLine, RiPrinterLine } from 'react-icons/ri'
 import { Option, Ward } from '../../types/global/hospitalAndWard'
 import Select from 'react-select'
 import { GlobalContextType } from '../../types/global/globalContext'
@@ -440,7 +440,7 @@ const Repair = () => {
                 })
             }
           >
-            <RiDeleteBin2Line size={16} />
+            <RiDeleteBin7Line size={20} />
           </button>
         </div>
       ),
@@ -452,11 +452,11 @@ const Repair = () => {
       cell: items => {
         return (
           <button
-            className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
+            className='btn btn-ghost flex !text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
             key={items.id}
             onClick={() => navigate('/repair/preview', { state: items })}
           >
-            <RiPrinterLine size={16} />
+            <RiPrinterLine size={20} />
           </button>
         )
       },

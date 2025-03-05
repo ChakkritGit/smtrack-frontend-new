@@ -554,11 +554,11 @@ const Warranty = () => {
       cell: items => {
         return (
           <button
-            className='btn btn-ghost flex text-base-content min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
+            className='btn btn-ghost flex !text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
             key={items.id}
             onClick={() => navigate('/warranty/preview', { state: items })}
           >
-            <RiPrinterLine size={16} />
+            <RiPrinterLine size={20} />
           </button>
         )
       },

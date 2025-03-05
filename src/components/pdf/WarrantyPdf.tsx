@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { WarrantiesType } from '../../types/smtrack/warranties/warranties'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { RiFilePdf2Fill, RiShieldCheckLine } from 'react-icons/ri'
 import { useTranslation } from 'react-i18next'
 import {
@@ -41,24 +41,8 @@ const WarrantyPdf = () => {
     }).format(date)
   }
 
-  return (
-    <div className='h-[calc(100dvh-200px)] sm:h-[calc(100dvh-140px)] p-3 px-[16px]'>
-      <div className='breadcrumbs text-sm mb-2'>
-        <ul>
-          <li>
-            <a onClick={() => navigate('/warranty')}>
-              <RiShieldCheckLine size={16} className='mr-1' />
-              {t('sideWarranty')}
-            </a>
-          </li>
-          <li>
-            <span className='inline-flex items-center gap-2'>
-              <RiFilePdf2Fill size={16} className='mr-1' />
-              {t('pagePDF')}
-            </span>
-          </li>
-        </ul>
-      </div>
+  const pdfViewer = useMemo(
+    () => (
       <PDFViewer
         width={'100%'}
         height={'100%'}
@@ -286,6 +270,29 @@ const WarrantyPdf = () => {
           </Page>
         </Document>
       </PDFViewer>
+    ),
+    []
+  )
+
+  return (
+    <div className='h-[calc(100dvh-200px)] sm:h-[calc(100dvh-140px)] p-3 px-[16px]'>
+      <div className='breadcrumbs text-sm mb-2'>
+        <ul>
+          <li>
+            <a onClick={() => navigate('/warranty')}>
+              <RiShieldCheckLine size={16} className='mr-1' />
+              {t('sideWarranty')}
+            </a>
+          </li>
+          <li>
+            <span className='inline-flex items-center gap-2'>
+              <RiFilePdf2Fill size={16} className='mr-1' />
+              {t('pagePDF')}
+            </span>
+          </li>
+        </ul>
+      </div>
+      {pdfViewer}
     </div>
   )
 }

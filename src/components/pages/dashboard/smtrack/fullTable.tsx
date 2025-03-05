@@ -6,7 +6,7 @@ import {
   DeviceLogs
 } from '../../../../types/smtrack/devices/deviceType'
 import Loading from '../../../skeleton/table/loading'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 interface FullTablePropType {
   dataLog: DeviceLogs[]
@@ -59,8 +59,8 @@ const FullTableComponent = (props: FullTablePropType) => {
     )
   }, [dataLog])
 
-  return (
-    <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300 mt-5'>
+  const table = useMemo(
+    () => (
       <DataTable
         pagination
         fixedHeader
@@ -74,6 +74,13 @@ const FullTableComponent = (props: FullTablePropType) => {
         paginationRowsPerPageOptions={[12, 30, 50, 100]}
         className='md:!max-h-[calc(100dvh-580px)]'
       />
+    ),
+    [reverseArray, isLoading]
+  )
+
+  return (
+    <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300 mt-5'>
+      {table}
     </div>
   )
 }

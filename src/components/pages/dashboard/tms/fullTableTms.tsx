@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { LogChartTms } from '../../../../types/tms/devices/deviceType'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import DataTableNoData from '../../../skeleton/table/noData'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Loading from '../../../skeleton/table/loading'
 
 interface FullTablePropType {
@@ -55,8 +55,8 @@ const FullTableTmsComponent = (props: FullTablePropType) => {
     )
   }, [dataLog])
 
-  return (
-    <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300 mt-5'>
+  const table = useMemo(
+    () => (
       <DataTable
         pagination
         fixedHeader
@@ -70,6 +70,13 @@ const FullTableTmsComponent = (props: FullTablePropType) => {
         paginationRowsPerPageOptions={[10, 30, 50, 100]}
         className='md:!max-h-[calc(100dvh-580px)]'
       />
+    ),
+    [reverseArray, isLoading]
+  )
+
+  return (
+    <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300 mt-5'>
+      {table}
     </div>
   )
 }

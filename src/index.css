@@ -57,6 +57,7 @@
   font-family: 'Anuphan', sans-serif;
   user-select: none;
   -webkit-user-select: none;
+  outline: 1px solid red !important;
 }
 
 .react-select__control {
@@ -395,7 +396,7 @@ body {
 }
 
 .go2072408551 {
-  @apply !bg-base-100 !text-base-content !pl-4 !py-3 !max-w-[430px];
+  @apply !bg-base-100 !text-base-content !p-3 !max-w-[430px];
 }
 
 input::-webkit-outer-spin-button,

@@ -195,6 +195,7 @@ const HomeTms = () => {
           data={devicesFiltered}
           paginationTotalRows={totalRows}
           paginationDefaultPage={currentPage}
+          paginationPerPage={perPage}
           progressPending={loading}
           progressComponent={<Loading />}
           noDataComponent={<DataTableNoData />}

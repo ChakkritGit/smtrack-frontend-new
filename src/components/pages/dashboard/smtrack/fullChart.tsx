@@ -2,6 +2,7 @@ import Chart from 'react-apexcharts'
 import { useTranslation } from 'react-i18next'
 import { DeviceLogs } from '../../../../types/smtrack/devices/deviceType'
 import Loading from '../../../skeleton/table/loading'
+import { useMemo } from 'react'
 
 interface FullChartPropType {
   dataLog: DeviceLogs[]
@@ -282,13 +283,14 @@ const FullChartComponent = (props: FullChartPropType) => {
     }
   }
 
+  const chart = useMemo(
+    () => <Chart options={options} series={series} height={680} />,
+    []
+  )
+
   return (
     <div className={`mt-3 ${isLoading ? 'h-[calc(100dvh-200px)]' : ''}`}>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <Chart options={options} series={series} height={680} />
-      )}
+      {isLoading ? <Loading /> : chart}
     </div>
   )
 }

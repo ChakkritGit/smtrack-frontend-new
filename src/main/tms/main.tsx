@@ -156,7 +156,7 @@ const MainTms = () => {
     ) {
       toast(
         (_t: ToastOptions) => (
-          <div className='flex items-center justify-between gap-4 rounded-full min-w-[220px]'>
+          <div className='flex items-center justify-between gap-4 min-w-[220px]'>
             <div className='flex flex-col'>
               <span className='text-sm font-bold max-w-[320px] break-words'>
                 {socketData.device ? socketData.device : '- -'}
