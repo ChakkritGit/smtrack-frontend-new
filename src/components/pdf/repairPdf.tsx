@@ -431,7 +431,7 @@ const RepairPdf = () => {
       </div>
       {instance.loading ? (
         <Loading />
-      ) : os !== 'iOS' ? (
+      ) : os === 'iOS' ? (
         <Worker workerUrl={pdfUrl}>
           <div className='w-full h-full'>
             <Viewer
