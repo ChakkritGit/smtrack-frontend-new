@@ -291,9 +291,9 @@ const WarrantyPdf = () => {
         <Loading />
       ) : os === 'iOS' ? (
         <Worker
-          workerUrl={`https://unpkg.com/pdfjs-dist@1.7/build/pdf.worker.min.js`}
+          workerUrl={`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js`}
         >
-          <div style={{ height: '100%', width: '100%' }}>
+          <div className='w-full h-full'>
             <Viewer fileUrl={instance?.url ?? ''} />
           </div>
         </Worker>
