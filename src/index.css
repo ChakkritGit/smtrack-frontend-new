@@ -57,7 +57,7 @@
   font-family: 'Anuphan', sans-serif;
   user-select: none;
   -webkit-user-select: none;
-  outline: 1px solid red !important;
+  /* outline: 1px solid red !important; */
 }
 
 .react-select__control {
