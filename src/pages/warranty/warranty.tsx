@@ -512,6 +512,14 @@ const Warranty = () => {
         return (
           <div className='flex items-center justify-center gap-3 p-3'>
             <button
+              className='btn btn-ghost flex !text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
+              key={item.id}
+              onClick={() => navigate('/warranty/preview', { state: item })}
+            >
+              <RiPrinterLine size={20} />
+            </button>
+            <div className='divider divider-horizontal mx-0'></div>
+            <button
               className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
               onClick={() => {
                 openEditModal(item)
@@ -548,23 +556,23 @@ const Warranty = () => {
       },
       sortable: false,
       center: true
-    },
-    {
-      name: t('print'),
-      cell: items => {
-        return (
-          <button
-            className='btn btn-ghost flex !text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
-            key={items.id}
-            onClick={() => navigate('/warranty/preview', { state: items })}
-          >
-            <RiPrinterLine size={20} />
-          </button>
-        )
-      },
-      sortable: false,
-      center: true
     }
+    // {
+    //   name: t('print'),
+    //   cell: items => {
+    //     return (
+    //   <button
+    //   className='btn btn-ghost flex !text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-primary'
+    //   key={items.id}
+    //   onClick={() => navigate('/warranty/preview', { state: items })}
+    // >
+    //   <RiPrinterLine size={20} />
+    // </button>
+    //     )
+    //   },
+    //   sortable: false,
+    //   center: true
+    // }
   ]
 
   const DataTableComponent = useMemo(() => {
