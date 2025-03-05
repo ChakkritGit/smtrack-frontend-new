@@ -37,7 +37,6 @@ const Notifications = () => {
   const navigate = useNavigate()
   const [notificationList, setNotification] = useState<NotificationType[]>([])
   const { role = 'USER' } = tokenDecode || {}
-  let notiLenght = 0
 
   const fetchNotificaton = async () => {
     try {
@@ -49,7 +48,6 @@ const Notifications = () => {
           : `/log/notification`
       )
       setNotification(response.data.data)
-      notiLenght = response.data.data.length
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error.message)
@@ -256,7 +254,7 @@ const Notifications = () => {
         w-[360px] md:max-h-[520px] md:w-[480px] overflow-y-auto
         border border-white/5 shadow-2xl outline outline-1 outline-black/5'
       >
-        <div className='flex items-center justify-between p-2 h-[49px]'>
+        <div className='flex items-center justify-between p-2 h-[54px] bg-base-100/70 backdrop-blur-md border-b border-base-content/10 shadow-sm sticky top-0 z-10'>
           <span className='text-base ml-2'>{t('titleNotification')}</span>
           <button
             className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 max-h-[34px] min-h-[34px]
@@ -267,7 +265,7 @@ const Notifications = () => {
             <RiArrowRightUpLine size={20} />
           </button>
         </div>
-        <div className='divider divider-vertical before:h-[1px] after:h-[1px] m-0 h-0'></div>
+        {/* <div className='divider divider-vertical before:h-[1px] after:h-[1px] m-0 h-0'></div> */}
         {role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode ? (
           <div>
             {notificationList.length > 0 ? (
