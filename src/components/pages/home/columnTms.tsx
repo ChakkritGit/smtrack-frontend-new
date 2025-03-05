@@ -1,5 +1,5 @@
 import { TFunctionNonStrict } from 'i18next'
-import { DeviceTmsType } from '../../../types/tms/devices/deviceType'
+import { DeviceTmsType, TmsLogType } from '../../../types/tms/devices/deviceType'
 import { TableColumn } from 'react-data-table-component'
 import { DoorKey } from '../../../types/global/doorQty'
 import { RiDoorClosedLine, RiDoorOpenLine } from 'react-icons/ri'
@@ -85,4 +85,68 @@ const columnTms = (
   ]
 }
 
-export { columnTms }
+
+const subColumnData = (
+  t: TFunctionNonStrict<'translation', undefined>
+): TableColumn<TmsLogType>[] => {
+  return [
+    {
+      name: 'MCUID',
+      selector: item => item.mcuId,
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('deviceProbeTb'),
+      selector: item => item.probe,
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('devicTemperatureTb'),
+      selector: item =>
+        item.tempValue ? `${item.tempValue.toFixed(2)}°C` : '—',
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('deviceDoorTb'),
+      cell: item => {
+        const doorCount: number = 1
+        const doors: DoorKey[] = ['door1']
+
+        return (
+          <>
+            {doors.slice(0, doorCount).map(doorKey => (
+              <div
+                key={doorKey}
+                className={`w-[24px] h-[24px] flex items-center justify-center rounded-btn ${
+                  item?.door
+                    ? 'bg-red-500 text-white'
+                    : 'border border-primary text-primary'
+                } duration-300`}
+              >
+                {item?.door ? (
+                  <RiDoorOpenLine size={14} />
+                ) : (
+                  <RiDoorClosedLine size={14} />
+                )}
+              </div>
+            ))}
+          </>
+        )
+      },
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('devicePlugTb'),
+      selector: item =>
+        !item?.plugin ? t('stateNormal') : t('stateProblem'),
+      sortable: false,
+      center: true
+    }
+  ]
+}
+
+export { columnTms, subColumnData }

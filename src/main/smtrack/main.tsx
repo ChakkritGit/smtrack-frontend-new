@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import Navbar from '../../components/navigation/navbar/navbar'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import axiosInstance from '../../constants/axios/axiosInstance'
@@ -40,7 +40,7 @@ const MainSmtrack = () => {
   const { id, role, hosId } = tokenDecode || {}
   const notiSound = new Audio(notificationSound)
   const [isFirstLoad, setIsFirstLoad] = useState(true)
-  let isPlaying = false
+  const isPlayingRef = useRef<boolean>(false)
   const toastLimit = 5
 
   const fetchUserProfile = async () => {
@@ -129,7 +129,7 @@ const MainSmtrack = () => {
   }, [toasts])
 
   useEffect(() => {
-    const isMessageValid = socketData?.message?.toLowerCase()
+    const isMessageValid = socketData?.message?.toLowerCase() ?? ''
 
     if (
       socketData &&
@@ -139,12 +139,12 @@ const MainSmtrack = () => {
       (!isMessageValid?.includes('device offline') ||
         !isMessageValid?.includes('device online'))
     ) {
-      if (!isPlaying) {
+      if (!isPlayingRef.current) {
         notiSound.play()
-        isPlaying = true
+        isPlayingRef.current = true
 
         setTimeout(() => {
-          isPlaying = false
+          isPlayingRef.current = false
         }, 3000)
       }
     }
@@ -159,10 +159,10 @@ const MainSmtrack = () => {
         (_t: ToastOptions) => (
           <div className='flex items-center gap-4 rounded-full w-max max-w-[280px]'>
             <div className='flex flex-col'>
-              <span className='text-base font-bold'>
+              <span className='text-base font-bold max-w-[280px] break-words'>
                 {socketData.device ? socketData.device : '- -'}
               </span>
-              <span className='text-[1rem]'>
+              <span className='text-[1rem] max-w-[280px] break-words'>
                 {changText(socketData.message, t)}
               </span>
               <span className='text-sm'>

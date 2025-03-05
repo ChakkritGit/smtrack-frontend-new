@@ -13,9 +13,13 @@ import HospitalAndWard from '../../components/filter/hospitalAndWard'
 import Loading from '../../components/skeleton/table/loading'
 import DataTableNoData from '../../components/skeleton/table/noData'
 import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
-import { CountTms, DeviceTmsType } from '../../types/tms/devices/deviceType'
+import {
+  CountTms,
+  DeviceTmsType,
+  TmsLogType
+} from '../../types/tms/devices/deviceType'
 import HomeCountTms from '../../components/pages/home/homeCountTms'
-import { columnTms } from '../../components/pages/home/columnTms'
+import { columnTms, subColumnData } from '../../components/pages/home/columnTms'
 
 const HomeTms = () => {
   const { t } = useTranslation()
@@ -38,7 +42,7 @@ const HomeTms = () => {
 
   const [loading, setLoading] = useState(false)
   const [totalRows, setTotalRows] = useState(0)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(cookies.get('homeRowPerPageTms') ?? 10)
   const [currentPage, setCurrentPage] = useState(1)
 
   const fetchDeviceCount = useCallback(async () => {
@@ -90,6 +94,7 @@ const HomeTms = () => {
     setPerPage(newPerPage)
     fetchDeviceCount()
     fetchDevices(page, newPerPage)
+    cookies.set('homeRowPerPageTms', newPerPage, cookieOptions)
   }
 
   const handleRowClicked = (row: DeviceTmsType) => {
@@ -128,6 +133,34 @@ const HomeTms = () => {
     [t, navigate]
   )
 
+  const subColumns: TableColumn<TmsLogType>[] = useMemo(
+    () => subColumnData(t),
+    [t, devicesFiltered]
+  )
+
+  const ExpandedComponent = ({ data }: { data: DeviceTmsType }) => {
+    const { log } = data
+    const filtered = Object.values(
+      log.reduce<Record<string, TmsLogType>>((acc, item) => {
+        if (!acc[item.mcuId] || acc[item.mcuId].updatedAt < item.updatedAt) {
+          acc[item.mcuId] = item
+        }
+        return acc
+      }, {})
+    )
+
+    return (
+      <div className='dataTableSubWrapper bg-base-100 rounded-btn duration-300'>
+        <DataTable
+          responsive
+          columns={subColumns}
+          data={filtered}
+          noDataComponent={<DataTableNoData />}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className='p-3 px-[16px]'>
       <div className='flex items-center justify-between mt-[16px]'>
@@ -157,6 +190,7 @@ const HomeTms = () => {
           pagination
           paginationServer
           pointerOnHover
+          expandableRows
           columns={columns}
           data={devicesFiltered}
           paginationTotalRows={totalRows}
@@ -164,6 +198,7 @@ const HomeTms = () => {
           progressPending={loading}
           progressComponent={<Loading />}
           noDataComponent={<DataTableNoData />}
+          expandableRowsComponent={ExpandedComponent}
           onChangeRowsPerPage={handlePerRowsChange}
           onChangePage={handlePageChange}
           onRowClicked={handleRowClicked}

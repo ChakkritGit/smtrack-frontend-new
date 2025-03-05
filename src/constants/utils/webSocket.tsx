@@ -19,34 +19,34 @@ import { TFunction } from 'i18next'
 const changIcon = (text: string) => {
   if (text.split(':')[1]?.substring(1, 5) === 'DOOR') {
     if (text.split(' ')[3] === 'opened') {
-      return <RiDoorOpenLine size={28} fill='var(--danger-color)' />
+      return <RiDoorOpenLine className='text-red-500 text-[28px] xl:text-[32px]' />
     } else {
-      return <RiDoorClosedLine size={28} fill='var(--main-color)' />
+      return <RiDoorClosedLine className='text-primary text-[28px] xl:text-[32px]' />
     }
   } else if (text.split(' ')[0] === 'Power') {
     if (text.split(' ')[1] === 'off') {
-      return <TbPlugConnectedX size={28} fill='var(--danger-color)' />
+      return <TbPlugConnectedX className='text-red-500 text-[28px] xl:text-[32px]' />
     } else {
-      return <TbPlugConnected size={28} fill='var(--main-color)' />
+      return <TbPlugConnected className='text-primary text-[28px] xl:text-[32px]' />
     }
   } else if (text.split(' ')[0] === 'SDCard') {
     if (text.split(' ')[1] === 'failed') {
-      return <MdOutlineSdCardAlert size={28} fill='var(--danger-color)' />
+      return <MdOutlineSdCardAlert className='text-red-500 text-[28px] xl:text-[32px]' />
     } else {
-      return <MdOutlineSdCard size={28} fill='var(--main-color)' />
+      return <MdOutlineSdCard className='text-primary text-[28px] xl:text-[32px]' />
     }
   } else if (text.split(' ')[0]?.substring(0, 5) === 'PROBE') {
     if (text.split(' ')[4] === 'high') {
-      return <FaTemperatureArrowUp size={28} fill='var(--danger-color)' />
+      return <FaTemperatureArrowUp className='text-red-500 text-[28px] xl:text-[32px]' />
     } else if (text.split(' ')[4] === 'low') {
-      return <FaTemperatureArrowDown size={28} fill='var(--danger-color)' />
+      return <FaTemperatureArrowDown className='text-red-500 text-[28px] xl:text-[32px]' />
     } else {
-      return <FaTemperatureEmpty size={28} fill='var(--main-color)' />
+      return <FaTemperatureEmpty className='text-primary text-[28px] xl:text-[32px]' />
     }
   } else if (text.split('/')[0] === 'REPORT') {
-    return <TbReportAnalytics size={28} fill='var(--main-color)' />
+    return <TbReportAnalytics className='text-primary text-[28px] xl:text-[32px]' />
   } else {
-    return <RiAlarmWarningFill size={28} fill='var(--danger-color)' />
+    return <RiAlarmWarningFill className='text-red-500 text-[28px] xl:text-[32px]' />
   }
 }
 

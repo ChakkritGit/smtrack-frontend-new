@@ -1,24 +1,10 @@
-import { ConfigType } from "../../smtrack/configs/configType"
+import { ConfigType } from '../../smtrack/configs/configType'
 
 type DeviceTmsType = {
   adjTemp: number
   hospital: string
   id: string
-  log: {
-    createdAt: string
-    date: string
-    door: boolean
-    id: string
-    internet: boolean
-    isAlert: boolean
-    mcuId: string
-    message: string
-    plugin: boolean
-    realValue: number
-    tempValue: number
-    time: string
-    updatedAt: string
-  }[]
+  log: TmsLogType[]
   maxTemp: number
   minTemp: number
   name: string
@@ -26,6 +12,23 @@ type DeviceTmsType = {
   sn: string
   ward: string
   token: string
+}
+
+type TmsLogType = {
+  createdAt: string
+  date: string
+  door: boolean
+  id: string
+  internet: boolean
+  isAlert: boolean
+  mcuId: string
+  message?: string
+  plugin: boolean
+  probe: string
+  realValue: number
+  tempValue: number
+  time: string
+  updatedAt: string
 }
 
 type CountTms = {
@@ -108,20 +111,20 @@ type AddDeviceForm = {
 
 type NetworkFormInit = {
   wifi?: {
-    ssid?: string,
-    password?: string,
-    macAddress?: string,
-    ip?: string,
-    subnet?: string,
-    gateway?: string,
+    ssid?: string
+    password?: string
+    macAddress?: string
+    ip?: string
+    subnet?: string
+    gateway?: string
     dns?: string
-  },
+  }
   lan?: {
-    ip?: string,
-    subnet?: string,
-    gateway?: string,
+    ip?: string
+    subnet?: string
+    gateway?: string
     dns?: string
-  },
+  }
   sim?: {
     simSp?: string
   }
@@ -136,5 +139,6 @@ export type {
   LogChartTms,
   AddDeviceType,
   AddDeviceForm,
-  NetworkFormInit
+  NetworkFormInit,
+  TmsLogType
 }

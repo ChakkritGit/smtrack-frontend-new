@@ -54,7 +54,7 @@ const Home = () => {
   const [deviceConnect, setDeviceConnect] = useState('')
   const [loading, setLoading] = useState(false)
   const [totalRows, setTotalRows] = useState(0)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(cookies.get('homeRowPerPage') ?? 10)
   const [currentPage, setCurrentPage] = useState(1)
   const [probeData, setProbeData] = useState<ProbeType[]>([])
   const [serial, setSerial] = useState<string>('')
@@ -123,6 +123,7 @@ const Home = () => {
     setPerPage(newPerPage)
     fetchDeviceCount(newPerPage)
     fetchDevices(page, newPerPage)
+    cookies.set('homeRowPerPage', newPerPage, cookieOptions)
   }
 
   const handleRowClicked = (row: DeviceType) => {
@@ -195,7 +196,7 @@ const Home = () => {
   const ExpandedComponent = ({ data }: { data: DeviceType }) => {
     const { probe } = data
     return (
-      <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300'>
+      <div className='dataTableSubWrapper bg-base-100 rounded-btn duration-300'>
         <DataTable
           columns={subColumns}
           data={probe}
