@@ -17,6 +17,7 @@ import { style } from './style/repairStyles'
 import Loading from '../skeleton/table/loading'
 import { UAParser } from 'ua-parser-js'
 import { Worker, Viewer } from '@react-pdf-viewer/core'
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'
 
 const RepairPdf = () => {
   const { t } = useTranslation()
@@ -24,6 +25,7 @@ const RepairPdf = () => {
   const { state } = useLocation() as { state: RepairType }
   const parser = new UAParser()
   const os = parser.getOS().name
+  const defaultLayoutPluginInstance = defaultLayoutPlugin()
 
   useEffect(() => {
     if (state === null) navigate('/repair')
@@ -433,7 +435,10 @@ const RepairPdf = () => {
           workerUrl={`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js`}
         >
           <div className='w-full h-full'>
-            <Viewer fileUrl={instance?.url ?? ''} />
+            <Viewer
+              fileUrl={instance?.url ?? ''}
+              plugins={[defaultLayoutPluginInstance]}
+            />
           </div>
         </Worker>
       ) : (
