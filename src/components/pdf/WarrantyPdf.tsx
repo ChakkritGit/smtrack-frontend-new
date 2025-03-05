@@ -286,19 +286,15 @@ const WarrantyPdf = () => {
           </li>
         </ul>
       </div>
-      {os === 'iOS' ? (
-        instance.loading ? (
-          <Loading />
-        ) : (
-          <iframe
-            src={instance?.url || ''}
-            width='100%'
-            height='100%'
-            style={{ border: 'none' }}
-          />
-        )
-      ) : instance.loading ? (
+      {instance.loading ? (
         <Loading />
+      ) : os === 'iOS' ? (
+        <iframe
+          src={instance?.url || ''}
+          width='100%'
+          height='100%'
+          style={{ border: 'none' }}
+        />
       ) : (
         <PDFViewer
           width={'100%'}
