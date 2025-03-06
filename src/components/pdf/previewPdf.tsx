@@ -96,7 +96,7 @@ function PreviewPDF () {
       <div className='h-full mt-3'>
         {instance.loading ? (
           <Loading />
-        ) : os !== 'iOS' ? (
+        ) : os === 'iOS' ? (
           <Worker workerUrl={pdfUrl}>
             <div className='w-full h-full'>
               <Viewer
