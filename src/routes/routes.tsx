@@ -144,9 +144,14 @@ const Routes = () => {
     [tmsMode, role]
   )
 
+  const routesProvider = useMemo(
+    () => <RouterProvider key={hashText()} router={routerInstance} />,
+    [routerInstance]
+  )
+
   return (
     <GlobalContext.Provider value={contextValue}>
-      <RouterProvider key={hashText()} router={routerInstance} />
+      {routesProvider}
     </GlobalContext.Provider>
   )
 }

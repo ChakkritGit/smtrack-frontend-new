@@ -7,7 +7,7 @@ import {
 } from 'react-icons/ri'
 import { useTranslation } from 'react-i18next'
 import Fullchartpdf from './fullChartPdf'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { UAParser } from 'ua-parser-js'
 import Loading from '../skeleton/table/loading'
 import { Worker, Viewer } from '@react-pdf-viewer/core'
@@ -34,6 +34,23 @@ function PreviewPDF () {
   const os = parser.getOS().name
   const defaultLayoutPluginInstance = defaultLayoutPlugin()
   const pdfUrl = '/pdf.worker.min.js'
+
+  useEffect(() => {
+    if (state === null || state === undefined || !state) {
+      navigate('/dashboard/chart', {
+        state: {
+          deviceLogs: {
+            sn: devSn,
+            minTemp: tempMin,
+            maxTemp: tempMax,
+            name: devName,
+            ward: ward,
+            hospital: hospital
+          }
+        }
+      })
+    }
+  }, [state])
 
   const pdfViewer = useMemo(
     () => (
