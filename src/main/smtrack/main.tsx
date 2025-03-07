@@ -8,7 +8,7 @@ import {
   responseType,
   UserProfileType
 } from '../../types/smtrack/utilsRedux/utilsReduxType'
-import { setSocketData, setUserProfile } from '../../redux/actions/utilsActions'
+import { setSocketData, setTokenExpire, setUserProfile } from '../../redux/actions/utilsActions'
 import { AxiosError } from 'axios'
 import { SubmitLoading } from '../../components/loading/submitLoading'
 import Sidebar from '../../components/navigation/sidebar/smtrack/sidebar'
@@ -21,6 +21,7 @@ import { socket } from '../../services/websocket'
 import { SocketResponseType } from '../../types/global/socketType'
 import notificationSound from '../../assets/sounds/notification.mp3'
 import BottomBar from '../../components/navigation/bottomBar/bottomBar'
+import TokenExpire from '../../components/modal/tokenExpire'
 
 const MainSmtrack = () => {
   const { t } = useTranslation()
@@ -58,6 +59,7 @@ const MainSmtrack = () => {
       } catch (error) {
         if (error instanceof AxiosError) {
           if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
           } else {
             console.error('Something wrong' + error)
           }
@@ -225,6 +227,7 @@ const MainSmtrack = () => {
         </div>
         <Sidebar />
       </div>
+      <TokenExpire />
       {submitLoading && <SubmitLoading submitLoading={submitLoading} />}
     </main>
   )

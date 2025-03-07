@@ -32,7 +32,7 @@ import {
 } from '../../types/smtrack/users/usersType'
 import defaultPic from '../../assets/images/default-pic.png'
 import Swal from 'sweetalert2'
-import { setSubmitLoading } from '../../redux/actions/utilsActions'
+import { setSubmitLoading, setTokenExpire } from '../../redux/actions/utilsActions'
 import { GlobalContextType } from '../../types/global/globalContext'
 import { GlobalContext } from '../../contexts/globalContext'
 import HopitalSelect from '../../components/selects/hopitalSelect'
@@ -126,6 +126,9 @@ const ManageHospital = () => {
       } catch (error) {
         addHosModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -185,6 +188,9 @@ const ManageHospital = () => {
       } catch (error) {
         editHosModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -236,6 +242,9 @@ const ManageHospital = () => {
       } catch (error) {
         addWardModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -288,6 +297,9 @@ const ManageHospital = () => {
       } catch (error) {
         editWardModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -443,6 +455,9 @@ const ManageHospital = () => {
         })
       } catch (error) {
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -485,6 +500,9 @@ const ManageHospital = () => {
         })
       } catch (error) {
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,

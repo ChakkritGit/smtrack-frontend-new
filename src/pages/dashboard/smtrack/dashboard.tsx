@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import HospitalAndWard from '../../../components/filter/hospitalAndWard'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import { AxiosError } from 'axios'
 import { DeviceLogsType } from '../../../types/smtrack/devices/deviceType'
@@ -15,8 +15,10 @@ import DataTableWrapper from '../../../components/pages/dashboard/smtrack/dataTa
 import { useTranslation } from 'react-i18next'
 import { RiCloseLargeLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
+import { setTokenExpire } from '../../../redux/actions/utilsActions'
 
 const Dashboard = () => {
+  const dispatch = useDispatch()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { deviceKey } = useSelector((state: RootState) => state.utils)
@@ -33,6 +35,10 @@ const Dashboard = () => {
       setDeviceLogs(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
+
         console.error(error.response?.data.message)
       } else {
         console.error(error)

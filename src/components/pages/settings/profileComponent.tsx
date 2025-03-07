@@ -19,6 +19,7 @@ import {
 } from '../../../constants/utils/utilsConstants'
 import {
   setSubmitLoading,
+  setTokenExpire,
   setUserProfile
 } from '../../../redux/actions/utilsActions'
 
@@ -85,6 +86,7 @@ const ProfileComponent = (props: ProfileProps) => {
       } catch (error) {
         if (error instanceof AxiosError) {
           if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
           } else {
             console.error('Something wrong' + error)
           }
@@ -121,6 +123,10 @@ const ProfileComponent = (props: ProfileProps) => {
       } catch (error) {
         profileModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
+
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -163,6 +169,10 @@ const ProfileComponent = (props: ProfileProps) => {
       await fetchUserProfile()
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
+
         Swal.fire({
           title: t('alertHeaderError'),
           text: error.response?.data.message,

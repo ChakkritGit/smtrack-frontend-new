@@ -29,7 +29,7 @@ import {
   handleApiError
 } from '../../constants/utils/utilsConstants'
 import UserPagination from '../../components/pagination/userPagination'
-import { setHosId, setSearch, setSubmitLoading } from '../../redux/actions/utilsActions'
+import { setHosId, setSearch, setSubmitLoading, setTokenExpire } from '../../redux/actions/utilsActions'
 import Swal from 'sweetalert2'
 import { resizeImage } from '../../constants/utils/image'
 import HopitalSelect from '../../components/selects/hopitalSelect'
@@ -193,6 +193,9 @@ const Users = () => {
       } catch (error) {
         addModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -266,6 +269,9 @@ const Users = () => {
       } catch (error) {
         editModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -318,6 +324,9 @@ const Users = () => {
         })
       } catch (error) {
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -368,6 +377,9 @@ const Users = () => {
         })
       } catch (error) {
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,

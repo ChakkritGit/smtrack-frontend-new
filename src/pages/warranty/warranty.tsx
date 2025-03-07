@@ -10,7 +10,7 @@ import {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { setSearch, setSubmitLoading } from '../../redux/actions/utilsActions'
+import { setSearch, setSubmitLoading, setTokenExpire } from '../../redux/actions/utilsActions'
 import {
   handleApiError,
   swalWithBootstrapButtons
@@ -89,6 +89,9 @@ const Warranty = () => {
       setDeviceList(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.error(error.response?.data.message)
       } else {
         console.error(error)
@@ -144,6 +147,9 @@ const Warranty = () => {
       } catch (error) {
         addModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -214,6 +220,9 @@ const Warranty = () => {
       } catch (error) {
         editModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -280,6 +289,9 @@ const Warranty = () => {
       })
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         Swal.fire({
           title: t('alertHeaderError'),
           text: error.response?.data.message,

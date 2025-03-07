@@ -21,6 +21,7 @@ const SUBMIT_LOADING = 'SUBMIT_LOADING'
 const SOCKET_DATA = 'SOCKET_DATA'
 const POPUP_MODE = 'POPUP_MODE'
 const SOUND_MODE = 'SOUND_MODE'
+const TOKEN_EXPIRE = 'TOKEN_EXPIRE'
 const RESET_UTILS = 'RESET_UTILS'
 
 interface UtilsState {
@@ -39,6 +40,7 @@ interface UtilsState {
   socketData: SocketResponseType | null
   popUpMode: boolean
   soundMode: boolean
+  tokenExpire: boolean
 }
 
 type UtilsAction =
@@ -55,6 +57,7 @@ type UtilsAction =
   | { type: typeof WARD_ID; payload: string }
   | { type: typeof DEVICE_KEY; payload: string }
   | { type: typeof SOCKET_DATA; payload: SocketResponseType }
+  | { type: typeof TOKEN_EXPIRE; payload: boolean }
   | { type: typeof POPUP_MODE }
   | { type: typeof SOUND_MODE }
   | { type: typeof RESET_UTILS }
@@ -75,6 +78,7 @@ export {
   SOCKET_DATA,
   POPUP_MODE,
   SOUND_MODE,
+  TOKEN_EXPIRE,
   RESET_UTILS
 }
 export type { UtilsState, UtilsAction }

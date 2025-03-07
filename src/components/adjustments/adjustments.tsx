@@ -18,7 +18,10 @@ import Select from 'react-select'
 import ReactSlider from 'react-slider'
 import { client } from '../../services/mqtt'
 import { useDispatch, useSelector } from 'react-redux'
-import { setSubmitLoading } from '../../redux/actions/utilsActions'
+import {
+  setSubmitLoading,
+  setTokenExpire
+} from '../../redux/actions/utilsActions'
 import Swal from 'sweetalert2'
 import axiosInstance from '../../constants/axios/axiosInstance'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
@@ -157,6 +160,10 @@ const Adjustments = (props: AdjustmentsProps) => {
     } catch (error) {
       openAdjustModalRef.current?.close()
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
+
         Swal.fire({
           title: t('alertHeaderError'),
           text: error.response?.data.message,
@@ -214,6 +221,10 @@ const Adjustments = (props: AdjustmentsProps) => {
     } catch (error) {
       openAdjustModalRef.current?.close()
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
+
         Swal.fire({
           title: t('alertHeaderError'),
           text: error.response?.data.message,
@@ -498,12 +509,9 @@ const Adjustments = (props: AdjustmentsProps) => {
         )
 
         // รอลบ
-        client.subscribe(
-          `${serial}/temp/real`,
-          err => {
-            if (err) console.error('MQTT Subscribe Error', err)
-          }
-        )
+        client.subscribe(`${serial}/temp/real`, err => {
+          if (err) console.error('MQTT Subscribe Error', err)
+        })
         //
 
         setIsLoadingMqtt(true)
@@ -561,12 +569,9 @@ const Adjustments = (props: AdjustmentsProps) => {
         )
         client.unsubscribe(`${serial}/temp/real`)
 
-        client.subscribe(
-          `${serial}/mute/status/receive`,
-          err => {
-            if (err) console.error('MQTT Subscribe Error', err)
-          }
-        )
+        client.subscribe(`${serial}/mute/status/receive`, err => {
+          if (err) console.error('MQTT Subscribe Error', err)
+        })
 
         client.publish(
           `siamatic/${deviceModel}/${version}/${serial}/mute/status`,

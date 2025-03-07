@@ -19,6 +19,7 @@ import {
   setDeviceKey,
   setIsExpand,
   setSearch,
+  setTokenExpire,
   setUserProfile
 } from '../../../redux/actions/utilsActions'
 import DefaultPic from '../../../assets/images/default-pic.png'
@@ -110,6 +111,10 @@ const Navbar = () => {
       setDeviceList(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
+
         console.error(error.response?.data.message)
       } else {
         console.error(error)

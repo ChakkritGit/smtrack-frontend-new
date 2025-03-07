@@ -7,7 +7,7 @@ import { DeviceListType } from '../../types/smtrack/devices/deviceType'
 import { Option } from '../../types/global/hospitalAndWard'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
-import { setDeviceKey } from '../../redux/actions/utilsActions'
+import { setDeviceKey, setTokenExpire } from '../../redux/actions/utilsActions'
 import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
 
 const DeviceList = () => {
@@ -24,6 +24,10 @@ const DeviceList = () => {
       setDeviceList(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
+
         console.error(error.response?.data.message)
       } else {
         console.error(error)

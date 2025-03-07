@@ -8,7 +8,7 @@ import {
   responseType,
   UserProfileType
 } from '../../types/smtrack/utilsRedux/utilsReduxType'
-import { setSocketData, setUserProfile } from '../../redux/actions/utilsActions'
+import { setSocketData, setTokenExpire, setUserProfile } from '../../redux/actions/utilsActions'
 import { AxiosError } from 'axios'
 import { socket } from '../../services/websocket'
 import { SocketResponseType } from '../../types/global/socketType'
@@ -21,6 +21,7 @@ import { changIcon, changText } from '../../constants/utils/webSocket'
 import notificationSound from '../../assets/sounds/notification.mp3'
 import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
 import BottomBar from '../../components/navigation/bottomBar/bottomBar'
+import TokenExpire from '../../components/modal/tokenExpire'
 
 const MainTms = () => {
   const { t } = useTranslation()
@@ -57,6 +58,7 @@ const MainTms = () => {
       } catch (error) {
         if (error instanceof AxiosError) {
           if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
           } else {
             console.error('Something wrong' + error)
           }
@@ -224,6 +226,7 @@ const MainTms = () => {
         </div>
         <Sidebar />
       </div>
+      <TokenExpire />
       {submitLoading && <SubmitLoading submitLoading={submitLoading} />}
     </main>
   )

@@ -3,7 +3,7 @@ import { RouterProvider } from 'react-router-dom'
 import { router } from './createRoutes'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../redux/reducers/rootReducer'
-import { setTokenDecode } from '../redux/actions/utilsActions'
+import { setTokenDecode, setTokenExpire } from '../redux/actions/utilsActions'
 import {
   responseType,
   TokenType
@@ -44,6 +44,9 @@ const Routes = () => {
       setHospital(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.error(error.response?.data.message)
       } else {
         console.error(error)
@@ -59,6 +62,9 @@ const Routes = () => {
       setWard(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.error(error.response?.data.message)
       } else {
         console.error(error)

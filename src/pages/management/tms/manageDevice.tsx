@@ -16,7 +16,7 @@ import axiosInstance from '../../../constants/axios/axiosInstance'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { AxiosError } from 'axios'
-import { setHosId, setSubmitLoading } from '../../../redux/actions/utilsActions'
+import { setHosId, setSubmitLoading, setTokenExpire } from '../../../redux/actions/utilsActions'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import HopitalSelect from '../../../components/selects/hopitalSelect'
 import WardSelectTms from '../../../components/selects/tms/wardSelect'
@@ -63,6 +63,9 @@ const ManageDevice = () => {
         setTotalRows(response.data.data?.total)
       } catch (error) {
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           console.error(error.message)
         } else {
           console.error(error)
@@ -137,6 +140,9 @@ const ManageDevice = () => {
       } catch (error) {
         addModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -218,6 +224,9 @@ const ManageDevice = () => {
         })
       } catch (error) {
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -280,6 +289,9 @@ const ManageDevice = () => {
       } catch (error) {
         editModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,

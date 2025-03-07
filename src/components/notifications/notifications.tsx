@@ -25,10 +25,12 @@ import {
 import { MdOutlineSdCard, MdOutlineSdCardAlert } from 'react-icons/md'
 import { extractValues } from '../../constants/utils/utilsConstants'
 import { RootState } from '../../redux/reducers/rootReducer'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
+import { setTokenExpire } from '../../redux/actions/utilsActions'
 
 const Notifications = () => {
+  const dispatch = useDispatch()
   const { tokenDecode, tmsMode, userProfile, socketData } = useSelector(
     (state: RootState) => state.utils
   )
@@ -50,6 +52,9 @@ const Notifications = () => {
       setNotification(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.error(error.message)
       } else {
         console.error(error)

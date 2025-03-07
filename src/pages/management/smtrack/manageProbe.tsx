@@ -23,7 +23,10 @@ import {
   scheduleTimeArray,
   swalWithBootstrapButtons
 } from '../../../constants/utils/utilsConstants'
-import { setSubmitLoading } from '../../../redux/actions/utilsActions'
+import {
+  setSubmitLoading,
+  setTokenExpire
+} from '../../../redux/actions/utilsActions'
 import Swal from 'sweetalert2'
 import Select, { SingleValue } from 'react-select'
 import { Option } from '../../../types/global/hospitalAndWard'
@@ -53,7 +56,9 @@ type ScheduleMinute = {
 const ManageProbe = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const { globalSearch, tokenDecode } = useSelector((state: RootState) => state.utils)
+  const { globalSearch, tokenDecode } = useSelector(
+    (state: RootState) => state.utils
+  )
   const addModalRef = useRef<HTMLDialogElement>(null)
   const editModalRef = useRef<HTMLDialogElement>(null)
   const [loading, setLoading] = useState(false)
@@ -146,6 +151,9 @@ const ManageProbe = () => {
       setDeviceList(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.error(error.response?.data.message)
       } else {
         console.error(error)
@@ -162,6 +170,9 @@ const ManageProbe = () => {
       setProbeList(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.error(error.message)
       } else {
         console.error(error)
@@ -215,6 +226,9 @@ const ManageProbe = () => {
       } catch (error) {
         addModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -305,6 +319,9 @@ const ManageProbe = () => {
       } catch (error) {
         editModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -469,6 +486,9 @@ const ManageProbe = () => {
       })
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         Swal.fire({
           title: t('alertHeaderError'),
           text: error.response?.data.message,
@@ -577,12 +597,8 @@ const ManageProbe = () => {
     const filter = probeList?.filter(f => {
       const matchesSearch =
         f.sn?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        f.name
-          ?.toLowerCase()
-          .includes(globalSearch.toLowerCase()) ||
-        f.channel
-          ?.toLowerCase()
-          .includes(globalSearch.toLowerCase())
+        f.name?.toLowerCase().includes(globalSearch.toLowerCase()) ||
+        f.channel?.toLowerCase().includes(globalSearch.toLowerCase())
 
       return matchesSearch
     })
@@ -631,31 +647,30 @@ const ManageProbe = () => {
           >
             <RiEditLine size={20} />
           </button>
-          {
-            role === 'SUPER' &&
+          {role === 'SUPER' && (
             <button
-            className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
-            onClick={() =>
-              swalWithBootstrapButtons
-                .fire({
-                  title: t('deleteProbe'),
-                  text: t('notReverseText'),
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonText: t('confirmButton'),
-                  cancelButtonText: t('cancelButton'),
-                  reverseButtons: false
-                })
-                .then(result => {
-                  if (result.isConfirmed) {
-                    deleteDevices(item.id)
-                  }
-                })
-            }
-          >
-            <RiDeleteBin7Line size={20} />
-          </button>
-          }
+              className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
+              onClick={() =>
+                swalWithBootstrapButtons
+                  .fire({
+                    title: t('deleteProbe'),
+                    text: t('notReverseText'),
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: t('confirmButton'),
+                    cancelButtonText: t('cancelButton'),
+                    reverseButtons: false
+                  })
+                  .then(result => {
+                    if (result.isConfirmed) {
+                      deleteDevices(item.id)
+                    }
+                  })
+              }
+            >
+              <RiDeleteBin7Line size={20} />
+            </button>
+          )}
         </div>
       ),
       sortable: false,

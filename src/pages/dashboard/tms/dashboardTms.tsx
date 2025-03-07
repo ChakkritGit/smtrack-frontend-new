@@ -12,7 +12,7 @@ import CardStatusTms from '../../../components/pages/dashboard/tms/cardStatusTms
 import ChartSwiperWrapperTms from '../../../components/pages/dashboard/tms/chartSwiperWrapperTms'
 import DataTableWrapperTms from '../../../components/pages/dashboard/tms/dataTableWrapperTms'
 import DeviceTmsList from '../../../components/filter/deviceListTms'
-import { setSearch } from '../../../redux/actions/utilsActions'
+import { setSearch, setTokenExpire } from '../../../redux/actions/utilsActions'
 import { useTranslation } from 'react-i18next'
 import { RiCloseLargeLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
@@ -35,6 +35,9 @@ const DashboardTms = () => {
       setDeviceLogs(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.error(error.response?.data.message)
       } else {
         console.error(error)

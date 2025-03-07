@@ -28,7 +28,7 @@ import { GlobalContextType } from '../../types/global/globalContext'
 import { GlobalContext } from '../../contexts/globalContext'
 import { DeviceListType } from '../../types/smtrack/devices/deviceType'
 import { AxiosError } from 'axios'
-import { setSubmitLoading } from '../../redux/actions/utilsActions'
+import { setSubmitLoading, setTokenExpire } from '../../redux/actions/utilsActions'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 
@@ -69,6 +69,9 @@ const Repair = () => {
       setDeviceList(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.error(error.response?.data.message)
       } else {
         console.error(error)
@@ -148,6 +151,9 @@ const Repair = () => {
       } catch (error) {
         addModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -219,6 +225,9 @@ const Repair = () => {
       } catch (error) {
         editModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -309,6 +318,9 @@ const Repair = () => {
       })
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         Swal.fire({
           title: t('alertHeaderError'),
           text: error.response?.data.message,

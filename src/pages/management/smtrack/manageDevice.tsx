@@ -21,7 +21,11 @@ import {
   RiShutDownLine,
   RiTimeLine
 } from 'react-icons/ri'
-import { setHosId, setSubmitLoading } from '../../../redux/actions/utilsActions'
+import {
+  setHosId,
+  setSubmitLoading,
+  setTokenExpire
+} from '../../../redux/actions/utilsActions'
 import toast from 'react-hot-toast'
 import { socket } from '../../../services/websocket'
 import {
@@ -114,6 +118,9 @@ const ManageDevice = () => {
         setTotalRows(response.data.data?.total)
       } catch (error) {
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           console.error(error.message)
         } else {
           console.error(error)
@@ -163,6 +170,9 @@ const ManageDevice = () => {
       } catch (error) {
         addModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -239,6 +249,9 @@ const ManageDevice = () => {
       } catch (error) {
         editModalRef.current?.close()
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,
@@ -366,6 +379,9 @@ const ManageDevice = () => {
       })
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         Swal.fire({
           title: t('alertHeaderError'),
           text: error.response?.data.message,
@@ -403,6 +419,9 @@ const ManageDevice = () => {
       })
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         Swal.fire({
           title: t('alertHeaderError'),
           text: error.response?.data.message,
@@ -470,6 +489,9 @@ const ManageDevice = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         editModalRef.current?.close()
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         Swal.fire({
           title: t('alertHeaderError'),
           text: error.response?.data.message,
@@ -528,6 +550,9 @@ const ManageDevice = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         editModalRef.current?.close()
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         Swal.fire({
           title: t('alertHeaderError'),
           text: error.response?.data.message,
@@ -571,6 +596,9 @@ const ManageDevice = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         editModalRef.current?.close()
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         Swal.fire({
           title: t('alertHeaderError'),
           text: error.response?.data.message,

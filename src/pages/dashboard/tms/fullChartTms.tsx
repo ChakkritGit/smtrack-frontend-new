@@ -21,7 +21,8 @@ import Swal from 'sweetalert2'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   setDeviceKey,
-  setSubmitLoading
+  setSubmitLoading,
+  setTokenExpire
 } from '../../../redux/actions/utilsActions'
 import toast from 'react-hot-toast'
 import { RootState } from '../../../redux/reducers/rootReducer'
@@ -70,6 +71,9 @@ const FullChartTms = () => {
       setDataLog(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.log(error.response?.data?.message)
       } else {
         console.error(error)
@@ -92,6 +96,9 @@ const FullChartTms = () => {
       setDataLog(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.log(error.response?.data?.message)
       } else {
         console.error(error)
@@ -114,6 +121,9 @@ const FullChartTms = () => {
       setDataLog(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.log(error.response?.data?.message)
       } else {
         console.error(error)
@@ -145,7 +155,7 @@ const FullChartTms = () => {
         } catch (error) {
           if (error instanceof AxiosError) {
             if (error.response?.status === 401) {
-              // dispatch(setShowAlert(true))
+              dispatch(setTokenExpire(true))
             } else {
               console.error('Something wrong' + error)
             }

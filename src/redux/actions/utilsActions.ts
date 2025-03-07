@@ -21,7 +21,8 @@ import {
   SOCKET_DATA,
   SOUND_MODE,
   POPUP_MODE,
-  RESET_UTILS
+  RESET_UTILS,
+  TOKEN_EXPIRE
 } from '../types/utilsTypes'
 
 const setCookieEncode = (dataEncode?: string) => ({
@@ -94,6 +95,11 @@ const setSoundMode = () => ({
   type: SOUND_MODE
 })
 
+const setTokenExpire = (state: boolean) => ({
+  type: TOKEN_EXPIRE,
+  payload: state
+})
+
 const resetUtils = () => ({
   type: RESET_UTILS
 })
@@ -114,5 +120,6 @@ export {
   setSocketData,
   setPopUpMode,
   setSoundMode,
+  setTokenExpire,
   resetUtils
 }

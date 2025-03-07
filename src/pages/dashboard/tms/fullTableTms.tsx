@@ -18,7 +18,7 @@ import {
 } from 'react-icons/ri'
 import FullTableTmsComponent from '../../../components/pages/dashboard/tms/fullTableTms'
 import { useDispatch } from 'react-redux'
-import { setDeviceKey } from '../../../redux/actions/utilsActions'
+import { setDeviceKey, setTokenExpire } from '../../../redux/actions/utilsActions'
 import toast from 'react-hot-toast'
 import * as XLSX from 'xlsx'
 
@@ -59,6 +59,9 @@ const FullTableTms = () => {
       setDataLog(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.log(error.response?.data?.message)
       } else {
         console.error(error)
@@ -81,6 +84,9 @@ const FullTableTms = () => {
       setDataLog(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.log(error.response?.data?.message)
       } else {
         console.error(error)
@@ -103,6 +109,9 @@ const FullTableTms = () => {
       setDataLog(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
         console.log(error.response?.data?.message)
       } else {
         console.error(error)
@@ -134,7 +143,7 @@ const FullTableTms = () => {
         } catch (error) {
           if (error instanceof AxiosError) {
             if (error.response?.status === 401) {
-              // dispatch(setShowAlert(true))
+              dispatch(setTokenExpire(true))
             } else {
               console.error('Something wrong' + error)
             }

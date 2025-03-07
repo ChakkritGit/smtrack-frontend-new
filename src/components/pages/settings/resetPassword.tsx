@@ -2,7 +2,7 @@ import { FormEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
-import { setSubmitLoading } from '../../../redux/actions/utilsActions'
+import { setSubmitLoading, setTokenExpire } from '../../../redux/actions/utilsActions'
 import { AxiosError } from 'axios'
 import axiosInstance from '../../../constants/axios/axiosInstance'
 import {
@@ -45,6 +45,10 @@ const ResetPassword = () => {
         })
       } catch (error) {
         if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
+
           Swal.fire({
             title: t('alertHeaderError'),
             text: error.response?.data.message,

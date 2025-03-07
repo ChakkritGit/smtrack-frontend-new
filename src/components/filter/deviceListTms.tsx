@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Select from 'react-select'
 import { Option } from '../../types/global/hospitalAndWard'
 import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
-import { setDeviceKey } from '../../redux/actions/utilsActions'
+import { setDeviceKey, setTokenExpire } from '../../redux/actions/utilsActions'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useCallback, useEffect, useState } from 'react'
 import axiosInstance from '../../constants/axios/axiosInstance'
@@ -26,6 +26,10 @@ const DeviceTmsList = () => {
       setDeviceList(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
+
         console.error(error.response?.data.message)
       } else {
         console.error(error)

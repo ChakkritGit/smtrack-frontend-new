@@ -521,6 +521,13 @@ const extractValues = (text: string) => {
   return null
 }
 
+const swalTokenInvalid = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-danger'
+  },
+  buttonsStyling: false
+})
+
 export {
   accessToken,
   cookieDecodeObject,
@@ -534,5 +541,6 @@ export {
   scheduleMinuteArray,
   scheduleTimeArray,
   countryCodes,
+  swalTokenInvalid,
   extractValues
 }
