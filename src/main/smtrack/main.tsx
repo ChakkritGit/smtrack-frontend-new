@@ -8,7 +8,11 @@ import {
   responseType,
   UserProfileType
 } from '../../types/smtrack/utilsRedux/utilsReduxType'
-import { setSocketData, setTokenExpire, setUserProfile } from '../../redux/actions/utilsActions'
+import {
+  setSocketData,
+  setTokenExpire,
+  setUserProfile
+} from '../../redux/actions/utilsActions'
 import { AxiosError } from 'axios'
 import { SubmitLoading } from '../../components/loading/submitLoading'
 import Sidebar from '../../components/navigation/sidebar/smtrack/sidebar'
@@ -70,12 +74,20 @@ const MainSmtrack = () => {
     }
   }
 
+  const isSocketResponseType = (
+    response: any
+  ): response is SocketResponseType => {
+    return response && typeof response === 'object' && 'hospital' in response
+  }
+
   const handleConnect = () => {}
   const handleDisconnect = (reason: any) =>
     console.error('Disconnected from Socket server:', reason)
   const handleError = (error: any) => console.error('Socket error:', error)
-  const handleMessage = (response: SocketResponseType) => {
+  const handleMessage = (response: unknown) => {
     if (!role && !hosId) return
+
+    if (!isSocketResponseType(response)) return
 
     if (
       role === 'LEGACY_ADMIN' ||

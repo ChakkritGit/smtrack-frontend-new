@@ -876,26 +876,32 @@ const ManageDevice = () => {
             className='btn flex btn-primary p-0 w-[48px] h-[48px] min-w-[48px] min-h-[48px] tooltip tooltip-left'
             data-tip={'Sync Device Time'}
             onClick={() => {
-              try {
-                socket.emit('send_schedule', 'time', (val: any) => {
-                  if (val === 'OK')
+              socket.emit('send_schedule', 'time', (val: string) => {
+                if (val === 'OK') {
+                  Swal.fire({
+                    title: t('alertHeaderSuccess'),
+                    text: val,
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                  })
+                }
+              })
+
+              socket.on(
+                'exception',
+                (message: { message: string; status: string }) => {
+                  if (message.status === 'error') {
                     Swal.fire({
-                      title: t('alertHeaderSuccess'),
-                      text: t('adjustTime'),
-                      icon: 'success',
+                      title: t('alertHeaderError'),
+                      text: message.message,
+                      icon: 'error',
                       timer: 2000,
                       showConfirmButton: false
                     })
-                })
-              } catch (error) {
-                Swal.fire({
-                  title: t('alertHeaderError'),
-                  text: t('descriptionErrorWrong'),
-                  icon: 'success',
-                  timer: 2000,
-                  showConfirmButton: false
-                })
-              }
+                  }
+                }
+              )
             }}
           >
             <RiTimeLine size={24} />
