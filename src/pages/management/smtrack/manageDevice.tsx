@@ -33,7 +33,11 @@ import {
   NetworkFormInit
 } from '../../../types/tms/devices/deviceType'
 import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
-import { swalWithBootstrapButtons } from '../../../constants/utils/utilsConstants'
+import {
+  hoursOptions,
+  minutesOptions,
+  swalWithBootstrapButtons
+} from '../../../constants/utils/utilsConstants'
 import { resizeImage } from '../../../constants/utils/image'
 import Swal from 'sweetalert2'
 import defaultPic from '../../../assets/images/default-pic.png'
@@ -44,6 +48,13 @@ import Loading from '../../../components/skeleton/table/loading'
 import DataTableNoData from '../../../components/skeleton/table/noData'
 import { ConfigType } from '../../../types/smtrack/configs/configType'
 import { client } from '../../../services/mqtt'
+import Select from 'react-select'
+import { Option } from '../../../types/global/hospitalAndWard'
+
+type selectOption = {
+  value: string
+  label: string
+}
 
 const ManageDevice = () => {
   const dispatch = useDispatch()
@@ -104,6 +115,10 @@ const ManageDevice = () => {
   const deviceModel =
     formData?.id?.substring(0, 3) === 'eTP' ? 'etemp' : 'items'
   const version = formData?.id?.substring(3, 5).toLowerCase()
+  const [hardReset, setHardReset] = useState({
+    hour: '',
+    minute: ''
+  })
 
   const fetchDevices = useCallback(
     async (page: number, size = perPage) => {
@@ -278,6 +293,47 @@ const ManageDevice = () => {
     }
   }
 
+  const hardResetFun = async () => {
+    dispatch(setSubmitLoading())
+
+    try {
+      await axiosInstance.put<responseType<DeviceType>>(
+        `/devices/configs/${formData.id}`,
+        {
+          hardReset: `${hardReset.hour}${hardReset.minute}`
+        }
+      )
+      editModalRef.current?.close()
+      resetForm()
+      await fetchDevices(1)
+      Swal.fire({
+        title: t('alertHeaderSuccess'),
+        text: t('submitSuccess'),
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2500
+      })
+    } catch (error) {
+      editModalRef.current?.close()
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
+        Swal.fire({
+          title: t('alertHeaderError'),
+          text: error.response?.data.message,
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2500
+        }).finally(() => editModalRef.current?.showModal())
+      } else {
+        console.error(error)
+      }
+    } finally {
+      dispatch(setSubmitLoading())
+    }
+  }
+
   const formatId = (value: string) => {
     value = value.replace(/[^a-zA-Z0-9]/g, '')
 
@@ -358,6 +414,11 @@ const ManageDevice = () => {
       image: null,
       imagePreview: device.positionPic || null,
       config: device.config
+    })
+    setHardReset({
+      ...hardReset,
+      hour: device?.config?.hardReset?.substring(0, 2),
+      minute: device?.config?.hardReset?.substring(2, 4)
     })
     editModalRef.current?.showModal()
   }
@@ -859,6 +920,29 @@ const ManageDevice = () => {
     }
   ]
 
+  const mapOptions = <T, K extends keyof T>(
+    data: T[],
+    valueKey: K,
+    labelKey: K
+  ): Option[] =>
+    data.map(item => ({
+      value: item[valueKey] as unknown as string,
+      label: item[labelKey] as unknown as string
+    }))
+
+  const mapDefaultValue = <T, K extends keyof T>(
+    data: T[],
+    id: string,
+    valueKey: K,
+    labelKey: K
+  ): Option | undefined =>
+    data
+      .filter(item => item[valueKey] === id)
+      .map(item => ({
+        value: item[valueKey] as unknown as string,
+        label: item[labelKey] as unknown as string
+      }))[0]
+
   return (
     <div>
       <div className='flex flex-col lg:flex-row lg:items-center justify-between mt-3'>
@@ -1159,6 +1243,7 @@ const ManageDevice = () => {
                   </label>
                 </div>
 
+                {/* network */}
                 <div className='form-control w-full'>
                   <label className='label flex-col items-start'>
                     <span className='label-text mb-2'>
@@ -1174,6 +1259,68 @@ const ManageDevice = () => {
                     </button>
                   </label>
                 </div>
+
+                {/* hard reset */}
+                {role === 'SUPER' && (
+                  <div className='form-control w-full col-span-2'>
+                    <div className='label flex-col items-start'>
+                      <span className='label-text mb-2'>{t('hardReset')}</span>
+                      <div className='grid grid-cols-1 md:grid-cols-3 gap-2 w-full'>
+                        <Select
+                          id='hours'
+                          options={mapOptions<selectOption, keyof selectOption>(
+                            hoursOptions,
+                            'value',
+                            'label'
+                          )}
+                          value={mapDefaultValue<
+                            selectOption,
+                            keyof selectOption
+                          >(hoursOptions, hardReset.hour, 'value', 'label')}
+                          onChange={e =>
+                            setHardReset({
+                              ...hardReset,
+                              hour: String(e?.value)
+                            })
+                          }
+                          menuPlacement='top'
+                          autoFocus={false}
+                          className='react-select-container z-[150] custom-menu-select w-full'
+                          classNamePrefix='react-select'
+                        />
+                        <Select
+                          id='minute'
+                          options={mapOptions<selectOption, keyof selectOption>(
+                            minutesOptions,
+                            'value',
+                            'label'
+                          )}
+                          value={mapDefaultValue<
+                            selectOption,
+                            keyof selectOption
+                          >(minutesOptions, hardReset.minute, 'value', 'label')}
+                          onChange={e =>
+                            setHardReset({
+                              ...hardReset,
+                              minute: String(e?.value)
+                            })
+                          }
+                          menuPlacement='top'
+                          autoFocus={false}
+                          className='react-select-container z-[150] custom-menu-select w-full'
+                          classNamePrefix='react-select'
+                        />
+                        <button
+                          className='btn btn-primary'
+                          type='button'
+                          onClick={() => hardResetFun()}
+                        >
+                          {t('messageSend')}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ) : (

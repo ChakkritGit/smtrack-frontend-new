@@ -528,6 +528,16 @@ const swalTokenInvalid = Swal.mixin({
   buttonsStyling: false
 })
 
+const hoursOptions = Array.from({ length: 24 }, (_, i) => ({
+  value: String(i).padStart(2, '0'),
+  label: String(i).padStart(2, '0'),
+}))
+
+const minutesOptions = Array.from({ length: 60 }, (_, i) => ({
+  value: String(i).padStart(2, '0'),
+  label: String(i).padStart(2, '0'),
+}))
+
 export {
   accessToken,
   cookieDecodeObject,
@@ -542,5 +552,7 @@ export {
   scheduleTimeArray,
   countryCodes,
   swalTokenInvalid,
+  hoursOptions,
+  minutesOptions,
   extractValues
 }
