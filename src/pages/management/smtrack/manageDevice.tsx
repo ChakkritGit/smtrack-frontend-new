@@ -1262,7 +1262,7 @@ const ManageDevice = () => {
 
                 {/* hard reset */}
                 {role === 'SUPER' && (
-                  <div className='form-control w-full col-span-2'>
+                  <div className='form-control w-full md:col-span-2'>
                     <div className='label flex-col items-start'>
                       <span className='label-text mb-2'>{t('hardReset')}</span>
                       <div className='grid grid-cols-1 md:grid-cols-3 gap-2 w-full'>
