@@ -5,23 +5,35 @@ import {
   RiColorFilterAiLine,
   RiIdCardFill,
   RiIdCardLine,
+  RiLogoutBoxRLine,
   RiNotification4Fill,
   RiNotification4Line,
   RiTranslate2
 } from 'react-icons/ri'
 import { RootState } from '../../redux/reducers/rootReducer'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ProfileComponent from '../../components/pages/settings/profileComponent'
 import SoundAndNotificationComponents from '../../components/pages/settings/soundAndNotificationComponents'
 import AppearanceComponents from '../../components/pages/settings/appearanceComponents'
 import LanguageComponents from '../../components/pages/settings/languageComponents'
 import ResetPassword from '../../components/pages/settings/resetPassword'
+import {
+  cookieOptions,
+  cookies,
+  swalWithBootstrapButtons
+} from '../../constants/utils/utilsConstants'
+import {
+  resetUtils,
+  setCookieEncode,
+  setUserProfile
+} from '../../redux/actions/utilsActions'
 
 interface FormState {
   imagePreview: string | null
 }
 
 const Settings = () => {
+  const dispatch = useDispatch()
   const { t } = useTranslation()
   const { userProfile } = useSelector((state: RootState) => state.utils)
   const profileModalRef = useRef<HTMLDialogElement>(null)
@@ -134,6 +146,40 @@ const Settings = () => {
             <a className='text-[16px] h-9 flex items-center gap-2'>
               <RiTranslate2 size={24} />
               <span className='hidden md:block'>{t('tabLanguage')}</span>
+            </a>
+          </li>
+          <li
+            onClick={() =>
+              swalWithBootstrapButtons
+                .fire({
+                  title: t('logoutDialog'),
+                  text: t('logoutDialogText'),
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: t('confirmButton'),
+                  cancelButtonText: t('cancelButton'),
+                  reverseButtons: false
+                })
+                .then(result => {
+                  if (result.isConfirmed) {
+                    cookies.remove('tokenObject', cookieOptions)
+                    cookies.remove('userProfile', cookieOptions)
+                    cookies.remove('tmsMode', cookieOptions)
+                    cookies.remove('hosId', cookieOptions)
+                    cookies.remove('wardId', cookieOptions)
+                    cookies.remove('deviceKey', cookieOptions)
+                    dispatch(resetUtils())
+                    dispatch(setCookieEncode(undefined))
+                    dispatch(setUserProfile(undefined))
+                    cookies.update()
+                  }
+                })
+            }
+            className={`btn font-normal text-red-500 flex-nowrap text-[16px] justify-start w-full flex`}
+          >
+            <a className='text-[16px] h-9 flex items-center gap-2'>
+              <RiLogoutBoxRLine size={24} />
+              <span className='hidden md:block'>{t('tabLogout')}</span>
             </a>
           </li>
         </ul>

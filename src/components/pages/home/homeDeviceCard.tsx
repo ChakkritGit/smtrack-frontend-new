@@ -95,7 +95,7 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
           currentPage={currentPage}
           handlePageChange={handlePageChange}
           handlePerRowsChange={handlePerRowsChange}
-          itemPerPage={[10, 20, 50, 100]}
+          itemPerPage={[10, 25, 50]}
           renderItem={(item, index) => (
             <div
               key={index}
