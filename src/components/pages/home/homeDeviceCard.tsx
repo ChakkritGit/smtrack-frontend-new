@@ -31,14 +31,25 @@ interface DeviceCardProps {
   handlePerRowsChange: (newPerPage: number, page: number) => Promise<void>
   loading: boolean
   openAdjustModal: (probe: ProbeType[], sn: string) => void
+  perPage: number
+  totalRows: number
+  currentPage: number
 }
 
 const HomeDeviceCard = (props: DeviceCardProps) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { devicesFiltered, handlePageChange, handlePerRowsChange, loading, openAdjustModal } =
-    props
+  const {
+    devicesFiltered,
+    handlePageChange,
+    handlePerRowsChange,
+    loading,
+    openAdjustModal,
+    perPage,
+    totalRows,
+    currentPage
+  } = props
 
   const doorComponent = (probe: ProbeType[], log: DeviceLogType[]) => {
     return (
@@ -77,12 +88,14 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
     if (devicesFiltered?.length > 0) {
       return (
         <DevicePagination
+          totalRows={totalRows}
           data={devicesFiltered}
-          initialPerPage={10}
-          itemPerPage={[10, 20, 50, 100, 150, 200]}
+          initialPerPage={perPage}
+          loading={loading}
+          currentPage={currentPage}
           handlePageChange={handlePageChange}
           handlePerRowsChange={handlePerRowsChange}
-          loading={loading}
+          itemPerPage={[10, 20, 50, 100]}
           renderItem={(item, index) => (
             <div
               key={index}
@@ -182,7 +195,9 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                   )}
                 </div>
                 <div
-                  className={`${item.log[0]?.extMemory ? 'bg-red-500 border-red-500' : ''} flex items-center justify-center text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top`}
+                  className={`${
+                    item.log[0]?.extMemory ? 'bg-red-500 border-red-500' : ''
+                  } flex items-center justify-center text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top`}
                   data-tip={t('dashSdCard')}
                 >
                   {item.log[0]?.extMemory ? (
@@ -192,7 +207,13 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                   )}
                 </div>
                 <div
-                  className={`${item.log[0]?.battery <= 20 ? 'bg-yellow-500 border-yellow-500 text-white' : item.log[0]?.battery === 0 ?  'bg-red-500 border-red-500 text-white' : ''} flex items-center justify-center gap-1 text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top`}
+                  className={`${
+                    item.log[0]?.battery <= 20
+                      ? 'bg-yellow-500 border-yellow-500 text-white'
+                      : item.log[0]?.battery === 0
+                      ? 'bg-red-500 border-red-500 text-white'
+                      : ''
+                  } flex items-center justify-center gap-1 text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top`}
                   data-tip={t('deviceBatteryTb')}
                 >
                   <div>
@@ -224,7 +245,7 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
         </div>
       )
     }
-  }, [devicesFiltered, t, loading])
+  }, [devicesFiltered, t, loading, totalRows, perPage, currentPage])
 
   return <div>{UserCard}</div>
 }

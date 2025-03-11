@@ -45,21 +45,23 @@ const columnData = (
         </div>
       ),
       sortable: false,
-      center: true
+      center: true,
+      width: '200px'
     },
     {
       name: t('deviceLocationTb'),
       cell: item => (
         <div
-          className='tooltip'
-          data-tip={item.location ?? '—'}
+          className='truncate'
+          title={item.location ?? '—'}
           onClick={() => handleRowClicked(item)}
         >
-          <span className='truncate max-w-[100px]'>{item.location ?? '—'}</span>
+          <span>{item.location ?? '—'}</span>
         </div>
       ),
       sortable: false,
-      center: true
+      center: true,
+      width: '150px'
     },
     {
       name: t('devicTemperatureTb'),
@@ -114,7 +116,7 @@ const columnData = (
         const doors: DoorKey[] = ['door1', 'door2', 'door3']
 
         return (
-          <>
+          <div className='flex items-center gap-2'>
             {doors.slice(0, doorCount).map(doorKey => (
               <div
                 key={doorKey}
@@ -131,7 +133,7 @@ const columnData = (
                 )}
               </div>
             ))}
-          </>
+          </div>
         )
       },
       sortable: false,

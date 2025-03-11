@@ -37,74 +37,66 @@ const UserPagination = <T,>({
 
   const generatePagination = () => {
     const pages: ReactNode[] = []
+
     if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(
-          <button
-            key={i}
-            className={`join-item btn ${currentPage === i ? 'btn-primary' : 'bg-base-300 border-base-300'}`}
-            onClick={() => goToPage(i)}
-          >
-            {i}
-          </button>
-        )
-      }
+        for (let i = 1; i <= totalPages; i++) {
+            pages.push(
+                <button
+                    key={i}
+                    className={`join-item btn ${currentPage === i ? 'btn-primary' : 'bg-base-300 border-base-300'}`}
+                    onClick={() => i !== currentPage && goToPage(i)}
+                >
+                    {i}
+                </button>
+            )
+        }
     } else {
-      if (currentPage > 3) {
         pages.push(
-          <button
-            key={1}
-            className="join-item btn"
-            onClick={() => goToPage(1)}
-          >
-            1
-          </button>
-        )
-        if (currentPage > 4) {
-          pages.push(
-            <button key="start-dots" className="join-item btn btn-disabled">
-              ...
+            <button
+                key={1}
+                className={`join-item btn ${currentPage === 1 ? 'btn-primary' : ''}`}
+                onClick={() => goToPage(1)}
+            >
+                1
             </button>
-          )
-        }
-      }
-
-      const start = Math.max(2, currentPage - 1)
-      const end = Math.min(totalPages - 1, currentPage + 1)
-
-      for (let i = start; i <= end; i++) {
-        pages.push(
-          <button
-            key={i}
-            className={`join-item btn ${currentPage === i ? 'btn-primary' : 'bg-base-300 border-base-300'}`}
-            onClick={() => goToPage(i)}
-          >
-            {i}
-          </button>
         )
-      }
 
-      if (currentPage < totalPages - 2) {
-        if (currentPage < totalPages - 3) {
-          pages.push(
-            <button key="end-dots" className="join-item btn btn-disabled">
-              ...
+        if (currentPage > 3) {
+            pages.push(<button key="start-dots" className="join-item btn btn-disabled">...</button>)
+        }
+
+        const start = Math.max(2, currentPage - 1)
+        const end = Math.min(totalPages - 1, currentPage + 1)
+
+        for (let i = start; i <= end; i++) {
+            pages.push(
+                <button
+                    key={i}
+                    className={`join-item btn ${currentPage === i ? 'btn-primary' : 'bg-base-300 border-base-300'}`}
+                    onClick={() => goToPage(i)}
+                >
+                    {i}
+                </button>
+            )
+        }
+
+        if (currentPage < totalPages - 2) {
+            pages.push(<button key="end-dots" className="join-item btn btn-disabled">...</button>)
+        }
+
+        pages.push(
+            <button
+                key={totalPages}
+                className={`join-item btn ${currentPage === totalPages ? 'btn-primary' : ''}`}
+                onClick={() => goToPage(totalPages)}
+            >
+                {totalPages}
             </button>
-          )
-        }
-        pages.push(
-          <button
-            key={totalPages}
-            className="join-item btn"
-            onClick={() => goToPage(totalPages)}
-          >
-            {totalPages}
-          </button>
         )
-      }
     }
+
     return pages
-  }
+}
 
   return (
     <>

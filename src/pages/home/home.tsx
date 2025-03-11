@@ -13,7 +13,11 @@ import {
   useRef,
   useState
 } from 'react'
-import { setDeviceKey, setSearch, setTokenExpire } from '../../redux/actions/utilsActions'
+import {
+  setDeviceKey,
+  setSearch,
+  setTokenExpire
+} from '../../redux/actions/utilsActions'
 import { DeviceCountType } from '../../types/smtrack/devices/deviceCount'
 import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
@@ -54,7 +58,9 @@ const Home = () => {
   const [deviceConnect, setDeviceConnect] = useState('')
   const [loading, setLoading] = useState(false)
   const [totalRows, setTotalRows] = useState(0)
-  const [perPage, setPerPage] = useState(cookies.get('homeRowPerPage') ?? 10)
+  const [perPage, setPerPage] = useState<number>(
+    cookies.get('homeRowPerPage') ?? 10
+  )
   const [currentPage, setCurrentPage] = useState(1)
   const [probeData, setProbeData] = useState<ProbeType[]>([])
   const [serial, setSerial] = useState<string>('')
@@ -151,12 +157,8 @@ const Home = () => {
     const filter = devices?.filter(f => {
       const matchesSearch =
         f.id?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        f.name
-          ?.toLowerCase()
-          .includes(globalSearch.toLowerCase()) ||
-        f.location
-          ?.toLowerCase()
-          .includes(globalSearch.toLowerCase())
+        f.name?.toLowerCase().includes(globalSearch.toLowerCase()) ||
+        f.location?.toLowerCase().includes(globalSearch.toLowerCase())
 
       const matchesConnection =
         deviceConnect === '' ||
@@ -314,16 +316,19 @@ const Home = () => {
             onChangeRowsPerPage={handlePerRowsChange}
             onChangePage={handlePageChange}
             onRowClicked={handleRowClicked}
-            paginationRowsPerPageOptions={[10, 20, 50, 100, 150, 200]}
+            paginationRowsPerPageOptions={[10, 20, 50, 100]}
             className='md:!max-h-[calc(100dvh-490px)]'
           />
         </div>
       ) : (
         <HomeDeviceCard
           devicesFiltered={devicesFiltered}
-          handlePageChange={handlePageChange}
-          handlePerRowsChange={handlePerRowsChange}
+          totalRows={totalRows}
+          currentPage={currentPage}
+          perPage={perPage}
           loading={loading}
+          handlePerRowsChange={handlePerRowsChange}
+          handlePageChange={handlePageChange}
           openAdjustModal={openAdjustModal}
         />
       )}
