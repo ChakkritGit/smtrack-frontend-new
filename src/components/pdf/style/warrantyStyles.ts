@@ -31,11 +31,10 @@ const style = StyleSheet.create({
     justifyContent: 'space-between'
   },
   headImage: {
+    aspectRatio: 1/1,
     objectFit: 'contain',
     width: '64px',
-    height: '64px',
-    marginTop: 20,
-    marginLeft: 20
+    height: '64px'
   },
   headText: {
     fontSize: 12,
@@ -60,7 +59,7 @@ const style = StyleSheet.create({
     alignItems: 'flex-start'
   },
   contentWrapperRow: {
-    marginTop: 15,
+    marginTop: 20,
     fontSize: 10,
     paddingHorizontal: 20,
     gap: 10,

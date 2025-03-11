@@ -429,7 +429,7 @@ const RepairPdf = () => {
           </li>
         </ul>
       </div>
-      {instance.loading ? (
+      {!instance.url ? (
         <Loading />
       ) : os === 'iOS' ? (
         <Worker workerUrl={pdfUrl}>

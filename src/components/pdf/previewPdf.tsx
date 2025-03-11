@@ -111,7 +111,7 @@ function PreviewPDF () {
         </ul>
       </div>
       <div className='h-full mt-3'>
-        {instance.loading ? (
+        {!instance.url ? (
           <Loading />
         ) : os === 'iOS' ? (
           <Worker workerUrl={pdfUrl}>

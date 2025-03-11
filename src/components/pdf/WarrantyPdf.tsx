@@ -13,7 +13,7 @@ import {
   View
 } from '@react-pdf/renderer'
 import { style } from './style/warrantyStyles'
-import ThanesLogo from '../../assets/images/Thanes-Logo2(RGB2500x2500).png'
+import ThanesLogo from '../../assets/images/Thanes_Logo2.png'
 import ThanesSciLogo from '../../assets/images/Thanesscience_Logo.png'
 import ThanesBannerLogo from '../../assets/images/ts-logo.png'
 import ThanesSciBannerLogo from '../../assets/images/Thanesscience.png'
@@ -290,7 +290,7 @@ const WarrantyPdf = () => {
           </li>
         </ul>
       </div>
-      {instance.loading ? (
+      {!instance.url ? (
         <Loading />
       ) : os === 'iOS' ? (
         <Worker workerUrl={pdfUrl}>
