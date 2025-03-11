@@ -7,6 +7,8 @@ type DevicesType = {
   createAt: string
   firmware: string
   hospital: string
+  hospitalName: string
+  wardName: string
   id: string
   installDate: string
   location?: string

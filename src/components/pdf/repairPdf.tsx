@@ -77,7 +77,7 @@ const RepairPdf = () => {
             <Text style={style.headerTextNumber}>
               เลขที่{' '}
               <Text style={style.headerTextNumberColor}>
-                {state?.id ? state?.id.substring(0, 10) : '—'}
+                {state?.id ? state?.id : '—'}
               </Text>
             </Text>
           </View>

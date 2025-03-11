@@ -90,7 +90,7 @@ const WarrantyPdf = () => {
                     <Text>Warranty No</Text>
                   </View>
                   <View style={style.secondHeaderTextTwo}>
-                    <Text>{'—'}</Text>
+                    <Text>{state?.id ?? '—'}</Text>
                   </View>
                 </View>
                 <View style={style.secondHeaderTextColumn}>

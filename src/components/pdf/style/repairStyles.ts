@@ -44,10 +44,12 @@ const style = StyleSheet.create({
     width: '33.33%'
   },
   headerTextSqColor: {
+    fontSize: 10,
     color: 'red',
     fontWeight: 'bold'
   },
   headerTextNumberColor: {
+    fontSize: 10,
     color: 'red',
     fontWeight: 'bold'
   },

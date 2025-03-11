@@ -708,9 +708,10 @@ const ManageDevice = () => {
   useEffect(() => {
     const filter = devices?.filter(f => {
       const matchesSearch =
-        f.id?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        f.name?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        f.hospital?.toLowerCase().includes(globalSearch.toLowerCase())
+        f?.id?.toLowerCase().includes(globalSearch.toLowerCase()) ||
+        f?.name?.toLowerCase().includes(globalSearch.toLowerCase()) ||
+        f?.hospitalName?.toLowerCase().includes(globalSearch.toLowerCase()) ||
+        f?.wardName?.toLowerCase().includes(globalSearch.toLowerCase())
 
       return matchesSearch
     })
@@ -766,13 +767,13 @@ const ManageDevice = () => {
     },
     {
       name: t('hospitals'),
-      cell: item => (item.hospital ? item.hospital : '—'),
+      cell: item => (item.hospitalName ? item.hospitalName : '—'),
       sortable: false,
       center: true
     },
     {
       name: t('ward'),
-      cell: item => (item.ward ? item.ward : '—'),
+      cell: item => (item.wardName ? item.wardName : '—'),
       sortable: false,
       center: true
     },
