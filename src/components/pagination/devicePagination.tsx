@@ -109,7 +109,7 @@ const DevicePagination = <T,>({
   return (
     <>
       {
-      !loading ?<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-7 content-center justify-items-center mt-5">
+      !loading ?<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-7 content-center justify-items-center mt-5">
         {data.map((item, index) => renderItem(item, index))}
       </div>
       :
