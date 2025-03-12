@@ -99,7 +99,7 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
           renderItem={(item, index) => (
             <div
               key={index}
-              className='w-full h-[356px] md:w-[280px] lg:w-[230px] xl:w-[260px] bg-base-100 rounded-btn shadow-sm p-4'
+              className='w-full h-[356px] bg-base-100 rounded-btn shadow-sm p-4'
             >
               <div className='flex items-start justify-between'>
                 <div className='avatar'>

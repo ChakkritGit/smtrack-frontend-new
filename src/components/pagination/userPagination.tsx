@@ -100,7 +100,7 @@ const UserPagination = <T,>({
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-3 content-center justify-items-center mt-5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-7 content-center justify-items-center mt-5">
         {paginatedData.map((item, index) => renderItem(item, index))}
       </div>
 

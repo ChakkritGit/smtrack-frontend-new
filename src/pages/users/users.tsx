@@ -29,7 +29,12 @@ import {
   handleApiError
 } from '../../constants/utils/utilsConstants'
 import UserPagination from '../../components/pagination/userPagination'
-import { setHosId, setSearch, setSubmitLoading, setTokenExpire } from '../../redux/actions/utilsActions'
+import {
+  setHosId,
+  setSearch,
+  setSubmitLoading,
+  setTokenExpire
+} from '../../redux/actions/utilsActions'
 import Swal from 'sweetalert2'
 import { resizeImage } from '../../constants/utils/image'
 import HopitalSelect from '../../components/selects/hopitalSelect'
@@ -458,7 +463,7 @@ const Users = () => {
           itemPerPage={[10, 30, 50, 100]}
           renderItem={(item, index) => (
             <div
-              className={`min-h-[240px] max-h-[270px] sm:w-[300px] shadow-sm lg:w-full w-full ${
+              className={`min-h-[240px] max-h-[270px] w-full shadow-sm ${
                 !item.status ? 'bg-base-100/40' : 'bg-base-100'
               } rounded-btn`}
               key={index}

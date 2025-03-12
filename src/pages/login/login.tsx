@@ -105,7 +105,7 @@ const Login = () => {
 
   return (
     <div className='min-h-dvh flex flex-col items-center justify-center gap-7'>
-      <div className='card bg-base-100 w-[370px] sm:w-[500px] md:w-[500px] lg:w-[600px] h-max shadow-xl'>
+      <div className='card bg-base-100 w-[350px] sm:w-[500px] md:w-[500px] lg:w-[600px] h-max shadow-xl'>
         <div className='px-5 sm:px-7 lg:px-10 pt-5'>
           <div className='text-end'>
             <LanguageList />
