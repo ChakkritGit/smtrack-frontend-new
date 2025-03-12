@@ -1,39 +1,46 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import ChartMini from './chartMini'
 import { useTranslation } from 'react-i18next'
-import { RiArrowRightUpLine, RiPlayLine, RiStopLine } from 'react-icons/ri'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { RiArrowRightUpLine } from 'react-icons/ri'
+import { useEffect, useMemo, useRef } from 'react'
 import { Autoplay, EffectCreative, Pagination } from 'swiper/modules'
 import { Swiper as SwiperType } from 'swiper/types'
 import { DeviceLogsType } from '../../../../types/smtrack/devices/deviceType'
 import { useNavigate } from 'react-router-dom'
+import SwiperCore from 'swiper'
+import { GlobalContextType } from '../../../../types/global/globalContext'
+import { useSwiperSync } from '../../../../constants/utils/utilsConstants'
 
 interface ChartSwiperWrapperProps {
   deviceLogs: DeviceLogsType | undefined
+  isPause: boolean
 }
+
+SwiperCore.use([Pagination])
 
 const ChartSwiperWrapper = (props: ChartSwiperWrapperProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { deviceLogs } = props
-  const [isPause, setIsPaused] = useState(false)
+  const { deviceLogs, isPause } = props
   const swiperRef = useRef<SwiperType>(null)
+  const { activeIndex, setActiveIndex } = useSwiperSync() as GlobalContextType
 
-  const togglePause = useCallback(() => {
-    setIsPaused(prev => !prev)
-    if (swiperRef.current) {
-      if (isPause) {
-        swiperRef.current.autoplay.start()
-      } else {
-        swiperRef.current.autoplay.stop()
+  useEffect(() => {
+      if (swiperRef.current) {
+        swiperRef.current.slideTo(activeIndex)
+
+        if (!isPause) {
+          swiperRef.current.autoplay.start()
+        } else {
+          swiperRef.current.autoplay.stop()
+        }
       }
-    }
-  }, [isPause])
+    }, [activeIndex, isPause])
 
   const SwiperFragment = useMemo(() => {
     return (
       <Swiper
-        onSwiper={swiper => (swiperRef.current = swiper)}
+        key={'chartSwiper'}
         slidesPerView={'auto'}
         spaceBetween={30}
         centeredSlides={true}
@@ -48,6 +55,8 @@ const ChartSwiperWrapper = (props: ChartSwiperWrapperProps) => {
           dynamicBullets: true,
           clickable: true
         }}
+        onSlideChange={swiper => setActiveIndex(swiper.activeIndex)}
+        onSwiper={swiper => swiperRef.current = swiper}
         effect={'creative'}
         creativeEffect={{
           prev: {
@@ -90,27 +99,13 @@ const ChartSwiperWrapper = (props: ChartSwiperWrapperProps) => {
         )}
       </Swiper>
     )
-  }, [isPause, deviceLogs, swiperRef])
+  }, [deviceLogs, swiperRef, activeIndex, swiperRef, isPause])
 
   return (
     <div className='flex flex-col gap-3 bg-base-100 w-full h-full rounded-btn p-3'>
       <div className='flex items-center justify-between px-3'>
         <div className='flex items-center gap-3'>
           <span className='text-[20px] font-bold'>{t('pageChart')}</span>
-          {deviceLogs && deviceLogs?.probe?.length > 1 && (
-            <label
-              htmlFor='button'
-              className='tooltip tooltip-right'
-              data-tip={isPause ? t('startSlide') : t('stopSlide')}
-            >
-              <button
-                className='btn btn-primary bg-opacity-15 text-primary border-primary border-2 p-0 hover:opacity-50 hover:border-primary hover:bg-transparent duration-300 max-h-[28px] min-h-[28px] max-w-[28px] min-w-[28px]'
-                onClick={togglePause}
-              >
-                {isPause ? <RiPlayLine size={20} /> : <RiStopLine size={20} />}
-              </button>
-            </label>
-          )}
         </div>
         <button
           className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'

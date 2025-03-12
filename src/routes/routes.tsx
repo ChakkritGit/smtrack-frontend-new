@@ -24,6 +24,7 @@ const Routes = () => {
   const { tokenDecode, cookieDecode, tmsMode, themeMode, userProfile } =
     useSelector((state: RootState) => state.utils)
   const [hospital, setHospital] = useState<HospitalType[]>([])
+  const [activeIndex, setActiveIndex] = useState(0)
   const [ward, setWard] = useState<WardType[]>([])
   const { role = 'USER' } = tokenDecode || {}
   const { token } = cookieDecode || {}
@@ -136,8 +137,8 @@ const Routes = () => {
 
   const routerInstance = useMemo(() => router(role, tmsMode), [role, tmsMode])
   const contextValue = useMemo(
-    () => ({ hospital, setHospital, ward, setWard, fetchHospital, fetchWard }),
-    [hospital, ward]
+    () => ({ hospital, setHospital, ward, setWard, fetchHospital, fetchWard, activeIndex, setActiveIndex }),
+    [hospital, ward, activeIndex]
   )
   const hashText = useCallback(
     () =>

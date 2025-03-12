@@ -13,9 +13,12 @@ import CardStatus from '../../../components/pages/dashboard/smtrack/cardStatus'
 import ChartSwiperWrapper from '../../../components/pages/dashboard/smtrack/chartSwiperWrapper'
 import DataTableWrapper from '../../../components/pages/dashboard/smtrack/dataTableWrapper'
 import { useTranslation } from 'react-i18next'
-import { RiCloseLargeLine } from 'react-icons/ri'
+import { RiCloseLargeLine, RiPlayLine, RiStopLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 import { setTokenExpire } from '../../../redux/actions/utilsActions'
+import { useSwiperSync } from '../../../constants/utils/utilsConstants'
+import { GlobalContextType } from '../../../types/global/globalContext'
+import { Swiper as SwiperType } from 'swiper/types'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
@@ -25,6 +28,15 @@ const Dashboard = () => {
   const [deviceLogs, setDeviceLogs] = useState<DeviceLogsType>()
   const [loading, setLoading] = useState(false)
   const modalRef = useRef<HTMLDialogElement>(null)
+  const { activeIndex } = useSwiperSync() as GlobalContextType
+  const swiperTempRef = useRef<SwiperType>(null)
+  const swiperTempOfDayRef = useRef<SwiperType>(null)
+  const swiperInfoRef = useRef<SwiperType>(null)
+  const [isPause, setIsPaused] = useState(false)
+
+  const togglePause = useCallback(() => {
+    setIsPaused(prev => !prev)
+  }, [isPause])
 
   const fetchDeviceLogs = useCallback(async () => {
     try {
@@ -57,13 +69,29 @@ const Dashboard = () => {
       <CardInFoComponent
         deviceData={deviceLogs}
         fetchDevices={fetchDeviceLogs}
+        swiperInfoRef={swiperInfoRef}
+        isPause={isPause}
       />
     )
-  }, [deviceKey, deviceLogs])
+  }, [deviceKey, deviceLogs, activeIndex, swiperInfoRef, isPause])
 
   const CardStatusComponent = useMemo(() => {
-    return <CardStatus deviceData={deviceLogs} />
-  }, [deviceKey, deviceLogs])
+    return (
+      <CardStatus
+        deviceData={deviceLogs}
+        swiperTempRef={swiperTempRef}
+        swiperTempOfDayRef={swiperTempOfDayRef}
+        isPause={isPause}
+      />
+    )
+  }, [
+    deviceKey,
+    deviceLogs,
+    activeIndex,
+    swiperTempRef,
+    swiperTempOfDayRef,
+    isPause
+  ])
 
   useEffect(() => {
     if (!deviceKey) {
@@ -94,7 +122,27 @@ const Dashboard = () => {
         <>
           <div className='flex items-center justify-between flex-wrap lg:flex-nowrap xl:flex-nowrap gap-3 mt-[16px]'>
             <DeviceList />
-            <HospitalAndWard />
+            <div className='flex items-center gap-3 justify-end w-full flex-wrap'>
+              {deviceLogs && deviceLogs?.probe?.length > 1 && (
+                <label
+                  htmlFor='button'
+                  className='tooltip tooltip-left'
+                  data-tip={isPause ? t('startSlide') : t('stopSlide')}
+                >
+                  <button
+                    className='btn btn-primary bg-opacity-15 text-primary border-primary border-2 p-0 hover:opacity-50 hover:border-primary hover:bg-transparent duration-300 max-h-[28px] min-h-[28px] max-w-[28px] min-w-[28px]'
+                    onClick={togglePause}
+                  >
+                    {isPause ? (
+                      <RiPlayLine size={20} />
+                    ) : (
+                      <RiStopLine size={20} />
+                    )}
+                  </button>
+                </label>
+              )}
+              <HospitalAndWard />
+            </div>
           </div>
           {loading ? (
             <div className='flex items-center justify-center loading-hieght-full'>
@@ -112,10 +160,13 @@ const Dashboard = () => {
               </div>
               <div className='grid grid-cols-1 lg:grid-cols-2 mt-4 gap-3'>
                 <div className='w-full h-[435px]'>
-                  <ChartSwiperWrapper deviceLogs={deviceLogs} />
+                  <ChartSwiperWrapper
+                    deviceLogs={deviceLogs}
+                    isPause={isPause}
+                  />
                 </div>
                 <div className='w-full h-[435px]'>
-                  <DataTableWrapper deviceLogs={deviceLogs} />
+                  <DataTableWrapper deviceLogs={deviceLogs} isPause={isPause} />
                 </div>
               </div>
             </>

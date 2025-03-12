@@ -3,22 +3,31 @@ import { DeviceLogsType } from '../../../../types/smtrack/devices/deviceType'
 import { RiSettings3Line } from 'react-icons/ri'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, EffectCreative, Pagination } from 'swiper/modules'
+import SwiperCore from 'swiper'
 import DefaultPic from '../../../../assets/images/default-pic.png'
 import Adjustments from '../../../adjustments/adjustments'
-import { useRef, useState } from 'react'
+import { RefObject, useEffect, useRef, useState } from 'react'
 import { ProbeType } from '../../../../types/smtrack/probe/probeType'
+import { useSwiperSync } from '../../../../constants/utils/utilsConstants'
+import { GlobalContextType } from '../../../../types/global/globalContext'
+import { Swiper as SwiperType } from 'swiper/types'
 
 type PropsType = {
   deviceData: DeviceLogsType | undefined
   fetchDevices: () => Promise<void>
+  swiperInfoRef: RefObject<SwiperType | null>
+  isPause: boolean
 }
+
+SwiperCore.use([Pagination])
 
 const CardInFoComponent = (props: PropsType) => {
   const { t } = useTranslation()
-  const { deviceData, fetchDevices } = props
+  const { deviceData, fetchDevices, swiperInfoRef, isPause } = props
   const [serial, setSerial] = useState<string>('')
   const [probeData, setProbeData] = useState<ProbeType[]>([])
   const openAdjustModalRef = useRef<HTMLDialogElement>(null)
+  const { activeIndex, setActiveIndex } = useSwiperSync() as GlobalContextType
 
   const openAdjustModal = (probe: ProbeType[], sn: string) => {
     setProbeData(probe)
@@ -27,6 +36,18 @@ const CardInFoComponent = (props: PropsType) => {
       openAdjustModalRef.current.showModal()
     }
   }
+
+  useEffect(() => {
+    if (swiperInfoRef.current) {
+      swiperInfoRef.current.slideTo(activeIndex)
+
+      if (!isPause) {
+        swiperInfoRef.current.autoplay.start()
+      } else {
+        swiperInfoRef.current.autoplay.stop()
+      }
+    }
+  }, [activeIndex, isPause])
 
   return (
     <div className='p-5 h-full'>
@@ -74,6 +95,7 @@ const CardInFoComponent = (props: PropsType) => {
         </div>
         <div className='w-full lg:w-[60%] h-3/4 p-1'>
           <Swiper
+            key={'adjustmentsSetting'}
             slidesPerView={'auto'}
             spaceBetween={100}
             centeredSlides={true}
@@ -83,10 +105,8 @@ const CardInFoComponent = (props: PropsType) => {
               disableOnInteraction: false,
               waitForTransition: false
             }}
-            // pagination={{
-            //   dynamicBullets: true,
-            //   clickable: true
-            // }}
+            onSlideChange={swiper => setActiveIndex(swiper.activeIndex)}
+            onSwiper={swiper => (swiperInfoRef.current = swiper)}
             effect={'creative'}
             creativeEffect={{
               prev: {

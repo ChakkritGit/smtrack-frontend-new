@@ -27,19 +27,46 @@ import {
   tempOfDay,
   unPlug
 } from '../../../../constants/utils/dashboardCardStatus'
+import SwiperCore from 'swiper'
+import { useSwiperSync } from '../../../../constants/utils/utilsConstants'
+import { GlobalContextType } from '../../../../types/global/globalContext'
+import { RefObject, useEffect } from 'react'
+import { Swiper as SwiperType } from 'swiper/types'
 
 type PropsType = {
   deviceData: DeviceLogsType | undefined
+  swiperTempRef: RefObject<SwiperType | null>
+  swiperTempOfDayRef: RefObject<SwiperType | null>
+  isPause: boolean
 }
+
+SwiperCore.use([Pagination])
 
 const CardStatus = (props: PropsType) => {
   const { t } = useTranslation()
-  const { deviceData } = props
+  const { deviceData, swiperTempRef, swiperTempOfDayRef, isPause } = props
+  const { activeIndex, setActiveIndex } = useSwiperSync() as GlobalContextType
+
+  useEffect(() => {
+    if (swiperTempRef.current && swiperTempOfDayRef.current) {
+      swiperTempRef.current.slideTo(activeIndex)
+      swiperTempOfDayRef.current.slideTo(activeIndex)
+
+      if (!isPause) {
+        swiperTempRef.current.autoplay.start()
+        swiperTempOfDayRef.current.autoplay.start()
+      } else {
+        swiperTempRef.current.autoplay.stop()
+        swiperTempOfDayRef.current.autoplay.stop()
+      }
+    }
+  }, [activeIndex, isPause])
 
   return (
     <>
       <div className='bg-base-100 rounded-btn w-full h-[140px] overflow-hidden'>
         <Swiper
+          key={'tempAndHumi'}
           slidesPerView={'auto'}
           spaceBetween={30}
           centeredSlides={true}
@@ -53,6 +80,8 @@ const CardStatus = (props: PropsType) => {
             dynamicBullets: true,
             clickable: true
           }}
+          onSlideChange={swiper => setActiveIndex(swiper.activeIndex)}
+          onSwiper={swiper => (swiperTempRef.current = swiper)}
           effect={'creative'}
           creativeEffect={{
             prev: {
@@ -164,12 +193,12 @@ const CardStatus = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              deviceData?.online
+              !deviceData?.online
                 ? 'text-base-content bg-opacity-80 bg-red-500'
                 : ''
             }`}
           >
-            {deviceData?.online ? (
+            {!deviceData?.online ? (
               <RiSignalWifiOffLine size={20} />
             ) : (
               <RiSignalWifi1Line size={20} />
@@ -179,11 +208,11 @@ const CardStatus = (props: PropsType) => {
         </div>
         <div
           className={`flex items-center justify-center text-[20px] font-bold h-full ${
-            deviceData?.online ? 'text-red-500' : ''
+            !deviceData?.online ? 'text-red-500' : ''
           }`}
         >
           {deviceData
-            ? deviceData?.online
+            ? !deviceData?.online
               ? t('stateDisconnect')
               : t('stateConnect')
             : '—'}
@@ -282,6 +311,7 @@ const CardStatus = (props: PropsType) => {
       </div>
       <div className='bg-base-100 rounded-btn w-full h-[140px] overflow-hidden'>
         <Swiper
+          key={'tempOfDaya'}
           slidesPerView={'auto'}
           spaceBetween={30}
           centeredSlides={true}
@@ -295,6 +325,8 @@ const CardStatus = (props: PropsType) => {
             dynamicBullets: true,
             clickable: true
           }}
+          onSlideChange={swiper => setActiveIndex(swiper.activeIndex)}
+          onSwiper={swiper => (swiperTempOfDayRef.current = swiper)}
           effect={'creative'}
           creativeEffect={{
             prev: {
@@ -399,12 +431,12 @@ const CardStatus = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              sdCard(deviceData)
+              !sdCard(deviceData)
                 ? 'text-base-content bg-opacity-80 bg-red-500'
                 : ''
             }`}
           >
-            {sdCard(deviceData) ? (
+            {!sdCard(deviceData) ? (
               <MdOutlineSdCardAlert size={20} />
             ) : (
               <MdOutlineSdCard size={20} />
@@ -414,11 +446,11 @@ const CardStatus = (props: PropsType) => {
         </div>
         <div
           className={`flex items-center justify-center text-[20px] font-bold h-full ${
-            sdCard(deviceData) ? 'text-red-500' : ''
+            !sdCard(deviceData) ? 'text-red-500' : ''
           }`}
         >
           {deviceData
-            ? sdCard(deviceData)
+            ? !sdCard(deviceData)
               ? t('stateProblem')
               : t('stateNormal')
             : '—'}

@@ -166,6 +166,7 @@ const MainSmtrack = () => {
     if (
       socketData &&
       !popUpMode &&
+      isMessageValid &&
       (!isMessageValid?.includes('device offline') ||
         !isMessageValid?.includes('device online'))
     ) {

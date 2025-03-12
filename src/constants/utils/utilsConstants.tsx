@@ -7,6 +7,8 @@ import { Dispatch } from 'redux'
 import { AxiosError } from 'axios'
 import Swal from 'sweetalert2'
 import { Schedule, ScheduleHour, ScheduleMinute } from '../../types/tms/devices/probeType'
+import { useContext } from 'react'
+import { GlobalContext } from '../../contexts/globalContext'
 
 const accessToken = (tokenObject: TokenDecodeType) =>
   CryptoJS.AES.encrypt(
@@ -538,6 +540,10 @@ const minutesOptions = Array.from({ length: 60 }, (_, i) => ({
   label: String(i).padStart(2, '0'),
 }))
 
+const useSwiperSync = () => {
+  return useContext(GlobalContext)
+}
+
 export {
   accessToken,
   cookieDecodeObject,
@@ -554,5 +560,6 @@ export {
   swalTokenInvalid,
   hoursOptions,
   minutesOptions,
-  extractValues
+  extractValues,
+  useSwiperSync
 }
