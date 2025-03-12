@@ -196,11 +196,11 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                 </div>
                 <div
                   className={`${
-                    item.log[0]?.extMemory ? 'bg-red-500 border-red-500' : ''
+                    !item.log[0]?.extMemory ? 'bg-red-500 border-red-500' : ''
                   } flex items-center justify-center text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top`}
                   data-tip={t('dashSdCard')}
                 >
-                  {item.log[0]?.extMemory ? (
+                  {!item.log[0]?.extMemory ? (
                     <MdOutlineSdCardAlert size={20} />
                   ) : (
                     <MdOutlineSdCard size={20} />
