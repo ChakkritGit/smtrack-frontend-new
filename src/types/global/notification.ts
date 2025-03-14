@@ -16,8 +16,28 @@ type NotificationType = {
 }
 
 type NotificationHistoryType = {
+  _measurement: string
+  _start: string
+  _stop: string
   _time: string
   message: string
+  sn: string
 }
 
-export type { NotificationType, NotificationHistoryType }
+type NotificationTmsHistoryType = {
+  _measurement: string
+  _start: string
+  _stop: string
+  _time: string
+  message: string
+  probe: string
+  result: string
+  sn: string
+  table: number
+}
+
+export type {
+  NotificationType,
+  NotificationHistoryType,
+  NotificationTmsHistoryType
+}

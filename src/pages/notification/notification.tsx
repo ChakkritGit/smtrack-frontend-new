@@ -19,7 +19,10 @@ import { MdOutlineSdCard, MdOutlineSdCardAlert } from 'react-icons/md'
 import { useCallback, useEffect, useState } from 'react'
 import axiosInstance from '../../constants/axios/axiosInstance'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
-import { NotificationHistoryType } from '../../types/global/notification'
+import {
+  NotificationHistoryType,
+  NotificationTmsHistoryType
+} from '../../types/global/notification'
 import { AxiosError } from 'axios'
 import { setTokenExpire } from '../../redux/actions/utilsActions'
 import Loading from '../../components/skeleton/table/loading'
@@ -32,11 +35,11 @@ const Notification = () => {
   )
   const { t } = useTranslation()
   const [notificationList, setNotification] = useState<
-    NotificationHistoryType[]
+    NotificationHistoryType[] | NotificationTmsHistoryType[]
   >([])
   const [datePicker, setDatePicker] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const { role = 'USER' } = tokenDecode || {}
+  const { role } = tokenDecode || {}
 
   const subTextNotiDetails = (text: string) => {
     if (text.split('/')[0] === 'PROBE1') {
@@ -129,18 +132,25 @@ const Notification = () => {
 
   const fetchNotificaton = useCallback(async () => {
     setIsLoading(true)
+
+    const baeUrl =
+      role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode
+        ? `/legacy/templog/history/notification${
+            datePicker !== '' ? `?filter=${datePicker}` : ''
+          }`
+        : `/log/notification/history/filter${
+            datePicker !== '' ? `?filter=${datePicker}` : ''
+          }`
+
     try {
-      const response = await axiosInstance.get<
-        responseType<NotificationHistoryType[]>
-      >(
+      const response =
         role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode
-          ? `/log/notification/history/filter${
-              datePicker !== '' ? `?filter=${datePicker}` : ''
-            }`
-          : `/log/notification/history/filter${
-              datePicker !== '' ? `?filter=${datePicker}` : ''
-            }`
-      )
+          ? await axiosInstance.get<responseType<NotificationTmsHistoryType[]>>(
+              baeUrl
+            )
+          : await axiosInstance.get<responseType<NotificationHistoryType[]>>(
+              baeUrl
+            )
       setNotification(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -154,7 +164,7 @@ const Notification = () => {
     } finally {
       setIsLoading(false)
     }
-  }, [datePicker])
+  }, [role, tmsMode, datePicker])
 
   useEffect(() => {
     fetchNotificaton()
@@ -162,19 +172,22 @@ const Notification = () => {
 
   return (
     <div className='p-3 px-[16px]'>
-      <input
-        type='date'
-        value={datePicker}
-        onChange={e => setDatePicker(e.target.value)}
-        className='input input-bordered w-full md:max-w-xs mb-3'
-      />
+      <div className='flex flex-col items-start gap-2 mb-3'>
+        <span>{t('seeLastData')}</span>
+        <input
+          type='date'
+          value={datePicker}
+          onChange={e => setDatePicker(e.target.value)}
+          className='input input-bordered w-full md:max-w-xs'
+        />
+      </div>
       <div className='bg-base-100 rounded-btn py-4 px-5'>
         {!isLoading ? (
           role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode ? (
             <div>
               {notificationList.length > 0 ? (
                 <NotificationPagination
-                  data={notificationList}
+                  data={notificationList as NotificationTmsHistoryType[]}
                   initialPerPage={10}
                   itemPerPage={[10, 30, 50, 100]}
                   renderItem={(item, index) => (
@@ -198,7 +211,7 @@ const Notification = () => {
                           </div>
                         </div>
                         <span className='text-[14px] opacity-70'>
-                          {item?.mcuId ?? '—'}
+                          {item?.sn ?? '—'}
                         </span>
                       </div>
                     </li>
@@ -214,7 +227,7 @@ const Notification = () => {
             <div>
               {notificationList.length > 0 ? (
                 <NotificationPagination
-                  data={notificationList}
+                  data={notificationList as NotificationHistoryType[]}
                   initialPerPage={10}
                   itemPerPage={[10, 30, 50, 100]}
                   renderItem={(item, index) => (
@@ -238,7 +251,7 @@ const Notification = () => {
                           </div>
                         </div>
                         <span className='text-[14px] opacity-70'>
-                          {item?.device?.name ?? '—'}
+                          {item?.sn ?? '—'}
                         </span>
                       </div>
                     </li>
