@@ -62,7 +62,7 @@ const DevicePagination = <T,>({
             <button
                 key={1}
                 className={`join-item btn ${currentPage === 1 ? 'btn-primary' : ''}`}
-                onClick={() => goToPage(1)}
+                onClick={() => currentPage !== 1 && goToPage(1)}
             >
                 1
             </button>
@@ -95,7 +95,7 @@ const DevicePagination = <T,>({
             <button
                 key={totalPages}
                 className={`join-item btn ${currentPage === totalPages ? 'btn-primary' : ''}`}
-                onClick={() => goToPage(totalPages)}
+                onClick={() => currentPage !== totalPages && goToPage(totalPages)}
             >
                 {totalPages}
             </button>
@@ -103,7 +103,7 @@ const DevicePagination = <T,>({
     }
 
     return pages
-}
+  }
 
 
   return (
