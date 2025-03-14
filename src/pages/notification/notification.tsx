@@ -168,7 +168,7 @@ const Notification = () => {
         onChange={e => setDatePicker(e.target.value)}
         className='input input-bordered w-full md:max-w-xs mb-3'
       />
-      <div>
+      <div className='bg-base-100 rounded-btn py-4 px-5'>
         {!isLoading ? (
           role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode ? (
             <div>
@@ -179,7 +179,7 @@ const Notification = () => {
                   itemPerPage={[10, 30, 50, 100]}
                   renderItem={(item, index) => (
                     <li
-                      className='flex items-center gap-3 py-2 px-3'
+                      className={`flex items-center gap-3 py-2 px-3 border-b border-base-content/5`}
                       key={index}
                     >
                       <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
@@ -219,7 +219,7 @@ const Notification = () => {
                   itemPerPage={[10, 30, 50, 100]}
                   renderItem={(item, index) => (
                     <li
-                      className='flex items-center gap-3 py-2 px-3'
+                      className={`flex items-center gap-3 py-2 px-3 border-b border-base-content/5`}
                       key={index}
                     >
                       <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>

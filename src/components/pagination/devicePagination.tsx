@@ -80,7 +80,7 @@ const DevicePagination = <T,>({
                 <button
                     key={i}
                     className={`join-item btn ${currentPage === i ? 'btn-primary' : 'bg-base-300 border-base-300'}`}
-                    onClick={() => goToPage(i)}
+                    onClick={() => currentPage !== i && goToPage(i)}
                 >
                     {i}
                 </button>
