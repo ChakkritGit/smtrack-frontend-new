@@ -10,7 +10,10 @@ import { ProbeType } from '../../types/smtrack/probe/probeType'
 import {
   RiArrowDownLine,
   RiArrowRightLine,
-  RiCloseLargeLine
+  RiCloseLargeLine,
+  RiSettings4Line,
+  RiSmartphoneLine,
+  RiVolumeUpLine
 } from 'react-icons/ri'
 import { useTranslation } from 'react-i18next'
 import { Option } from '../../types/global/hospitalAndWard'
@@ -606,7 +609,7 @@ const Adjustments = (props: AdjustmentsProps) => {
     <dialog ref={openAdjustModalRef} className='modal overflow-y-scroll py-10'>
       <form
         onSubmit={tab === 1 ? handleSubmit : handleSubmitAppSetting}
-        className='modal-box w-5/6 max-w-[50rem] h-max max-h-max'
+        className='modal-box md:w-5/6 max-w-[50rem] h-max max-h-max'
       >
         <div className='flex items-center justify-between gap-2'>
           <h3 className='font-bold text-base'>{serial}</h3>
@@ -646,17 +649,34 @@ const Adjustments = (props: AdjustmentsProps) => {
         </div>
 
         <div role='tablist' className='tabs tabs-bordered mt-3'>
-          <input
-            type='radio'
-            name='my_tabs_1'
+          <a
             role='tab'
-            className='tab'
-            aria-label={t('adjustMents')}
-            defaultChecked
-            checked={tab === 1}
+            className={`tab ${tab === 1 ? 'tab-active' : ''} flex items-center gap-2`}
             onClick={() => setTab(1)}
-          />
-          <div role='tabpanel' className='tab-content'>
+          >
+            <RiSettings4Line size={24} className='md:hidden' />
+            <span className='hidden md:block'>{t('adjustMents')}</span>
+          </a>
+          <a
+            role='tab'
+            className={`tab ${tab === 2 ? 'tab-active' : ''} flex items-center gap-2`}
+            onClick={() => setTab(2)}
+          >
+            <RiSmartphoneLine size={24} className='md:hidden' />
+            <span className='hidden md:block'>{t('notificationSettings')}</span>
+          </a>
+          <a
+            role='tab'
+            className={`tab ${tab === 3 ? 'tab-active' : ''} flex items-center gap-2`}
+            onClick={() => setTab(3)}
+          >
+            <RiVolumeUpLine size={24} className='md:hidden' />
+            <span className='hidden md:block'>{t('muteSetting')}</span>
+          </a>
+        </div>
+
+        {tab === 1 ? (
+          <div>
             <div className='mt-3'>
               <h3 className='font-bold text-base'>{t('adjustMents')}</h3>
               <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
@@ -1530,17 +1550,8 @@ const Adjustments = (props: AdjustmentsProps) => {
               </div>
             )}
           </div>
-
-          <input
-            type='radio'
-            name='my_tabs_1'
-            role='tab'
-            className='tab'
-            aria-label={t('notificationSettings')}
-            checked={tab === 2}
-            onClick={() => setTab(2)}
-          />
-          <div role='tabpanel' className='tab-content mt-3'>
+        ) : tab === 2 ? (
+          <div className='mt-3'>
             <AppMute
               muteMode={muteMode}
               setMuteMode={setMuteMode}
@@ -1552,17 +1563,8 @@ const Adjustments = (props: AdjustmentsProps) => {
               setScheduleTime={setScheduleTime}
             />
           </div>
-
-          <input
-            type='radio'
-            name='my_tabs_1'
-            role='tab'
-            className='tab'
-            aria-label={t('muteSetting')}
-            checked={tab === 3}
-            onClick={() => setTab(3)}
-          />
-          <div role='tabpanel' className='tab-content mt-3'>
+        ) : (
+          <div className='mt-3'>
             <h3 className='font-bold text-base'>{t('countProbe')}</h3>
             <div className='flex flex-col gap-3 mt-3'>
               {deviceModel === 'etemp' && (
@@ -1750,7 +1752,7 @@ const Adjustments = (props: AdjustmentsProps) => {
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {(tab === 1 || tab === 2) && (
           <div className={`modal-action ${isLoadingMqtt ? 'mt-0' : 'mt-6'}`}>

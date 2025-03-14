@@ -15,4 +15,9 @@ type NotificationType = {
   createdAt: string
 }
 
-export type { NotificationType }
+type NotificationHistoryType = {
+  _time: string
+  message: string
+}
+
+export type { NotificationType, NotificationHistoryType }

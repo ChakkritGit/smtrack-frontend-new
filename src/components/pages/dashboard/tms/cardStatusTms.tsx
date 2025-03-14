@@ -6,8 +6,6 @@ import {
   RiDoorOpenLine,
   RiErrorWarningLine,
   RiPlugLine,
-  RiSignalWifi1Line,
-  RiSignalWifiOffLine,
   RiTempColdLine
 } from 'react-icons/ri'
 import { HiOutlineArrowsUpDown } from 'react-icons/hi2'
@@ -23,7 +21,7 @@ const CardStatusTms = (props: PropsType) => {
 
   return (
     <>
-      <div className='bg-base-100 p-3 rounded-btn w-full h-[140px] overflow-hidden xl:col-span-4'>
+      <div className='bg-base-100 p-3 rounded-btn w-full h-[140px] overflow-hidden xl:col-span-6'>
         <div className='flex items-center gap-2 h-[30%]'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
@@ -67,7 +65,7 @@ const CardStatusTms = (props: PropsType) => {
           </div>
         </div>
       </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px] xl:col-span-4'>
+      {/* <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px] xl:col-span-4'>
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
@@ -97,8 +95,8 @@ const CardStatusTms = (props: PropsType) => {
               : t('stateConnect')
             : '—'}
         </div>
-      </div>
-      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px] xl:col-span-4'>
+      </div> */}
+      <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px] xl:col-span-6'>
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${

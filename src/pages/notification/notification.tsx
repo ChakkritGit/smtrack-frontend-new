@@ -19,10 +19,11 @@ import { MdOutlineSdCard, MdOutlineSdCardAlert } from 'react-icons/md'
 import { useCallback, useEffect, useState } from 'react'
 import axiosInstance from '../../constants/axios/axiosInstance'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
-import { NotificationType } from '../../types/global/notification'
+import { NotificationHistoryType } from '../../types/global/notification'
 import { AxiosError } from 'axios'
 import { setTokenExpire } from '../../redux/actions/utilsActions'
 import Loading from '../../components/skeleton/table/loading'
+import NotificationPagination from '../../components/pagination/notificationPagination'
 
 const Notification = () => {
   const dispatch = useDispatch()
@@ -30,7 +31,9 @@ const Notification = () => {
     (state: RootState) => state.utils
   )
   const { t } = useTranslation()
-  const [notificationList, setNotification] = useState<NotificationType[]>([])
+  const [notificationList, setNotification] = useState<
+    NotificationHistoryType[]
+  >([])
   const [datePicker, setDatePicker] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const { role = 'USER' } = tokenDecode || {}
@@ -128,7 +131,7 @@ const Notification = () => {
     setIsLoading(true)
     try {
       const response = await axiosInstance.get<
-        responseType<NotificationType[]>
+        responseType<NotificationHistoryType[]>
       >(
         role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode
           ? `/log/notification/history/filter${
@@ -158,41 +161,49 @@ const Notification = () => {
   }, [datePicker])
 
   return (
-    <div className='p-3'>
+    <div className='p-3 px-[16px]'>
       <input
         type='date'
         value={datePicker}
         onChange={e => setDatePicker(e.target.value)}
         className='input input-bordered w-full md:max-w-xs mb-3'
       />
-      <div className='h-[calc(100dvh-150px)]'>
+      <div>
         {!isLoading ? (
           role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode ? (
             <div>
               {notificationList.length > 0 ? (
-                notificationList.map((item, index) => (
-                  <li className='flex items-center gap-3 py-2 px-3' key={index}>
-                    <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
-                      <RiAlarmWarningFill size={24} />
-                    </div>
-                    <div className='flex flex-col gap-1 w-full'>
-                      <div className='flex items-center justify-between gap-3'>
-                        <span>{item.message}</span>
-                        <div className='flex flex-col items-end opacity-70'>
-                          <span className='text-[14px]'>
-                            {item.createdAt.substring(11, 16)}
-                          </span>
-                          <span className='w-max text-[14px]'>
-                            {item.createdAt.substring(0, 10)}
-                          </span>
-                        </div>
+                <NotificationPagination
+                  data={notificationList}
+                  initialPerPage={10}
+                  itemPerPage={[10, 30, 50, 100]}
+                  renderItem={(item, index) => (
+                    <li
+                      className='flex items-center gap-3 py-2 px-3'
+                      key={index}
+                    >
+                      <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
+                        <RiAlarmWarningFill size={24} />
                       </div>
-                      <span className='text-[14px] opacity-70'>
-                        {item?.mcuId}
-                      </span>
-                    </div>
-                  </li>
-                ))
+                      <div className='flex flex-col gap-1 w-full'>
+                        <div className='flex items-center justify-between gap-3'>
+                          <span>{item?.message}</span>
+                          <div className='flex flex-col items-end opacity-70'>
+                            <span className='text-[14px]'>
+                              {item?._time?.substring(11, 16)}
+                            </span>
+                            <span className='w-max text-[14px]'>
+                              {item?._time?.substring(0, 10)}
+                            </span>
+                          </div>
+                        </div>
+                        <span className='text-[14px] opacity-70'>
+                          {item?.mcuId ?? '—'}
+                        </span>
+                      </div>
+                    </li>
+                  )}
+                />
               ) : (
                 <div className='flex items-center justify-center loading-hieght-full'>
                   <div>{t('notificationEmpty')}</div>
@@ -202,29 +213,37 @@ const Notification = () => {
           ) : (
             <div>
               {notificationList.length > 0 ? (
-                notificationList.map((item, index) => (
-                  <li className='flex items-center gap-3 py-2 px-3' key={index}>
-                    <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
-                      {subTextNotiDetailsIcon(item.message)}
-                    </div>
-                    <div className='flex flex-col gap-1 w-full'>
-                      <div className='flex items-center justify-between gap-3'>
-                        <span>{subTextNotiDetails(item.message)}</span>
-                        <div className='flex flex-col items-end opacity-70'>
-                          <span className='text-[14px]'>
-                            {item.createAt.substring(11, 16)}
-                          </span>
-                          <span className='w-max text-[14px]'>
-                            {item.createAt.substring(0, 10)}
-                          </span>
-                        </div>
+                <NotificationPagination
+                  data={notificationList}
+                  initialPerPage={10}
+                  itemPerPage={[10, 30, 50, 100]}
+                  renderItem={(item, index) => (
+                    <li
+                      className='flex items-center gap-3 py-2 px-3'
+                      key={index}
+                    >
+                      <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
+                        {subTextNotiDetailsIcon(item?.message)}
                       </div>
-                      <span className='text-[14px] opacity-70'>
-                        {item.device.name}
-                      </span>
-                    </div>
-                  </li>
-                ))
+                      <div className='flex flex-col gap-1 w-full'>
+                        <div className='flex items-center justify-between gap-3'>
+                          <span>{subTextNotiDetails(item?.message)}</span>
+                          <div className='flex flex-col items-end opacity-70'>
+                            <span className='text-[14px]'>
+                              {item?._time?.substring(11, 16)}
+                            </span>
+                            <span className='w-max text-[14px]'>
+                              {item?._time?.substring(0, 10)}
+                            </span>
+                          </div>
+                        </div>
+                        <span className='text-[14px] opacity-70'>
+                          {item?.device?.name ?? '—'}
+                        </span>
+                      </div>
+                    </li>
+                  )}
+                />
               ) : (
                 <div className='flex items-center justify-center loading-hieght-full'>
                   <div>{t('notificationEmpty')}</div>

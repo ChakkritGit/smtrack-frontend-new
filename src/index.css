@@ -126,6 +126,26 @@
   }
 }
 
+.custom-ward-menu-select {
+  &>.react-select__menu>div:nth-child(1) {
+    justify-content: unset !important;
+    max-height: 250px;
+    max-width: 250px;
+  }
+
+  &>.react-select__menu {
+    @apply right-1;
+  }
+}
+
+.custom-hospital-menu-select {
+  &>.react-select__menu>div:nth-child(1) {
+    justify-content: unset !important;
+    max-height: 250px;
+    max-width: 350px;
+  }
+}
+
 .react-select__option {
   @apply max-w-[300px] flex whitespace-normal break-words;
 }

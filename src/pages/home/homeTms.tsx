@@ -1,8 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
-import { GlobalContextType } from '../../types/global/globalContext'
-import { GlobalContext } from '../../contexts/globalContext'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import axiosInstance from '../../constants/axios/axiosInstance'
 import { AxiosError } from 'axios'
@@ -14,11 +12,9 @@ import Loading from '../../components/skeleton/table/loading'
 import DataTableNoData from '../../components/skeleton/table/noData'
 import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
 import {
-  CountTms,
   DeviceTmsType,
   TmsLogType
 } from '../../types/tms/devices/deviceType'
-import HomeCountTms from '../../components/pages/home/homeCountTms'
 import { columnTms, subColumnData } from '../../components/pages/home/columnTms'
 
 const HomeTms = () => {
@@ -26,17 +22,11 @@ const HomeTms = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const {
-    userProfile,
-    hosId,
     wardId,
-    tokenDecode,
     globalSearch,
     cookieDecode
   } = useSelector((state: RootState) => state.utils)
-  const { hospital, ward } = useContext(GlobalContext) as GlobalContextType
-  const { role } = tokenDecode || {}
   const { token } = cookieDecode || {}
-  const [deviceCount, setDeviceCount] = useState<CountTms>()
   const [devices, setDevices] = useState<DeviceTmsType[]>([])
   const [devicesFiltered, setDevicesFiltered] = useState<DeviceTmsType[]>([])
 
@@ -45,23 +35,23 @@ const HomeTms = () => {
   const [perPage, setPerPage] = useState(cookies.get('homeRowPerPageTms') ?? 10)
   const [currentPage, setCurrentPage] = useState(1)
 
-  const fetchDeviceCount = useCallback(async () => {
-    try {
-      const response = await axiosInstance.get(
-        `/legacy/templog/dashboard/count${wardId ? `?ward=${wardId}&` : ''}`
-      )
-      setDeviceCount(response.data.data)
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.status === 401) {
-          dispatch(setTokenExpire(true))
-        }
-        console.error(error.response?.data.message)
-      } else {
-        console.error(error)
-      }
-    }
-  }, [perPage, wardId])
+  // const fetchDeviceCount = useCallback(async () => {
+  //   try {
+  //     const response = await axiosInstance.get(
+  //       `/legacy/templog/dashboard/count${wardId ? `?ward=${wardId}&` : ''}`
+  //     )
+  //     setDeviceCount(response.data.data)
+  //   } catch (error) {
+  //     if (error instanceof AxiosError) {
+  //       if (error.response?.status === 401) {
+  //         dispatch(setTokenExpire(true))
+  //       }
+  //       console.error(error.response?.data.message)
+  //     } else {
+  //       console.error(error)
+  //     }
+  //   }
+  // }, [perPage, wardId])
 
   const fetchDevices = useCallback(
     async (page: number, size = perPage) => {
@@ -92,13 +82,13 @@ const HomeTms = () => {
 
   const handlePageChange = (page: number) => {
     fetchDevices(page)
-    fetchDeviceCount()
+    // fetchDeviceCount()
     setCurrentPage(page)
   }
 
   const handlePerRowsChange = async (newPerPage: number, page: number) => {
     setPerPage(newPerPage)
-    fetchDeviceCount()
+    // fetchDeviceCount()
     fetchDevices(page, newPerPage)
     cookies.set('homeRowPerPageTms', newPerPage, cookieOptions)
   }
@@ -125,7 +115,7 @@ const HomeTms = () => {
   useEffect(() => {
     if (!token) return
     fetchDevices(1)
-    fetchDeviceCount()
+    // fetchDeviceCount()
   }, [token, wardId])
 
   useEffect(() => {
@@ -169,7 +159,7 @@ const HomeTms = () => {
 
   return (
     <div className='p-3 px-[16px]'>
-      <div className='flex items-center justify-between mt-[16px]'>
+      {/* <div className='flex items-center justify-between mt-[16px]'>
         <span className='font-bold text-[20px]'>{t('showAllBox')}</span>
         {role === 'SUPER' && (
           <span className='bg-base-300 p-2 px-3 rounded-btn'>
@@ -181,8 +171,8 @@ const HomeTms = () => {
             }`}
           </span>
         )}
-      </div>
-      <HomeCountTms deviceCount={deviceCount} />
+      </div> */}
+      {/* <HomeCountTms deviceCount={deviceCount} /> */}
       <div className='flex lg:items-center justify-between flex-col lg:flex-row gap-3 lg:gap-0 my-4'>
         <span className='font-bold text-[20px]'>{t('detailAllBox')}</span>
         <div className='flex items-end lg:items-center gap-3 flex-col lg:flex-row lg:h-[40px]'>
@@ -210,7 +200,7 @@ const HomeTms = () => {
           onChangePage={handlePageChange}
           onRowClicked={handleRowClicked}
           paginationRowsPerPageOptions={[10, 20, 50, 100, 150, 200]}
-          fixedHeaderScrollHeight='calc(100dvh - 490px)'
+          fixedHeaderScrollHeight='calc(100dvh - 250px)'
         />
       </div>
     </div>
