@@ -146,13 +146,13 @@ const MainSmtrack = () => {
     const isMessageValid = socketData?.message?.toLowerCase() ?? ''
 
     if (
-      socketData &&
-      !popUpMode &&
-      !soundMode &&
-      isMessageValid &&
-      (!isMessageValid?.includes('device offline') ||
-        !isMessageValid?.includes('device online'))
+      isMessageValid?.includes('device offline') ||
+      isMessageValid?.includes('device online')
     ) {
+      return
+    }
+
+    if (socketData && !popUpMode && !soundMode && isMessageValid) {
       if (!isPlayingRef.current) {
         notiSound.play()
         isPlayingRef.current = true
@@ -163,13 +163,7 @@ const MainSmtrack = () => {
       }
     }
 
-    if (
-      socketData &&
-      !popUpMode &&
-      isMessageValid &&
-      (!isMessageValid?.includes('device offline') ||
-        !isMessageValid?.includes('device online'))
-    ) {
+    if (socketData && !popUpMode) {
       toast(
         (_t: ToastOptions) => (
           <div className='flex items-center justify-between gap-4 min-w-[220px]'>

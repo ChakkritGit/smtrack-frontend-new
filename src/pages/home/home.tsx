@@ -39,14 +39,8 @@ const Home = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const {
-    globalSearch,
-    cookieDecode,
-    userProfile,
-    hosId,
-    wardId,
-    tokenDecode
-  } = useSelector((state: RootState) => state.utils)
+  const { globalSearch, userProfile, hosId, wardId, tokenDecode, socketData } =
+    useSelector((state: RootState) => state.utils)
   const { hospital, ward } = useContext(GlobalContext) as GlobalContextType
   const [deviceCount, setDeviceCount] = useState<DeviceCountType>()
   const [devices, setDevices] = useState<DeviceType[]>([])
@@ -65,7 +59,7 @@ const Home = () => {
   const [probeData, setProbeData] = useState<ProbeType[]>([])
   const [serial, setSerial] = useState<string>('')
   const openAdjustModalRef = useRef<HTMLDialogElement>(null)
-  const { token } = cookieDecode || {}
+  const firstFetch = useRef<boolean>(false)
   const { role } = tokenDecode || {}
 
   const fetchDeviceCount = useCallback(
@@ -172,10 +166,25 @@ const Home = () => {
   }, [devices, globalSearch, deviceConnect])
 
   useEffect(() => {
-    if (!token) return
-    fetchDevices(1)
-    fetchDeviceCount(1)
-  }, [token, wardId])
+    if (socketData?.device) {
+      const shouldFetch =
+        devices.length > 0 &&
+        devices.every(
+          f => f.name?.toLowerCase().includes(socketData.device.toLowerCase())
+        )
+        console.log('device: ', shouldFetch)
+        console.log('device name: ', socketData.device)
+      if (shouldFetch) {
+        firstFetch.current = false
+      }
+    }
+
+    if (!firstFetch.current) {
+      fetchDevices(1)
+      fetchDeviceCount(1)
+      firstFetch.current = true
+    }
+  }, [wardId, socketData, devices])
 
   useEffect(() => {
     return () => {
