@@ -193,12 +193,12 @@ const CardStatus = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              !deviceData?.online
+              deviceData?.online && !deviceData?.online
                 ? 'text-base-content bg-opacity-80 bg-red-500'
                 : ''
             }`}
           >
-            {!deviceData?.online ? (
+            {deviceData?.online && !deviceData?.online ? (
               <RiSignalWifiOffLine size={20} />
             ) : (
               <RiSignalWifi1Line size={20} />
@@ -208,10 +208,10 @@ const CardStatus = (props: PropsType) => {
         </div>
         <div
           className={`flex items-center justify-center text-[20px] font-bold h-full ${
-            !deviceData?.online ? 'text-red-500' : ''
+            deviceData?.online && !deviceData?.online ? 'text-red-500' : ''
           }`}
         >
-          {deviceData
+          {deviceData?.online
             ? !deviceData?.online
               ? t('stateDisconnect')
               : t('stateConnect')
@@ -240,7 +240,7 @@ const CardStatus = (props: PropsType) => {
             doorOpen(deviceData) ? 'text-red-500' : ''
           }`}
         >
-          {deviceData
+          {deviceData?.log && deviceData?.log?.length > 0
             ? doorOpen(deviceData)
               ? t('doorOpen')
               : t('doorClose')
@@ -269,7 +269,7 @@ const CardStatus = (props: PropsType) => {
             unPlug(deviceData) ? 'text-red-500' : ''
           }`}
         >
-          {deviceData
+          {deviceData?.log && deviceData?.log?.length > 0
             ? unPlug(deviceData)
               ? t('stateProblem')
               : t('stateNormal')
@@ -431,12 +431,16 @@ const CardStatus = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
+              deviceData?.log &&
+              deviceData?.log.length > 0 &&
               !sdCard(deviceData)
                 ? 'text-base-content bg-opacity-80 bg-red-500'
                 : ''
             }`}
           >
-            {!sdCard(deviceData) ? (
+            {deviceData?.log &&
+            deviceData?.log.length > 0 &&
+            !sdCard(deviceData) ? (
               <MdOutlineSdCardAlert size={20} />
             ) : (
               <MdOutlineSdCard size={20} />
@@ -446,10 +450,12 @@ const CardStatus = (props: PropsType) => {
         </div>
         <div
           className={`flex items-center justify-center text-[20px] font-bold h-full ${
-            !sdCard(deviceData) ? 'text-red-500' : ''
+            deviceData?.log && deviceData?.log.length > 0 && !sdCard(deviceData)
+              ? 'text-red-500'
+              : ''
           }`}
         >
-          {deviceData
+          {deviceData?.log && deviceData?.log?.length > 0
             ? !sdCard(deviceData)
               ? t('stateProblem')
               : t('stateNormal')

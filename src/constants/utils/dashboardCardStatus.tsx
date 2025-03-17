@@ -124,7 +124,7 @@ const tempOfDayTms = (deviceData: DeviceLogTms | undefined) => {
 
 const sdCard = (deviceData: DeviceLogsType | undefined) => {
   if (deviceData?.log) {
-    return deviceData?.log[0]?.extMemory ?? false
+    return deviceData?.log[0]?.extMemory
   }
 }
 
