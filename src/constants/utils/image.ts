@@ -12,7 +12,6 @@ export const resizeImage = (
       try {
         let imageSrc = e.target?.result as string
 
-        // Handle SVG format separately
         if (file.type === 'image/svg+xml') {
           const svgContent = imageSrc
           const parser = new DOMParser()
@@ -38,7 +37,6 @@ export const resizeImage = (
           return
         }
 
-        // Handle HEIC/HEIF format
         if (file.type === 'image/heic' || file.type === 'image/heif') {
           const heicBlob = await heic2any({ blob: file, toType: 'image/jpeg' })
           const singleBlob = Array.isArray(heicBlob) ? heicBlob[0] : heicBlob
@@ -66,13 +64,11 @@ export const resizeImage = (
           context?.scale(dpiScale, dpiScale)
           context?.drawImage(image, 0, 0, originalWidth, originalHeight)
 
-          // Add Watermark with Shadow
           if (context) {
             context.font = '6px Anuphan'
             context.fillStyle = 'rgba(255, 255, 255, 0.18)'
             context.textAlign = 'right'
 
-            // Add shadow
             context.shadowColor = 'rgba(0, 0, 0, 0.5)'
             context.shadowOffsetX = 2
             context.shadowOffsetY = 2
@@ -80,17 +76,14 @@ export const resizeImage = (
 
             context.fillText('SMTrack+', originalWidth - 5, originalHeight - 5)
 
-            // Reset shadow settings
             context.shadowColor = 'transparent'
             context.shadowOffsetX = 0
             context.shadowOffsetY = 0
             context.shadowBlur = 0
           }
 
-          // Always convert to JPEG
           const dataUrl = canvas.toDataURL(finalMimeString)
 
-          // Add EXIF metadata
           const exifObj = piexif.load(dataUrl)
           exifObj['0th'] = exifObj['0th'] || {}
           exifObj['0th'][piexif.ImageIFD.Copyright] =
@@ -98,7 +91,6 @@ export const resizeImage = (
           const exifStr = piexif.dump(exifObj)
           const newImageData = piexif.insert(exifStr, dataUrl)
 
-          // Convert the EXIF-inserted base64 string back to a Blob
           const byteString = atob(newImageData.split(',')[1])
           const ab = new ArrayBuffer(byteString.length)
           const ia = new Uint8Array(ab)
@@ -120,6 +112,6 @@ export const resizeImage = (
       reject(error)
     }
 
-    reader.readAsDataURL(file) // Ensure base64 encoding
+    reader.readAsDataURL(file)
   })
 }

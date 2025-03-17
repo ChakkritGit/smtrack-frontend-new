@@ -11,8 +11,11 @@ import {
   RiArrowDownLine,
   RiArrowRightLine,
   RiCloseLargeLine,
+  RiSettings4Fill,
   RiSettings4Line,
+  RiSmartphoneFill,
   RiSmartphoneLine,
+  RiVolumeUpFill,
   RiVolumeUpLine
 } from 'react-icons/ri'
 import { useTranslation } from 'react-i18next'
@@ -651,27 +654,51 @@ const Adjustments = (props: AdjustmentsProps) => {
         <div role='tablist' className='tabs tabs-bordered mt-3'>
           <a
             role='tab'
-            className={`tab ${tab === 1 ? 'tab-active' : ''} flex items-center gap-2`}
+            className={`tab ${
+              tab === 1 ? 'tab-active' : ''
+            } flex items-center gap-2`}
             onClick={() => setTab(1)}
           >
-            <RiSettings4Line size={24} className='md:hidden' />
-            <span className='hidden md:block'>{t('adjustMents')}</span>
+            {tab === 1 ? (
+              <RiSettings4Fill size={24} />
+            ) : (
+              <RiSettings4Line size={24} />
+            )}
+            <span className='hidden md:block sm:text-sm lg:text-base font-bold'>
+              {t('adjustMents')}
+            </span>
           </a>
           <a
             role='tab'
-            className={`tab ${tab === 2 ? 'tab-active' : ''} flex items-center gap-2`}
+            className={`tab ${
+              tab === 2 ? 'tab-active' : ''
+            } flex items-center gap-2`}
             onClick={() => setTab(2)}
           >
-            <RiSmartphoneLine size={24} className='md:hidden' />
-            <span className='hidden md:block'>{t('notificationSettings')}</span>
+            {tab === 2 ? (
+              <RiSmartphoneFill size={24} />
+            ) : (
+              <RiSmartphoneLine size={24} />
+            )}
+            <span className='hidden md:block sm:text-sm lg:text-base font-bold'>
+              {t('notificationSettings')}
+            </span>
           </a>
           <a
             role='tab'
-            className={`tab ${tab === 3 ? 'tab-active' : ''} flex items-center gap-2`}
+            className={`tab ${
+              tab === 3 ? 'tab-active' : ''
+            } flex items-center gap-2`}
             onClick={() => setTab(3)}
           >
-            <RiVolumeUpLine size={24} className='md:hidden' />
-            <span className='hidden md:block'>{t('muteSetting')}</span>
+            {tab === 3 ? (
+              <RiVolumeUpFill size={24} />
+            ) : (
+              <RiVolumeUpLine size={24} />
+            )}
+            <span className='hidden md:block sm:text-sm lg:text-base font-bold'>
+              {t('muteSetting')}
+            </span>
           </a>
         </div>
 
