@@ -621,7 +621,7 @@ const ManageProbe = () => {
     },
     {
       name: t('probeChanel'),
-      cell: item => item.channel ?? '—',
+      cell: item => <span className='badge badge-primary font-bold'>{item.channel ?? '—'}</span>,
       sortable: false,
       center: true
     },
