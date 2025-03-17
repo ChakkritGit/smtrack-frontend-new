@@ -2,7 +2,7 @@ import { AxiosError } from 'axios'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 import axiosInstance from '../../../constants/axios/axiosInstance'
-import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
+import { cookies } from '../../../constants/utils/utilsConstants'
 import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import { useTranslation } from 'react-i18next'
 import {
@@ -17,7 +17,6 @@ import {
 import Swal from 'sweetalert2'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  setDeviceKey,
   setSubmitLoading,
   setTokenExpire
 } from '../../../redux/actions/utilsActions'
@@ -76,6 +75,10 @@ const FullChart = () => {
     }
   }, [isPause])
 
+  useEffect(() => {
+    console.log('data: ', deviceLogs)
+  }, [deviceLogs])
+
   const logDay = async () => {
     setPagenumber(1)
     setDataLog([])
@@ -121,7 +124,7 @@ const FullChart = () => {
       } else {
         console.error(error)
       }
-    }finally {
+    } finally {
       setIsLoading(false)
     }
   }
@@ -146,7 +149,7 @@ const FullChart = () => {
       } else {
         console.error(error)
       }
-    }finally {
+    } finally {
       setIsLoading(false)
     }
   }
@@ -180,7 +183,7 @@ const FullChart = () => {
           } else {
             console.error('Uknown error: ', error)
           }
-        }finally {
+        } finally {
           setIsLoading(false)
         }
       } else {
@@ -292,14 +295,6 @@ const FullChart = () => {
   }, [])
 
   useEffect(() => {
-    if (!deviceLogs) {
-      dispatch(setDeviceKey(''))
-      cookies.remove('deviceKey', cookieOptions)
-      navigate('/dashboard')
-    }
-  }, [deviceLogs])
-
-  useEffect(() => {
     if (deviceLogs?.id === '') {
       navigate('/dashboard')
     }
@@ -322,7 +317,8 @@ const FullChart = () => {
               chartIMG: waitExport,
               dateTime: String(new Date()).substring(0, 25),
               hosImg: userProfile?.ward.hospital.hosPic,
-              probe: deviceLogs.probe
+              probe: deviceLogs.probe,
+              deviceLogs
             }
           })
         } catch (error) {
@@ -378,7 +374,7 @@ const FullChart = () => {
               itemTwo.probe.includes(item.channel)
             )
             return (
-              <SwiperSlide key={0}>
+              <SwiperSlide>
                 <FullChartComponent
                   dataLog={filterItem}
                   tempMin={item.tempMin}

@@ -1,5 +1,5 @@
 import { PDFViewer, usePDF } from '@react-pdf/renderer'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Location, useLocation, useNavigate } from 'react-router-dom'
 import {
   RiBarChart2Line,
   RiDashboardLine,
@@ -12,61 +12,54 @@ import { UAParser } from 'ua-parser-js'
 import Loading from '../skeleton/table/loading'
 import { Worker, Viewer } from '@react-pdf-viewer/core'
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'
+import { ProbeType } from '../../types/smtrack/probe/probeType'
+import { DeviceLog } from '../../types/smtrack/devices/deviceType'
+
+interface ChartPreviewPdfType {
+  title: string
+  ward: string
+  image: string
+  hospital: string
+  devSn: string
+  devName: string | undefined
+  chartIMG: unknown
+  dateTime: string
+  hosImg: string | undefined
+  probe: ProbeType[]
+  deviceLogs: DeviceLog
+}
 
 function PreviewPDF () {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { state } = useLocation()
-  const {
-    title,
-    ward,
-    image,
-    hospital,
-    devSn,
-    devName,
-    chartIMG,
-    dateTime,
-    hosImg,
-    tempMin,
-    tempMax
-  } = state
+  const location = useLocation() as Location<ChartPreviewPdfType>
   const parser = new UAParser()
   const os = parser.getOS().name
   const defaultLayoutPluginInstance = defaultLayoutPlugin()
   const pdfUrl = '/pdf.worker.min.js'
 
   useEffect(() => {
-    if (state === null || state === undefined || !state) {
-      navigate('/dashboard/chart', {
-        state: {
-          deviceLogs: {
-            sn: devSn,
-            minTemp: tempMin,
-            maxTemp: tempMax,
-            name: devName,
-            ward: ward,
-            hospital: hospital
-          }
-        }
-      })
+    if (!location.state) {
+      navigate('/dashboard')
     }
-  }, [state])
+  }, [location.state])
 
   const pdfViewer = useMemo(
     () => (
       <Fullchartpdf
-        title={title}
-        image={image}
-        chartIMG={chartIMG}
-        devSn={devSn}
-        devName={devName}
-        hospital={hospital}
-        ward={ward}
-        dateTime={dateTime}
-        hosImg={hosImg}
+        title={location?.state?.title}
+        image={location?.state?.image}
+        chartIMG={location?.state?.chartIMG as string}
+        devSn={location?.state?.devSn}
+        devName={location?.state?.devName}
+        hospital={location?.state?.hospital}
+        ward={location?.state?.ward}
+        dateTime={location?.state?.dateTime}
+        hosImg={location?.state?.hosImg}
+        deviceLogs={location?.state?.deviceLogs}
       />
     ),
-    [state]
+    [location.state]
   )
 
   const [instance, _update] = usePDF({ document: pdfViewer })
@@ -86,14 +79,7 @@ function PreviewPDF () {
               onClick={() =>
                 navigate('/dashboard/chart', {
                   state: {
-                    deviceLogs: {
-                      sn: devSn,
-                      minTemp: tempMin,
-                      maxTemp: tempMax,
-                      name: devName,
-                      ward: ward,
-                      hospital: hospital
-                    }
+                    deviceLogs: location.state.deviceLogs
                   }
                 })
               }

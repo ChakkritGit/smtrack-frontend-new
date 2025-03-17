@@ -4,8 +4,9 @@ import { pdftype } from '../../types/tms/pdfExportType'
 import { StylesPdf } from './style/styles'
 
 export default function Fullchartpdf (pdftype: pdftype) {
-  const { chartIMG, dateTime, devName, devSn, hospital, title, ward, hosImg } =
+  const { chartIMG, dateTime, devName, devSn, title, hosImg, deviceLogs } =
     pdftype
+    
 
   return (
     <Document
@@ -65,8 +66,8 @@ export default function Fullchartpdf (pdftype: pdftype) {
               source={hosImg ? hosImg : defaultImg}
               style={StylesPdf.img}
             />
-            <Text>{hospital}</Text>
-            <Text>{ward}</Text>
+            <Text>{deviceLogs.hospitalName}</Text>
+            <Text>{deviceLogs.wardName}</Text>
           </View>
         </View>
         <View style={StylesPdf.Body_img}>
