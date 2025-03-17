@@ -100,7 +100,7 @@ const NotificationPagination = <T,>({
 
   return (
     <>
-      <div className='max-h-[calc(100dvh-250px)] overflow-y-scroll'>
+      <div className='max-h-[calc(100dvh-300px)] min-h-[calc(100dvh-300px)] overflow-y-scroll'>
         {paginatedData.map((item, index) => renderItem(item, index))}
       </div>
 
