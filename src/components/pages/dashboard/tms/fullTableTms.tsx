@@ -68,7 +68,7 @@ const FullTableTmsComponent = (props: FullTablePropType) => {
         progressComponent={<Loading />}
         paginationPerPage={10}
         paginationRowsPerPageOptions={[10, 30, 50, 100]}
-        className='md:!max-h-[calc(100dvh-580px)]'
+        className='md:!max-h-[calc(100dvh-300px)]'
       />
     ),
     [reverseArray, isLoading]
