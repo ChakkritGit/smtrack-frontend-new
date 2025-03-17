@@ -59,8 +59,9 @@ const Home = () => {
   const [probeData, setProbeData] = useState<ProbeType[]>([])
   const [serial, setSerial] = useState<string>('')
   const openAdjustModalRef = useRef<HTMLDialogElement>(null)
-  const firstFetch = useRef<boolean>(false)
   const { role } = tokenDecode || {}
+  const firstFetch = useRef<boolean>(false)
+  const deviceFetchHistory = useRef<Record<string, number>>({})
 
   const fetchDeviceCount = useCallback(
     async (page: number, size = perPage) => {
@@ -88,7 +89,9 @@ const Home = () => {
   const fetchDevices = useCallback(
     async (page: number, size = perPage) => {
       try {
-        setLoading(true)
+        if (!firstFetch.current) {
+          setLoading(true)
+        }
         const response = await axiosInstance.get<
           responseType<DeviceResponseType>
         >(
@@ -166,16 +169,25 @@ const Home = () => {
   }, [devices, globalSearch, deviceConnect])
 
   useEffect(() => {
-    if (socketData?.device) {
-      const shouldFetch =
-        devices.length > 0 &&
-        devices.every(
-          f => f.name?.toLowerCase().includes(socketData.device.toLowerCase())
+    const handleDeviceData = () => {
+      if (socketData?.device && devices.length > 0) {
+        const deviceName = socketData.device.toLowerCase()
+
+        const matchedDevice = devices.find(f =>
+          f.name?.toLowerCase().includes(deviceName)
         )
-        console.log('device: ', shouldFetch)
-        console.log('device name: ', socketData.device)
-      if (shouldFetch) {
-        firstFetch.current = false
+
+        if (matchedDevice) {
+          const currentTime = Date.now()
+          const lastFetchTime = deviceFetchHistory.current[deviceName] || 0
+
+          if (currentTime - lastFetchTime >= 30000) {
+            deviceFetchHistory.current[deviceName] = currentTime
+
+            fetchDevices(1)
+            fetchDeviceCount(1)
+          }
+        }
       }
     }
 
@@ -184,7 +196,19 @@ const Home = () => {
       fetchDeviceCount(1)
       firstFetch.current = true
     }
-  }, [wardId, socketData, devices])
+
+    if (socketData?.device) {
+      handleDeviceData()
+    }
+
+    return () => {}
+  }, [devices, socketData])
+
+  useEffect(() => {
+    fetchDevices(1)
+    fetchDeviceCount(1)
+    firstFetch.current = false
+  }, [wardId])
 
   useEffect(() => {
     return () => {

@@ -195,7 +195,10 @@ const Sidebar = () => {
             <Link
               to={'/warranty'}
               className={`btn font-normal flex-nowrap justify-start w-full ${
-                location.pathname === '/warranty' || location.pathname === '/warranty/preview' ? 'btn-primary' : 'btn-ghost'
+                location.pathname === '/warranty' ||
+                location.pathname === '/warranty/preview'
+                  ? 'btn-primary'
+                  : 'btn-ghost'
               } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
               data-tip={t('sideWarranty')}
             >
@@ -222,7 +225,7 @@ const Sidebar = () => {
               <div className='flex flex-col items-center gap-2'>
                 {!isExpand && (
                   <span className='text-[12px] truncate'>
-                    *Switch mode SMTrack and Line
+                    *Switch SMTrack and Line mode
                   </span>
                 )}
                 <div className='flex items-center justify-center gap-2'>

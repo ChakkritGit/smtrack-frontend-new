@@ -13,8 +13,6 @@ const RoleButtons = (props: RoleButtonProps) => {
   const { deviceConnect, handleFilterConnect, role, t, tmsMode } = props
 
   const renderButton = (level: string) => {
-    console.log(`level${level.charAt(0).toUpperCase() + level.slice(1)}`)
-
     return (
       <button
         key={level}

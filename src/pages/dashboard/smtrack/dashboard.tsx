@@ -24,7 +24,9 @@ const Dashboard = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { deviceKey } = useSelector((state: RootState) => state.utils)
+  const { deviceKey, socketData } = useSelector(
+    (state: RootState) => state.utils
+  )
   const [deviceLogs, setDeviceLogs] = useState<DeviceLogsType>()
   const [loading, setLoading] = useState(false)
   const modalRef = useRef<HTMLDialogElement>(null)
@@ -33,6 +35,8 @@ const Dashboard = () => {
   const swiperTempOfDayRef = useRef<SwiperType>(null)
   const swiperInfoRef = useRef<SwiperType>(null)
   const [isPause, setIsPaused] = useState(false)
+  const firstFetch = useRef<boolean>(false)
+  const deviceFetchHistory = useRef<Record<string, number>>({})
 
   const togglePause = useCallback(() => {
     setIsPaused(prev => !prev)
@@ -40,7 +44,9 @@ const Dashboard = () => {
 
   const fetchDeviceLogs = useCallback(async () => {
     try {
-      setLoading(true)
+      if (!firstFetch.current) {
+        setLoading(true)
+      }
       const response = await axiosInstance.get<responseType<DeviceLogsType>>(
         `/devices/device/${deviceKey}`
       )
@@ -59,6 +65,38 @@ const Dashboard = () => {
       setLoading(false)
     }
   }, [deviceKey])
+
+  useEffect(() => {
+    const handleDeviceData = () => {
+      if (socketData?.device && deviceLogs?.name) {
+        const deviceName = socketData.device.toLowerCase()
+
+        const matchedDevice = deviceLogs.name.toLowerCase().includes(deviceName)
+
+        if (matchedDevice) {
+          const currentTime = Date.now()
+          const lastFetchTime = deviceFetchHistory.current[deviceName] || 0
+
+          if (currentTime - lastFetchTime >= 30000) {
+            deviceFetchHistory.current[deviceName] = currentTime
+
+            fetchDeviceLogs()
+          }
+        }
+      }
+    }
+
+    if (!firstFetch.current) {
+      fetchDeviceLogs()
+      firstFetch.current = true
+    }
+
+    if (socketData?.device) {
+      handleDeviceData()
+    }
+
+    return () => {}
+  }, [deviceLogs, socketData])
 
   useEffect(() => {
     fetchDeviceLogs()
