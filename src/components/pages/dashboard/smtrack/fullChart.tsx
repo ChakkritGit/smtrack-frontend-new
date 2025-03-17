@@ -172,7 +172,7 @@ const FullChartComponent = (props: FullChartPropType) => {
     grid: {
       show: true,
       strokeDashArray: 5,
-      borderColor: 'color(61% 0 238 / var(--tw-text-opacity, .15))',
+      borderColor: 'oklch(61% 0 238 / var(--tw-text-opacity, .15))',
       xaxis: {
         lines: {
           show: true
