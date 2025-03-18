@@ -6,7 +6,11 @@ import { DeviceType } from '../../types/smtrack/devices/deviceType'
 import { Dispatch } from 'redux'
 import { AxiosError } from 'axios'
 import Swal from 'sweetalert2'
-import { Schedule, ScheduleHour, ScheduleMinute } from '../../types/tms/devices/probeType'
+import {
+  Schedule,
+  ScheduleHour,
+  ScheduleMinute
+} from '../../types/tms/devices/probeType'
 import { useContext } from 'react'
 import { GlobalContext } from '../../contexts/globalContext'
 
@@ -25,9 +29,9 @@ const expiresDate = () => {
   return expirationDate.setHours(expirationDate.getHours() + 240) // 8 วันนับจากวันนี้
 }
 
-export const cookieOptions: CookieSetOptions = {
+const cookieOptions: CookieSetOptions = {
   path: '/',
-  expires: new Date(expiresDate()), // 8 วันนับจากวันนี้
+  expires: new Date(expiresDate()), // 8 วันนับจากวันปัจจุบัน
   maxAge: Number(import.meta.env.VITE_APP_MAXAGE * 24 * 60 * 60),
   domain:
     import.meta.env.VITE_APP_NODE_ENV === 'development'
@@ -60,59 +64,103 @@ const getRoleLabel = (
   }
 }
 
-const isLeapYear = (year: number): boolean => {
-  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
-}
+// const isLeapYear = (year: number): boolean => {
+//   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
+// }
 
-const calulateDate = (devicesData: DeviceType) => {
+// const calculateDate = (devicesData: DeviceType) => {
+//   const { warranty } = devicesData
+//   const today = new Date()
+//   const expiredDate = new Date(String(warranty[0]?.expire))
+//   // Use the expiredDate directly
+//   const timeDifference = expiredDate.getTime() - today.getTime()
+//   const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
+
+//   let remainingDays = daysRemaining
+//   let years = 0
+//   let months = 0
+
+//   const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+//   while (remainingDays >= 365) {
+//     if (isLeapYear(today.getFullYear() + years)) {
+//       if (remainingDays >= 366) {
+//         remainingDays -= 366
+//         years++
+//       } else {
+//         break
+//       }
+//     } else {
+//       remainingDays -= 365
+//       years++
+//     }
+//   }
+
+//   let currentMonth = today.getMonth()
+//   while (remainingDays >= daysInMonth[currentMonth]) {
+//     if (currentMonth === 1 && isLeapYear(today.getFullYear() + years)) {
+//       if (remainingDays >= 29) {
+//         remainingDays -= 29
+//         months++
+//       } else {
+//         break
+//       }
+//     } else {
+//       remainingDays -= daysInMonth[currentMonth]
+//       months++
+//     }
+//     currentMonth = (currentMonth + 1) % 12
+//   }
+
+//   return {
+//     daysRemaining,
+//     years,
+//     months,
+//     remainingDays
+//   }
+// }
+
+const calculateDate = (devicesData: DeviceType) => {
   const { warranty } = devicesData
   const today = new Date()
   const expiredDate = new Date(String(warranty[0]?.expire))
-  // Use the expiredDate directly
-  const timeDifference = expiredDate.getTime() - today.getTime()
-  const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
 
-  let remainingDays = daysRemaining
-  let years = 0
-  let months = 0
-
-  const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
-  while (remainingDays >= 365) {
-    if (isLeapYear(today.getFullYear() + years)) {
-      if (remainingDays >= 366) {
-        remainingDays -= 366
-        years++
-      } else {
-        break
-      }
-    } else {
-      remainingDays -= 365
-      years++
+  if (expiredDate < today) {
+    return {
+      daysRemaining: 0,
+      years: 0,
+      months: 0,
+      days: 0
     }
   }
 
-  let currentMonth = today.getMonth()
-  while (remainingDays >= daysInMonth[currentMonth]) {
-    if (currentMonth === 1 && isLeapYear(today.getFullYear() + years)) {
-      if (remainingDays >= 29) {
-        remainingDays -= 29
-        months++
-      } else {
-        break
-      }
-    } else {
-      remainingDays -= daysInMonth[currentMonth]
-      months++
-    }
-    currentMonth = (currentMonth + 1) % 12
+  const timeDifference = expiredDate.getTime() - today.getTime()
+  let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
+
+  let years = expiredDate.getFullYear() - today.getFullYear()
+  let months = expiredDate.getMonth() - today.getMonth()
+  let days = expiredDate.getDate() - today.getDate()
+
+  if (days < 0) {
+    months--
+    const lastMonthDays = new Date(
+      expiredDate.getFullYear(),
+      expiredDate.getMonth(),
+      0
+    ).getDate()
+    days += lastMonthDays
+  }
+
+  if (months < 0) {
+    years--
+    months += 12
   }
 
   return {
     daysRemaining,
-    years,
-    months,
-    remainingDays
+    years: years >= 0 ? years : 0,
+    months: months >= 0 ? months : 0,
+    days: days >= 0 ? days : 0
   }
 }
 
@@ -136,10 +184,10 @@ const handleApiError = (error: unknown) => {
 
 const swalWithBootstrapButtons = Swal.mixin({
   customClass: {
-    confirmButton: "btn btn-ghost bg-red-500 text-white",
-    cancelButton: "btn btn-ghost bg-gray-700 text-white",
+    confirmButton: 'btn btn-ghost bg-red-500 text-white',
+    cancelButton: 'btn btn-ghost bg-gray-700 text-white'
   },
-  buttonsStyling: false,
+  buttonsStyling: false
 })
 
 const scheduleDayArray: Schedule[] = [
@@ -174,7 +222,7 @@ const scheduleDayArray: Schedule[] = [
   {
     scheduleKey: 'SUN',
     scheduleLabel: 'SUN'
-  },
+  }
 ]
 
 const scheduleTimeArray: ScheduleHour[] = [
@@ -300,7 +348,7 @@ const scheduleMinuteArray: ScheduleMinute[] = [
   {
     scheduleMinuteKey: '50',
     scheduleMinuteLabel: '50'
-  },
+  }
 ]
 
 const countryCodes = [
@@ -506,7 +554,7 @@ const countryCodes = [
   { code: '+994', country: 'Azerbaijan' },
   { code: '+995', country: 'Georgia' },
   { code: '+996', country: 'Kyrgyzstan' },
-  { code: '+998', country: 'Uzbekistan' },
+  { code: '+998', country: 'Uzbekistan' }
 ]
 
 const extractValues = (text: string) => {
@@ -532,12 +580,12 @@ const swalTokenInvalid = Swal.mixin({
 
 const hoursOptions = Array.from({ length: 24 }, (_, i) => ({
   value: String(i).padStart(2, '0'),
-  label: String(i).padStart(2, '0'),
+  label: String(i).padStart(2, '0')
 }))
 
 const minutesOptions = Array.from({ length: 60 }, (_, i) => ({
   value: String(i).padStart(2, '0'),
-  label: String(i).padStart(2, '0'),
+  label: String(i).padStart(2, '0')
 }))
 
 const useSwiperSync = () => {
@@ -548,8 +596,9 @@ export {
   accessToken,
   cookieDecodeObject,
   getRoleLabel,
-  calulateDate,
+  calculateDate,
   cookies,
+  cookieOptions,
   updateLocalStorageAndDispatch,
   handleApiError,
   swalWithBootstrapButtons,

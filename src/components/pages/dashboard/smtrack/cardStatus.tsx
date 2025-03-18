@@ -28,7 +28,10 @@ import {
   unPlug
 } from '../../../../constants/utils/dashboardCardStatus'
 import SwiperCore from 'swiper'
-import { useSwiperSync } from '../../../../constants/utils/utilsConstants'
+import {
+  calculateDate,
+  useSwiperSync
+} from '../../../../constants/utils/utilsConstants'
 import { GlobalContextType } from '../../../../types/global/globalContext'
 import { RefObject, useEffect } from 'react'
 import { Swiper as SwiperType } from 'swiper/types'
@@ -489,8 +492,34 @@ const CardStatus = (props: PropsType) => {
           </div>
           <span>{t('dashWarranty')}</span>
         </div>
-        <div className='flex items-center justify-center text-[20px] font-bold h-full'>
-          <span>{deviceData?.repair?.length ?? '—'}</span>
+        <div className='flex items-center justify-center text-[18px] font-bold h-full'>
+          {deviceData?.warranty ? (
+            <span
+              className={`${
+                calculateDate(deviceData).daysRemaining <= 0
+                  ? 'text-red-500'
+                  : ''
+              }`}
+            >
+              {deviceData?.warranty[0]?.expire
+                ? calculateDate(deviceData).daysRemaining > 0
+                  ? calculateDate(deviceData).years > 0
+                    ? `${calculateDate(deviceData).years} ${t('year')} ${
+                        calculateDate(deviceData).months
+                      } ${t('month')} ${calculateDate(deviceData).days} ${t(
+                        'day'
+                      )}`
+                    : calculateDate(deviceData).months > 0
+                    ? `${calculateDate(deviceData).months} ${t('month')} ${
+                        calculateDate(deviceData).days
+                      } ${t('day')}`
+                    : `${calculateDate(deviceData).days} ${t('day')}`
+                  : t('tabWarrantyExpired')
+                : t('notRegistered')}
+            </span>
+          ) : (
+            <span>{t('notRegistered')}</span>
+          )}
         </div>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[140px]'>
@@ -501,7 +530,7 @@ const CardStatus = (props: PropsType) => {
           <span>{t('dashRepair')}</span>
         </div>
         <div className='flex items-center justify-center text-[20px] font-bold h-full'>
-          <span>{deviceData?.warranty?.length ?? '—'}</span>
+          <span>{deviceData?.repair?.length ?? '—'}</span>
         </div>
       </div>
     </>

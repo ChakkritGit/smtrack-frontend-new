@@ -9,7 +9,7 @@ import {
   RiTempColdLine
 } from 'react-icons/ri'
 import { DoorKey } from '../../../types/global/doorQty'
-import { calulateDate } from '../../../constants/utils/utilsConstants'
+import { calculateDate } from '../../../constants/utils/utilsConstants'
 import { ProbeType } from '../../../types/smtrack/probe/probeType'
 
 const columnData = (
@@ -173,26 +173,22 @@ const columnData = (
         return (
           <span
             className={`w-max max-w-[150px] h-[24px] px-2 flex items-center justify-center rounded-btn ${
-              calulateDate(item).remainingDays <= 0 &&
-              calulateDate(item).months <= 0 &&
-              calulateDate(item).years <= 0
+              calculateDate(item).daysRemaining <= 0
                 ? 'bg-red-500 text-white'
                 : ''
             } duration-300`}
           >
             {item.warranty[0]?.expire
-              ? calulateDate(item).daysRemaining > 0
-                ? calulateDate(item).years > 0
-                  ? `${calulateDate(item).years} ${t('year')} ${
-                      calulateDate(item).months
-                    } ${t('month')} ${calulateDate(item).remainingDays} ${t(
-                      'day'
-                    )}`
-                  : calulateDate(item).months > 0
-                  ? `${calulateDate(item).months} ${t('month')} ${
-                      calulateDate(item).remainingDays
+              ? calculateDate(item).daysRemaining > 0
+                ? calculateDate(item).years > 0
+                  ? `${calculateDate(item).years} ${t('year')} ${
+                      calculateDate(item).months
+                    } ${t('month')} ${calculateDate(item).days} ${t('day')}`
+                  : calculateDate(item).months > 0
+                  ? `${calculateDate(item).months} ${t('month')} ${
+                      calculateDate(item).days
                     } ${t('day')}`
-                  : `${calulateDate(item).remainingDays} ${t('day')}`
+                  : `${calculateDate(item).days} ${t('day')}`
                 : t('tabWarrantyExpired')
               : t('notRegistered')}
           </span>

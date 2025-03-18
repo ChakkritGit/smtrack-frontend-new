@@ -10,7 +10,11 @@ import {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { setSearch, setSubmitLoading, setTokenExpire } from '../../redux/actions/utilsActions'
+import {
+  setSearch,
+  setSubmitLoading,
+  setTokenExpire
+} from '../../redux/actions/utilsActions'
 import {
   handleApiError,
   swalWithBootstrapButtons
@@ -98,10 +102,6 @@ const Warranty = () => {
       }
     }
   }, [])
-
-  const isLeapYear = (year: number): boolean => {
-    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
-  }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -461,57 +461,43 @@ const Warranty = () => {
       name: t('deviceWarrantyTb'),
       cell: item => {
         const today = new Date()
-        const expiredDate = new Date(item.expire)
-        const timeDifference = expiredDate.getTime() - today.getTime()
-        const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
+        const expiredDate = new Date(String(item?.expire))
 
-        let remainingDays = daysRemaining
-        let years = 0
-        let months = 0
-
-        const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
-        while (remainingDays >= 365) {
-          if (isLeapYear(today.getFullYear() + years)) {
-            if (remainingDays >= 366) {
-              remainingDays -= 366
-              years++
-            } else {
-              break
-            }
-          } else {
-            remainingDays -= 365
-            years++
-          }
+        if (expiredDate < today) {
+          return <span>{t('tabWarrantyExpired')}</span>
         }
 
-        let currentMonth = today.getMonth()
-        while (remainingDays >= daysInMonth[currentMonth]) {
-          if (currentMonth === 1 && isLeapYear(today.getFullYear() + years)) {
-            if (remainingDays >= 29) {
-              remainingDays -= 29
-              months++
-            } else {
-              break
-            }
-          } else {
-            remainingDays -= daysInMonth[currentMonth]
-            months++
-          }
-          currentMonth = (currentMonth + 1) % 12
+        // const timeDifference = expiredDate.getTime() - today.getTime()
+        // let daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
+
+        let years = expiredDate.getFullYear() - today.getFullYear()
+        let months = expiredDate.getMonth() - today.getMonth()
+        let days = expiredDate.getDate() - today.getDate()
+
+        if (days < 0) {
+          months--
+          const lastMonthDays = new Date(
+            expiredDate.getFullYear(),
+            expiredDate.getMonth(),
+            0
+          ).getDate()
+          days += lastMonthDays
+        }
+
+        if (months < 0) {
+          years--
+          months += 12
         }
 
         return (
           <span>
-            {daysRemaining > 0
-              ? years > 0
-                ? `${years} ${t('year')} ${months} ${t(
-                    'month'
-                  )} ${remainingDays} ${t('day')}`
-                : months > 0
-                ? `${months} ${t('month')} ${remainingDays} ${t('day')}`
-                : `${remainingDays} ${t('day')}`
-              : t('tabWarrantyExpired')}
+            {years > 0
+              ? `${years} ${t('year')} ${months} ${t('month')} ${days} ${t(
+                  'day'
+                )}`
+              : months > 0
+              ? `${months} ${t('month')} ${days} ${t('day')}`
+              : `${days} ${t('day')}`}
           </span>
         )
       },
