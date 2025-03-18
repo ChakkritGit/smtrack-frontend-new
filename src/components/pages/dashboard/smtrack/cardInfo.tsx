@@ -51,7 +51,7 @@ const CardInFoComponent = (props: PropsType) => {
 
   return (
     <div className='p-5 h-full'>
-      <div className='flex items-center justify-between'>
+      <div className='flex items-start justify-between'>
         <div>
           <div className='flex items-center gap-2'>
             <p className='font-bold'>{t('deviceNameBox')} • </p>
