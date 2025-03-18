@@ -207,7 +207,8 @@ const FullChartComponent = (props: FullChartPropType) => {
         },
         axisBorder: {
           show: true,
-          color: 'oklch(79% 0.1305 238 / 1)'
+          color: 'oklch(79% 0.1305 238 / 1)',
+          width: 3
         },
         labels: {
           style: {
@@ -226,7 +227,8 @@ const FullChartComponent = (props: FullChartPropType) => {
         },
         axisBorder: {
           show: true,
-          color: 'oklch(73.24% 0.1973 44.47 / 1)'
+          color: 'oklch(73.24% 0.1973 44.47 / 1)',
+          width: 3
         },
         labels: {
           style: {

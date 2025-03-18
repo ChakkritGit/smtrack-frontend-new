@@ -71,6 +71,14 @@ const CardInFoComponent = (props: PropsType) => {
               {deviceData?.id ?? '—'}
             </p>
           </div>
+          <div className='truncate max-w-[450px]'>
+            <span className='font-bold'>{t('hospitalsName')} • </span>
+            <span>{deviceData?.hospitalName ?? '—'}</span>
+          </div>
+          <div className='truncate max-w-[450px]'>
+            <span className='font-bold'>{t('wardsName')} • </span>
+            <span>{deviceData?.wardName ?? '—'}</span>
+          </div>
         </div>
         <button
           className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 tooltip tooltip-left'
@@ -85,15 +93,15 @@ const CardInFoComponent = (props: PropsType) => {
           <RiSettings3Line size={24} />
         </button>
       </div>
-      <div className='flex justify-between flex-col lg:flex-row gap-3 mt-4 h-full'>
-        <div className='flex justify-center items-center w-full lg:w-[35%] h-3/4'>
+      <div className='flex justify-between flex-col lg:flex-row gap-3 mt-2 h-full'>
+        <div className='flex justify-center items-center w-full lg:w-[35%] lg:h-48'>
           <img
             src={deviceData?.positionPic ?? DefaultPic}
             alt='Device-image'
             className='rounded-btn w-max h-[85%] object-contain cursor-pointer hover:scale-95 duration-300'
           />
         </div>
-        <div className='w-full lg:w-[60%] h-3/4 p-1'>
+        <div className='w-full lg:w-[60%] lg:h-48 p-1'>
           <Swiper
             key={'adjustmentsSetting'}
             slidesPerView={'auto'}

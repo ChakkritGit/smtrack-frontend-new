@@ -85,7 +85,8 @@ const FullChartTmsComponent = (props: FullChartPropType) => {
     },
     axisBorder: {
       show: true,
-      color: 'oklch(73.24% 0.1973 44.47 / 1)'
+      color: 'oklch(73.24% 0.1973 44.47 / 1)',
+      width: 3
     },
     labels: {
       style: {

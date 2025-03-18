@@ -204,7 +204,8 @@ const ChartMini = (props: ChartMiniProps) => {
         },
         axisBorder: {
           show: true,
-          color: 'oklch(79% 0.1305 238 / 1)'
+          color: 'oklch(79% 0.1305 238 / 1)',
+          width: 2.5
         },
         labels: {
           style: {
@@ -223,7 +224,8 @@ const ChartMini = (props: ChartMiniProps) => {
         },
         axisBorder: {
           show: true,
-          color: 'oklch(73.24% 0.1973 44.47 / 1)'
+          color: 'oklch(73.24% 0.1973 44.47 / 1)',
+          width: 2.5
         },
         labels: {
           style: {
