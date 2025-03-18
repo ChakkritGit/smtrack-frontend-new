@@ -84,8 +84,16 @@ const FullChartTmsComponent = (props: FullChartPropType) => {
       show: i === 0
     },
     axisBorder: {
-      show: false,
+      show: true,
       color: 'oklch(73.24% 0.1973 44.47 / 1)'
+    },
+    labels: {
+      style: {
+        fontFamily: 'Anuphan',
+        colors: 'oklch(70% 0.1973 44.47 / 1)',
+        fontSize: '14px',
+        fontWeight: 600
+      }
     },
     min: minTempAvg,
     max: maxTempAvg

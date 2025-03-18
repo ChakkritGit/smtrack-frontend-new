@@ -184,7 +184,7 @@
   @apply !bg-primary;
 }
 
-.apexcharts-text tspan {
+.apexcharts-xaxis-texts-g>text {
   @apply !fill-base-content;
 }
 

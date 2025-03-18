@@ -203,8 +203,16 @@ const ChartMini = (props: ChartMiniProps) => {
           show: true
         },
         axisBorder: {
-          show: false,
+          show: true,
           color: 'oklch(79% 0.1305 238 / 1)'
+        },
+        labels: {
+          style: {
+            fontFamily: 'Anuphan',
+            colors: 'oklch(70% 0.1305 238 / 1)',
+            fontSize: '14px',
+            fontWeight: 600
+          }
         },
         min: 0,
         max: 100
@@ -214,8 +222,16 @@ const ChartMini = (props: ChartMiniProps) => {
           show: true
         },
         axisBorder: {
-          show: false,
+          show: true,
           color: 'oklch(73.24% 0.1973 44.47 / 1)'
+        },
+        labels: {
+          style: {
+            fontFamily: 'Anuphan',
+            colors: 'oklch(70% 0.1973 44.47 / 1)',
+            fontSize: '14px',
+            fontWeight: 600
+          }
         },
         min: minTempAvg,
         max: maxTempAvg
