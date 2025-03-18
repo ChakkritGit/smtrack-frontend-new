@@ -207,7 +207,6 @@ const Home = () => {
   useEffect(() => {
     fetchDevices(1)
     fetchDeviceCount(1)
-    firstFetch.current = false
   }, [wardId])
 
   useEffect(() => {
