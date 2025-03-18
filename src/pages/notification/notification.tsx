@@ -27,6 +27,7 @@ import { AxiosError } from 'axios'
 import { setTokenExpire } from '../../redux/actions/utilsActions'
 import Loading from '../../components/skeleton/table/loading'
 import NotificationPagination from '../../components/pagination/notificationPagination'
+import { FaThermometerHalf } from 'react-icons/fa'
 
 const Notification = () => {
   const dispatch = useDispatch()
@@ -43,6 +44,15 @@ const Notification = () => {
 
   const subTextNotiDetails = (text: string) => {
     if (text.split('/')[0] === 'PROBE1') {
+      if (text.split('/')[1] === 'TEMP') {
+        if (text.split('/')[2] === 'OVER') {
+          return t('tempHigherLimmit')
+        } else if (text.split('/')[2] === 'LOWER') {
+          return t('tempBelowLimmit')
+        } else {
+          return t('tempBackToNormal')
+        }
+      }
       const probe = text.split('/')
       const probeNumber = probe[0].replace('PROBE', '')
       const doorNumber = probe[1].replace('DOOR', '')
@@ -50,14 +60,6 @@ const Notification = () => {
       return `${t('deviceProbeTb')} ${probeNumber} ${t(
         'doorNum'
       )} ${doorNumber} ${status}`
-    } else if (text.split('/')[0] === 'TEMP') {
-      if (text.split('/')[1] === 'OVER') {
-        return t('tempHigherLimmit')
-      } else if (text.split('/')[1] === 'LOWER') {
-        return t('tempBelowLimmit')
-      } else {
-        return t('tempBackToNormal')
-      }
     } else if (text.split('/')[0] === 'AC') {
       if (text.split('/')[1] === 'ON') {
         return t('plugBackToNormal')
@@ -91,20 +93,21 @@ const Notification = () => {
 
   const subTextNotiDetailsIcon = (text: string) => {
     if (text.split('/')[0] === 'PROBE1') {
+      if (text.split('/')[1] === 'TEMP') {
+        if (text.split('/')[2] === 'OVER') {
+          return <FaTemperatureArrowUp size={24} />
+        } else if (text.split('/')[2] === 'LOWER') {
+          return <FaTemperatureArrowDown size={24} />
+        } else {
+          return <FaThermometerHalf size={24} />
+        }
+      }
       const probe = text.split('/')
       return probe[2] === 'ON' ? (
         <RiDoorOpenLine size={24} />
       ) : (
         <RiDoorClosedLine size={24} />
       )
-    } else if (text.split('/')[0] === 'TEMP') {
-      if (text.split('/')[1] === 'OVER') {
-        return <FaTemperatureArrowUp size={24} />
-      } else if (text.split('/')[1] === 'LOWER') {
-        return <FaTemperatureArrowDown size={24} />
-      } else {
-        return <RiAlarmWarningFill size={24} />
-      }
     } else if (text.split('/')[0] === 'AC') {
       if (text.split('/')[1] === 'ON') {
         return <TbPlugConnected size={24} />
