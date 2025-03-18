@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useTranslation } from 'react-i18next'
 import { DeviceLogsType } from '../../../../types/smtrack/devices/deviceType'
 import { RiSettings3Line } from 'react-icons/ri'

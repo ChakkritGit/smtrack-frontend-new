@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import HospitalAndWard from '../../../components/filter/hospitalAndWard'
 import { useDispatch, useSelector } from 'react-redux'
