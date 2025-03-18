@@ -47,7 +47,7 @@ const CardInFoComponent = (props: PropsType) => {
         swiperInfoRef.current.autoplay.stop()
       }
     }
-  }, [activeIndex, isPause])
+  }, [activeIndex, isPause, swiperInfoRef])
 
   return (
     <div className='p-5 h-full'>
