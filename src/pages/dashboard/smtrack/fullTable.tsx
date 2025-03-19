@@ -15,7 +15,10 @@ import {
   RiTableFill
 } from 'react-icons/ri'
 import { useDispatch } from 'react-redux'
-import { setDeviceKey, setTokenExpire } from '../../../redux/actions/utilsActions'
+import {
+  setDeviceKey,
+  setTokenExpire
+} from '../../../redux/actions/utilsActions'
 import toast from 'react-hot-toast'
 import * as XLSX from 'xlsx'
 import { Autoplay, EffectCreative, Pagination } from 'swiper/modules'
@@ -197,42 +200,69 @@ const FullTable = () => {
   }) => {
     return new Promise<boolean>((resolve, reject) => {
       if (object.deviceData && object.log.length > 0) {
-        const newArray = object.log.map((items, index) => {
-          return {
-            No: index + 1,
-            DeviceSN: deviceLogs.id,
-            DeviceName: object.deviceData?.name,
-            TemperatureMin: 0,
-            TemperatureMax: 0,
-            Date: new Date(items._time).toLocaleString('th-TH', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-              timeZone: 'UTC'
-            }),
-            Time: new Date(items._time).toLocaleString('th-TH', {
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-              timeZone: 'UTC'
-            }),
-            Temperature: items.temp.toFixed(2),
-            Humidity: items.humidity.toFixed(2),
-            Door:
-              items.door1 || items.door2 || items.door3
-                ? t('stateOn')
-                : t('stateOff')
+        const wb = XLSX.utils.book_new()
+
+        object.deviceData.probe.forEach(i => {
+          const newArray = object.log
+            .filter(f => f.probe === i.channel)
+            .map((items, index) => ({
+              No: index + 1,
+              DeviceSN: object.deviceData?.id,
+              DeviceName: object.deviceData?.name,
+              TemperatureMin: i.tempMin,
+              TemperatureMax: i.tempMax,
+              Date: new Date(items._time).toLocaleString('th-TH', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                timeZone: 'UTC'
+              }),
+              Time: new Date(items._time).toLocaleString('th-TH', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZone: 'UTC'
+              }),
+              Probe: items.probe,
+              Temperature: items.temp.toFixed(2),
+              Humidity: items.humidity.toFixed(2),
+
+              ...(i.doorQty === 3
+                ? {
+                    Door1: items.door1 ? t('stateOn') : t('stateOff'),
+                    Door2: items.door2 ? t('stateOn') : t('stateOff'),
+                    Door3: items.door3 ? t('stateOn') : t('stateOff')
+                  }
+                : i.doorQty === 2
+                ? {
+                    Door1: items.door1 ? t('stateOn') : t('stateOff'),
+                    Door2: items.door2 ? t('stateOn') : t('stateOff')
+                  }
+                : {
+                    Door1: items.door1 ? t('stateOn') : t('stateOff')
+                  }),
+
+              Plug: !items.plug ? t('stateProblem') : t('stateNormal'),
+              Battery: items.battery
+            }))
+
+          try {
+            const ws = XLSX.utils.json_to_sheet(newArray)
+            XLSX.utils.book_append_sheet(wb, ws, `Probe_Channel_${i.channel}`)
+          } catch (error) {
+            console.error(error)
           }
         })
 
-        const ws = XLSX.utils.json_to_sheet(newArray)
-        const wb = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(wb, ws, String(newArray[0].DeviceSN))
-
         try {
-          XLSX.writeFile(wb, 'smtrack-data-table' + '.xlsx')
-          resolve(true)
+          if (wb.SheetNames.length > 0) {
+            XLSX.writeFile(wb, 'smtrack-data-table.xlsx')
+            resolve(true)
+          } else {
+            reject(false)
+          }
         } catch (error) {
+          console.error(error)
           reject(false)
         }
       } else {

@@ -452,6 +452,7 @@ export default {
     installApp: 'How to Install App (APK)',
     profile: 'Profile',
     allNotification: 'All Notifications on the Web',
+    moveDevice: 'Transfer device data',
 
     // connect
     ipAddress: 'IP',
@@ -480,6 +481,8 @@ export default {
     deactivateDevice: 'Do you want to deactivate a device?',
     deactivateDeviceText:
       'If you deactivated it, the device will stop working immediately!',
+    moveDeviceActive:
+      'Cannot move a device that is currently in use. Please turn off the device before transferring data.',
     reactivateDevice: 'Do you want to reactivate a device?',
     reactivateDeviceText:
       'If you reactivate it, the device will start working immediately!',

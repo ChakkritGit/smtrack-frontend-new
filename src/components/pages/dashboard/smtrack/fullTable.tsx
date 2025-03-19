@@ -7,6 +7,8 @@ import {
 } from '../../../../types/smtrack/devices/deviceType'
 import Loading from '../../../skeleton/table/loading'
 import { useEffect, useMemo, useState } from 'react'
+import { DoorKey } from '../../../../types/global/doorQty'
+import { RiDoorClosedLine, RiDoorOpenLine } from 'react-icons/ri'
 
 interface FullTablePropType {
   dataLog: DeviceLogs[]
@@ -34,12 +36,29 @@ const FullTableComponent = (props: FullTablePropType) => {
       name: t('deviceSerialTb'),
       cell: () => <span title={deviceLogs.id}>{deviceLogs.id}</span>,
       sortable: false,
+      center: true,
+      width: '200px'
+    },
+    {
+      name: t('deviceDate'),
+      cell: items =>
+        new Date(items._time).toLocaleString('th-TH', {
+          day: '2-digit',
+          month: '2-digit',
+          year: '2-digit',
+          timeZone: 'UTC'
+        }),
+      sortable: false,
       center: true
     },
     {
       name: t('deviceTime'),
-      cell: item =>
-        `${item._time.substring(0, 10)} ${item._time.substring(11, 16)}`,
+      cell: items =>
+        new Date(items._time).toLocaleString('th-TH', {
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: 'UTC'
+        }),
       sortable: false,
       center: true
     },
@@ -48,7 +67,73 @@ const FullTableComponent = (props: FullTablePropType) => {
       cell: item => item.temp.toFixed(2) + '°C',
       sortable: false,
       center: true
-    }
+    },
+    {
+      name: t('deviceHumiTb'),
+      cell: item => item.humidity.toFixed(2) + '%',
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('deviceConnectTb'),
+      selector: (items) => !items.internet ? t('stateDisconnect') : t('stateConnect'),
+      sortable: false,
+      center: true,
+    },
+    {
+      name: t('deviceSdCard'),
+      cell: items => (
+        <span>
+          {!items.extMemory ? t('stateProblem') : t('stateNormal')}
+        </span>
+      ),
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('deviceDoorTb'),
+      cell: item => {
+        const doorCount: number = deviceLogs.probe[0]?.doorQty || 1
+        const doors: DoorKey[] = ['door1', 'door2', 'door3']
+
+        return (
+          <div className='flex items-center gap-2'>
+            {doors.slice(0, doorCount).map(doorKey => (
+              <div
+                key={doorKey}
+                className={`w-[24px] h-[24px] flex items-center justify-center rounded-btn ${
+                  item.door1 || item.door2 || item.door3
+                    ? 'bg-red-500 text-white'
+                    : 'border border-primary text-primary'
+                } duration-300`}
+              >
+                {item.door1 || item.door2 || item.door3 ? (
+                  <RiDoorOpenLine size={14} />
+                ) : (
+                  <RiDoorClosedLine size={14} />
+                )}
+              </div>
+            ))}
+          </div>
+        )
+      },
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('devicePlugTb'),
+      cell: (items) => (
+        <span>{!items.plug ? t('stateProblem') : t('stateNormal')}</span>
+      ),
+      sortable: false,
+      center: true,
+    },
+    {
+      name: t('deviceBatteryTb'),
+      cell: (items) => `${items.battery}%`,
+      sortable: false,
+      center: true,
+    },
   ]
 
   useEffect(() => {

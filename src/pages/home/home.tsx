@@ -41,7 +41,15 @@ const Home = () => {
   const navigate = useNavigate()
   const { globalSearch, userProfile, hosId, wardId, tokenDecode, socketData } =
     useSelector((state: RootState) => state.utils)
-  const { hospital, ward } = useContext(GlobalContext) as GlobalContextType
+  const {
+    hospital,
+    ward,
+    searchRef,
+    isFocused,
+    setIsFocused,
+    isCleared,
+    setIsCleared
+  } = useContext(GlobalContext) as GlobalContextType
   const [deviceCount, setDeviceCount] = useState<DeviceCountType>()
   const [devices, setDevices] = useState<DeviceType[]>([])
   const [devicesFiltered, setDevicesFiltered] = useState<DeviceType[]>([])
@@ -87,7 +95,7 @@ const Home = () => {
   )
 
   const fetchDevices = useCallback(
-    async (page: number, size = perPage) => {
+    async (page: number, size = perPage, search?: string) => {
       try {
         if (!firstFetch.current) {
           setLoading(true)
@@ -97,7 +105,7 @@ const Home = () => {
         >(
           `/devices/device?${
             wardId ? `ward=${wardId}&` : ''
-          }page=${page}&perpage=${size}`
+          }page=${page}&perpage=${size}${search ? `&filter=${search}` : ''}`
         )
         setDevices(response.data.data?.devices)
         setTotalRows(response.data.data?.total)
@@ -152,17 +160,12 @@ const Home = () => {
 
   useEffect(() => {
     const filter = devices?.filter(f => {
-      const matchesSearch =
-        f.id?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        f.name?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        f.location?.toLowerCase().includes(globalSearch.toLowerCase())
-
       const matchesConnection =
         deviceConnect === '' ||
         (deviceConnect === 'online' && f.online === true) ||
         (deviceConnect === 'offline' && f.online === false)
 
-      return matchesSearch && matchesConnection
+      return matchesConnection
     })
 
     setDevicesFiltered(filter)
@@ -214,6 +217,30 @@ const Home = () => {
       dispatch(setSearch(''))
     }
   }, [])
+
+  useEffect(() => {
+    const handleCk = (e: KeyboardEvent) => {
+      if (globalSearch !== '' && e.key?.toLowerCase() === 'enter') {
+        e.preventDefault()
+        if (isFocused) {
+          searchRef.current?.blur()
+          setIsFocused(false)
+        }
+        fetchDevices(currentPage, perPage, globalSearch)
+      }
+    }
+
+    window.addEventListener('keydown', handleCk)
+
+    if (isCleared) {
+      fetchDevices(currentPage, perPage)
+      setIsCleared(false)
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleCk)
+    }
+  }, [globalSearch, currentPage, perPage, isCleared])
 
   const openAdjustModal = (probe: ProbeType[], sn: string) => {
     setProbeData(probe)

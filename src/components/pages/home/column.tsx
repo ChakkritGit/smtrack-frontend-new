@@ -156,7 +156,7 @@ const columnData = (
     {
       name: t('devicePlugTb'),
       selector: item =>
-        item.log[0]?.plug ? t('stateProblem') : t('stateNormal'),
+        item.log[0]?.plug ? t('stateNormal') : t('stateProblem'),
       sortable: false,
       center: true
     },

@@ -59,12 +59,16 @@ interface DeviceLog extends DevicesType {
 
 type DeviceLogs = {
   _time: string
+  battery: number
   door1: boolean
   door2: boolean
   door3: boolean
+  extMemory: boolean
   humidity: number
+  plug: boolean
   probe: string
   temp: number
+  internet: boolean
 }
 
 export type {

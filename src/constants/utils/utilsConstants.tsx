@@ -184,7 +184,7 @@ const handleApiError = (error: unknown) => {
 
 const swalWithBootstrapButtons = Swal.mixin({
   customClass: {
-    confirmButton: 'btn btn-ghost bg-red-500 text-white',
+    confirmButton: 'btn btn-ghost bg-red-500 text-white hover:bg-red-700 Duration-300',
     cancelButton: 'btn btn-ghost bg-gray-700 text-white'
   },
   buttonsStyling: false
@@ -571,9 +571,9 @@ const extractValues = (text: string) => {
   return null
 }
 
-const swalTokenInvalid = Swal.mixin({
+const swalMoveDevice = Swal.mixin({
   customClass: {
-    confirmButton: 'btn btn-danger'
+    confirmButton: 'btn btn-primary'
   },
   buttonsStyling: false
 })
@@ -606,9 +606,9 @@ export {
   scheduleMinuteArray,
   scheduleTimeArray,
   countryCodes,
-  swalTokenInvalid,
   hoursOptions,
   minutesOptions,
+  swalMoveDevice,
   extractValues,
   useSwiperSync
 }

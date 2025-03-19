@@ -184,11 +184,11 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                 </div>
                 <div
                   className={`${
-                    item.log[0]?.plug ? 'bg-red-500 border-red-500' : ''
+                    !item.log[0]?.plug ? 'bg-red-500 border-red-500' : ''
                   } flex items-center justify-center text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top`}
                   data-tip={t('devicePlug')}
                 >
-                  {item.log[0]?.plug ? (
+                  {!item.log[0]?.plug ? (
                     <TbPlugX size={20} />
                   ) : (
                     <TbPlug size={20} />

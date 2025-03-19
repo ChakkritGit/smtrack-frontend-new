@@ -451,6 +451,7 @@ export default {
     installApp: 'วิธีการติดตั้งแอปพลิเคชั่น (APK)',
     profile: 'โปรไฟล์',
     allNotification: 'การแจ้งเตือนในหน้าเว็บทั้งหมด',
+    moveDevice: 'ย้ายข้อมูลอุปกรณ์',
 
     // connect
     ipAddress: 'IP',
@@ -477,6 +478,7 @@ export default {
     customMessageLogData: 'ช่วงเวลาที่เลือกห่างกันมากกว่า 30 วัน',
     deactivateDevice: 'คุณต้องการปิดการใช้งานหรือไม่',
     deactivateDeviceText: 'หากคุณปิดการใช้งานอุปกรณ์จะหยุดทำงานทันที',
+    moveDeviceActive: 'ไม่สามารถย้ายอุปกรณ์ที่กำลังเปิดใช้งานอยู่ กรุณาปิดอุปกรณ์ก่อนทำการย้ายข้อมูล',
     reactivateDevice: 'คุณต้องการเปิดการใช้งานหรือไม่',
     reactivateDeviceText: 'หากคุณเปิดการใช้งานอุปกรณ์จะกลับมาทำงานทันที',
     deleteProbe: 'คุณต้องการลบโพรบหรือไม่',

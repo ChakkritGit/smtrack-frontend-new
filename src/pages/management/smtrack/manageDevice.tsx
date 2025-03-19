@@ -21,6 +21,7 @@ import {
   RiShutDownLine,
   RiTimeLine
 } from 'react-icons/ri'
+import { IoSwapVertical } from "react-icons/io5"
 import {
   setHosId,
   setSubmitLoading,
@@ -36,6 +37,7 @@ import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import {
   hoursOptions,
   minutesOptions,
+  swalMoveDevice,
   swalWithBootstrapButtons
 } from '../../../constants/utils/utilsConstants'
 import { resizeImage } from '../../../constants/utils/image'
@@ -50,6 +52,8 @@ import { ConfigType } from '../../../types/smtrack/configs/configType'
 import { client } from '../../../services/mqtt'
 import Select from 'react-select'
 import { Option } from '../../../types/global/hospitalAndWard'
+import { TbTransfer } from 'react-icons/tb'
+import MoveDeviceList from '../../../components/filter/moveDeviceList'
 
 type selectOption = {
   value: string
@@ -70,8 +74,14 @@ const ManageDevice = () => {
   const [currentTab, setCurrentTab] = useState(1)
   const [imageProcessing, setImageProcessing] = useState(false)
   const [onNetwork, setOnNetwork] = useState(false)
+  const [moveDevice, setMoveDevice] = useState({
+    id: '',
+    name: ''
+  })
+  const [deviceId, setDeviceId] = useState('')
   const addModalRef = useRef<HTMLDialogElement>(null)
   const editModalRef = useRef<HTMLDialogElement>(null)
+  const moveModalRef = useRef<HTMLDialogElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { token } = cookieDecode || {}
   const { role } = tokenDecode || {}
@@ -180,7 +190,7 @@ const ManageDevice = () => {
           showConfirmButton: false,
           timer: 2500
         }).finally(async () => {
-          await fetchDevices(1)
+          await fetchDevices(currentPage, perPage)
         })
       } catch (error) {
         addModalRef.current?.close()
@@ -253,7 +263,7 @@ const ManageDevice = () => {
         )
         editModalRef.current?.close()
         resetForm()
-        await fetchDevices(1)
+        await fetchDevices(currentPage, perPage)
         Swal.fire({
           title: t('alertHeaderSuccess'),
           text: t('submitSuccess'),
@@ -430,7 +440,7 @@ const ManageDevice = () => {
         `/devices/device/${id}`,
         { status }
       )
-      await fetchDevices(1)
+      await fetchDevices(currentPage, perPage)
       Swal.fire({
         title: t('alertHeaderSuccess'),
         text: response.data.message,
@@ -470,7 +480,7 @@ const ManageDevice = () => {
       const response = await axiosInstance.delete<responseType<DeviceType>>(
         `/devices/device/${id}`
       )
-      await fetchDevices(1)
+      await fetchDevices(currentPage, perPage)
       Swal.fire({
         title: t('alertHeaderSuccess'),
         text: response.data.message,
@@ -700,6 +710,61 @@ const ManageDevice = () => {
     setOnNetwork(true)
   }
 
+  const handleMoveDevice = async (e: FormEvent) => {
+    e.preventDefault()
+    dispatch(setSubmitLoading())
+
+    if (deviceId !== '') {
+      try {
+        await axiosInstance.patch<responseType<DeviceType>>(
+          `/devices/device/${moveDevice.id}`,
+          {
+            id: deviceId
+          }
+        )
+        moveModalRef.current?.close()
+        resetForm()
+        Swal.fire({
+          title: t('alertHeaderSuccess'),
+          text: t('submitSuccess'),
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 2500
+        }).finally(async () => {
+          await fetchDevices(currentPage, perPage)
+        })
+      } catch (error) {
+        moveModalRef.current?.close()
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            dispatch(setTokenExpire(true))
+          }
+          Swal.fire({
+            title: t('alertHeaderError'),
+            text: error.response?.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2500
+          }).finally(() => moveModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      } finally {
+        dispatch(setSubmitLoading())
+      }
+    } else {
+      moveModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeField'),
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => moveModalRef.current?.showModal())
+      dispatch(setSubmitLoading())
+    }
+  }
+
   useEffect(() => {
     if (!token) return
     fetchDevices(1)
@@ -756,25 +821,25 @@ const ManageDevice = () => {
           {item.name ? item.name : '—'}
         </span>
       ),
-      sortable: false,
+      sortable: false
       // center: true
     },
     {
       name: t('deviceLocationTb'),
       cell: item => (item.location ? item.location : '—'),
-      sortable: false,
+      sortable: false
       // center: true
     },
     {
       name: t('hospitals'),
       cell: item => (item.hospitalName ? item.hospitalName : '—'),
-      sortable: false,
+      sortable: false
       // center: true
     },
     {
       name: t('ward'),
       cell: item => (item.wardName ? item.wardName : '—'),
-      sortable: false,
+      sortable: false
       // center: true
     },
     {
@@ -918,7 +983,44 @@ const ManageDevice = () => {
       ),
       sortable: false,
       center: true
-    }
+    },
+    ...(role === 'SUPER'
+      ? [
+          {
+            name: t('Move'),
+            cell: (item: DeviceType) => (
+              <div className='flex items-center justify-center gap-3 p-3'>
+                <button
+                  data-tip={t('deviceActive')}
+                  className='btn btn-primary tooltip tooltip-left flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0'
+                  onClick={() => {
+                    if (item.status) {
+                      swalMoveDevice.fire({
+                        title: t('alertHeaderWarning'),
+                        text: t('moveDeviceActive'),
+                        icon: 'warning',
+                        confirmButtonText: t('confirmButton')
+                      })
+                    } else {
+                      setMoveDevice({
+                        id: item.id,
+                        name: item.name ?? ''
+                      })
+                      if (moveModalRef.current) {
+                        moveModalRef.current.showModal()
+                      }
+                    }
+                  }}
+                >
+                  <TbTransfer size={20} />
+                </button>
+              </div>
+            ),
+            sortable: false,
+            center: true
+          }
+        ]
+      : [])
   ]
 
   const mapOptions = <T, K extends keyof T>(
@@ -1862,6 +1964,56 @@ const ManageDevice = () => {
                 {t('buttonErrorBack')}
               </button>
             )}
+            <button type='submit' className='btn btn-primary'>
+              {t('submitButton')}
+            </button>
+          </div>
+        </form>
+      </dialog>
+
+      {/* move Modal */}
+      <dialog ref={moveModalRef} className='modal overflow-y-scroll py-10'>
+        <form
+          onSubmit={handleMoveDevice}
+          className='flex flex-col justify-between modal-box md:w-5/6 md:max-w-2xl min-h-[550px] max-h-max'
+        >
+          <div>
+            <h3 className='font-bold text-lg mb-3'>{t('moveDevice')}</h3>
+            <MoveDeviceList deviceId={deviceId} setDeviceId={setDeviceId} />
+            <div className='bg-base-200 rounded-btn p-3 mt-3'>
+              {/* <RiCpuLine size={24} /> */}
+              <div className='flex flex-col gap-1'>
+                <span>S/N: {moveDevice.id}</span>
+                <span>Name: {moveDevice.name}</span>
+              </div>
+            </div>
+            <div className='my-10 w-full flex items-center justify-center'>
+              <IoSwapVertical size={36} className='text-base-content/70' />
+            </div>
+            <div className='bg-base-200 rounded-btn p-3 mt-3'>
+              {/* <RiCpuLine size={24} /> */}
+              <div className='flex flex-col gap-1'>
+                <span>S/N: {deviceId !== '' ? deviceId : '—'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Actions */}
+          <div className='modal-action mt-4 md:mt-6'>
+            <button
+              type='button'
+              className='btn'
+              onClick={() => {
+                setDeviceId('')
+                setMoveDevice({
+                  id: '',
+                  name: ''
+                })
+                moveModalRef.current?.close()
+              }}
+            >
+              {t('cancelButton')}
+            </button>
             <button type='submit' className='btn btn-primary'>
               {t('submitButton')}
             </button>
