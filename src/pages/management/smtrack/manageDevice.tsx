@@ -757,25 +757,25 @@ const ManageDevice = () => {
         </span>
       ),
       sortable: false,
-      center: true
+      // center: true
     },
     {
       name: t('deviceLocationTb'),
       cell: item => (item.location ? item.location : '—'),
       sortable: false,
-      center: true
+      // center: true
     },
     {
       name: t('hospitals'),
       cell: item => (item.hospitalName ? item.hospitalName : '—'),
       sortable: false,
-      center: true
+      // center: true
     },
     {
       name: t('ward'),
       cell: item => (item.wardName ? item.wardName : '—'),
       sortable: false,
-      center: true
+      // center: true
     },
     {
       name: t('firmWareVer'),

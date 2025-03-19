@@ -329,19 +329,19 @@ const ManageDevice = () => {
       name: t('deviceNameBox'),
       cell: item => item.name,
       sortable: false,
-      center: true
+      // center: true
     },
     {
       name: t('hospitalsName'),
       cell: item => item.hospital,
       sortable: false,
-      center: true
+      // center: true
     },
     {
       name: t('wardsName'),
       cell: item => item.ward,
       sortable: false,
-      center: true
+      // center: true
     },
     {
       name: t('token'),

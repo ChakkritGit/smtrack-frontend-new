@@ -553,7 +553,7 @@ const ManageHospital = () => {
     {
       name: t('hosName'),
       cell: item => item.hosName,
-      center: true,
+      // center: true,
       sortable: false
     },
     {
@@ -566,7 +566,7 @@ const ManageHospital = () => {
         ) : (
           '—'
         ),
-      center: true,
+      // center: true,
       sortable: false
     },
     {
@@ -616,7 +616,7 @@ const ManageHospital = () => {
     {
       name: t('wardName'),
       cell: item => item.wardName,
-      center: true,
+      // center: true,
       sortable: false
     },
     {

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, RefObject, SetStateAction } from 'react'
 import { HospitalType } from '../smtrack/hospitals/hospitalType'
 import { WardType } from '../smtrack/wards/wardType'
 
@@ -11,6 +11,11 @@ type GlobalContextType = {
   fetchWard: () => Promise<void>
   activeIndex: number
   setActiveIndex: Dispatch<SetStateAction<number>>
+  searchRef: RefObject<HTMLInputElement | null>
+  isFocused: boolean
+  setIsFocused: Dispatch<SetStateAction<boolean>>
+  isCleared: boolean
+  setIsCleared: Dispatch<SetStateAction<boolean>>
 }
 
 export type { GlobalContextType }

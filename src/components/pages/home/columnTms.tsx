@@ -36,7 +36,7 @@ const columnTms = (
         </div>
       ),
       sortable: false,
-      center: true
+      // center: true
     },
     {
       name: t('devicTemperatureTb'),

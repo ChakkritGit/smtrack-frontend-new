@@ -1,35 +1,38 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import axiosInstance from '../../constants/axios/axiosInstance'
 import { AxiosError } from 'axios'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import { useNavigate } from 'react-router-dom'
-import { setDeviceKey, setSearch, setTokenExpire } from '../../redux/actions/utilsActions'
+import {
+  setDeviceKey,
+  setSearch,
+  setTokenExpire
+} from '../../redux/actions/utilsActions'
 import HospitalAndWard from '../../components/filter/hospitalAndWard'
 import Loading from '../../components/skeleton/table/loading'
 import DataTableNoData from '../../components/skeleton/table/noData'
 import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
-import {
-  DeviceTmsType,
-  TmsLogType
-} from '../../types/tms/devices/deviceType'
+import { DeviceTmsType, TmsLogType } from '../../types/tms/devices/deviceType'
 import { columnTms, subColumnData } from '../../components/pages/home/columnTms'
+import { GlobalContext } from '../../contexts/globalContext'
+import { GlobalContextType } from '../../types/global/globalContext'
 
 const HomeTms = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const {
-    wardId,
-    globalSearch,
-    cookieDecode
-  } = useSelector((state: RootState) => state.utils)
+  const { wardId, globalSearch, cookieDecode } = useSelector(
+    (state: RootState) => state.utils
+  )
+  const { searchRef, isFocused, setIsFocused, isCleared, setIsCleared } = useContext(
+    GlobalContext
+  ) as GlobalContextType
   const { token } = cookieDecode || {}
   const [devices, setDevices] = useState<DeviceTmsType[]>([])
   const [devicesFiltered, setDevicesFiltered] = useState<DeviceTmsType[]>([])
-
   const [loading, setLoading] = useState(false)
   const [totalRows, setTotalRows] = useState(0)
   const [perPage, setPerPage] = useState(cookies.get('homeRowPerPageTms') ?? 10)
@@ -156,6 +159,30 @@ const HomeTms = () => {
       </div>
     )
   }
+
+  useEffect(() => {
+    const handleCk = (e: KeyboardEvent) => {
+      if (globalSearch !== '' && e.key?.toLowerCase() === 'enter') {
+        e.preventDefault()
+        if (isFocused) {
+          searchRef.current?.blur()
+          setIsFocused(false)
+        }
+        fetchDevices(currentPage, perPage)
+      }
+    }
+
+    window.addEventListener('keydown', handleCk)
+
+    if (isCleared) {
+      fetchDevices(currentPage, perPage)
+      setIsCleared(false)
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleCk)
+    }
+  }, [globalSearch, currentPage, perPage, isCleared])
 
   return (
     <div className='p-3 px-[16px]'>

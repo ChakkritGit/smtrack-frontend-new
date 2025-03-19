@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import {
   RiSearchLine,
   RiArrowDownSLine,
@@ -34,7 +41,7 @@ import { useTranslation } from 'react-i18next'
 import ThemeList from '../../theme/themeList'
 import LanguageList from '../../language/languageList'
 import { menuDataArraySmtrack } from '../../../constants/utils/dataSearch'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import axiosInstance from '../../../constants/axios/axiosInstance'
 import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import { DeviceListTmsType } from '../../../types/tms/devices/deviceType'
@@ -43,6 +50,8 @@ import { DeviceListType } from '../../../types/smtrack/devices/deviceType'
 import Notifications from '../../notifications/notifications'
 import ProfileComponent from '../../pages/settings/profileComponent'
 import SoundAndNotificationComponents from '../../pages/settings/soundAndNotificationComponents'
+import { GlobalContext } from '../../../contexts/globalContext'
+import { GlobalContextType } from '../../../types/global/globalContext'
 
 type SearchType = {
   text: string
@@ -57,12 +66,15 @@ interface FormState {
 const Navbar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const location = useLocation()
   const { t } = useTranslation()
   const { isExpand, userProfile, globalSearch, tmsMode } = useSelector(
     (state: RootState) => state.utils
   )
+  const { searchRef, isFocused, setIsFocused, setIsCleared } = useContext(
+    GlobalContext
+  ) as GlobalContextType
   const { pic, display, role } = userProfile || {}
-  const searchRef = useRef<HTMLInputElement | null>(null)
   const searchWrapperRef = useRef<HTMLInputElement | null>(null)
   const profileModalRef = useRef<HTMLDialogElement>(null)
   const settingModalRef = useRef<HTMLDialogElement>(null)
@@ -70,7 +82,6 @@ const Navbar = () => {
   const os = parser.getOS().name
   const isMac = os === 'mac os'
   const clearText = globalSearch === ''
-  const [isFocused, setIsFocused] = useState(false)
   const [deviceList, setDeviceList] = useState<
     DeviceListType[] | DeviceListTmsType[]
   >([])
@@ -168,6 +179,15 @@ const Navbar = () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
+
+  useEffect(() => {
+    if (
+      (globalSearch === '' && location.pathname === '/') ||
+      location.pathname === 'management'
+    ) {
+      setIsCleared(true)
+    }
+  }, [globalSearch, location])
 
   const searchRecommend = useMemo(() => {
     if (!isFocused) return null
@@ -405,7 +425,15 @@ const Navbar = () => {
                 ) : (
                   <kbd
                     className='kbd kbd-sm'
-                    onClick={() => dispatch(setSearch(''))}
+                    onClick={() => {
+                      dispatch(setSearch(''))
+                      if (
+                        location.pathname === '/' ||
+                        location.pathname === 'management'
+                      ) {
+                        setIsCleared(true)
+                      }
+                    }}
                   >
                     X
                   </kbd>

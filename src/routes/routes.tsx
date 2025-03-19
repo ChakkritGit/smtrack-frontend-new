@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './createRoutes'
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,6 +26,9 @@ const Routes = () => {
   const [hospital, setHospital] = useState<HospitalType[]>([])
   const [activeIndex, setActiveIndex] = useState(0)
   const [ward, setWard] = useState<WardType[]>([])
+  const [isFocused, setIsFocused] = useState(false)
+  const [isCleared, setIsCleared] = useState(false)
+  const searchRef = useRef<HTMLInputElement | null>(null)
   const { role = 'USER' } = tokenDecode || {}
   const { token } = cookieDecode || {}
   const system = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -137,8 +140,22 @@ const Routes = () => {
 
   const routerInstance = useMemo(() => router(role, tmsMode), [role, tmsMode])
   const contextValue = useMemo(
-    () => ({ hospital, setHospital, ward, setWard, fetchHospital, fetchWard, activeIndex, setActiveIndex }),
-    [hospital, ward, activeIndex]
+    () => ({
+      hospital,
+      setHospital,
+      ward,
+      setWard,
+      fetchHospital,
+      fetchWard,
+      activeIndex,
+      setActiveIndex,
+      searchRef,
+      isFocused,
+      setIsFocused,
+      isCleared,
+      setIsCleared
+    }),
+    [hospital, ward, activeIndex, isFocused, searchRef, isCleared]
   )
   const hashText = useCallback(
     () =>
