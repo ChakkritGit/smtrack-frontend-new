@@ -184,16 +184,16 @@ const Home = () => {
           if (currentTime - lastFetchTime >= 30000) {
             deviceFetchHistory.current[deviceName] = currentTime
 
-            fetchDevices(1)
-            fetchDeviceCount(1)
+            fetchDevices(currentPage, perPage)
+            fetchDeviceCount(currentPage, perPage)
           }
         }
       }
     }
 
     if (!firstFetch.current) {
-      fetchDevices(1)
-      fetchDeviceCount(1)
+      fetchDevices(currentPage, perPage)
+      fetchDeviceCount(currentPage, perPage)
       firstFetch.current = true
     }
 
@@ -202,7 +202,7 @@ const Home = () => {
     }
 
     return () => {}
-  }, [devices, socketData])
+  }, [devices, socketData, currentPage, perPage])
 
   useEffect(() => {
     fetchDevices(1)
