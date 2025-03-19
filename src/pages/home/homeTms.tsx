@@ -57,13 +57,13 @@ const HomeTms = () => {
   // }, [perPage, wardId])
 
   const fetchDevices = useCallback(
-    async (page: number, size = perPage) => {
+    async (page: number, size = perPage, search?: string) => {
       try {
         setLoading(true)
         const response = await axiosInstance.get(
           `/legacy/device?${
             wardId ? `ward=${wardId}&` : ''
-          }page=${page}&perpage=${size}`
+          }page=${page}&perpage=${size} ${search ? `&search=${search}` : ''}`
         )
         setDevices(response.data.data?.devices)
         setTotalRows(response.data.data?.total)

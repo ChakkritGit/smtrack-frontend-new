@@ -60,7 +60,7 @@ const ChartMiniTms = (props: ChartMiniProps) => {
   )
 
   const generateColors = (count: number) => {
-    const colors = ['oklch(72% 0.2 25 / 1)']
+    const colors = ['oklch(73.24% 0.1973 44.47 / 1)']
     for (let i = 1; i < count; i++) {
       const chroma = (Math.random() * 0.2 + 0.1).toFixed(4)
       const hue = (Math.random() * 360).toFixed(0)
