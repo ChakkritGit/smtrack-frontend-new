@@ -190,7 +190,7 @@ const Notification = () => {
             <div>
               {notificationList.length > 0 ? (
                 <NotificationPagination
-                  data={notificationList as NotificationTmsHistoryType[]}
+                  data={notificationList.sort((a, b) => new Date(b._time).getTime() - new Date(a._time).getTime()) as NotificationTmsHistoryType[]}
                   initialPerPage={10}
                   itemPerPage={[10, 30, 50, 100]}
                   renderItem={(item, index) => (
@@ -230,7 +230,7 @@ const Notification = () => {
             <div>
               {notificationList.length > 0 ? (
                 <NotificationPagination
-                  data={notificationList as NotificationHistoryType[]}
+                  data={notificationList.sort((a, b) => new Date(b._time).getTime() - new Date(a._time).getTime()) as NotificationHistoryType[]}
                   initialPerPage={10}
                   itemPerPage={[10, 30, 50, 100]}
                   renderItem={(item, index) => (
