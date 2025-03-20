@@ -1,4 +1,3 @@
-import 'katex/dist/katex.min.css'
 import { RiStickyNoteFill } from 'react-icons/ri'
 import { V2 } from './version'
 
