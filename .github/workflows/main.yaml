@@ -22,7 +22,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: siamatic/smtrack-frontend:1.0.0b
+        tags: siamatic/smtrack-frontend:1.0.1b
         build-args: |
           VITE_APP_API=${{secrets.VITE_APP_API}}
           VITE_APP_IMG=${{secrets.VITE_APP_IMG}}
@@ -41,9 +41,9 @@ jobs:
       run: |
         git config --global user.email "nongtonnee@gmail.com"
         git config --global user.name "ChakkritGit"
-        sed -i "s|image: your-docker-repo/app:.*|image: siamatic/smtrack-frontend:1.0.0b|" deploy.yaml
+        sed -i "s|image: your-docker-repo/app:.*|image: siamatic/smtrack-frontend:1.0.1b|" deploy.yaml
         git add deploy.yaml
-        git commit -m "Update deployment image to siamatic/smtrack-frontend:1.0.0b"
+        git commit -m "Update deployment image to siamatic/smtrack-frontend:1.0.1b"
         git push
     - name: Send success message to slack
       id: slack
@@ -51,13 +51,13 @@ jobs:
       with:
         payload: |
           {
-            "text": "✅ GitHub Action build siamatic/smtrack-frontend result: ${{ job.status }}",
+            "text": "✅ GitHub Action build siamatic/smtrack-frontend:1.0.1b result: ${{ job.status }}",
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "✅ GitHub Action build siamatic/smtrack-frontend result: ${{ job.status }}"
+                  "text": "✅ GitHub Action build siamatic/smtrack-frontend:1.0.1b result: ${{ job.status }}"
                 }
               }
             ]
