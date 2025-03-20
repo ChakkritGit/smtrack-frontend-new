@@ -10,6 +10,7 @@ import Users from '../../pages/users/users'
 import ManagementTms from '../../pages/management/tms/managementTms'
 import Settings from '../../pages/settings/settings'
 import Notification from '../../pages/notification/notification'
+import Changelog from '../../components/changelog/changelog'
 
 const tmsChildren: RouteObject[] = [
   {
@@ -68,7 +69,12 @@ const tmsChildren: RouteObject[] = [
     path: 'notification',
     element: <Notification />,
     errorElement: <ErrorScreen />
-  }
+  },
+  {
+    path: 'changelog',
+    element: <Changelog />,
+    errorElement: <ErrorScreen />
+  },
 ]
 
 export { tmsChildren }

@@ -14,6 +14,7 @@ import Settings from '../../pages/settings/settings'
 import Notification from '../../pages/notification/notification'
 import RepairPdf from '../../components/pdf/repairPdf'
 import WarrantyPdf from '../../components/pdf/WarrantyPdf'
+import Changelog from '../../components/changelog/changelog'
 
 const smtrackChildren: RouteObject[] = [
   {
@@ -103,8 +104,8 @@ const smtrackChildren: RouteObject[] = [
     errorElement: <ErrorScreen />
   },
   {
-    path: 'changeLog',
-    element: <>changeLog</>,
+    path: 'changelog',
+    element: <Changelog />,
     errorElement: <ErrorScreen />
   },
   ...(import.meta.env.VITE_APP_NODE_ENV === 'development'

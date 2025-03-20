@@ -217,7 +217,7 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                   data-tip={t('deviceBatteryTb')}
                 >
                   <div>
-                    {!item.log[0]?.plug ? (
+                    {item.log[0]?.plug ? (
                       <RiBatteryChargeLine size={20} />
                     ) : item.log[0]?.battery === 0 ? (
                       <RiBatteryLine size={20} />

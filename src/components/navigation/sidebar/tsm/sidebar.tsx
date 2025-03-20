@@ -221,7 +221,7 @@ const Sidebar = () => {
               )}
             </Link>
             <Link
-              to={'/log'}
+              to={'/changelog'}
               className={`text-[12px] ${
                 isExpand ? 'text-center' : 'text-right'
               } hover:underline cursor-pointer`}

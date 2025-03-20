@@ -613,19 +613,26 @@ const Users = () => {
           tmsMode={tmsMode}
           disabled={userInactive}
         />
-        <div className='divider divider-horizontal hidden md:flex mx-0 py-1 mt-5'></div>
-        <button
-          disabled={userConnect !== ''}
-          key={'Inactive'}
-          className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal mt-0 md:mt-5 ${
-            userInactive
-              ? 'btn-primary text-white'
-              : 'btn-ghost border border-gray-500/50 text-gray-500'
-          }`}
-          onClick={() => setUserInactive(!userInactive)}
-        >
-          <span>{t(`userInactive`)}</span>
-        </button>
+        {(role === 'SUPER' ||
+          role === 'SERVICE' ||
+          role === 'ADMIN' ||
+          role === 'LEGACY_ADMIN') && (
+          <>
+            <div className='divider divider-horizontal hidden md:flex mx-0 py-1 mt-5'></div>
+            <button
+              disabled={userConnect !== ''}
+              key={'Inactive'}
+              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal mt-0 md:mt-5 ${
+                userInactive
+                  ? 'btn-primary text-white'
+                  : 'btn-ghost border border-gray-500/50 text-gray-500'
+              }`}
+              onClick={() => setUserInactive(!userInactive)}
+            >
+              <span>{t(`userInactive`)}</span>
+            </button>
+          </>
+        )}
       </div>
 
       {UserCard}
