@@ -55,7 +55,8 @@ const Users = () => {
   const [users, setUsers] = useState<UsersType[]>([])
   const [usersFilter, setUsersFilter] = useState<UsersType[]>([])
   const [imageProcessing, setImageProcessing] = useState(false)
-  const [deviceConnect, setDeviceConnect] = useState('')
+  const [userConnect, setUserConnect] = useState('')
+  const [userInactive, setUserInactive] = useState(false)
   const [onEdit, setOnEdit] = useState(false)
   const [userPassword, setUserPassword] = useState('')
 
@@ -349,10 +350,10 @@ const Users = () => {
   }
 
   const handleFilterConnect = (status: string) => {
-    if (deviceConnect === status) {
-      setDeviceConnect('')
+    if (userConnect === status) {
+      setUserConnect('')
     } else {
-      setDeviceConnect(status)
+      setUserConnect(status)
     }
   }
 
@@ -432,16 +433,18 @@ const Users = () => {
           f.username?.toLowerCase().includes(globalSearch.toLowerCase())
 
       const matchesConnection =
-        deviceConnect === '' ||
-        (deviceConnect === 'SUPER' && f.role === 'SUPER') ||
-        (deviceConnect === 'SERVICE' && f.role === 'SERVICE') ||
-        (deviceConnect === 'ADMIN' && f.role === 'ADMIN') ||
-        (deviceConnect === 'USER' && f.role === 'USER') ||
-        (deviceConnect === 'LEGACY_ADMIN' && f.role === 'LEGACY_ADMIN') ||
-        (deviceConnect === 'LEGACY_USER' && f.role === 'LEGACY_USER') ||
-        (deviceConnect === 'GUEST' && f.role === 'GUEST')
+        userConnect === '' ||
+        (userConnect === 'SUPER' && f.role === 'SUPER') ||
+        (userConnect === 'SERVICE' && f.role === 'SERVICE') ||
+        (userConnect === 'ADMIN' && f.role === 'ADMIN') ||
+        (userConnect === 'USER' && f.role === 'USER') ||
+        (userConnect === 'LEGACY_ADMIN' && f.role === 'LEGACY_ADMIN') ||
+        (userConnect === 'LEGACY_USER' && f.role === 'LEGACY_USER') ||
+        (userConnect === 'GUEST' && f.role === 'GUEST')
 
-      return matchesSearch && matchesConnection
+      const matchesInactive = userInactive ? !f.status : f
+
+      return matchesSearch && matchesConnection && matchesInactive
     })
 
     const newFilter = tmsMode
@@ -451,8 +454,9 @@ const Users = () => {
             item.role?.includes('LEGACY_USER')
         )
       : filterUsers
+
     setUsersFilter(newFilter)
-  }, [users, globalSearch, wardId, tmsMode, deviceConnect])
+  }, [users, globalSearch, wardId, tmsMode, userConnect, userInactive])
 
   const UserCard = useMemo(() => {
     if (usersFilter?.length > 0) {
@@ -602,12 +606,26 @@ const Users = () => {
 
       <div className='flex items-center justify-start flex-wrap gap-3 mt-5'>
         <RoleButtons
-          deviceConnect={deviceConnect}
+          userConnect={userConnect}
           handleFilterConnect={handleFilterConnect}
           role={role}
           t={t}
           tmsMode={tmsMode}
+          disabled={userInactive}
         />
+        <div className='divider divider-horizontal hidden md:flex mx-0 py-1 mt-5'></div>
+        <button
+          disabled={userConnect !== ''}
+          key={'Inactive'}
+          className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal mt-0 md:mt-5 ${
+            userInactive
+              ? 'btn-primary text-white'
+              : 'btn-ghost border border-gray-500/50 text-gray-500'
+          }`}
+          onClick={() => setUserInactive(!userInactive)}
+        >
+          <span>{t(`userInactive`)}</span>
+        </button>
       </div>
 
       {UserCard}

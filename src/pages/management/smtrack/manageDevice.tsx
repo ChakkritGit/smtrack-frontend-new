@@ -758,6 +758,11 @@ const ManageDevice = () => {
         }
       } finally {
         dispatch(setSubmitLoading())
+        setDeviceId('')
+        setMoveDevice({
+          id: '',
+          name: ''
+        })
       }
     } else {
       moveModalRef.current?.close()

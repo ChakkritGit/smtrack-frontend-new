@@ -3,21 +3,23 @@ import { UserRole } from '../../../types/global/users/usersType'
 
 type RoleButtonProps = {
   role: UserRole | undefined
-  deviceConnect: string
+  userConnect: string
   handleFilterConnect: (status: string) => void
   t: TFunction
   tmsMode: boolean
+  disabled: boolean
 }
 
 const RoleButtons = (props: RoleButtonProps) => {
-  const { deviceConnect, handleFilterConnect, role, t, tmsMode } = props
+  const { userConnect, handleFilterConnect, role, t, tmsMode, disabled } = props
 
   const renderButton = (level: string) => {
     return (
       <button
         key={level}
+        disabled={disabled}
         className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
-          deviceConnect === level
+          userConnect === level
             ? 'btn-primary text-white'
             : 'btn-ghost border border-gray-500/50 text-gray-500'
         }`}
