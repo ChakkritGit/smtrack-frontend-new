@@ -980,11 +980,11 @@ const ManageDevice = () => {
     ...(role === 'SUPER'
       ? [
           {
-            name: t('Move'),
+            name: t('move'),
             cell: (item: DeviceType) => (
               <div className='flex items-center justify-center gap-3 p-3'>
                 <button
-                  data-tip={t('deviceActive')}
+                  data-tip={t('moveDevice')}
                   className='btn btn-primary tooltip tooltip-left flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0'
                   onClick={() => {
                     if (item.status) {

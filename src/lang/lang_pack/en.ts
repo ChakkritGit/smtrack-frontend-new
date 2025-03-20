@@ -453,6 +453,7 @@ export default {
     profile: 'Profile',
     allNotification: 'All Notifications on the Web',
     moveDevice: 'Transfer device data',
+    move: 'Transfer data',
 
     // connect
     ipAddress: 'IP',

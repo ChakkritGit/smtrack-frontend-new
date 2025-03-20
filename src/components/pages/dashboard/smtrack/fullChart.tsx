@@ -81,7 +81,7 @@ const FullChartComponent = (props: FullChartPropType) => {
     chart: {
       height: 680,
       animations: {
-        enabled: true,
+        enabled: false,
         animateGradually: {
           enabled: true
         },

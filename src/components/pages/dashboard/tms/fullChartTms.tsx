@@ -104,7 +104,7 @@ const FullChartTmsComponent = (props: FullChartPropType) => {
     chart: {
       height: 680,
       animations: {
-        enabled: true,
+        enabled: false,
         animateGradually: {
           enabled: true,
           delay: 300

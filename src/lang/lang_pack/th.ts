@@ -452,6 +452,7 @@ export default {
     profile: 'โปรไฟล์',
     allNotification: 'การแจ้งเตือนในหน้าเว็บทั้งหมด',
     moveDevice: 'ย้ายข้อมูลอุปกรณ์',
+    move: 'ย้ายข้อมูล',
 
     // connect
     ipAddress: 'IP',
