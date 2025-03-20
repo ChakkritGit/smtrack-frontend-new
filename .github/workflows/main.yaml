@@ -37,19 +37,27 @@ jobs:
           VITE_APP_SECRETKEY=${{secrets.VITE_APP_SECRETKEY}}
           VITE_APP_MAXAGE=${{secrets.VITE_APP_MAXAGE}}
           VITE_APP_NODE_ENV=${{secrets.VITE_APP_NODE_ENV}}
+    - name: Update Kubernetes manifests
+      run: |
+        git config --global user.email "nongtonnee@gmail.com"
+        git config --global user.name "ChakkritGit"
+        sed -i "s|image: your-docker-repo/app:.*|image: siamatic/smtrack-frontend:1.0.0b|" deploy.yaml
+        git add deploy.yaml
+        git commit -m "Update deployment image to siamatic/smtrack-frontend:1.0.0b"
+        git push
     - name: Send success message to slack
       id: slack
       uses: slackapi/slack-github-action@v1.27.0
       with:
         payload: |
           {
-            "text": "GitHub Action build siamatic/smtrack-frontend result: ${{ job.status }} ✅",
+            "text": "✅ GitHub Action build siamatic/smtrack-frontend result: ${{ job.status }}",
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "GitHub Action build siamatic/smtrack-frontend result: ${{ job.status }} ✅"
+                  "text": "✅ GitHub Action build siamatic/smtrack-frontend result: ${{ job.status }}"
                 }
               }
             ]
