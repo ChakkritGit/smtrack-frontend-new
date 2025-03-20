@@ -15,9 +15,9 @@ const FullChartComponent = (props: FullChartPropType) => {
   const { t } = useTranslation()
   const { dataLog, tempMin, tempMax, isLoading } = props
 
-  const tempAvgValues = dataLog ? dataLog.map(item => item.temp) : [0]
-  const minTempAvg = Math.min(...tempAvgValues) - 2
-  const maxTempAvg = Math.max(...tempAvgValues) + 2
+  // const tempAvgValues = dataLog ? dataLog.map(item => item.temp) : [0]
+  // const minTempAvg = Math.min(...tempAvgValues) - 2
+  // const maxTempAvg = Math.max(...tempAvgValues) + 2
 
   const mappedData = dataLog.map(item => {
     const time = new Date(item._time).getTime()
@@ -194,7 +194,7 @@ const FullChartComponent = (props: FullChartPropType) => {
     stroke: {
       lineCap: 'round',
       curve: ['smooth', 'smooth', 'smooth', 'smooth', 'stepline'],
-      width: [3, 3, 1, 1, 2]
+      width: [3, 3, 1.5, 1.5, 2]
     },
     xaxis: {
       type: 'datetime'
@@ -239,18 +239,18 @@ const FullChartComponent = (props: FullChartPropType) => {
             fontWeight: 600
           }
         },
-        min: minTempAvg,
-        max: maxTempAvg
+        min: tempMin - 3.5,
+        max: tempMax + 3.5
       },
       {
         show: false,
-        min: minTempAvg,
-        max: maxTempAvg
+        min: tempMin - 3.5,
+        max: tempMax + 3.5
       },
       {
         show: false,
-        min: minTempAvg,
-        max: maxTempAvg
+        min: tempMin - 3.5,
+        max: tempMax + 3.5
       },
       {
         show: false,
@@ -274,7 +274,7 @@ const FullChartComponent = (props: FullChartPropType) => {
       'oklch(79% 0.1305 238 / var(--tw-text-opacity, 0.25))',
       'oklch(73.24% 0.1973 44.47 / var(--tw-text-opacity, 1))',
       'oklch(81% 0.1696 175 / var(--tw-text-opacity, 1))',
-      'oklch(81% 0.1696 175 / var(--tw-text-opacity, 1))',
+      'oklch(81% 0.2319 126 / var(--tw-text-opacity, 1))',
       'oklch(90% 0.1378 90 / var(--tw-text-opacity, 1))'
     ],
     fill: {

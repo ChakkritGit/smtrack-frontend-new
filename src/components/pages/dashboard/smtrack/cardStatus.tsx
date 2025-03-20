@@ -391,7 +391,7 @@ const CardStatus = (props: PropsType) => {
                       <span>↓</span>
                       <span>
                         {deviceData?.log
-                          ? tempOfDay(deviceData, item.channel).max
+                          ? tempOfDay(deviceData, item.channel).min
                           : '—'}{' '}
                         °C
                       </span>
