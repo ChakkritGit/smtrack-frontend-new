@@ -386,7 +386,7 @@ const FullChart = () => {
           })}
       </Swiper>
     )
-  }, [deviceLogs, dataLog])
+  }, [deviceLogs, dataLog, t])
 
   return (
     <div className='p-3 px-5 overflow-hidden'>

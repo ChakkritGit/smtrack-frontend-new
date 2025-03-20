@@ -15,9 +15,9 @@ const FullChartComponent = (props: FullChartPropType) => {
   const { t } = useTranslation()
   const { dataLog, tempMin, tempMax, isLoading } = props
 
-  // const tempAvgValues = dataLog ? dataLog.map(item => item.temp) : [0]
-  // const minTempAvg = Math.min(...tempAvgValues) - 2
-  // const maxTempAvg = Math.max(...tempAvgValues) + 2
+  const tempAvgValues = dataLog ? dataLog.map(item => item.temp) : [0]
+  const minTempAvg = Math.min(...tempAvgValues)
+  const maxTempAvg = Math.max(...tempAvgValues)
 
   const mappedData = dataLog.map(item => {
     const time = new Date(item._time).getTime()
@@ -239,18 +239,18 @@ const FullChartComponent = (props: FullChartPropType) => {
             fontWeight: 600
           }
         },
-        min: tempMin - 3.5,
-        max: tempMax + 3.5
+        min: tempMin - 3.5 - minTempAvg / 1.3,
+        max: tempMax + 3.5 + maxTempAvg / 1.3
       },
       {
         show: false,
-        min: tempMin - 3.5,
-        max: tempMax + 3.5
+        min: tempMin - 3.5 - minTempAvg / 1.3,
+        max: tempMax + 3.5 + maxTempAvg / 1.3
       },
       {
         show: false,
-        min: tempMin - 3.5,
-        max: tempMax + 3.5
+        min: tempMin - 3.5 - minTempAvg / 1.3,
+        max: tempMax + 3.5 + maxTempAvg / 1.3
       },
       {
         show: false,
@@ -293,7 +293,7 @@ const FullChartComponent = (props: FullChartPropType) => {
         inverseColors: true,
         opacityFrom: 0.45,
         opacityTo: 0,
-        stops: [0, 70]
+        stops: [minTempAvg, tempMax + maxTempAvg + 50]
       }
     },
     legend: {

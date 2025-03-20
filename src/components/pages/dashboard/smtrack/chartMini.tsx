@@ -12,9 +12,9 @@ const ChartMini = (props: ChartMiniProps) => {
   const { t } = useTranslation()
   const { logData, tempMin, tempMax } = props
 
-  // const tempAvgValues = logData.map(item => item.temp)
-  // const minTempAvgCal = Math.min(...tempAvgValues) - 2
-  // const maxTempAvgCal = Math.max(...tempAvgValues) + 2
+  const tempAvgValues = logData.map(item => item.temp)
+  const minTempAvg = Math.min(...tempAvgValues)
+  const maxTempAvg = Math.max(...tempAvgValues)
 
   const mappedData = logData.map(item => {
     const time = new Date(item.sendTime).getTime()
@@ -235,18 +235,18 @@ const ChartMini = (props: ChartMiniProps) => {
             fontWeight: 600
           }
         },
-        min: tempMin - 3.5,
-        max: tempMax + 3.5
+        min: tempMin - 3.5 - minTempAvg / 1.3,
+        max: tempMax + 3.5 + maxTempAvg / 1.3
       },
       {
         show: false,
-        min: tempMin - 3.5,
-        max: tempMax + 3.5
+        min: tempMin - 3.5 - minTempAvg / 1.3,
+        max: tempMax + 3.5 + maxTempAvg / 1.3
       },
       {
         show: false,
-        min: tempMin - 3.5,
-        max: tempMax + 3.5
+        min: tempMin - 3.5 - minTempAvg / 1.3,
+        max: tempMax + 3.5 + maxTempAvg / 1.3
       },
       {
         show: false,
@@ -289,7 +289,7 @@ const ChartMini = (props: ChartMiniProps) => {
         inverseColors: true,
         opacityFrom: 0.45,
         opacityTo: 0,
-        stops: [0, 70]
+        stops: [minTempAvg, tempMax + maxTempAvg + 50]
       }
     },
     legend: {
