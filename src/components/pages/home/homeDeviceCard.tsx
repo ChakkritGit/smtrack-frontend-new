@@ -175,35 +175,51 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                   } flex items-center justify-center text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top`}
                   data-tip={t('deviceProbe')}
                 >
-                  {item.log[0]?.tempDisplay >= item.probe[0]?.tempMax ||
-                  item.log[0]?.tempDisplay <= item.probe[0]?.tempMin ? (
-                    <RiErrorWarningLine size={20} />
+                  {item.log[0] ? (
+                    item.log[0]?.tempDisplay >= item.probe[0]?.tempMax ||
+                    item.log[0]?.tempDisplay <= item.probe[0]?.tempMin ? (
+                      <RiErrorWarningLine size={20} />
+                    ) : (
+                      <RiTempColdLine size={20} />
+                    )
                   ) : (
-                    <RiTempColdLine size={20} />
+                    '—'
                   )}
                 </div>
                 <div
                   className={`${
-                    !item.log[0]?.plug ? 'bg-red-500 border-red-500' : ''
+                    item.log[0] && !item.log[0]?.plug
+                      ? 'bg-red-500 border-red-500'
+                      : ''
                   } flex items-center justify-center text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top`}
                   data-tip={t('devicePlug')}
                 >
-                  {!item.log[0]?.plug ? (
-                    <TbPlugX size={20} />
+                  {item.log[0] ? (
+                    !item.log[0]?.plug ? (
+                      <TbPlugX size={20} />
+                    ) : (
+                      <TbPlug size={20} />
+                    )
                   ) : (
-                    <TbPlug size={20} />
+                    '—'
                   )}
                 </div>
                 <div
                   className={`${
-                    !item.log[0]?.extMemory ? 'bg-red-500 border-red-500' : ''
+                    item.log[0] && !item.log[0]?.extMemory
+                      ? 'bg-red-500 border-red-500'
+                      : ''
                   } flex items-center justify-center text-[14px] h-[32px] min-w-[30px] w-max px-1 border border-base-content/50 rounded-btn tooltip tooltip-top`}
                   data-tip={t('dashSdCard')}
                 >
-                  {!item.log[0]?.extMemory ? (
-                    <MdOutlineSdCardAlert size={20} />
+                  {item.log[0] ? (
+                    !item.log[0]?.extMemory ? (
+                      <MdOutlineSdCardAlert size={20} />
+                    ) : (
+                      <MdOutlineSdCard size={20} />
+                    )
                   ) : (
-                    <MdOutlineSdCard size={20} />
+                    '—'
                   )}
                 </div>
                 <div
@@ -217,20 +233,25 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                   data-tip={t('deviceBatteryTb')}
                 >
                   <div>
-                    {item.log[0]?.plug ? (
-                      <RiBatteryChargeLine size={20} />
-                    ) : item.log[0]?.battery === 0 ? (
-                      <RiBatteryLine size={20} />
-                    ) : item.log[0]?.battery <= 50 ? (
-                      <RiBatteryLowLine size={20} />
-                    ) : item.log[0]?.battery <= 100 ? (
-                      <RiBatteryFill size={20} />
+                    {item.log[0] ? (
+                      item.log[0]?.plug ? (
+                        <RiBatteryChargeLine size={20} />
+                      ) : item.log[0]?.battery === 0 ? (
+                        <RiBatteryLine size={20} />
+                      ) : item.log[0]?.battery <= 50 ? (
+                        <RiBatteryLowLine size={20} />
+                      ) : item.log[0]?.battery <= 100 ? (
+                        <RiBatteryFill size={20} />
+                      ) : (
+                        <RiAlertLine size={20} />
+                      )
                     ) : (
-                      <RiAlertLine size={20} />
+                      ''
                     )}
                   </div>
                   <span>
-                    {item.log[0]?.battery ?? '—'} <sub>%</sub>
+                    {item.log[0] ? `${item.log[0]?.battery}` : '—'}
+                    <sub> %</sub>
                   </span>
                 </div>
               </div>
