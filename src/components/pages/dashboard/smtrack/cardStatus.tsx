@@ -254,12 +254,12 @@ const CardStatus = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              unPlug(deviceData)
+              !unPlug(deviceData)
                 ? 'text-base-content bg-opacity-80 bg-red-500'
                 : ''
             }`}
           >
-            {unPlug(deviceData) ? (
+            {!unPlug(deviceData) ? (
               <RiAlertLine size={20} />
             ) : (
               <RiPlugLine size={20} />
@@ -269,14 +269,10 @@ const CardStatus = (props: PropsType) => {
         </div>
         <div
           className={`flex items-center justify-center text-[20px] font-bold h-full ${
-            unPlug(deviceData) ? 'text-red-500' : ''
+            !unPlug(deviceData) ? 'text-red-500' : ''
           }`}
         >
-          {deviceData?.log && deviceData?.log?.length > 0
-            ? unPlug(deviceData)
-              ? t('stateProblem')
-              : t('stateNormal')
-            : '—'}
+          {!unPlug(deviceData) ? t('stateProblem') : t('stateNormal') ?? '—'}
         </div>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[155px]'>
@@ -434,16 +430,12 @@ const CardStatus = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              deviceData?.log &&
-              deviceData?.log.length > 0 &&
               !sdCard(deviceData)
                 ? 'text-base-content bg-opacity-80 bg-red-500'
                 : ''
             }`}
           >
-            {deviceData?.log &&
-            deviceData?.log.length > 0 &&
-            !sdCard(deviceData) ? (
+            {!sdCard(deviceData) ? (
               <MdOutlineSdCardAlert size={20} />
             ) : (
               <MdOutlineSdCard size={20} />
@@ -453,16 +445,10 @@ const CardStatus = (props: PropsType) => {
         </div>
         <div
           className={`flex items-center justify-center text-[20px] font-bold h-full ${
-            deviceData?.log && deviceData?.log.length > 0 && !sdCard(deviceData)
-              ? 'text-red-500'
-              : ''
+            !sdCard(deviceData) ? 'text-red-500' : ''
           }`}
         >
-          {deviceData?.log && deviceData?.log?.length > 0
-            ? !sdCard(deviceData)
-              ? t('stateProblem')
-              : t('stateNormal')
-            : '—'}
+          {!sdCard(deviceData) ? t('stateProblem') : t('stateNormal') ?? '—'}
         </div>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[155px]'>

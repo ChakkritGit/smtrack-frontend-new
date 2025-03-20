@@ -79,6 +79,7 @@ const FullChartComponent = (props: FullChartPropType) => {
 
   const options: ApexCharts.ApexOptions = {
     chart: {
+      height: 680,
       animations: {
         enabled: true,
         animateGradually: {
@@ -298,11 +299,69 @@ const FullChartComponent = (props: FullChartPropType) => {
     legend: {
       position: 'bottom',
       horizontalAlign: 'right'
-    }
+    },
+    responsive: [
+      {
+        breakpoint: 5124,
+        options: {
+          chart: {
+            height: 2480
+          }
+        }
+      },
+      {
+        breakpoint: 3844,
+        options: {
+          chart: {
+            height: 1780
+          }
+        }
+      },
+      {
+        breakpoint: 2564,
+        options: {
+          chart: {
+            height: 1080
+          }
+        }
+      },
+      {
+        breakpoint: 1924,
+        options: {
+          chart: {
+            height: 680
+          }
+        }
+      },
+      {
+        breakpoint: 1284,
+        options: {
+          chart: {
+            height: 580
+          }
+        }
+      },
+      {
+        breakpoint: 724,
+        options: {
+          chart: {
+            height: 480
+          }
+        }
+      },
+      {
+        breakpoint: 484,
+        options: {
+          chart: {
+            height: 380
+          }
+        }
+      }
+    ]
   }
 
   const chart = useMemo(
-    () => <Chart options={options} series={series} height={680} />,
+    () => <Chart options={options} series={series} />,
     [dataLog]
   )
 

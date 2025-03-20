@@ -32,29 +32,10 @@ const HomeTms = () => {
   ) as GlobalContextType
   const { token } = cookieDecode || {}
   const [devices, setDevices] = useState<DeviceTmsType[]>([])
-  const [devicesFiltered, setDevicesFiltered] = useState<DeviceTmsType[]>([])
   const [loading, setLoading] = useState(false)
   const [totalRows, setTotalRows] = useState(0)
   const [perPage, setPerPage] = useState(cookies.get('homeRowPerPageTms') ?? 10)
   const [currentPage, setCurrentPage] = useState(1)
-
-  // const fetchDeviceCount = useCallback(async () => {
-  //   try {
-  //     const response = await axiosInstance.get(
-  //       `/legacy/templog/dashboard/count${wardId ? `?ward=${wardId}&` : ''}`
-  //     )
-  //     setDeviceCount(response.data.data)
-  //   } catch (error) {
-  //     if (error instanceof AxiosError) {
-  //       if (error.response?.status === 401) {
-  //         dispatch(setTokenExpire(true))
-  //       }
-  //       console.error(error.response?.data.message)
-  //     } else {
-  //       console.error(error)
-  //     }
-  //   }
-  // }, [perPage, wardId])
 
   const fetchDevices = useCallback(
     async (page: number, size = perPage, search?: string) => {
@@ -63,7 +44,7 @@ const HomeTms = () => {
         const response = await axiosInstance.get(
           `/legacy/device?${
             wardId ? `ward=${wardId}&` : ''
-          }page=${page}&perpage=${size} ${search ? `&search=${search}` : ''}`
+          }page=${page}&perpage=${size} ${search ? `&filter=${search}` : ''}`
         )
         setDevices(response.data.data?.devices)
         setTotalRows(response.data.data?.total)
@@ -104,18 +85,6 @@ const HomeTms = () => {
   }
 
   useEffect(() => {
-    const filter = devices?.filter(f => {
-      const matchesSearch =
-        f.id?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        f.name?.toLowerCase().includes(globalSearch.toLowerCase())
-
-      return matchesSearch
-    })
-
-    setDevicesFiltered(filter)
-  }, [devices, globalSearch])
-
-  useEffect(() => {
     if (!token) return
     fetchDevices(1)
     // fetchDeviceCount()
@@ -134,7 +103,7 @@ const HomeTms = () => {
 
   const subColumns: TableColumn<TmsLogType>[] = useMemo(
     () => subColumnData(t),
-    [t, devicesFiltered]
+    [t, devices]
   )
 
   const ExpandedComponent = ({ data }: { data: DeviceTmsType }) => {
@@ -162,13 +131,13 @@ const HomeTms = () => {
 
   useEffect(() => {
     const handleCk = (e: KeyboardEvent) => {
-      if (globalSearch !== '' && e.key?.toLowerCase() === 'enter') {
+      if (globalSearch !== '' && e.key?.toLowerCase() === 'enter' && isFocused) {
         e.preventDefault()
         if (isFocused) {
           searchRef.current?.blur()
           setIsFocused(false)
         }
-        fetchDevices(currentPage, perPage)
+        fetchDevices(currentPage, perPage, globalSearch)
       }
     }
 
@@ -182,24 +151,10 @@ const HomeTms = () => {
     return () => {
       window.removeEventListener('keydown', handleCk)
     }
-  }, [globalSearch, currentPage, perPage, isCleared])
+  }, [globalSearch, currentPage, perPage, isCleared, isFocused])
 
   return (
     <div className='p-3 px-[16px]'>
-      {/* <div className='flex items-center justify-between mt-[16px]'>
-        <span className='font-bold text-[20px]'>{t('showAllBox')}</span>
-        {role === 'SUPER' && (
-          <span className='bg-base-300 p-2 px-3 rounded-btn'>
-            {`${
-              hospital?.filter(f => f.id?.includes(hosId))[0]?.hosName ??
-              userProfile?.ward?.hospital?.hosName
-            } - ${
-              ward?.filter(w => w.id?.includes(wardId))[0]?.wardName ?? 'ALL'
-            }`}
-          </span>
-        )}
-      </div> */}
-      {/* <HomeCountTms deviceCount={deviceCount} /> */}
       <div className='flex lg:items-center justify-between flex-col lg:flex-row gap-3 lg:gap-0 my-4'>
         <span className='font-bold text-[20px]'>{t('detailAllBox')}</span>
         <div className='flex items-end lg:items-center gap-3 flex-col lg:flex-row lg:h-[40px]'>
@@ -215,7 +170,7 @@ const HomeTms = () => {
           pointerOnHover
           expandableRows
           columns={columns}
-          data={devicesFiltered}
+          data={devices}
           paginationTotalRows={totalRows}
           paginationDefaultPage={currentPage}
           paginationPerPage={perPage}

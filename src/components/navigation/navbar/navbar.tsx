@@ -91,7 +91,6 @@ const Navbar = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [edit, setEdit] = useState(false)
   const [imageProcessing, setImageProcessing] = useState(false)
-
   const [searchHistory, setSearchHistory] = useState<SearchType[]>(() => {
     const storedHistory = cookies.get('searchHistory')
     return storedHistory ? storedHistory : []
@@ -183,7 +182,7 @@ const Navbar = () => {
   useEffect(() => {
     if (
       (globalSearch === '' && location.pathname === '/') ||
-      location.pathname === 'management'
+      (globalSearch === '' && location.pathname === '/management')
     ) {
       setIsCleared(true)
     }
@@ -429,7 +428,7 @@ const Navbar = () => {
                       dispatch(setSearch(''))
                       if (
                         location.pathname === '/' ||
-                        location.pathname === 'management'
+                        location.pathname === '/management'
                       ) {
                         setIsCleared(true)
                       }

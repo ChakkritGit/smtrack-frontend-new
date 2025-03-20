@@ -3,6 +3,7 @@ import {
   ChangeEvent,
   FormEvent,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState
@@ -21,7 +22,7 @@ import {
   RiShutDownLine,
   RiTimeLine
 } from 'react-icons/ri'
-import { IoSwapVertical } from "react-icons/io5"
+import { IoSwapVertical } from 'react-icons/io5'
 import {
   setHosId,
   setSubmitLoading,
@@ -54,6 +55,9 @@ import Select from 'react-select'
 import { Option } from '../../../types/global/hospitalAndWard'
 import { TbTransfer } from 'react-icons/tb'
 import MoveDeviceList from '../../../components/filter/moveDeviceList'
+import { GlobalContextType } from '../../../types/global/globalContext'
+import { GlobalContext } from '../../../contexts/globalContext'
+import { DeviceResponseType } from '../../../types/global/deviceResponseType'
 
 type selectOption = {
   value: string
@@ -65,8 +69,9 @@ const ManageDevice = () => {
   const { t } = useTranslation()
   const { wardId, globalSearch, cookieDecode, tokenDecode, hosId } =
     useSelector((state: RootState) => state.utils)
+  const { searchRef, isFocused, setIsFocused, isCleared, setIsCleared } =
+    useContext(GlobalContext) as GlobalContextType
   const [devices, setDevices] = useState<DeviceType[]>([])
-  const [devicesFiltered, setDevicesFiltered] = useState<DeviceType[]>([])
   const [loading, setLoading] = useState(false)
   const [totalRows, setTotalRows] = useState(0)
   const [perPage, setPerPage] = useState(10)
@@ -131,13 +136,15 @@ const ManageDevice = () => {
   })
 
   const fetchDevices = useCallback(
-    async (page: number, size = perPage) => {
+    async (page: number, size = perPage, search?: string) => {
       try {
         setLoading(true)
-        const response = await axiosInstance.get(
+        const response = await axiosInstance.get<
+          responseType<DeviceResponseType>
+        >(
           `/devices/device?${
             wardId ? `ward=${wardId}&` : ''
-          }page=${page}&perpage=${size}`
+          }page=${page}&perpage=${size}${search ? `&filter=${search}` : ''}`
         )
         setDevices(response.data.data?.devices)
         setTotalRows(response.data.data?.total)
@@ -770,20 +777,6 @@ const ManageDevice = () => {
     fetchDevices(1)
   }, [token, wardId])
 
-  useEffect(() => {
-    const filter = devices?.filter(f => {
-      const matchesSearch =
-        f?.id?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        f?.name?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        f?.hospitalName?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        f?.wardName?.toLowerCase().includes(globalSearch.toLowerCase())
-
-      return matchesSearch
-    })
-
-    setDevicesFiltered(filter)
-  }, [devices, globalSearch])
-
   const columns: TableColumn<DeviceType>[] = [
     {
       name: t('deviceSerialTb'),
@@ -1023,6 +1016,34 @@ const ManageDevice = () => {
       : [])
   ]
 
+  useEffect(() => {
+    const handleCk = (e: KeyboardEvent) => {
+      if (
+        globalSearch !== '' &&
+        e.key?.toLowerCase() === 'enter' &&
+        isFocused
+      ) {
+        e.preventDefault()
+        if (isFocused) {
+          searchRef.current?.blur()
+          setIsFocused(false)
+        }
+        fetchDevices(currentPage, perPage, globalSearch)
+      }
+    }
+
+    window.addEventListener('keydown', handleCk)
+
+    if (isCleared) {
+      fetchDevices(currentPage, perPage)
+      setIsCleared(false)
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleCk)
+    }
+  }, [globalSearch, currentPage, perPage, isCleared, isFocused])
+
   const mapOptions = <T, K extends keyof T>(
     data: T[],
     valueKey: K,
@@ -1103,7 +1124,7 @@ const ManageDevice = () => {
           pagination
           paginationServer
           columns={columns}
-          data={devicesFiltered}
+          data={devices}
           paginationTotalRows={totalRows}
           paginationDefaultPage={currentPage}
           progressPending={loading}

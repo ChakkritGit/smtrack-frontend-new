@@ -4,6 +4,7 @@ import {
   ChangeEvent,
   FormEvent,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState
@@ -16,7 +17,11 @@ import axiosInstance from '../../../constants/axios/axiosInstance'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { AxiosError } from 'axios'
-import { setHosId, setSubmitLoading, setTokenExpire } from '../../../redux/actions/utilsActions'
+import {
+  setHosId,
+  setSubmitLoading,
+  setTokenExpire
+} from '../../../redux/actions/utilsActions'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import HopitalSelect from '../../../components/selects/hopitalSelect'
 import WardSelectTms from '../../../components/selects/tms/wardSelect'
@@ -26,6 +31,8 @@ import { RiDeleteBin7Line, RiEditLine, RiFileCopyLine } from 'react-icons/ri'
 import toast from 'react-hot-toast'
 import Loading from '../../../components/skeleton/table/loading'
 import DataTableNoData from '../../../components/skeleton/table/noData'
+import { GlobalContextType } from '../../../types/global/globalContext'
+import { GlobalContext } from '../../../contexts/globalContext'
 
 const ManageDevice = () => {
   const dispatch = useDispatch()
@@ -33,8 +40,9 @@ const ManageDevice = () => {
   const { wardId, globalSearch, cookieDecode, hosId } = useSelector(
     (state: RootState) => state.utils
   )
+  const { searchRef, isFocused, setIsFocused, isCleared, setIsCleared } =
+    useContext(GlobalContext) as GlobalContextType
   const [devices, setDevices] = useState<DeviceTmsType[]>([])
-  const [devicesFiltered, setDevicesFiltered] = useState<DeviceTmsType[]>([])
   const [loading, setLoading] = useState(false)
   const [totalRows, setTotalRows] = useState(0)
   const [perPage, setPerPage] = useState(10)
@@ -51,13 +59,13 @@ const ManageDevice = () => {
   const editModalRef = useRef<HTMLDialogElement>(null)
 
   const fetchDevices = useCallback(
-    async (page: number, size = perPage) => {
+    async (page: number, size = perPage, search?: string) => {
       try {
         setLoading(true)
         const response = await axiosInstance.get(
           `/legacy/device?${
             wardId ? `ward=${wardId}&` : ''
-          }page=${page}&perpage=${size}`
+          }page=${page}&perpage=${size} ${search ? `&filter=${search}` : ''}`
         )
         setDevices(response.data.data?.devices)
         setTotalRows(response.data.data?.total)
@@ -179,18 +187,6 @@ const ManageDevice = () => {
       [name]: value
     }))
   }
-
-  useEffect(() => {
-    const filter = devices?.filter(f => {
-      const matchesSearch =
-        f.id?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        f.name?.toLowerCase().includes(globalSearch.toLowerCase())
-
-      return matchesSearch
-    })
-
-    setDevicesFiltered(filter)
-  }, [devices, globalSearch])
 
   useEffect(() => {
     if (!token) return
@@ -328,19 +324,19 @@ const ManageDevice = () => {
     {
       name: t('deviceNameBox'),
       cell: item => item.name,
-      sortable: false,
+      sortable: false
       // center: true
     },
     {
       name: t('hospitalsName'),
-      cell: item => item.hospital,
-      sortable: false,
+      cell: item => item.hospitalName,
+      sortable: false
       // center: true
     },
     {
       name: t('wardsName'),
-      cell: item => item.ward,
-      sortable: false,
+      cell: item => item.wardName,
+      sortable: false
       // center: true
     },
     {
@@ -388,6 +384,34 @@ const ManageDevice = () => {
     }
   ]
 
+  useEffect(() => {
+    const handleCk = (e: KeyboardEvent) => {
+      if (
+        globalSearch !== '' &&
+        e.key?.toLowerCase() === 'enter' &&
+        isFocused
+      ) {
+        e.preventDefault()
+        if (isFocused) {
+          searchRef.current?.blur()
+          setIsFocused(false)
+        }
+        fetchDevices(currentPage, perPage, globalSearch)
+      }
+    }
+
+    window.addEventListener('keydown', handleCk)
+
+    if (isCleared) {
+      fetchDevices(currentPage, perPage)
+      setIsCleared(false)
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleCk)
+    }
+  }, [globalSearch, currentPage, perPage, isCleared, isFocused])
+
   return (
     <div>
       <div className='flex flex-col lg:flex-row lg:items-center justify-between mt-3'>
@@ -409,7 +433,7 @@ const ManageDevice = () => {
           pagination
           paginationServer
           columns={columns}
-          data={devicesFiltered}
+          data={devices}
           paginationTotalRows={totalRows}
           paginationDefaultPage={currentPage}
           progressPending={loading}

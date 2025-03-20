@@ -12,6 +12,8 @@ type DeviceTmsType = {
   sn: string
   ward: string
   token: string
+  hospitalName: string
+  wardName: string
 }
 
 type TmsLogType = {

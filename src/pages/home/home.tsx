@@ -187,17 +187,28 @@ const Home = () => {
           if (currentTime - lastFetchTime >= 30000) {
             deviceFetchHistory.current[deviceName] = currentTime
 
-            fetchDevices(currentPage, perPage)
-            fetchDeviceCount(currentPage, perPage)
+            if (globalSearch !== '') {
+              fetchDevices(currentPage, perPage, globalSearch)
+              fetchDeviceCount(currentPage, perPage)
+            } else {
+              fetchDevices(currentPage, perPage)
+              fetchDeviceCount(currentPage, perPage)
+            }
           }
         }
       }
     }
 
     if (!firstFetch.current) {
-      fetchDevices(currentPage, perPage)
-      fetchDeviceCount(currentPage, perPage)
-      firstFetch.current = true
+      if (globalSearch !== '') {
+        fetchDevices(currentPage, perPage, globalSearch)
+        fetchDeviceCount(currentPage, perPage)
+        firstFetch.current = true
+      } else {
+        fetchDevices(currentPage, perPage)
+        fetchDeviceCount(currentPage, perPage)
+        firstFetch.current = true
+      }
     }
 
     if (socketData?.device) {
@@ -205,7 +216,7 @@ const Home = () => {
     }
 
     return () => {}
-  }, [devices, socketData, currentPage, perPage])
+  }, [devices, socketData, currentPage, perPage, globalSearch])
 
   useEffect(() => {
     fetchDevices(1)
@@ -220,7 +231,7 @@ const Home = () => {
 
   useEffect(() => {
     const handleCk = (e: KeyboardEvent) => {
-      if (globalSearch !== '' && e.key?.toLowerCase() === 'enter') {
+      if (globalSearch !== '' && e.key?.toLowerCase() === 'enter' && isFocused) {
         e.preventDefault()
         if (isFocused) {
           searchRef.current?.blur()
@@ -240,7 +251,7 @@ const Home = () => {
     return () => {
       window.removeEventListener('keydown', handleCk)
     }
-  }, [globalSearch, currentPage, perPage, isCleared])
+  }, [globalSearch, currentPage, perPage, isCleared, isFocused])
 
   const openAdjustModal = (probe: ProbeType[], sn: string) => {
     setProbeData(probe)

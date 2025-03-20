@@ -389,7 +389,7 @@ const FullChart = () => {
   }, [deviceLogs, dataLog])
 
   return (
-    <div className='container mx-auto p-3'>
+    <div className='p-3 px-5'>
       <div className='breadcrumbs text-sm mt-3'>
         <ul>
           <li>
