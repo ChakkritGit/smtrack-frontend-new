@@ -41,7 +41,21 @@ jobs:
       run: |
         git config --global user.email "nongtonnee@gmail.com"
         git config --global user.name "ChakkritGit"
-        sed -i "s|image: your-docker-repo/app:.*|image: siamatic/smtrack-frontend:1.0.1b|" deploy.yaml
+
+        if grep -q "image: siamatic/smtrack-frontend:" deploy.yaml; then
+          echo "No changes needed in deploy.yaml"
+          exit 0
+        fi
+
+        sed -i -E "s|image: [^ ]+|image: siamatic/smtrack-frontend:1.0.1b|g" deploy.yaml
+
+        git diff deploy.yaml || echo "No changes detected"
+
+        if git diff --quiet deploy.yaml; then
+          echo "No changes detected in deploy.yaml"
+          exit 0
+        fi
+
         git add deploy.yaml
         git commit -m "Update deployment image to siamatic/smtrack-frontend:1.0.1b"
         git push
