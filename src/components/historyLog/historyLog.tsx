@@ -78,7 +78,7 @@ const HistoryLog = () => {
           onChange={e => setDatePicker(e.target.value)}
           className='input input-bordered w-full md:max-w-xs'
         />
-        <button className='btn btn-error' disabled={deviceId === '' && userId === '' && datePicker === ''} onClick={() => clearForm()}>{t('buttonClear')}</button>
+        <button className='btn btn-error w-full md:w-auto' disabled={deviceId === '' && userId === '' && datePicker === ''} onClick={() => clearForm()}>{t('buttonClear')}</button>
       </div>
       <div className='py-4'>
         {!isLoading ? (
