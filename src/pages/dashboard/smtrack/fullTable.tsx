@@ -223,7 +223,6 @@ const FullTable = () => {
                 second: '2-digit',
                 timeZone: 'UTC'
               }),
-              Probe: items.probe,
               Temperature: items.temp.toFixed(2),
               Humidity: items.humidity.toFixed(2),
 
@@ -384,7 +383,7 @@ const FullTable = () => {
           </a>
         </div>
         <div className='flex items-center gap-3 justify-end w-full'>
-          <label
+          {deviceLogs && deviceLogs?.probe?.length > 1 && <label
             htmlFor='button'
             className='tooltip tooltip-top flex'
             data-tip={isPause ? t('startSlide') : t('stopSlide')}
@@ -395,7 +394,7 @@ const FullTable = () => {
             >
               {isPause ? <RiPlayLine size={20} /> : <RiStopLine size={20} />}
             </button>
-          </label>
+          </label>}
           <div className='dropdown dropdown-end z-50'>
             <button
               tabIndex={0}

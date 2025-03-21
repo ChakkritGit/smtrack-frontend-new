@@ -1555,13 +1555,20 @@ const ManageDevice = () => {
                         </div>
                       </div>
                     </div>
-                    <div className='form-control w-full md:col-span-2'>
+                    <div
+                      className={`form-control w-full md:col-span-2 ${
+                        firmwareList.length === 0
+                          ? 'opacity-50 cursor-not-allowed'
+                          : ''
+                      }`}
+                    >
                       <div className='label flex-col items-start'>
                         <span className='label-text mb-2'>
                           {t('firmWareVer')}
                         </span>
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-2 w-full'>
                           <Select
+                            isDisabled={firmwareList.length === 0}
                             id='minute'
                             options={mapOptions<
                               selectFirmwareOption,
