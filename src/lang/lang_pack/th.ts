@@ -458,6 +458,7 @@ export default {
     message: 'ข้อความ',
     modifyBy: 'แก้ไขโดย',
     buttonClear: 'ล้าง',
+    sendFm: 'ส่งแล้ว',
 
     // connect
     ipAddress: 'IP',

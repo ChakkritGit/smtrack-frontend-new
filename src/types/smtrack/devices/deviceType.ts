@@ -72,8 +72,10 @@ type DeviceLogs = {
 }
 
 type FirmwareListType = {
-  name: string
-  url: string
+  fileName: string
+  filePath: string
+  fileSize: string
+  createDate: string
 }
 
 export type {

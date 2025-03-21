@@ -459,6 +459,7 @@ export default {
     message: 'Message',
     modifyBy: 'Modify by',
     buttonClear: 'Clear',
+    sendFm: 'Sent',
 
     // connect
     ipAddress: 'IP',

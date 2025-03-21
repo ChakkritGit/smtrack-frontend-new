@@ -68,8 +68,10 @@ type selectOption = {
 }
 
 type selectFirmwareOption = {
-  name: string
-  url: string
+  fileName: string
+  filePath: string
+  fileSize: string
+  createDate: string
 }
 
 const ManageDevice = () => {
@@ -155,11 +157,13 @@ const ManageDevice = () => {
         a: selectFirmwareOption,
         b: selectFirmwareOption
       ) => {
-        const versionA = a.name.match(/(\d+)\.(\d+)\.(\d+)/)
-        const versionB = b.name.match(/(\d+)\.(\d+)\.(\d+)/)
+        const versionA = a.fileName.match(/(\d+)\.(\d+)\.(\d+)/)
+        const versionB = b.fileName.match(/(\d+)\.(\d+)\.(\d+)/)
 
-        if (a.name.startsWith('i-TeM') && !b.name.startsWith('i-TeM')) return 1
-        if (b.name.startsWith('i-TeM') && !a.name.startsWith('i-TeM')) return -1
+        if (a.fileName.startsWith('i-TeM') && !b.fileName.startsWith('i-TeM'))
+          return 1
+        if (b.fileName.startsWith('i-TeM') && !a.fileName.startsWith('i-TeM'))
+          return -1
 
         if (versionA && versionB) {
           const majorA = parseInt(versionA[1], 10)
@@ -178,8 +182,8 @@ const ManageDevice = () => {
       const combinedList = response.data.data
         .filter(
           filter =>
-            !filter.name.startsWith('bootloader') &&
-            !filter.name.startsWith('partition')
+            !filter.fileName.startsWith('bootloader') &&
+            !filter.fileName.startsWith('partition')
         )
         .sort(versionCompare)
 
@@ -475,6 +479,7 @@ const ManageDevice = () => {
       remark: '',
       tag: ''
     })
+    setSelectedFirmware('')
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
@@ -857,7 +862,7 @@ const ManageDevice = () => {
       await fetchDevices(currentPage, perPage)
       Swal.fire({
         title: t('alertHeaderSuccess'),
-        text: t('submitSuccess'),
+        text: t('sendFm'),
         icon: 'success',
         showConfirmButton: false,
         timer: 2500
@@ -1568,16 +1573,22 @@ const ManageDevice = () => {
                         </span>
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-2 w-full'>
                           <Select
+                            key={selectedFirmware}
                             isDisabled={firmwareList.length === 0}
-                            id='minute'
+                            id='firmware'
                             options={mapOptions<
                               selectFirmwareOption,
                               keyof selectFirmwareOption
-                            >(firmwareList, 'name', 'name')}
+                            >(firmwareList, 'fileName', 'fileName')}
                             value={mapDefaultValue<
                               selectFirmwareOption,
                               keyof selectFirmwareOption
-                            >(firmwareList, hardReset.minute, 'name', 'name')}
+                            >(
+                              firmwareList,
+                              selectedFirmware,
+                              'fileName',
+                              'fileName'
+                            )}
                             onChange={e =>
                               setSelectedFirmware(String(e?.value))
                             }
@@ -2154,7 +2165,10 @@ const ManageDevice = () => {
         >
           <div>
             <h3 className='font-bold text-lg mb-3'>{t('moveDevice')}</h3>
-            <DeviceListWithSetState deviceId={deviceId} setDeviceId={setDeviceId} />
+            <DeviceListWithSetState
+              deviceId={deviceId}
+              setDeviceId={setDeviceId}
+            />
             <div className='bg-base-200 rounded-btn p-3 mt-3'>
               {/* <RiCpuLine size={24} /> */}
               <div className='flex flex-col gap-1'>
