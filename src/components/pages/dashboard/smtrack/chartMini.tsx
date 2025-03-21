@@ -158,6 +158,7 @@ const ChartMini = (props: ChartMiniProps) => {
       defaultLocale: 'en'
     },
     tooltip: {
+      enabled: true,
       theme: 'apexcharts-tooltip',
       x: {
         format: 'dd MMM yy HH:mm'

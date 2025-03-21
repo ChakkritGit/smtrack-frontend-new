@@ -196,12 +196,12 @@ const CardStatus = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              deviceData?.online && !deviceData?.online
+              !deviceData?.online
                 ? 'text-base-content bg-opacity-80 bg-red-500'
                 : ''
             }`}
           >
-            {deviceData?.online && !deviceData?.online ? (
+            {!deviceData?.online ? (
               <RiSignalWifiOffLine size={20} />
             ) : (
               <RiSignalWifi1Line size={20} />
@@ -211,14 +211,10 @@ const CardStatus = (props: PropsType) => {
         </div>
         <div
           className={`flex items-center justify-center text-[20px] font-bold h-full ${
-            deviceData?.online && !deviceData?.online ? 'text-red-500' : ''
+            !deviceData?.online ? 'text-red-500' : ''
           }`}
         >
-          {deviceData?.online
-            ? !deviceData?.online
-              ? t('stateDisconnect')
-              : t('stateConnect')
-            : '—'}
+          {!deviceData?.online ? t('stateDisconnect') : t('stateConnect')}
         </div>
       </div>
       <div className='flex flex-col gap-2 p-3 bg-base-100 rounded-btn w-full h-[155px]'>
