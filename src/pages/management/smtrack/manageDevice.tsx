@@ -57,10 +57,10 @@ import { client } from '../../../services/mqtt'
 import Select from 'react-select'
 import { Option } from '../../../types/global/hospitalAndWard'
 import { TbTransfer } from 'react-icons/tb'
-import MoveDeviceList from '../../../components/filter/moveDeviceList'
 import { GlobalContextType } from '../../../types/global/globalContext'
 import { GlobalContext } from '../../../contexts/globalContext'
 import { DeviceResponseType } from '../../../types/global/deviceResponseType'
+import DeviceListWithSetState from '../../../components/filter/DeviceListWithSetState'
 
 type selectOption = {
   value: string
@@ -2154,7 +2154,7 @@ const ManageDevice = () => {
         >
           <div>
             <h3 className='font-bold text-lg mb-3'>{t('moveDevice')}</h3>
-            <MoveDeviceList deviceId={deviceId} setDeviceId={setDeviceId} />
+            <DeviceListWithSetState deviceId={deviceId} setDeviceId={setDeviceId} />
             <div className='bg-base-200 rounded-btn p-3 mt-3'>
               {/* <RiCpuLine size={24} /> */}
               <div className='flex flex-col gap-1'>

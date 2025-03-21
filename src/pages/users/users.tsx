@@ -24,10 +24,7 @@ import {
 import defaultPic from '../../assets/images/default-user.jpg'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  getRoleLabel,
-  handleApiError
-} from '../../constants/utils/utilsConstants'
+import { getRoleLabel } from '../../constants/utils/utilsConstants'
 import UserPagination from '../../components/pagination/userPagination'
 import {
   setHosId,
@@ -85,7 +82,14 @@ const Users = () => {
       )
       setUsers(response.data.data)
     } catch (error) {
-      handleApiError(error)
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
+        console.error(error.response?.data.message)
+      } else {
+        console.error(error)
+      }
     }
   }, [])
 

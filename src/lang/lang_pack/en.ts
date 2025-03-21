@@ -174,7 +174,7 @@ export default {
     // manage
     tabManageDevice: 'Manage Devices',
     tabManageHospitals: 'Manage Hospitals',
-    tabAdjustHistory: 'Adjust Logs',
+    tabAdjustHistory: 'History Logs',
     subTabDevice: 'Devices',
     subTabProbe: 'Probe',
     subTabFirmware: 'Firmware',
@@ -454,6 +454,10 @@ export default {
     allNotification: 'All Notifications on the Web',
     moveDevice: 'Transfer device data',
     move: 'Transfer data',
+    typeUpdate: 'Update',
+    typeCreate: 'Create',
+    message: 'Message',
+    modifyBy: 'Modify by',
 
     // connect
     ipAddress: 'IP',

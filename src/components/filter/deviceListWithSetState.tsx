@@ -19,7 +19,7 @@ interface MoveDeviceProps {
   setDeviceId: Dispatch<SetStateAction<string>>
 }
 
-const MoveDeviceList = (props: MoveDeviceProps) => {
+const DeviceListWithSetState = (props: MoveDeviceProps) => {
   const dispatch = useDispatch()
   const { deviceId, setDeviceId } = props
   const [deviceList, setDeviceList] = useState<DeviceListType[]>([])
@@ -35,7 +35,6 @@ const MoveDeviceList = (props: MoveDeviceProps) => {
         if (error.response?.status === 401) {
           dispatch(setTokenExpire(true))
         }
-
         console.error(error.response?.data.message)
       } else {
         console.error(error)
@@ -87,10 +86,10 @@ const MoveDeviceList = (props: MoveDeviceProps) => {
         setDeviceId(String(e?.value))
       }}
       autoFocus={false}
-      className='react-select-container custom-device-select z-[75] min-w-full md:min-w-[315px]'
+      className='react-select-container custom-device-select z-[76] min-w-full md:min-w-[315px]'
       classNamePrefix='react-select'
     />
   )
 }
 
-export default MoveDeviceList
+export default DeviceListWithSetState

@@ -184,7 +184,7 @@ export default {
     // manage
     tabManageDevice: 'จัดการอุปกรณ์',
     tabManageHospitals: 'จัดการโรงพยาบาล',
-    tabAdjustHistory: 'ประวัติการปรับค่าอุปกรณ์',
+    tabAdjustHistory: 'ประวัติการแก้ไข',
     subTabDevice: 'อุปกรณ์',
     subTabProbe: 'โพรบ',
     subTabFirmware: 'เฟิร์มแวร์',
@@ -453,6 +453,10 @@ export default {
     allNotification: 'การแจ้งเตือนในหน้าเว็บทั้งหมด',
     moveDevice: 'ย้ายข้อมูลอุปกรณ์',
     move: 'ย้ายข้อมูล',
+    typeUpdate: 'แก้ไข',
+    typeCreate: 'เพิ่ม',
+    message: 'ข้อความ',
+    modifyBy: 'แก้ไขโดย',
 
     // connect
     ipAddress: 'IP',

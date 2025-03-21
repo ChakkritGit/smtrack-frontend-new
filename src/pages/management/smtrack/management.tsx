@@ -6,6 +6,7 @@ import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
 import { setSearch } from '../../../redux/actions/utilsActions'
 import ManageDeviceAndProbe from './manageDeviceAndProbe'
 import ManageHospital from '../manageHospital'
+import HistoryLog from '../../../components/historyLog/historyLog'
 
 const Management = () => {
   const dispatch = useDispatch()
@@ -22,7 +23,7 @@ const Management = () => {
 
   const manageMenu = useMemo(
     () => (
-      <div role='tablist' className='tabs tabs-bordered w-72 md:w-max mt-3'>
+      <div role='tablist' className='tabs tabs-bordered md:w-max mt-3'>
         <a
           role='tab'
           className={`tab text-sm md:text-lg ${tab === 1 ? 'tab-active' : ''}`}
@@ -37,18 +38,32 @@ const Management = () => {
           role === 'SERVICE' ||
           role === 'ADMIN' ||
           role === 'LEGACY_ADMIN') && (
-          <a
-            role='tab'
-            className={`tab text-sm md:text-lg ${
-              tab === 2 ? 'tab-active' : ''
-            }`}
-            onClick={() => {
-              cookies.set('manageHospitalTab', 2, cookieOptions)
-              setTab(2)
-            }}
-          >
-            {t('tabManageHospitals')}
-          </a>
+          <>
+            <a
+              role='tab'
+              className={`tab text-sm md:text-lg ${
+                tab === 2 ? 'tab-active' : ''
+              }`}
+              onClick={() => {
+                cookies.set('manageHospitalTab', 2, cookieOptions)
+                setTab(2)
+              }}
+            >
+              {t('tabManageHospitals')}
+            </a>
+            <a
+              role='tab'
+              className={`tab text-sm md:text-lg ${
+                tab === 3 ? 'tab-active' : ''
+              }`}
+              onClick={() => {
+                cookies.set('manageHospitalTab', 3, cookieOptions)
+                setTab(3)
+              }}
+            >
+              {t('tabAdjustHistory')}
+            </a>
+          </>
         )}
       </div>
     ),
@@ -59,7 +74,13 @@ const Management = () => {
     <div className='p-3 px-[16px]'>
       {manageMenu}
       <div className='mt-3'>
-        {tab === 1 ? <ManageDeviceAndProbe /> : <ManageHospital />}
+        {tab === 1 ? (
+          <ManageDeviceAndProbe />
+        ) : tab === 2 ? (
+          <ManageHospital />
+        ) : (
+          <HistoryLog />
+        )}
       </div>
     </div>
   )
