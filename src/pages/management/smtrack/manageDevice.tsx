@@ -60,7 +60,7 @@ import { TbTransfer } from 'react-icons/tb'
 import { GlobalContextType } from '../../../types/global/globalContext'
 import { GlobalContext } from '../../../contexts/globalContext'
 import { DeviceResponseType } from '../../../types/global/deviceResponseType'
-import DeviceListWithSetState from '../../../components/filter/DeviceListWithSetState'
+import DeviceListWithSetState from '../../../components/filter/deviceListState'
 
 type selectOption = {
   value: string

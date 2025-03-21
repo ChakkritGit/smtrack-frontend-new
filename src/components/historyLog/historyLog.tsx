@@ -9,7 +9,7 @@ import { setTokenExpire } from '../../redux/actions/utilsActions'
 import HistoryPagination from '../pagination/historyPagination'
 import { useTranslation } from 'react-i18next'
 import Loading from '../skeleton/table/loading'
-import DeviceListWithSetState from '../filter/DeviceListWithSetState'
+import DeviceListWithSetState from '../filter/deviceListState'
 
 const HistoryLog = () => {
   const dispatch = useDispatch()
