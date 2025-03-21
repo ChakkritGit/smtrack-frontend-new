@@ -112,7 +112,8 @@ const HistoryLog = () => {
                   </div>
                   <div className='collapse-content'>
                     <div className='flex flex-col gap-2 w-full rounded-md bg-base-200/50 p-3'>
-                      <p className='font-medium'>{t('message')}: {item.message.split(':')[1].split('/')[0]}</p>
+                      <p className='font-medium'>{t('hisDetail')}</p>
+                      <p className='ml-5'>- {item.message.split(':')[1].split('/')[0]}</p>
                       <p className='text-[14px]'>{t('modifyBy')}: {item.message.split('/')[1]}</p>
                     </div>
                   </div>
