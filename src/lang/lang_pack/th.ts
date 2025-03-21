@@ -457,6 +457,7 @@ export default {
     typeCreate: 'เพิ่ม',
     message: 'ข้อความ',
     modifyBy: 'แก้ไขโดย',
+    buttonClear: 'ล้าง',
 
     // connect
     ipAddress: 'IP',

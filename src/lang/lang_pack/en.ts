@@ -458,6 +458,7 @@ export default {
     typeCreate: 'Create',
     message: 'Message',
     modifyBy: 'Modify by',
+    buttonClear: 'Clear',
 
     // connect
     ipAddress: 'IP',

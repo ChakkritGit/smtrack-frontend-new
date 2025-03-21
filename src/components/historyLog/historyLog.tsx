@@ -20,13 +20,14 @@ const HistoryLog = () => {
   const [historyLogsFilter, setHistoryLogsFilter] = useState<HistoryLohType[]>(
     []
   )
+  const [datePicker, setDatePicker] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
   const fetchHistoryLog = useCallback(async () => {
     setIsLoading(true)
     try {
       const response = await axiosInstance.get<responseType<HistoryLohType[]>>(
-        `/history/device?sn=${deviceId}`
+        `/history/device?sn=${deviceId} ${datePicker ? `&filter=${datePicker}` : ''}`
       )
       setHistoryLogs(response.data.data)
     } catch (error) {
@@ -42,12 +43,20 @@ const HistoryLog = () => {
     } finally {
       setIsLoading(false)
     }
-  }, [deviceId])
+  }, [deviceId, datePicker])
+
+  const clearForm = () => {
+    setDeviceId('')
+    setUserId('')
+    setDatePicker('')
+    setHistoryLogs([])
+    setHistoryLogsFilter([])
+  }
 
   useEffect(() => {
     if (deviceId === '') return
     fetchHistoryLog()
-  }, [deviceId])
+  }, [deviceId, datePicker])
 
   useEffect(() => {
     const filter = historyLogs.filter(f => f.user.includes(userId))
@@ -61,12 +70,21 @@ const HistoryLog = () => {
         <DeviceListWithSetState deviceId={deviceId} setDeviceId={setDeviceId} />
         <span className='ml-3 md:ml-0'>{t('hisUsername')}</span>
         <UserListWithSetState userId={userId} setUserId={setUserId} />
+        <span>{t('seeLastData')}</span>
+        <input
+          type='date'
+          disabled={deviceId === ''}
+          value={datePicker}
+          onChange={e => setDatePicker(e.target.value)}
+          className='input input-bordered w-full md:max-w-xs'
+        />
+        <button className='btn btn-error' disabled={deviceId === '' && userId === '' && datePicker === ''} onClick={() => clearForm()}>{t('buttonClear')}</button>
       </div>
       <div className='py-4'>
         {!isLoading ? (
           historyLogsFilter.length > 0 ? (
             <HistoryPagination
-              data={historyLogsFilter as HistoryLohType[]}
+              data={historyLogsFilter.sort((a, b) => new Date(b._time).getTime() - new Date(a._time).getTime()) as HistoryLohType[]}
               initialPerPage={10}
               itemPerPage={[10, 30, 50, 100]}
               renderItem={(item, index) => (

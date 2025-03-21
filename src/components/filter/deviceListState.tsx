@@ -71,6 +71,7 @@ const DeviceListWithSetState = (props: MoveDeviceProps) => {
 
   return (
     <Select
+      key={deviceId}
       options={mapOptions<DeviceListType, keyof DeviceListType>(
         deviceList,
         'id',
