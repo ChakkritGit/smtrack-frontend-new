@@ -293,7 +293,7 @@ const FullChartComponent = (props: FullChartPropType) => {
         inverseColors: true,
         opacityFrom: 0.45,
         opacityTo: 0,
-        stops: [minTempAvg, tempMax + maxTempAvg + 50]
+        stops: [minTempAvg, tempMax + maxTempAvg + 35]
       }
     },
     legend: {

@@ -507,12 +507,21 @@ const Adjustments = (props: AdjustmentsProps) => {
         })
         setProbeBefore(probeFiltered)
 
-        client.subscribe(
-          `${serial}/${probeFiltered?.channel}/temp/real`,
-          err => {
-            if (err) console.error('MQTT Subscribe Error', err)
-          }
-        )
+        if (version === 'v2') {
+          client.subscribe(
+            `${serial}/${probeFiltered?.channel}/temp/real`,
+            err => {
+              if (err) console.error('MQTT Subscribe Error', err)
+            }
+          )
+        } else {
+          client.subscribe(
+            `${serial}/temp/real`,
+            err => {
+              if (err) console.error('MQTT Subscribe Error', err)
+            }
+          )
+        }
 
         // รอลบ
         client.subscribe(`${serial}/temp/real`, err => {

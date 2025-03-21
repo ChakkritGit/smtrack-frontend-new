@@ -12,7 +12,10 @@ import DataTable, { TableColumn } from 'react-data-table-component'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import { AxiosError } from 'axios'
-import { DeviceType } from '../../../types/smtrack/devices/deviceType'
+import {
+  DeviceType,
+  FirmwareListType
+} from '../../../types/smtrack/devices/deviceType'
 import axiosInstance from '../../../constants/axios/axiosInstance'
 import {
   RiDeleteBin7Line,
@@ -64,6 +67,11 @@ type selectOption = {
   label: string
 }
 
+type selectFirmwareOption = {
+  name: string
+  url: string
+}
+
 const ManageDevice = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
@@ -72,6 +80,8 @@ const ManageDevice = () => {
   const { searchRef, isFocused, setIsFocused, isCleared, setIsCleared } =
     useContext(GlobalContext) as GlobalContextType
   const [devices, setDevices] = useState<DeviceType[]>([])
+  const [firmwareList, setFirmwareList] = useState<FirmwareListType[]>([])
+  const [selectedFirmware, setSelectedFirmware] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const [totalRows, setTotalRows] = useState(0)
   const [perPage, setPerPage] = useState(10)
@@ -134,6 +144,57 @@ const ManageDevice = () => {
     hour: '',
     minute: ''
   })
+
+  const fetchFirmware = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get<
+        responseType<FirmwareListType[]>
+      >('https://drive.siamatic.co.th/api/drive')
+
+      const versionCompare = (
+        a: selectFirmwareOption,
+        b: selectFirmwareOption
+      ) => {
+        const versionA = a.name.match(/(\d+)\.(\d+)\.(\d+)/)
+        const versionB = b.name.match(/(\d+)\.(\d+)\.(\d+)/)
+
+        if (a.name.startsWith('i-TeM') && !b.name.startsWith('i-TeM')) return 1
+        if (b.name.startsWith('i-TeM') && !a.name.startsWith('i-TeM')) return -1
+
+        if (versionA && versionB) {
+          const majorA = parseInt(versionA[1], 10)
+          const minorA = parseInt(versionA[2], 10)
+          const patchA = parseInt(versionA[3], 10)
+
+          const majorB = parseInt(versionB[1], 10)
+          const minorB = parseInt(versionB[2], 10)
+          const patchB = parseInt(versionB[3], 10)
+
+          return majorA - majorB || minorA - minorB || patchA - patchB
+        }
+        return 0
+      }
+
+      const combinedList = response.data.data
+        .filter(
+          filter =>
+            !filter.name.startsWith('bootloader') &&
+            !filter.name.startsWith('partition')
+        )
+        .sort(versionCompare)
+
+      setFirmwareList(combinedList)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
+        console.error(error.message)
+      } else {
+        console.error(error)
+      }
+    }
+  }, [])
 
   const fetchDevices = useCallback(
     async (page: number, size = perPage, search?: string) => {
@@ -418,6 +479,7 @@ const ManageDevice = () => {
   }
 
   const openEditModal = (device: DeviceType) => {
+    fetchFirmware()
     dispatch(setHosId(device.hospital))
     setFormData({
       id: device.id,
@@ -777,6 +839,47 @@ const ManageDevice = () => {
     }
   }
 
+  const handleUpdateFirmware = async () => {
+    if (selectedFirmware !== '' && formData?.id !== '') {
+      if (deviceModel === 'etemp') {
+        client.publish(
+          `siamatic/${deviceModel}/${version}/${formData?.id}/firmware`,
+          selectedFirmware
+        )
+      } else {
+        client.publish(
+          `siamatic/${deviceModel}/${version}/${formData?.id}/firmware`,
+          selectedFirmware
+        )
+      }
+      editModalRef.current?.close()
+      resetForm()
+      await fetchDevices(currentPage, perPage)
+      Swal.fire({
+        title: t('alertHeaderSuccess'),
+        text: t('submitSuccess'),
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => {
+        setSelectedFirmware('')
+        editModalRef.current?.showModal()
+      })
+    } else {
+      editModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderError'),
+        text: t('descriptionErrorWrong'),
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 2500
+      }).finally(() => {
+        setSelectedFirmware('')
+        editModalRef.current?.showModal()
+      })
+    }
+  }
+
   useEffect(() => {
     if (!token) return
     fetchDevices(1)
@@ -819,32 +922,37 @@ const ManageDevice = () => {
           {item.name ? item.name : '—'}
         </span>
       ),
-      sortable: false
+      sortable: false,
+      width: '170px'
       // center: true
     },
     {
       name: t('deviceLocationTb'),
       cell: item => (item.location ? item.location : '—'),
-      sortable: false
+      sortable: false,
+      width: '150px'
       // center: true
     },
     {
       name: t('hospitals'),
       cell: item => (item.hospitalName ? item.hospitalName : '—'),
-      sortable: false
+      sortable: false,
+      width: '150px'
       // center: true
     },
     {
       name: t('ward'),
       cell: item => (item.wardName ? item.wardName : '—'),
-      sortable: false
+      sortable: false,
+      width: '150px'
       // center: true
     },
     {
       name: t('firmWareVer'),
       selector: item => (item.firmware ? item.firmware : '—'),
       sortable: false,
-      center: true
+      center: true,
+      width: '130px'
     },
     {
       name: t('status'),
@@ -897,6 +1005,35 @@ const ManageDevice = () => {
       name: t('action'),
       cell: item => (
         <div className='flex items-center justify-center gap-3 p-3'>
+          {role === 'SUPER' && (
+            <>
+              <button
+                data-tip={t('moveDevice')}
+                className='btn btn-primary tooltip tooltip-left flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0'
+                onClick={() => {
+                  if (item.status) {
+                    swalMoveDevice.fire({
+                      title: t('alertHeaderWarning'),
+                      text: t('moveDeviceActive'),
+                      icon: 'warning',
+                      confirmButtonText: t('confirmButton')
+                    })
+                  } else {
+                    setMoveDevice({
+                      id: item.id,
+                      name: item.name ?? ''
+                    })
+                    if (moveModalRef.current) {
+                      moveModalRef.current.showModal()
+                    }
+                  }
+                }}
+              >
+                <TbTransfer size={20} />
+              </button>
+              <div className='divider divider-horizontal mx-0'></div>
+            </>
+          )}
           {role === 'SUPER' &&
             (item.status ? (
               <button
@@ -981,44 +1118,7 @@ const ManageDevice = () => {
       ),
       sortable: false,
       center: true
-    },
-    ...(role === 'SUPER'
-      ? [
-          {
-            name: t('move'),
-            cell: (item: DeviceType) => (
-              <div className='flex items-center justify-center gap-3 p-3'>
-                <button
-                  data-tip={t('moveDevice')}
-                  className='btn btn-primary tooltip tooltip-left flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0'
-                  onClick={() => {
-                    if (item.status) {
-                      swalMoveDevice.fire({
-                        title: t('alertHeaderWarning'),
-                        text: t('moveDeviceActive'),
-                        icon: 'warning',
-                        confirmButtonText: t('confirmButton')
-                      })
-                    } else {
-                      setMoveDevice({
-                        id: item.id,
-                        name: item.name ?? ''
-                      })
-                      if (moveModalRef.current) {
-                        moveModalRef.current.showModal()
-                      }
-                    }
-                  }}
-                >
-                  <TbTransfer size={20} />
-                </button>
-              </div>
-            ),
-            sortable: false,
-            center: true
-          }
-        ]
-      : [])
+    }
   ]
 
   useEffect(() => {
@@ -1208,7 +1308,7 @@ const ManageDevice = () => {
         </form>
       </dialog>
 
-      {/* Edit User Modal */}
+      {/* Edit device Modal */}
       <dialog ref={editModalRef} className='modal overflow-y-scroll py-10'>
         <form
           onSubmit={
@@ -1391,64 +1491,106 @@ const ManageDevice = () => {
 
                 {/* hard reset */}
                 {role === 'SUPER' && (
-                  <div className='form-control w-full md:col-span-2'>
-                    <div className='label flex-col items-start'>
-                      <span className='label-text mb-2'>{t('hardReset')}</span>
-                      <div className='grid grid-cols-1 md:grid-cols-3 gap-2 w-full'>
-                        <Select
-                          id='hours'
-                          options={mapOptions<selectOption, keyof selectOption>(
-                            hoursOptions,
-                            'value',
-                            'label'
-                          )}
-                          value={mapDefaultValue<
-                            selectOption,
-                            keyof selectOption
-                          >(hoursOptions, hardReset.hour, 'value', 'label')}
-                          onChange={e =>
-                            setHardReset({
-                              ...hardReset,
-                              hour: String(e?.value)
-                            })
-                          }
-                          menuPlacement='top'
-                          autoFocus={false}
-                          className='react-select-container z-[150] custom-menu-select w-full'
-                          classNamePrefix='react-select'
-                        />
-                        <Select
-                          id='minute'
-                          options={mapOptions<selectOption, keyof selectOption>(
-                            minutesOptions,
-                            'value',
-                            'label'
-                          )}
-                          value={mapDefaultValue<
-                            selectOption,
-                            keyof selectOption
-                          >(minutesOptions, hardReset.minute, 'value', 'label')}
-                          onChange={e =>
-                            setHardReset({
-                              ...hardReset,
-                              minute: String(e?.value)
-                            })
-                          }
-                          menuPlacement='top'
-                          autoFocus={false}
-                          className='react-select-container z-[150] custom-menu-select w-full'
-                          classNamePrefix='react-select'
-                        />
-                        <button
-                          className='btn btn-primary'
-                          type='button'
-                          onClick={() => hardResetFun()}
-                        >
-                          {t('messageSend')}
-                        </button>
+                  <>
+                    <div className='form-control w-full md:col-span-2'>
+                      <div className='label flex-col items-start'>
+                        <span className='label-text mb-2'>
+                          {t('hardReset')}
+                        </span>
+                        <div className='grid grid-cols-1 md:grid-cols-3 gap-2 w-full'>
+                          <Select
+                            id='hours'
+                            options={mapOptions<
+                              selectOption,
+                              keyof selectOption
+                            >(hoursOptions, 'value', 'label')}
+                            value={mapDefaultValue<
+                              selectOption,
+                              keyof selectOption
+                            >(hoursOptions, hardReset.hour, 'value', 'label')}
+                            onChange={e =>
+                              setHardReset({
+                                ...hardReset,
+                                hour: String(e?.value)
+                              })
+                            }
+                            menuPlacement='top'
+                            autoFocus={false}
+                            className='react-select-container z-[150] custom-menu-select w-full'
+                            classNamePrefix='react-select'
+                          />
+                          <Select
+                            id='minute'
+                            options={mapOptions<
+                              selectOption,
+                              keyof selectOption
+                            >(minutesOptions, 'value', 'label')}
+                            value={mapDefaultValue<
+                              selectOption,
+                              keyof selectOption
+                            >(
+                              minutesOptions,
+                              hardReset.minute,
+                              'value',
+                              'label'
+                            )}
+                            onChange={e =>
+                              setHardReset({
+                                ...hardReset,
+                                minute: String(e?.value)
+                              })
+                            }
+                            menuPlacement='top'
+                            autoFocus={false}
+                            className='react-select-container z-[150] custom-menu-select w-full'
+                            classNamePrefix='react-select'
+                          />
+                          <button
+                            className='btn btn-primary'
+                            type='button'
+                            onClick={() => hardResetFun()}
+                          >
+                            {t('messageSend')}
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                    <div className='form-control w-full md:col-span-2'>
+                      <div className='label flex-col items-start'>
+                        <span className='label-text mb-2'>
+                          {t('firmWareVer')}
+                        </span>
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-2 w-full'>
+                          <Select
+                            id='minute'
+                            options={mapOptions<
+                              selectFirmwareOption,
+                              keyof selectFirmwareOption
+                            >(firmwareList, 'name', 'name')}
+                            value={mapDefaultValue<
+                              selectFirmwareOption,
+                              keyof selectFirmwareOption
+                            >(firmwareList, hardReset.minute, 'name', 'name')}
+                            onChange={e =>
+                              setSelectedFirmware(String(e?.value))
+                            }
+                            menuPlacement='top'
+                            autoFocus={false}
+                            className='react-select-container z-[150] custom-menu-select w-full'
+                            classNamePrefix='react-select'
+                          />
+                          <button
+                            className='btn btn-primary'
+                            type='button'
+                            disabled={selectedFirmware === ''}
+                            onClick={() => handleUpdateFirmware()}
+                          >
+                            {t('updateButton')}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>

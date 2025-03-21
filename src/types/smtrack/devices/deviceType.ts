@@ -71,11 +71,17 @@ type DeviceLogs = {
   internet: boolean
 }
 
+type FirmwareListType = {
+  name: string
+  url: string
+}
+
 export type {
   DevicesType,
   DeviceType,
   DeviceLogsType,
   DeviceListType,
   DeviceLog,
-  DeviceLogs
+  DeviceLogs,
+  FirmwareListType
 }
