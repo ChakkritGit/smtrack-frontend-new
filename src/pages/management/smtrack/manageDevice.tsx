@@ -23,6 +23,10 @@ import {
   RiFileCopyLine,
   RiSettings4Line,
   RiShutDownLine,
+  RiSignalWifi2Fill,
+  RiSignalWifi2Line,
+  RiSimCard2Fill,
+  RiSimCard2Line,
   RiTimeLine
 } from 'react-icons/ri'
 import { IoSwapVertical } from 'react-icons/io5'
@@ -61,6 +65,8 @@ import { GlobalContextType } from '../../../types/global/globalContext'
 import { GlobalContext } from '../../../contexts/globalContext'
 import { DeviceResponseType } from '../../../types/global/deviceResponseType'
 import DeviceListWithSetState from '../../../components/filter/deviceListState'
+import { CgEthernet } from 'react-icons/cg'
+import { BsEthernet } from 'react-icons/bs'
 
 type selectOption = {
   value: string
@@ -479,7 +485,6 @@ const ManageDevice = () => {
       remark: '',
       tag: ''
     })
-    setSelectedFirmware('')
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
@@ -858,7 +863,7 @@ const ManageDevice = () => {
         )
       }
       editModalRef.current?.close()
-      resetForm()
+      setSelectedFirmware('')
       await fetchDevices(currentPage, perPage)
       Swal.fire({
         title: t('alertHeaderSuccess'),
@@ -1617,24 +1622,45 @@ const ManageDevice = () => {
               <div role='tablist' className='tabs tabs-bordered mt-4'>
                 <a
                   role='tab'
-                  className={`tab ${currentTab === 1 ? 'tab-active' : ''}`}
+                  className={`tab ${
+                    currentTab === 1 ? 'tab-active font-medium' : ''
+                  }`}
                   onClick={() => setCurrentTab(1)}
                 >
-                  Wi-Fi
+                  {currentTab === 1 ? (
+                    <RiSignalWifi2Fill size={24} />
+                  ) : (
+                    <RiSignalWifi2Line size={24} />
+                  )}
+                  <span className='hidden md:block md:ml-2'>Wi-Fi</span>
                 </a>
                 <a
                   role='tab'
-                  className={`tab ${currentTab === 2 ? 'tab-active' : ''}`}
+                  className={`tab ${
+                    currentTab === 2 ? 'tab-active font-medium' : ''
+                  }`}
                   onClick={() => setCurrentTab(2)}
                 >
-                  Lan
+                  {currentTab === 2 ? (
+                    <BsEthernet size={24} />
+                  ) : (
+                    <CgEthernet size={24} />
+                  )}
+                  <span className='hidden md:block md:ml-2'>Lan</span>
                 </a>
                 <a
                   role='tab'
-                  className={`tab ${currentTab === 3 ? 'tab-active' : ''}`}
+                  className={`tab ${
+                    currentTab === 3 ? 'tab-active font-medium' : ''
+                  }`}
                   onClick={() => setCurrentTab(3)}
                 >
-                  Sim
+                  {currentTab === 3 ? (
+                    <RiSimCard2Fill size={24} />
+                  ) : (
+                    <RiSimCard2Line size={24} />
+                  )}
+                  <span className='hidden md:block md:ml-2'>Sim</span>
                 </a>
               </div>
               {currentTab === 1 ? (

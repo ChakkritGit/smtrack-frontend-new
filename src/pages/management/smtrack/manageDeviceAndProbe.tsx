@@ -6,6 +6,7 @@ import { setSearch } from '../../../redux/actions/utilsActions'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import ManageProbe from './manageProbe'
 import ManageDevice from './manageDevice'
+import { RiBox3Fill, RiBox3Line, RiSensorFill, RiSensorLine } from 'react-icons/ri'
 
 const ManageDeviceAndProbe = () => {
   const dispatch = useDispatch()
@@ -26,27 +27,29 @@ const ManageDeviceAndProbe = () => {
         <a
           role='tab'
           className={`tab text-sm md:text-base ${
-            tab === 1 ? 'tab-active' : ''
+            tab === 1 ? 'tab-active font-medium' : ''
           }`}
           onClick={() => {
             cookies.set('manageDeviceTab', 1, cookieOptions)
             setTab(1)
           }}
         >
-          {t('subTabDevice')}
+          {tab === 1 ? <RiBox3Fill size={24} /> : <RiBox3Line size={24} />}
+          <span className='hidden md:block md:ml-2'>{t('subTabDevice')}</span>
         </a>
         {(role === 'SUPER' || role === 'SERVICE') && (
           <a
             role='tab'
             className={`tab text-sm md:text-base ${
-              tab === 2 ? 'tab-active' : ''
+              tab === 2 ? 'tab-active font-medium' : ''
             }`}
             onClick={() => {
               cookies.set('manageDeviceTab', 2, cookieOptions)
               setTab(2)
             }}
           >
-            {t('subTabProbe')}
+            {tab === 2 ? <RiSensorFill size={24} /> : <RiSensorLine size={24} />}
+            <span className='hidden md:block md:ml-2'>{t('subTabProbe')}</span>
           </a>
         )}
       </div>
@@ -58,11 +61,7 @@ const ManageDeviceAndProbe = () => {
     <div>
       {manageMenu}
       <div className='mt-3'>
-        {tab === 1 ? (
-          <ManageDevice />
-        ) : (
-          <ManageProbe />
-        )}
+        {tab === 1 ? <ManageDevice /> : <ManageProbe />}
       </div>
     </div>
   )

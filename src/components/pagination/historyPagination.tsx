@@ -100,7 +100,7 @@ const HistoryPagination = <T,>({
 
   return (
     <>
-      <div className='max-h-[calc(100dvh-350px)] min-h-[calc(100dvh-350px)] overflow-y-scroll'>
+      <div className='md:max-h-[calc(100dvh-350px)] min-h-[calc(100dvh-350px)] overflow-y-scroll'>
         <div className='join join-vertical w-full bg-base-100'>
           {paginatedData.map((item, index) => renderItem(item, index))}
         </div>

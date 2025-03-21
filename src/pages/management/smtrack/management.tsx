@@ -7,6 +7,14 @@ import { setSearch } from '../../../redux/actions/utilsActions'
 import ManageDeviceAndProbe from './manageDeviceAndProbe'
 import ManageHospital from '../manageHospital'
 import HistoryLog from '../../../components/historyLog/historyLog'
+import {
+  RiBox3Fill,
+  RiBox3Line,
+  RiFileHistoryFill,
+  RiFileHistoryLine,
+  RiHospitalFill,
+  RiHospitalLine
+} from 'react-icons/ri'
 
 const Management = () => {
   const dispatch = useDispatch()
@@ -26,13 +34,18 @@ const Management = () => {
       <div role='tablist' className='tabs tabs-bordered md:w-max mt-3'>
         <a
           role='tab'
-          className={`tab text-sm md:text-lg ${tab === 1 ? 'tab-active' : ''}`}
+          className={`tab text-sm md:text-lg ${
+            tab === 1 ? 'tab-active font-medium' : ''
+          }`}
           onClick={() => {
             cookies.set('manageHospitalTab', 1, cookieOptions)
             setTab(1)
           }}
         >
-          {t('tabManageDevice')}
+          {tab === 1 ? <RiBox3Fill size={24} /> : <RiBox3Line size={24} />}
+          <span className='hidden md:block md:ml-2'>
+            {t('tabManageDevice')}
+          </span>
         </a>
         {(role === 'SUPER' ||
           role === 'SERVICE' ||
@@ -42,26 +55,32 @@ const Management = () => {
             <a
               role='tab'
               className={`tab text-sm md:text-lg ${
-                tab === 2 ? 'tab-active' : ''
+                tab === 2 ? 'tab-active font-medium' : ''
               }`}
               onClick={() => {
                 cookies.set('manageHospitalTab', 2, cookieOptions)
                 setTab(2)
               }}
             >
-              {t('tabManageHospitals')}
+              {tab === 2 ? <RiHospitalFill size={24} /> : <RiHospitalLine size={24} />}
+              <span className='hidden md:block md:ml-2'>
+                {t('tabManageHospitals')}
+              </span>
             </a>
             <a
               role='tab'
               className={`tab text-sm md:text-lg ${
-                tab === 3 ? 'tab-active' : ''
+                tab === 3 ? 'tab-active font-medium' : ''
               }`}
               onClick={() => {
                 cookies.set('manageHospitalTab', 3, cookieOptions)
                 setTab(3)
               }}
             >
-              {t('tabAdjustHistory')}
+              {tab === 3 ? <RiFileHistoryFill size={24} /> : <RiFileHistoryLine size={24} />}
+              <span className='hidden md:block md:ml-2'>
+                {t('tabAdjustHistory')}
+              </span>
             </a>
           </>
         )}

@@ -67,7 +67,7 @@ const DataTableMini = (props: TableMiniProps) => {
     },
     {
       name: t('deviceConnectTb'),
-      cell: item => (item.internet ? t('deviceOffline') : t('deviceOnline')),
+      cell: item => !item.internet ? t('stateDisconnect') : t('stateConnect'),
       sortable: false,
       center: true
     }

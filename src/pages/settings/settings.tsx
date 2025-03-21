@@ -175,7 +175,7 @@ const Settings = () => {
                   }
                 })
             }
-            className={`btn font-normal text-red-500 flex-nowrap text-[16px] justify-start w-full flex`}
+            className={`btn btn-ghost font-normal text-red-500 flex-nowrap text-[16px] justify-start w-full flex`}
           >
             <a className='text-[16px] h-9 flex items-center gap-2'>
               <RiLogoutBoxRLine size={24} />
