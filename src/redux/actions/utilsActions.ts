@@ -67,12 +67,12 @@ const setTheme = (theme: string) => ({
   payload: theme
 })
 
-const setHosId = (id: string) => ({
+const setHosId = (id: string | undefined) => ({
   type: HOS_ID,
   payload: id
 })
 
-const setWardId = (id: string) => ({
+const setWardId = (id: string | undefined) => ({
   type: WARD_ID,
   payload: id
 })

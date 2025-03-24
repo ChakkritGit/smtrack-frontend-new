@@ -24,13 +24,11 @@ const HomeTms = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { wardId, globalSearch, cookieDecode } = useSelector(
+  const { wardId, globalSearch } = useSelector(
     (state: RootState) => state.utils
   )
-  const { searchRef, isFocused, setIsFocused, isCleared, setIsCleared } = useContext(
-    GlobalContext
-  ) as GlobalContextType
-  const { token } = cookieDecode || {}
+  const { searchRef, isFocused, setIsFocused, isCleared, setIsCleared } =
+    useContext(GlobalContext) as GlobalContextType
   const [devices, setDevices] = useState<DeviceTmsType[]>([])
   const [loading, setLoading] = useState(false)
   const [totalRows, setTotalRows] = useState(0)
@@ -85,10 +83,9 @@ const HomeTms = () => {
   }
 
   useEffect(() => {
-    if (!token) return
     fetchDevices(1)
     // fetchDeviceCount()
-  }, [token, wardId])
+  }, [wardId])
 
   useEffect(() => {
     return () => {
@@ -131,7 +128,11 @@ const HomeTms = () => {
 
   useEffect(() => {
     const handleCk = (e: KeyboardEvent) => {
-      if (globalSearch !== '' && e.key?.toLowerCase() === 'enter' && isFocused) {
+      if (
+        globalSearch !== '' &&
+        e.key?.toLowerCase() === 'enter' &&
+        isFocused
+      ) {
         e.preventDefault()
         if (isFocused) {
           searchRef.current?.blur()
@@ -153,6 +154,34 @@ const HomeTms = () => {
     }
   }, [globalSearch, currentPage, perPage, isCleared, isFocused])
 
+  const dataTable = useMemo(
+    () => (
+      <DataTable
+        responsive
+        fixedHeader
+        pagination
+        paginationServer
+        pointerOnHover
+        expandableRows
+        columns={columns}
+        data={devices}
+        paginationTotalRows={totalRows}
+        paginationDefaultPage={currentPage}
+        paginationPerPage={perPage}
+        progressPending={loading}
+        progressComponent={<Loading />}
+        noDataComponent={<DataTableNoData />}
+        expandableRowsComponent={ExpandedComponent}
+        onChangeRowsPerPage={handlePerRowsChange}
+        onChangePage={handlePageChange}
+        onRowClicked={handleRowClicked}
+        paginationRowsPerPageOptions={[10, 20, 50, 100, 150, 200]}
+        fixedHeaderScrollHeight='calc(100dvh - 250px)'
+      />
+    ),
+    [devices, loading, totalRows, currentPage, perPage, columns, wardId]
+  )
+
   return (
     <div className='p-3 px-[16px]'>
       <div className='flex lg:items-center justify-between flex-col lg:flex-row gap-3 lg:gap-0 my-4'>
@@ -162,28 +191,7 @@ const HomeTms = () => {
         </div>
       </div>
       <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300'>
-        <DataTable
-          responsive
-          fixedHeader
-          pagination
-          paginationServer
-          pointerOnHover
-          expandableRows
-          columns={columns}
-          data={devices}
-          paginationTotalRows={totalRows}
-          paginationDefaultPage={currentPage}
-          paginationPerPage={perPage}
-          progressPending={loading}
-          progressComponent={<Loading />}
-          noDataComponent={<DataTableNoData />}
-          expandableRowsComponent={ExpandedComponent}
-          onChangeRowsPerPage={handlePerRowsChange}
-          onChangePage={handlePageChange}
-          onRowClicked={handleRowClicked}
-          paginationRowsPerPageOptions={[10, 20, 50, 100, 150, 200]}
-          fixedHeaderScrollHeight='calc(100dvh - 250px)'
-        />
+        {dataTable}
       </div>
     </div>
   )

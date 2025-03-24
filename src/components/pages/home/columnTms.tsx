@@ -37,6 +37,7 @@ const columnTms = (
       ),
       sortable: false,
       // center: true
+      width: '280px'
     },
     {
       name: t('devicTemperatureTb'),

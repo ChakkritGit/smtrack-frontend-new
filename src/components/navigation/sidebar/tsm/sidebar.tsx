@@ -15,7 +15,9 @@ import {
 } from 'react-icons/ri'
 import {
   setDeviceKey,
-  setTmsMode
+  setHosId,
+  setTmsMode,
+  setWardId
 } from '../../../../redux/actions/utilsActions'
 import DefaultPic from '../../../../assets/images/default-pic.png'
 import { useTranslation } from 'react-i18next'
@@ -189,14 +191,19 @@ const Sidebar = () => {
                     className='toggle toggle-md'
                     checked={tmsMode}
                     onClick={async () => {
-                      navigate('/')
-                      dispatch(setTmsMode())
+                      dispatch(setDeviceKey(''))
+                      dispatch(setHosId(undefined))
+                      dispatch(setWardId(undefined))
+                      cookies.remove('hosId', cookieOptions)
+                      cookies.remove('wardId', cookieOptions)
+                      cookies.set('tmsMode', !tmsMode, cookieOptions)
+                      cookies.remove('deviceKey', cookieOptions)
+                      cookies.update()
 
                       await new Promise(resolve => setTimeout(resolve, 500))
 
-                      dispatch(setDeviceKey(''))
-                      cookies.set('tmsMode', !tmsMode, cookieOptions)
-                      cookies.remove('deviceKey', cookieOptions)
+                      navigate('/')
+                      dispatch(setTmsMode())
                     }}
                   />
                 </div>

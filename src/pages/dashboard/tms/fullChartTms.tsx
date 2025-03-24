@@ -304,8 +304,7 @@ const FullChartTms = () => {
               chartIMG: waitExport,
               dateTime: String(new Date()).substring(0, 25),
               hosImg: userProfile?.ward.hospital.hosPic,
-              tempMin: deviceLogs.minTemp,
-              tempMax: deviceLogs.maxTemp
+              deviceLogs
             }
           })
         } catch (error) {
