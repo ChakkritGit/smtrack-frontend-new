@@ -80,7 +80,7 @@ const Navbar = () => {
   const settingModalRef = useRef<HTMLDialogElement>(null)
   const parser = new UAParser()
   const os = parser.getOS().name
-  const isMac = os === 'mac os'
+  const isWindows = os === 'Windows'
   const clearText = globalSearch === ''
   const [deviceList, setDeviceList] = useState<
     DeviceListType[] | DeviceListTmsType[]
@@ -418,7 +418,7 @@ const Navbar = () => {
                 />
                 {clearText ? (
                   <>
-                    <kbd className='kbd kbd-sm'>{isMac ? '⌘' : 'Ctrl'}</kbd>
+                    <kbd className='kbd kbd-sm'>{isWindows ? 'Ctrl' : '⌘'}</kbd>
                     <kbd className='kbd kbd-sm'>K</kbd>
                   </>
                 ) : (
