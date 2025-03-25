@@ -12,6 +12,7 @@ import { ProbeType } from '../../../../types/smtrack/probe/probeType'
 import { useSwiperSync } from '../../../../constants/utils/utilsConstants'
 import { GlobalContextType } from '../../../../types/global/globalContext'
 import { Swiper as SwiperType } from 'swiper/types'
+import ImageModal from '../../../ui/imageModal'
 
 type PropsType = {
   deviceData: DeviceLogsType | undefined
@@ -29,6 +30,7 @@ const CardInFoComponent = (props: PropsType) => {
   const [probeData, setProbeData] = useState<ProbeType[]>([])
   const openAdjustModalRef = useRef<HTMLDialogElement>(null)
   const { activeIndex, setActiveIndex } = useSwiperSync() as GlobalContextType
+  const modalRef = useRef<HTMLDialogElement>(null)
 
   const openAdjustModal = (probe: ProbeType[], sn: string) => {
     setProbeData(probe)
@@ -95,7 +97,10 @@ const CardInFoComponent = (props: PropsType) => {
         </button>
       </div>
       <div className='flex justify-between flex-col lg:flex-row gap-3 mt-2 h-full'>
-        <div className='flex justify-center items-center w-full lg:w-[35%] lg:h-48'>
+        <div
+          className='flex justify-center items-center w-full lg:w-[35%] lg:h-48'
+          onClick={() => modalRef.current?.showModal()}
+        >
           <img
             src={deviceData?.positionPic ?? DefaultPic}
             alt='Device-image'
@@ -206,6 +211,8 @@ const CardInFoComponent = (props: PropsType) => {
         setProbeData={setProbeData}
         fetchDevices={fetchDevices}
       />
+
+      <ImageModal modalRef={modalRef} deviceData={deviceData} />
     </div>
   )
 }
