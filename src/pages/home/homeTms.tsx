@@ -175,7 +175,7 @@ const HomeTms = () => {
         onChangeRowsPerPage={handlePerRowsChange}
         onChangePage={handlePageChange}
         onRowClicked={handleRowClicked}
-        paginationRowsPerPageOptions={[10, 20, 50, 100, 150, 200]}
+        paginationRowsPerPageOptions={[10, 20, 50, 100]}
         fixedHeaderScrollHeight='calc(100dvh - 250px)'
       />
     ),

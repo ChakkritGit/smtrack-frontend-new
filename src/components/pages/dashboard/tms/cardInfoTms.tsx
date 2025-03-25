@@ -43,18 +43,26 @@ const CardInfoTms = (props: PropsType) => {
           />
         </div>
         <div className='w-full lg:w-[60%] h-3/4 p-1'>
-          <div className='flex items-center gap-3'>
+          <div className='flex items-center gap-2'>
+            <span className='font-medium'>{t('hospitalsName')}</span>
             <p className='font-bold'>•</p>
             <p className='truncate max-w-[150px] lg:max-w-[300px]'>
-              {deviceData?.ward ?? '—'}
+              {deviceData?.hospitalName ?? '—'}
             </p>
           </div>
           <div className='flex items-center gap-3'>
+            <span className='font-medium'>{t('wardsName')}</span>
+            <p className='font-bold'>•</p>
+            <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+              {deviceData?.wardName ?? '—'}
+            </p>
+          </div>
+          {/* <div className='flex items-center gap-3'>
             <p className='font-bold'>• {t('tempValueUnit')}:</p>
             <p className='truncate max-w-[150px] lg:max-w-[300px]'>
               {deviceData?.minTemp ?? '—'} / {deviceData?.maxTemp ?? '—'} °C
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

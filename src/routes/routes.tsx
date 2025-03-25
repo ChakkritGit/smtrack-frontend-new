@@ -42,7 +42,7 @@ const Routes = () => {
 
   const fetchHospital = async () => {
     try {
-      const response = await axiosInstance<responseType<HospitalType[]>>(
+      const response = await axiosInstance.get<responseType<HospitalType[]>>(
         '/auth/hospital'
       )
       setHospital(response.data.data)
@@ -60,7 +60,7 @@ const Routes = () => {
 
   const fetchWard = async () => {
     try {
-      const response = await axiosInstance<responseType<WardType[]>>(
+      const response = await axiosInstance.get<responseType<WardType[]>>(
         '/auth/ward'
       )
       setWard(response.data.data)

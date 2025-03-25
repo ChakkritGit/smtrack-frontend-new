@@ -50,6 +50,7 @@ type DeviceListTmsType = {
 type DeviceLogTms = {
   adjTemp: number
   hospital: string
+  hospitalName: string
   id: string
   maxTemp: number
   minTemp: number
@@ -57,6 +58,7 @@ type DeviceLogTms = {
   record: number
   sn: string
   ward: string
+  wardName: string
   log: DeviceLogsTms[]
 }
 

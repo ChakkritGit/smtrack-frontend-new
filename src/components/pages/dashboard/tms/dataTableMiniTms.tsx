@@ -64,12 +64,12 @@ const DataTableMiniTms = (props: TableMiniProps) => {
       sortable: false,
       center: true
     },
-    {
-      name: t('deviceConnectTb'),
-      cell: item => (item.internet ? t('deviceOffline') : t('deviceOnline')),
-      sortable: false,
-      center: true
-    }
+    // {
+    //   name: t('deviceConnectTb'),
+    //   cell: item => (item.internet ? t('deviceOffline') : t('deviceOnline')),
+    //   sortable: false,
+    //   center: true
+    // }
   ]
 
   useEffect(() => {
@@ -95,8 +95,8 @@ const DataTableMiniTms = (props: TableMiniProps) => {
         columns={columns}
         data={reverseArray}
         noDataComponent={<DataTableNoData />}
-        paginationPerPage={12}
-        paginationRowsPerPageOptions={[12, 30, 50, 100]}
+        paginationPerPage={10}
+        paginationRowsPerPageOptions={[10, 30, 50, 100]}
         className='md:!max-h-[calc(100dvh-630px)]'
       />
     </div>
