@@ -19,12 +19,12 @@ import Select from 'react-select'
 const HospitalAndWard = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const { tokenDecode, wardId, hosId } = useSelector(
+  const { tokenDecode, wardId, hosId, tmsMode } = useSelector(
     (state: RootState) => state.utils
   )
   const { hospital, ward } = useContext(GlobalContext) as GlobalContextType
   const [showFilter, setShowFilter] = useState(false)
-  const [wardName, setWardname] = useState<WardType[]>([])
+  const [wardArray, setWardArray] = useState<WardType[]>([])
   const { role } = tokenDecode || {}
 
   const mapOptions = <T, K extends keyof T>(
@@ -53,7 +53,7 @@ const HospitalAndWard = () => {
   const getHospital = (hospitalID: string | undefined) => {
     if (hospitalID !== '') {
       updateLocalStorageAndDispatch('hosId', hospitalID, setHosId, dispatch)
-      setWardname(
+      setWardArray(
         ward.filter(items =>
           hospitalID ? items.hospital.id.includes(hospitalID) : items
         )
@@ -74,10 +74,10 @@ const HospitalAndWard = () => {
   }
 
   useEffect(() => {
-    setWardname(
-      ward?.filter(items => (hosId ? items.hospital.id.includes(hosId) : items))
-    )
-  }, [ward, hosId])
+    const filter = ward?.filter(items => (hosId ? items.hospital.id.includes(hosId) : items))
+    const filterNewSystem = filter.filter((f) => !tmsMode ? f.type.includes('NEW') : f.type.includes('LEGACY'))
+    setWardArray(filterNewSystem)
+  }, [ward, hosId, tmsMode])
 
   const allHos = {
     id: '',
@@ -88,18 +88,19 @@ const HospitalAndWard = () => {
   }
   const allWard = {
     id: '',
+    type: '',
+    updateAt: '',
     wardName: 'ALL',
     wardSeq: 0,
-    hosId: '',
     createAt: '',
-    updateAt: '',
+    hosId: '',
     hospital: {} as WardType
   }
 
   const updatedHosData = [allHos, ...(Array.isArray(hospital) ? hospital : [])]
   const updatedWardData = [
     allWard,
-    ...(Array.isArray(wardName) ? wardName : [])
+    ...(Array.isArray(wardArray) ? wardArray : [])
   ]
 
   return (
@@ -126,11 +127,7 @@ const HospitalAndWard = () => {
             />
           )}
           <Select
-            options={mapOptions<Ward, keyof Ward>(
-              updatedWardData,
-              'id',
-              'wardName'
-            )}
+            options={mapOptions<Ward, keyof Ward>(updatedWardData, 'id', 'wardName')}
             value={mapDefaultValue<Ward, keyof Ward>(
               updatedWardData,
               wardId ? wardId : '',
