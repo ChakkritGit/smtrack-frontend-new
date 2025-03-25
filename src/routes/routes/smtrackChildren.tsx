@@ -65,11 +65,6 @@ const smtrackChildren: RouteObject[] = [
         path: 'management/:id',
         element: <>management/:id</>,
         errorElement: <ErrorScreen />
-      },
-      {
-        path: 'logs',
-        element: <>logs</>,
-        errorElement: <ErrorScreen />
       }
     ]
   },
