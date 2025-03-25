@@ -6,12 +6,11 @@ type RoleButtonProps = {
   userConnect: string
   handleFilterConnect: (status: string) => void
   t: TFunction
-  tmsMode: boolean
   disabled: boolean
 }
 
 const RoleButtons = (props: RoleButtonProps) => {
-  const { userConnect, handleFilterConnect, role, t, tmsMode, disabled } = props
+  const { userConnect, handleFilterConnect, role, t, disabled } = props
 
   const renderButton = (level: string) => {
     return (
@@ -41,44 +40,42 @@ const RoleButtons = (props: RoleButtonProps) => {
           {renderButton(UserRole.LEGACY_USER)}
         </>
       ) : (
-        !tmsMode && (
-          <>
-            {/* SUPER เห็นทุก Role */}
-            {role === UserRole.SUPER && (
-              <>
-                {renderButton(UserRole.SUPER)}
-                {renderButton(UserRole.SERVICE)}
-                {renderButton(UserRole.ADMIN)}
-                {renderButton(UserRole.USER)}
-                {renderButton(UserRole.LEGACY_ADMIN)}
-                {renderButton(UserRole.LEGACY_USER)}
-                {renderButton(UserRole.GUEST)}
-              </>
-            )}
+        <>
+          {/* SUPER เห็นทุก Role */}
+          {role === UserRole.SUPER && (
+            <>
+              {renderButton(UserRole.SUPER)}
+              {renderButton(UserRole.SERVICE)}
+              {renderButton(UserRole.ADMIN)}
+              {renderButton(UserRole.USER)}
+              {renderButton(UserRole.LEGACY_ADMIN)}
+              {renderButton(UserRole.LEGACY_USER)}
+              {renderButton(UserRole.GUEST)}
+            </>
+          )}
 
-            {/* SERVICE เห็น SERVICE ลงไปทั้งหมด (แต่ไม่เห็น GUEST) */}
-            {role === UserRole.SERVICE && (
-              <>
-                {renderButton(UserRole.SERVICE)}
-                {renderButton(UserRole.ADMIN)}
-                {renderButton(UserRole.USER)}
-                {renderButton(UserRole.LEGACY_ADMIN)}
-                {renderButton(UserRole.LEGACY_USER)}
-              </>
-            )}
+          {/* SERVICE เห็น SERVICE ลงไปทั้งหมด (แต่ไม่เห็น GUEST) */}
+          {role === UserRole.SERVICE && (
+            <>
+              {renderButton(UserRole.SERVICE)}
+              {renderButton(UserRole.ADMIN)}
+              {renderButton(UserRole.USER)}
+              {renderButton(UserRole.LEGACY_ADMIN)}
+              {renderButton(UserRole.LEGACY_USER)}
+            </>
+          )}
 
-            {/* ADMIN เห็น ADMIN ลงไปทั้งหมด (แต่ไม่เห็น LEGACY_ADMIN, LEGACY_USER, GUEST) */}
-            {role === UserRole.ADMIN && (
-              <>
-                {renderButton(UserRole.ADMIN)}
-                {renderButton(UserRole.USER)}
-              </>
-            )}
+          {/* ADMIN เห็น ADMIN ลงไปทั้งหมด (แต่ไม่เห็น LEGACY_ADMIN, LEGACY_USER, GUEST) */}
+          {role === UserRole.ADMIN && (
+            <>
+              {renderButton(UserRole.ADMIN)}
+              {renderButton(UserRole.USER)}
+            </>
+          )}
 
-            {/* USER เห็นแค่ USER */}
-            {role === UserRole.USER && <>{renderButton(UserRole.USER)}</>}
-          </>
-        )
+          {/* USER เห็นแค่ USER */}
+          {role === UserRole.USER && <>{renderButton(UserRole.USER)}</>}
+        </>
       )}
     </div>
   )

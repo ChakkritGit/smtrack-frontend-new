@@ -196,8 +196,9 @@ const Sidebar = () => {
                       dispatch(setWardId(undefined))
                       cookies.remove('hosId', cookieOptions)
                       cookies.remove('wardId', cookieOptions)
-                      cookies.set('tmsMode', !tmsMode, cookieOptions)
                       cookies.remove('deviceKey', cookieOptions)
+                      cookies.remove('searchHistory', cookieOptions)
+                      cookies.set('tmsMode', !tmsMode, cookieOptions)
                       cookies.update()
 
                       await new Promise(resolve => setTimeout(resolve, 500))

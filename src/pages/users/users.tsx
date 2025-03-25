@@ -614,7 +614,6 @@ const Users = () => {
           handleFilterConnect={handleFilterConnect}
           role={role}
           t={t}
-          tmsMode={tmsMode}
           disabled={userInactive}
         />
         {(role === 'SUPER' ||

@@ -710,10 +710,6 @@ const ManageProbe = () => {
     { value: 'Analog Sensor', name: 'Analog Sensor' }
   ]
 
-  useEffect(() => {
-    console.table(formData)
-  }, [formData])
-
   return (
     <div>
       <div className='flex flex-col lg:flex-row lg:items-center justify-between mt-3'>
@@ -733,13 +729,13 @@ const ManageProbe = () => {
           responsive
           fixedHeader
           pagination
-          paginationServer
           columns={columns}
           data={probeListFilter}
           progressPending={loading}
           progressComponent={<Loading />}
           noDataComponent={<DataTableNoData />}
-          paginationRowsPerPageOptions={[10, 20, 50, 100, 150, 200]}
+          paginationPerPage={10}
+          paginationRowsPerPageOptions={[10, 20, 50, 100]}
           className='md:!max-h-[calc(100dvh-350px)]'
         />
       </div>
