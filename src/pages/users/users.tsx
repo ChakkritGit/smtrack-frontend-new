@@ -429,12 +429,13 @@ const Users = () => {
 
   useEffect(() => {
     const filterUsers = users?.filter(f => {
-      const matchesSearch = wardId
-        ? (f.ward?.id?.toLowerCase().includes(wardId.toLowerCase()) &&
-            f.display?.toLowerCase().includes(globalSearch.toLowerCase())) ||
-          f.username?.toLowerCase().includes(globalSearch.toLowerCase())
-        : f.display?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-          f.username?.toLowerCase().includes(globalSearch.toLowerCase())
+      if (wardId && f.ward?.id !== wardId) {
+        return false
+      }
+
+      const matchesSearch =
+        f.display?.toLowerCase().includes(globalSearch.toLowerCase()) ||
+        f.username?.toLowerCase().includes(globalSearch.toLowerCase())
 
       const matchesConnection =
         userConnect === '' ||
@@ -446,7 +447,7 @@ const Users = () => {
         (userConnect === 'LEGACY_USER' && f.role === 'LEGACY_USER') ||
         (userConnect === 'GUEST' && f.role === 'GUEST')
 
-      const matchesInactive = userInactive ? !f.status : f
+      const matchesInactive = userInactive ? !f.status : true
 
       return matchesSearch && matchesConnection && matchesInactive
     })
