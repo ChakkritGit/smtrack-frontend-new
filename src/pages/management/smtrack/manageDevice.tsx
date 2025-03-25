@@ -1001,7 +1001,7 @@ const ManageDevice = () => {
                   }
                 }}
               >
-                <span className='truncate max-w-[80px]'>{item.token}</span>
+                <span className='truncate max-w-[80px]'>{item.token ?? '—'}</span>
                 <RiFileCopyLine size={18} className='text-base-content/70' />
               </div>
             ),

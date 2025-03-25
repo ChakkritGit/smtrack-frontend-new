@@ -271,7 +271,7 @@ const FullChartComponent = (props: FullChartPropType) => {
       }
     },
     colors: [
-      'oklch(79% 0.1305 238 / var(--tw-text-opacity, 0.25))',
+      'oklch(79% 0.1305 238 / var(--tw-text-opacity, 0.45))',
       'oklch(73.24% 0.1973 44.47 / var(--tw-text-opacity, 1))',
       'oklch(81% 0.1696 175 / var(--tw-text-opacity, 1))',
       'oklch(81% 0.2319 126 / var(--tw-text-opacity, 1))',
@@ -284,7 +284,7 @@ const FullChartComponent = (props: FullChartPropType) => {
         type: 'vertical',
         shadeIntensity: 0.5,
         gradientToColors: [
-          'oklch(84.41% 0.0937 238 / var(--tw-text-opacity, 0.25))',
+          'oklch(79% 0.1305 238 / var(--tw-text-opacity, 0.45))',
           'oklch(76.18% 0.1702 44.47 / var(--tw-text-opacity, 1))',
           'oklch(0% 0 0 / var(--tw-text-opacity, 0))',
           'oklch(0% 0 0 / var(--tw-text-opacity, 0))',

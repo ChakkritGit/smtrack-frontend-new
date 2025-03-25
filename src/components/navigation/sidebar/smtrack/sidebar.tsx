@@ -126,9 +126,7 @@ const Sidebar = () => {
                 <Link
                   to={'/users'}
                   className={`btn font-normal flex-nowrap justify-start w-full ${
-                    location.pathname === '/users'
-                      ? 'btn-primary'
-                      : 'btn-ghost'
+                    location.pathname === '/users' ? 'btn-primary' : 'btn-ghost'
                   } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
                   data-tip={t('sidePermission')}
                 >
@@ -170,51 +168,58 @@ const Sidebar = () => {
               </>
             )}
           </div>
-          <div className='divider mb-0'></div>
           <div className='flex items-center justify-center flex-col gap-2 p-3'>
-            <Link
-              to={'/repair'}
-              className={`btn font-normal flex-nowrap justify-start w-full ${
-                location.pathname === '/repair' ||
-                location.pathname === '/repair/preview'
-                  ? 'btn-primary'
-                  : 'btn-ghost'
-              } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
-              data-tip={t('sideRepair')}
-            >
-              {location.pathname === '/repair' ||
-              location.pathname === '/repair/preview' ? (
-                <RiFileSettingsFill size={24} />
-              ) : (
-                <RiFileSettingsLine size={24} />
-              )}
-              {!isExpand && (
-                <span className='text-[16px] leading-normal truncate'>
-                  {t('sideRepair')}
-                </span>
-              )}
-            </Link>
-            <Link
-              to={'/warranty'}
-              className={`btn font-normal flex-nowrap justify-start w-full ${
-                location.pathname === '/warranty' ||
-                location.pathname === '/warranty/preview'
-                  ? 'btn-primary'
-                  : 'btn-ghost'
-              } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
-              data-tip={t('sideWarranty')}
-            >
-              {location.pathname === '/warranty' ? (
-                <RiShieldCheckFill size={24} />
-              ) : (
-                <RiShieldCheckLine size={24} />
-              )}
-              {!isExpand && (
-                <span className='text-[16px] leading-normal truncate'>
-                  {t('sideWarranty')}
-                </span>
-              )}
-            </Link>
+            {(role === 'SUPER' ||
+              role === 'SERVICE' ||
+              role === 'ADMIN' ||
+              role === 'LEGACY_ADMIN') && (
+              <>
+                <div className='divider mb-0'></div>
+                <Link
+                  to={'/repair'}
+                  className={`btn font-normal flex-nowrap justify-start w-full ${
+                    location.pathname === '/repair' ||
+                    location.pathname === '/repair/preview'
+                      ? 'btn-primary'
+                      : 'btn-ghost'
+                  } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
+                  data-tip={t('sideRepair')}
+                >
+                  {location.pathname === '/repair' ||
+                  location.pathname === '/repair/preview' ? (
+                    <RiFileSettingsFill size={24} />
+                  ) : (
+                    <RiFileSettingsLine size={24} />
+                  )}
+                  {!isExpand && (
+                    <span className='text-[16px] leading-normal truncate'>
+                      {t('sideRepair')}
+                    </span>
+                  )}
+                </Link>
+                <Link
+                  to={'/warranty'}
+                  className={`btn font-normal flex-nowrap justify-start w-full ${
+                    location.pathname === '/warranty' ||
+                    location.pathname === '/warranty/preview'
+                      ? 'btn-primary'
+                      : 'btn-ghost'
+                  } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
+                  data-tip={t('sideWarranty')}
+                >
+                  {location.pathname === '/warranty' ? (
+                    <RiShieldCheckFill size={24} />
+                  ) : (
+                    <RiShieldCheckLine size={24} />
+                  )}
+                  {!isExpand && (
+                    <span className='text-[16px] leading-normal truncate'>
+                      {t('sideWarranty')}
+                    </span>
+                  )}
+                </Link>
+              </>
+            )}
           </div>
         </div>
         <div className='w-full'>

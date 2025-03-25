@@ -542,8 +542,8 @@ const ManageHospital = () => {
   const columns: TableColumn<HospitalsType>[] = [
     {
       name: t('noNumber'),
-      cell: (_, index) => {
-        return <div>{index + 1}</div>
+      cell: (item, _index) => {
+        return <div>{item.hosSeq}</div>
       },
       sortable: false,
       center: true
