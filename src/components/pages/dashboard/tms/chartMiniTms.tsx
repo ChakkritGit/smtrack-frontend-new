@@ -95,8 +95,8 @@ const ChartMiniTms = (props: ChartMiniProps) => {
         fontWeight: 600
       }
     },
-    min: minTempAvg,
-    max: maxTempAvg
+    min: minTempAvg - 5,
+    max: maxTempAvg + 5
   }))
 
   const options: ApexCharts.ApexOptions = {
