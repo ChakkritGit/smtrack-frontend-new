@@ -1001,8 +1001,12 @@ const ManageDevice = () => {
                   }
                 }}
               >
-                <span className='truncate max-w-[80px]'>{item.token ?? '—'}</span>
-                <RiFileCopyLine size={18} className='text-base-content/70' />
+                <span className='truncate max-w-[80px]'>
+                  {item.token ?? '—'}
+                </span>
+                {item.token && (
+                  <RiFileCopyLine size={18} className='text-base-content/70' />
+                )}
               </div>
             ),
             sortable: false,
@@ -1049,26 +1053,24 @@ const ManageDevice = () => {
                 data-tip={t('deviceInactive')}
                 className='btn btn-ghost tooltip tooltip-left flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
                 onClick={() =>
-                  Swal
-                    .fire({
-                      title: t('deactivateDevice'),
-                      text: t('deactivateDeviceText'),
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonText: t('confirmButton'),
-                      cancelButtonText: t('cancelButton'),
-                      reverseButtons: false,
-                      customClass: {
-                        actions: 'custom-action',
-                        confirmButton: 'custom-confirmButton',
-                        cancelButton: 'custom-cancelButton'
-                      },
-                    })
-                    .then(result => {
-                      if (result.isConfirmed) {
-                        deactiveDevices(item.id, false)
-                      }
-                    })
+                  Swal.fire({
+                    title: t('deactivateDevice'),
+                    text: t('deactivateDeviceText'),
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: t('confirmButton'),
+                    cancelButtonText: t('cancelButton'),
+                    reverseButtons: false,
+                    customClass: {
+                      actions: 'custom-action',
+                      confirmButton: 'custom-confirmButton',
+                      cancelButton: 'custom-cancelButton'
+                    }
+                  }).then(result => {
+                    if (result.isConfirmed) {
+                      deactiveDevices(item.id, false)
+                    }
+                  })
                 }
               >
                 <RiShutDownLine size={20} />
@@ -1078,26 +1080,24 @@ const ManageDevice = () => {
                 data-tip={t('deviceActive')}
                 className='btn btn-primary tooltip tooltip-left flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0'
                 onClick={() =>
-                  Swal
-                    .fire({
-                      title: t('deactivateDevice'),
-                      text: t('deactivateDeviceText'),
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonText: t('confirmButton'),
-                      cancelButtonText: t('cancelButton'),
-                      reverseButtons: false,
-                      customClass: {
-                        actions: 'custom-action',
-                        confirmButton: 'custom-confirmButton',
-                        cancelButton: 'custom-cancelButton'
-                      },
-                    })
-                    .then(result => {
-                      if (result.isConfirmed) {
-                        deactiveDevices(item.id, true)
-                      }
-                    })
+                  Swal.fire({
+                    title: t('deactivateDevice'),
+                    text: t('deactivateDeviceText'),
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: t('confirmButton'),
+                    cancelButtonText: t('cancelButton'),
+                    reverseButtons: false,
+                    customClass: {
+                      actions: 'custom-action',
+                      confirmButton: 'custom-confirmButton',
+                      cancelButton: 'custom-cancelButton'
+                    }
+                  }).then(result => {
+                    if (result.isConfirmed) {
+                      deactiveDevices(item.id, true)
+                    }
+                  })
                 }
               >
                 <RiShutDownLine size={20} />
@@ -1113,26 +1113,24 @@ const ManageDevice = () => {
             <button
               className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
               onClick={() =>
-                Swal
-                  .fire({
-                    title: t('deleteDeviceTitle'),
-                    text: t('notReverseText'),
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: t('confirmButton'),
-                    cancelButtonText: t('cancelButton'),
-                    customClass: {
-                      actions: 'custom-action',
-                      confirmButton: 'custom-confirmButton',
-                      cancelButton: 'custom-cancelButton'
-                    },
-                    reverseButtons: false
-                  })
-                  .then(result => {
-                    if (result.isConfirmed) {
-                      deleteDevices(item.id)
-                    }
-                  })
+                Swal.fire({
+                  title: t('deleteDeviceTitle'),
+                  text: t('notReverseText'),
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: t('confirmButton'),
+                  cancelButtonText: t('cancelButton'),
+                  customClass: {
+                    actions: 'custom-action',
+                    confirmButton: 'custom-confirmButton',
+                    cancelButton: 'custom-cancelButton'
+                  },
+                  reverseButtons: false
+                }).then(result => {
+                  if (result.isConfirmed) {
+                    deleteDevices(item.id)
+                  }
+                })
               }
             >
               <RiDeleteBin7Line size={20} />
