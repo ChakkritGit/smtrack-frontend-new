@@ -134,6 +134,7 @@ const Adjustments = (props: AdjustmentsProps) => {
     thirdMinute: ''
   })
   const [isLoadingMqtt, setIsLoadingMqtt] = useState(false)
+  const [isLoadingMuteMqtt, setIsLoadingMuteMqtt] = useState(false)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -515,12 +516,9 @@ const Adjustments = (props: AdjustmentsProps) => {
             }
           )
         } else {
-          client.subscribe(
-            `${serial}/temp/real`,
-            err => {
-              if (err) console.error('MQTT Subscribe Error', err)
-            }
-          )
+          client.subscribe(`${serial}/temp/real`, err => {
+            if (err) console.error('MQTT Subscribe Error', err)
+          })
         }
 
         // รอลบ
@@ -588,6 +586,7 @@ const Adjustments = (props: AdjustmentsProps) => {
           if (err) console.error('MQTT Subscribe Error', err)
         })
 
+        setIsLoadingMuteMqtt(true)
         client.publish(
           `siamatic/${deviceModel}/${version}/${serial}/mute/status`,
           'on'
@@ -596,6 +595,7 @@ const Adjustments = (props: AdjustmentsProps) => {
 
         client.on('message', (_topic, message) => {
           setMuteDoor(JSON.parse(message.toString()))
+          setIsLoadingMuteMqtt(false)
         })
 
         client.on('error', err => {
@@ -1599,7 +1599,7 @@ const Adjustments = (props: AdjustmentsProps) => {
               setScheduleTime={setScheduleTime}
             />
           </div>
-        ) : (
+        ) : !isLoadingMuteMqtt ? (
           <div className='mt-3'>
             <h3 className='font-bold text-base'>{t('countProbe')}</h3>
             <div className='flex flex-col gap-3 mt-3'>
@@ -1787,6 +1787,10 @@ const Adjustments = (props: AdjustmentsProps) => {
                 </div>
               </div>
             </div>
+          </div>
+        ) : (
+          <div className='mt-5'>
+            <Loading />
           </div>
         )}
 

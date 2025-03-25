@@ -13,7 +13,7 @@ const ImageModal = (props: ImageModalProps) => {
   return (
     <dialog ref={modalRef} className='modal overflow-y-scroll py-10'>
       <form className='modal-box md:w-5/6 max-w-[50rem] h-max max-h-max'>
-        <div className='flex items-center justify-between gap-2'>
+        <div className='flex justify-between gap-2'>
           <div>
             <h3 className='font-bold text-base'>{deviceData?.id}</h3>
             <span>{deviceData?.position}</span>

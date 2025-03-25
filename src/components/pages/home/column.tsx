@@ -97,6 +97,7 @@ const columnData = (
                 ? 'bg-red-500 text-white'
                 : 'border border-primary text-primary'
             } duration-300`}
+            onClick={() => handleRowClicked(item)}
           >
             {isTempOutOfRange ? (
               <RiErrorWarningLine size={14} />
@@ -116,7 +117,10 @@ const columnData = (
         const doors: DoorKey[] = ['door1', 'door2', 'door3']
 
         return (
-          <div className='flex items-center gap-2'>
+          <div
+            className='flex items-center gap-2'
+            onClick={() => handleRowClicked(item)}
+          >
             {doors.slice(0, doorCount).map(doorKey => (
               <div
                 key={doorKey}
@@ -146,6 +150,7 @@ const columnData = (
           className={`w-max h-[24px] px-2 flex items-center justify-center rounded-btn ${
             item.online ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
           } duration-300`}
+          onClick={() => handleRowClicked(item)}
         >
           {item.online ? t('deviceOnline') : t('deviceOffline')}
         </div>
@@ -177,6 +182,7 @@ const columnData = (
                 ? 'bg-red-500 text-white'
                 : ''
             } duration-300`}
+            onClick={() => handleRowClicked(item)}
           >
             {item.warranty[0]?.expire
               ? calculateDate(item).daysRemaining > 0
