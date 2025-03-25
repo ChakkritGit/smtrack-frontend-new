@@ -45,8 +45,7 @@ import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
 import {
   hoursOptions,
   minutesOptions,
-  swalMoveDevice,
-  swalWithBootstrapButtons
+  swalMoveDevice
 } from '../../../constants/utils/utilsConstants'
 import { resizeImage } from '../../../constants/utils/image'
 import Swal from 'sweetalert2'
@@ -1050,7 +1049,7 @@ const ManageDevice = () => {
                 data-tip={t('deviceInactive')}
                 className='btn btn-ghost tooltip tooltip-left flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
                 onClick={() =>
-                  swalWithBootstrapButtons
+                  Swal
                     .fire({
                       title: t('deactivateDevice'),
                       text: t('deactivateDeviceText'),
@@ -1058,7 +1057,12 @@ const ManageDevice = () => {
                       showCancelButton: true,
                       confirmButtonText: t('confirmButton'),
                       cancelButtonText: t('cancelButton'),
-                      reverseButtons: false
+                      reverseButtons: false,
+                      customClass: {
+                        actions: 'custom-action',
+                        confirmButton: 'custom-confirmButton',
+                        cancelButton: 'custom-cancelButton'
+                      },
                     })
                     .then(result => {
                       if (result.isConfirmed) {
@@ -1074,7 +1078,7 @@ const ManageDevice = () => {
                 data-tip={t('deviceActive')}
                 className='btn btn-primary tooltip tooltip-left flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0'
                 onClick={() =>
-                  swalWithBootstrapButtons
+                  Swal
                     .fire({
                       title: t('deactivateDevice'),
                       text: t('deactivateDeviceText'),
@@ -1082,7 +1086,12 @@ const ManageDevice = () => {
                       showCancelButton: true,
                       confirmButtonText: t('confirmButton'),
                       cancelButtonText: t('cancelButton'),
-                      reverseButtons: false
+                      reverseButtons: false,
+                      customClass: {
+                        actions: 'custom-action',
+                        confirmButton: 'custom-confirmButton',
+                        cancelButton: 'custom-cancelButton'
+                      },
                     })
                     .then(result => {
                       if (result.isConfirmed) {
@@ -1104,7 +1113,7 @@ const ManageDevice = () => {
             <button
               className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
               onClick={() =>
-                swalWithBootstrapButtons
+                Swal
                   .fire({
                     title: t('deleteDeviceTitle'),
                     text: t('notReverseText'),

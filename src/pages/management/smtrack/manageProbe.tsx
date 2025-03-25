@@ -20,8 +20,7 @@ import { RiDeleteBin7Line, RiEditLine } from 'react-icons/ri'
 import {
   scheduleDayArray,
   scheduleMinuteArray,
-  scheduleTimeArray,
-  swalWithBootstrapButtons
+  scheduleTimeArray
 } from '../../../constants/utils/utilsConstants'
 import {
   setSubmitLoading,
@@ -651,7 +650,7 @@ const ManageProbe = () => {
             <button
               className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
               onClick={() =>
-                swalWithBootstrapButtons
+                Swal
                   .fire({
                     title: t('deleteProbe'),
                     text: t('notReverseText'),
@@ -659,7 +658,12 @@ const ManageProbe = () => {
                     showCancelButton: true,
                     confirmButtonText: t('confirmButton'),
                     cancelButtonText: t('cancelButton'),
-                    reverseButtons: false
+                    reverseButtons: false,
+                    customClass: {
+                      actions: 'custom-action',
+                      confirmButton: 'custom-confirmButton',
+                      cancelButton: 'custom-cancelButton'
+                    },
                   })
                   .then(result => {
                     if (result.isConfirmed) {

@@ -182,14 +182,6 @@ const handleApiError = (error: unknown) => {
   }
 }
 
-const swalWithBootstrapButtons = Swal.mixin({
-  customClass: {
-    confirmButton: 'btn btn-ghost bg-red-500 text-white hover:bg-red-700 Duration-300',
-    cancelButton: 'btn btn-ghost bg-gray-700 text-white'
-  },
-  buttonsStyling: false
-})
-
 const scheduleDayArray: Schedule[] = [
   {
     scheduleKey: 'OFF',
@@ -601,7 +593,6 @@ export {
   cookieOptions,
   updateLocalStorageAndDispatch,
   handleApiError,
-  swalWithBootstrapButtons,
   scheduleDayArray,
   scheduleMinuteArray,
   scheduleTimeArray,

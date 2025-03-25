@@ -15,8 +15,7 @@ import DataTableNoData from '../../components/skeleton/table/noData'
 import axiosInstance from '../../constants/axios/axiosInstance'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
 import {
-  handleApiError,
-  swalWithBootstrapButtons
+  handleApiError
 } from '../../constants/utils/utilsConstants'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
@@ -443,7 +442,7 @@ const Repair = () => {
           <button
             className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
             onClick={() =>
-              swalWithBootstrapButtons
+              Swal
                 .fire({
                   title: t('deleteRepairTitle'),
                   text: t('notReverseText'),
@@ -451,7 +450,12 @@ const Repair = () => {
                   showCancelButton: true,
                   confirmButtonText: t('confirmButton'),
                   cancelButtonText: t('cancelButton'),
-                  reverseButtons: false
+                  reverseButtons: false,
+                  customClass: {
+                    actions: 'custom-action',
+                    confirmButton: 'custom-confirmButton',
+                    cancelButton: 'custom-cancelButton'
+                  },
                 })
                 .then(result => {
                   if (result.isConfirmed) {

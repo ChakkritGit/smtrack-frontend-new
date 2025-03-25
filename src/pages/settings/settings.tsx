@@ -19,14 +19,14 @@ import LanguageComponents from '../../components/pages/settings/languageComponen
 import ResetPassword from '../../components/pages/settings/resetPassword'
 import {
   cookieOptions,
-  cookies,
-  swalWithBootstrapButtons
+  cookies
 } from '../../constants/utils/utilsConstants'
 import {
   resetUtils,
   setCookieEncode,
   setUserProfile
 } from '../../redux/actions/utilsActions'
+import Swal from 'sweetalert2'
 
 interface FormState {
   imagePreview: string | null
@@ -150,7 +150,7 @@ const Settings = () => {
           </li>
           <li
             onClick={() =>
-              swalWithBootstrapButtons
+              Swal
                 .fire({
                   title: t('logoutDialog'),
                   text: t('logoutDialogText'),
@@ -158,7 +158,12 @@ const Settings = () => {
                   showCancelButton: true,
                   confirmButtonText: t('confirmButton'),
                   cancelButtonText: t('cancelButton'),
-                  reverseButtons: false
+                  reverseButtons: false,
+                  customClass: {
+                    actions: 'custom-action',
+                    confirmButton: 'custom-confirmButton',
+                    cancelButton: 'custom-cancelButton'
+                  }
                 })
                 .then(result => {
                   if (result.isConfirmed) {

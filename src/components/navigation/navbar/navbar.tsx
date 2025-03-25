@@ -34,8 +34,7 @@ import { UAParser } from 'ua-parser-js'
 import {
   cookieOptions,
   cookies,
-  getRoleLabel,
-  swalWithBootstrapButtons
+  getRoleLabel
 } from '../../../constants/utils/utilsConstants'
 import { useTranslation } from 'react-i18next'
 import ThemeList from '../../theme/themeList'
@@ -52,6 +51,7 @@ import ProfileComponent from '../../pages/settings/profileComponent'
 import SoundAndNotificationComponents from '../../pages/settings/soundAndNotificationComponents'
 import { GlobalContext } from '../../../contexts/globalContext'
 import { GlobalContextType } from '../../../types/global/globalContext'
+import Swal from 'sweetalert2'
 
 type SearchType = {
   text: string
@@ -497,7 +497,7 @@ const Navbar = () => {
               <div className='divider divider-vertical m-0 before:h-[1px] after:h-[1px]'></div>
               <li
                 onClick={() =>
-                  swalWithBootstrapButtons
+                  Swal
                     .fire({
                       title: t('logoutDialog'),
                       text: t('logoutDialogText'),
@@ -505,7 +505,12 @@ const Navbar = () => {
                       showCancelButton: true,
                       confirmButtonText: t('confirmButton'),
                       cancelButtonText: t('cancelButton'),
-                      reverseButtons: false
+                      reverseButtons: false,
+                      customClass: {
+                        actions: 'custom-action',
+                        confirmButton: 'custom-confirmButton',
+                        cancelButton: 'custom-cancelButton'
+                      },
                     })
                     .then(result => {
                       if (result.isConfirmed) {

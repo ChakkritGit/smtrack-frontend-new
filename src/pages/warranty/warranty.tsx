@@ -16,8 +16,7 @@ import {
   setTokenExpire
 } from '../../redux/actions/utilsActions'
 import {
-  handleApiError,
-  swalWithBootstrapButtons
+  handleApiError
 } from '../../constants/utils/utilsConstants'
 import axiosInstance from '../../constants/axios/axiosInstance'
 import { responseType } from '../../types/smtrack/utilsRedux/utilsReduxType'
@@ -529,7 +528,7 @@ const Warranty = () => {
               <button
                 className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
                 onClick={() =>
-                  swalWithBootstrapButtons
+                  Swal
                     .fire({
                       title: t('deleteWarranty'),
                       text: t('deleteWarrantyText'),
@@ -537,7 +536,12 @@ const Warranty = () => {
                       showCancelButton: true,
                       confirmButtonText: t('confirmButton'),
                       cancelButtonText: t('cancelButton'),
-                      reverseButtons: false
+                      reverseButtons: false,
+                      customClass: {
+                        actions: 'custom-action',
+                        confirmButton: 'custom-confirmButton',
+                        cancelButton: 'custom-cancelButton'
+                      },
                     })
                     .then(result => {
                       if (result.isConfirmed) {
