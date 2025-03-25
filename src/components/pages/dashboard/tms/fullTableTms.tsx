@@ -33,6 +33,12 @@ const FullTableTmsComponent = (props: FullTablePropType) => {
       center: true
     },
     {
+      name: t('deviceProbeTb'),
+      cell: item => <span title={item.sn}>{item.probe}</span>,
+      sortable: false,
+      center: true
+    },
+    {
       name: t('deviceTime'),
       cell: item =>
         `${item._time.substring(0, 10)} ${item._time.substring(11, 16)}`,
