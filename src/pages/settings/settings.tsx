@@ -73,7 +73,7 @@ const Settings = () => {
 
   const settingContent = useMemo(
     () => (
-      <div className='w-full p-3 bg-base-100 rounded-btn max-h-[calc(100dvh-140px)] overflow-y-scroll'>
+      <div className='w-full p-3 bg-base-100 rounded-btn max-h-[calc(100dvh-230px)] overflow-y-scroll'>
         {tab === 1 ? (
           settingProfile
         ) : tab === 2 ? (
@@ -89,7 +89,7 @@ const Settings = () => {
   )
 
   return (
-    <div className='min-h-[calc(100dvh-64px)] p-3'>
+    <div className='p-3'>
       <div className='flex gap-1 md:gap-3 p-3'>
         <ul className='flex flex-col md:min-w-[200px] gap-1'>
           <li

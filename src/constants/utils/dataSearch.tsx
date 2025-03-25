@@ -24,7 +24,7 @@ const menuDataArraySmtrack = () => {
     },
     {
       text: 'sidePermission',
-      path: '/permission',
+      path: '/users',
       tag: 'Manage Users, จัดการผู้ใช้',
       icon: <RiUser6Line size={20} />
     },

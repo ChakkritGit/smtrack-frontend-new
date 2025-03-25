@@ -450,7 +450,7 @@ input[type=number] {
 }
 
 .custom-action {
-  @apply !gap-1;
+  @apply !gap-0;
 }
 
 .custom-confirmButton {

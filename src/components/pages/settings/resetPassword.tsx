@@ -151,11 +151,11 @@ const ResetPassword = () => {
           </form>
         </div>
       ) : (
-        <div className='flex items-center justify-between mt-3'>
+        <div className='flex md:items-center justify-between flex-col md:flex-row gap-3 md:gap-0 mt-3'>
           <span className='ml-5'>{t('titlePassword')}</span>
           <button
             onClick={() => setOnEdit(true)}
-            className='w-[100px] h-[45px] md:w-max md:h-[40px] px-2 font-bold rounded-btn border-[2px] border-base-content text-[14px] md:text-base-content hover:opacity-50 duration-300'
+            className='md:w-[140px] h-[45px] md:h-[40px] px-2 font-bold rounded-btn border-[2px] border-base-content text-[14px] md:text-base-content hover:opacity-50 duration-300'
           >
             {t('changPassword')}
           </button>

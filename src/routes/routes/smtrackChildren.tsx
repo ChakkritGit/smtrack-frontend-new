@@ -52,7 +52,7 @@ const smtrackChildren: RouteObject[] = [
     errorElement: <ErrorScreen />,
     children: [
       {
-        path: 'permission',
+        path: 'users',
         element: <Users />,
         errorElement: <ErrorScreen />
       },

@@ -124,15 +124,15 @@ const Sidebar = () => {
             {(role === 'SUPER' || role === 'SERVICE' || role === 'ADMIN') && (
               <>
                 <Link
-                  to={'/permission'}
+                  to={'/users'}
                   className={`btn font-normal flex-nowrap justify-start w-full ${
-                    location.pathname === '/permission'
+                    location.pathname === '/users'
                       ? 'btn-primary'
                       : 'btn-ghost'
                   } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
                   data-tip={t('sidePermission')}
                 >
-                  {location.pathname === '/permission' ? (
+                  {location.pathname === '/users' ? (
                     <RiUser6Fill size={24} />
                   ) : (
                     <RiUser6Line size={24} />

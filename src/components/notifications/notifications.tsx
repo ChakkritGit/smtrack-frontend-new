@@ -196,12 +196,8 @@ const Notifications = () => {
 
   useEffect(() => {
     if (notificationList.length > 0) {
-      const baseImageSrc = `/api/proxy?url=${encodeURIComponent(
-        userProfile?.ward.hospital.hosPic || 'app-logo.png'
-      )}`
-
       const img = new Image()
-      img.src = baseImageSrc
+      img.src = userProfile?.ward.hospital.hosPic || 'app-logo.png'
       img.crossOrigin = 'anonymous'
 
       img.onload = () => {

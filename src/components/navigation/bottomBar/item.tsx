@@ -53,7 +53,7 @@ const BottomNavItem = (props: BottomItemProps) => {
           text: t('sideDashboard')
         },
         {
-          to: '/permission',
+          to: '/users',
           icon: [RiUser6Fill, RiUser6Line],
           text: t('sidePermission')
         },

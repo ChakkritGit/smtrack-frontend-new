@@ -274,7 +274,7 @@ const ProfileComponent = (props: ProfileProps) => {
             </span>
           </div>
           <button
-            className='w-[50px] h-[35px] md:w-[70px] md:h-[40px] font-bold rounded-btn border-[2px] border-base-content text-[14px] md:text-base-content hover:opacity-50 duration-300'
+            className='w-full md:w-[80px] h-[45px] md:h-[40px] font-bold rounded-btn border-[2px] border-base-content text-[14px] md:text-base-content hover:opacity-50 duration-300'
             onClick={() => {
               setEdit(true)
               setDisplayName(userProfile?.display ?? '—')
