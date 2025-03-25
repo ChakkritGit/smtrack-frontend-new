@@ -396,6 +396,10 @@ const Adjustments = (props: AdjustmentsProps) => {
     client.unsubscribe(`${serial}/mute/status/receive`)
     client.unsubscribe(`${serial}/temp/real`)
     client.unsubscribe(`${serial}/mute/status/receive`)
+    client.publish(
+      `${serial}/temp`,
+      'off'
+    )
     //
 
     setAdjustmentsForm({
@@ -489,6 +493,10 @@ const Adjustments = (props: AdjustmentsProps) => {
             `siamatic/${deviceModel}/${version}/${serial}/temp`,
             'off'
           )
+          client.publish(
+            `${serial}/temp`,
+            'off'
+          )
           //
 
           client.unsubscribe(`${serial}/${beforeSelectProbe}/temp/real`)
@@ -539,6 +547,10 @@ const Adjustments = (props: AdjustmentsProps) => {
           `siamatic/${deviceModel}/${version}/${serial}/temp`,
           'on'
         )
+        client.publish(
+          `${serial}/temp`,
+          'on'
+        )
         //
 
         setBeforeSelectProbe(probeFiltered?.channel)
@@ -578,6 +590,10 @@ const Adjustments = (props: AdjustmentsProps) => {
         // รอลบ
         client.publish(
           `siamatic/${deviceModel}/${version}/${serial}/temp`,
+          'off'
+        )
+        client.publish(
+          `${serial}/temp`,
           'off'
         )
         client.unsubscribe(`${serial}/temp/real`)
