@@ -436,7 +436,12 @@ const ManageHospital = () => {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: t('confirmButton'),
-      cancelButtonText: t('cancelButton')
+      cancelButtonText: t('cancelButton'),
+      customClass: {
+        actions: 'custom-action',
+        confirmButton: 'custom-confirmButton',
+        cancelButton: 'custom-cancelButton'
+      }
     })
 
     if (result.isConfirmed) {
@@ -481,7 +486,12 @@ const ManageHospital = () => {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: t('confirmButton'),
-      cancelButtonText: t('cancelButton')
+      cancelButtonText: t('cancelButton'),
+      customClass: {
+        actions: 'custom-action',
+        confirmButton: 'custom-confirmButton',
+        cancelButton: 'custom-cancelButton'
+      }
     })
 
     if (result.isConfirmed) {

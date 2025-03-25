@@ -1112,6 +1112,11 @@ const ManageDevice = () => {
                     showCancelButton: true,
                     confirmButtonText: t('confirmButton'),
                     cancelButtonText: t('cancelButton'),
+                    customClass: {
+                      actions: 'custom-action',
+                      confirmButton: 'custom-confirmButton',
+                      cancelButton: 'custom-cancelButton'
+                    },
                     reverseButtons: false
                   })
                   .then(result => {

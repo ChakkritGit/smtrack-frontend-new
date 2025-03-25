@@ -314,8 +314,13 @@ const Users = () => {
       text: t('notReverseText'),
       icon: 'warning',
       showCancelButton: true,
+      cancelButtonText: t('cancelButton'),
       confirmButtonText: t('confirmButton'),
-      cancelButtonText: t('cancelButton')
+      customClass: {
+        actions: 'custom-action',
+        confirmButton: 'custom-confirmButton',
+        cancelButton: 'custom-cancelButton'
+      }
     })
 
     if (result.isConfirmed) {
