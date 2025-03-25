@@ -21,21 +21,21 @@ const App = () => {
             {t('appDownload')} SMTrack+
           </span>
           <div className='flex flex-col md:flex-row items-center gap-3 mt-3'>
-            <div className='avatar'>
+            <a className='avatar' href="https://apps.apple.com/th/app/smtrack/id6670781090" target="_blank" rel="noopener noreferrer">
               <div className='h-[50px] w-[150px] rounded !aspect-auto'>
                 <img src={appStore} />
               </div>
-            </div>
-            <div className='avatar'>
+            </a>
+            <a className='avatar' href="https://play.google.com/store/apps/details?id=com.thanes.temp_noti" target="_blank" rel="noopener noreferrer">
               <div className='h-[50px] w-[150px] rounded !aspect-auto'>
                 <img src={playStore} />
               </div>
-            </div>
-            <div className='avatar'>
+            </a>
+            <a className='avatar' href="https://api.siamatic.co.th/etemp/media/app-release.apk" target="_blank" rel="noopener noreferrer">
               <div className='h-[50px] w-[150px] rounded !aspect-auto'>
                 <img src={ApkBanner} />
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>

@@ -332,10 +332,12 @@ const FullChartTms = () => {
             </a>
           </li>
           <li>
-            <span className='inline-flex items-center gap-2'>
+            <div className='flex items-center gap-2'>
               <RiBarChart2Fill size={16} className='mr-1' />
-              {t('fullChart')}
-            </span>
+              <span>{t('fullChart')}</span>
+              <span>-</span>
+              <span>{deviceLogs?.sn}</span>
+            </div>
           </li>
         </ul>
       </div>
