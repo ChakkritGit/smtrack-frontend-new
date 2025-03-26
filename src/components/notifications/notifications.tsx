@@ -30,6 +30,7 @@ import { Location, useLocation, useNavigate } from 'react-router-dom'
 import { setTokenExpire } from '../../redux/actions/utilsActions'
 import { FaThermometerHalf } from 'react-icons/fa'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import Loading from '../skeleton/table/loading'
 
 const Notifications = () => {
   const dispatch = useDispatch()
@@ -42,18 +43,21 @@ const Notifications = () => {
   const [page, setPage] = useState(1)
   const [notificationList, setNotification] = useState<NotificationType[]>([])
   const [fetchMore, setFetchMore] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { role = 'USER' } = tokenDecode || {}
 
-  const fetchNotificaton = async (page: number) => {
+  const fetchNotification = async (pages: number) => {
     try {
       const response = await axiosInstance.get<
         responseType<NotificationType[]>
       >(
         role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode
-          ? `/legacy/templog/alert/notification?page=${page}&perpage=${10}`
-          : `/log/notification?page=${page}&perpage=${10}`
+          ? `/legacy/templog/alert/notification?page=${pages}&perpage=${10}`
+          : `/log/notification?page=${pages}&perpage=${10}`
       )
-      setNotification(notificationList.concat(response.data.data))
+      setNotification(prevList =>
+        pages === 1 ? response.data.data : prevList.concat(response.data.data)
+      )
       setFetchMore(response.data.data.length !== 0)
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -71,7 +75,7 @@ const Notifications = () => {
     let subscribed = true
     ;(async () => {
       if (subscribed) {
-        await fetchNotificaton(1)
+        await fetchNotification(1)
       }
     })()
     return () => {
@@ -81,7 +85,7 @@ const Notifications = () => {
 
   useEffect(() => {
     if (page === 1) return
-    fetchNotificaton(page)
+    fetchNotification(page)
   }, [page])
 
   const handleLoadMoreData = () => {
@@ -293,7 +297,9 @@ const Notifications = () => {
             <RiArrowRightUpLine size={20} />
           </button>
         </div>
-        {role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode ? (
+        {isLoading ? (
+          <Loading />
+        ) : role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode ? (
           <div id='scrollableDiv' className='h-[520px] overflow-y-scroll'>
             {notificationList.length > 0 ? (
               <InfiniteScroll
@@ -416,8 +422,20 @@ const Notifications = () => {
         )}
       </ul>
     ),
-    [notificationList, t]
+    [notificationList, t, isLoading, fetchMore, tmsMode, role]
   )
+
+  const handleClick = () => {
+    setIsLoading(true)
+    setPage(1)
+    setNotification([])
+    setFetchMore(false)
+
+    setTimeout(async () => {
+      await fetchNotification(1)
+      setIsLoading(false)
+    }, 1000)
+  }
 
   return (
     <div className='dropdown dropdown-end'>
@@ -425,6 +443,7 @@ const Notifications = () => {
         tabIndex={0}
         role='button'
         className='indicator btn btn-ghost justify-end'
+        onClick={handleClick}
       >
         {notificationList.length > 0 && (
           <span className='indicator-item badge badge-secondary px-1 top-3 right-4 lg:right-3'>
