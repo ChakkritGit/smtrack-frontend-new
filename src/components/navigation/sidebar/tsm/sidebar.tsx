@@ -25,6 +25,9 @@ import {
   cookieOptions,
   cookies
 } from '../../../../constants/utils/utilsConstants'
+import { useContext } from 'react'
+import { GlobalContext } from '../../../../contexts/globalContext'
+import { GlobalContextType } from '../../../../types/global/globalContext'
 
 const Sidebar = () => {
   const dispatch = useDispatch()
@@ -34,6 +37,7 @@ const Sidebar = () => {
   const { isExpand, userProfile, tmsMode, tokenDecode } = useSelector(
     (state: RootState) => state.utils
   )
+  const { ward: wardData } = useContext(GlobalContext) as GlobalContextType
   const { ward } = userProfile || {}
   const { role } = tokenDecode || {}
 
@@ -124,9 +128,7 @@ const Sidebar = () => {
                 <Link
                   to={'/users'}
                   className={`btn font-normal flex-nowrap justify-start w-full ${
-                    location.pathname === '/users'
-                      ? 'btn-primary'
-                      : 'btn-ghost'
+                    location.pathname === '/users' ? 'btn-primary' : 'btn-ghost'
                   } flex ${isExpand ? 'tooltip tooltip-right z-50' : ''}`}
                   data-tip={t('sidePermission')}
                 >
@@ -177,7 +179,7 @@ const Sidebar = () => {
             {(role === 'SUPER' ||
               role === 'SERVICE' ||
               role === 'ADMIN' ||
-              role === 'LEGACY_ADMIN') && (
+              role === 'LEGACY_ADMIN') && wardData.find((f) => f.type === 'NEW') && (
               <div className='flex flex-col items-center gap-2'>
                 {!isExpand && (
                   <span className='text-[12px] truncate'>

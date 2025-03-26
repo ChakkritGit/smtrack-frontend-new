@@ -79,7 +79,7 @@ const columnTms = (
     {
       name: t('devicePlugTb'),
       selector: item =>
-        !item.log[0]?.plugin ? t('stateNormal') : t('stateProblem'),
+        !item.log[0]?.plugin ? t('stateProblem') : t('stateNormal'),
       sortable: false,
       center: true
     }
