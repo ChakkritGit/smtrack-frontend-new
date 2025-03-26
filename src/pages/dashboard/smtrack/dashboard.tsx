@@ -36,7 +36,6 @@ const Dashboard = () => {
   const swiperTempOfDayRef = useRef<SwiperType>(null)
   const swiperInfoRef = useRef<SwiperType>(null)
   const [isPause, setIsPaused] = useState(false)
-  const firstFetch = useRef<boolean>(false)
   const deviceFetchHistory = useRef<Record<string, number>>({})
 
   const togglePause = useCallback(() => {
@@ -45,9 +44,6 @@ const Dashboard = () => {
 
   const fetchDeviceLogs = useCallback(async () => {
     try {
-      if (!firstFetch.current) {
-        setLoading(true)
-      }
       const response = await axiosInstance.get<responseType<DeviceLogsType>>(
         `/devices/device/${deviceKey}`
       )
@@ -87,11 +83,6 @@ const Dashboard = () => {
       }
     }
 
-    if (!firstFetch.current) {
-      fetchDeviceLogs()
-      firstFetch.current = true
-    }
-
     if (socketData?.device) {
       handleDeviceData()
     }
@@ -100,6 +91,8 @@ const Dashboard = () => {
   }, [deviceLogs, socketData])
 
   useEffect(() => {
+    if (!deviceKey) return
+    setLoading(true)
     fetchDeviceLogs()
   }, [deviceKey])
 

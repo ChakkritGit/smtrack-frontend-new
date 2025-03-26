@@ -220,9 +220,9 @@
     @apply rounded-none;
   }
 
-  &>div>div>div>div:nth-child(1) {
+  /* &>div>div>div>div:nth-child(1) {
     @apply bg-base-100/90 backdrop-blur;
-  }
+  } */
 
   &>div>div>div>div>div>div>button {
     @apply text-inherit;

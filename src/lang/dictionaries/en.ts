@@ -472,6 +472,8 @@ export default {
     titleError: 'Oops!',
     descriptionError: 'Page Not Found',
     descriptionErrorWrong: 'Something wrong please try again',
+    descriptionWrong: 'Something wrong',
+    tooLoad: 'timeout!',
     buttonErrorBack: 'Back',
     titleNotAccess: 'Access denied',
     descriptionNotAccess: `You don't have permission to access this page!`,
