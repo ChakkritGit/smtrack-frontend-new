@@ -188,6 +188,7 @@ const Home = () => {
             deviceFetchHistory.current[deviceName] = currentTime
 
             if (globalSearch !== '') {
+              if (isFocused) return
               fetchDevices(currentPage, perPage, globalSearch)
               fetchDeviceCount(currentPage, perPage)
             } else {
@@ -216,7 +217,7 @@ const Home = () => {
     }
 
     return () => {}
-  }, [devices, socketData, currentPage, perPage, globalSearch])
+  }, [devices, socketData, currentPage, perPage, globalSearch, isFocused])
 
   useEffect(() => {
     fetchDevices(1)

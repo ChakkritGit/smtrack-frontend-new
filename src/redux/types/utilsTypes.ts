@@ -50,7 +50,7 @@ type UtilsAction =
   | { type: typeof USER_PROFILE; payload: UserProfileType | undefined }
   | { type: typeof GLOBAL_SEARCH; payload: string }
   | { type: typeof THEME_MODE; payload: string }
-  | { type: typeof TMS_MODE }
+  | { type: typeof TMS_MODE; payload: boolean }
   | { type: typeof IS_EXPAND }
   | { type: typeof SUBMIT_LOADING }
   | { type: typeof HOS_ID; payload: string }

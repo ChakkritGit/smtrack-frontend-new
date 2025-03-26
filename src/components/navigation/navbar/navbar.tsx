@@ -102,6 +102,7 @@ const Navbar = () => {
       return updatedHistory
     })
   }
+
   const removeHistoryItem = (path: string) => {
     setSearchHistory(prev => {
       const updatedHistory = prev.filter(item => item.path !== path)
@@ -114,7 +115,15 @@ const Navbar = () => {
     try {
       const response = await axiosInstance.get<
         responseType<DeviceListTmsType[] | DeviceListTmsType[]>
-      >(!tmsMode ? '/devices/dashboard/device' : '/legacy/device/devices/list')
+      >(
+        (
+          tmsMode
+            ? !(role === 'LEGACY_ADMIN' || role === 'LEGACY_USER')
+            : role === 'LEGACY_ADMIN' || role === 'LEGACY_USER'
+        )
+          ? '/legacy/device/devices/list'
+          : '/devices/dashboard/device'
+      )
       setDeviceList(response.data.data)
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -127,11 +136,11 @@ const Navbar = () => {
         console.error(error)
       }
     }
-  }, [])
+  }, [tmsMode, role])
 
   useEffect(() => {
     fetchDeviceList()
-  }, [])
+  }, [tmsMode, role])
 
   useEffect(() => {
     localStorage.setItem('expandaside', isExpand.toString())
@@ -206,15 +215,24 @@ const Navbar = () => {
     return (
       <div
         className='search-anim absolute min-w-[450px] min-h-[50px] max-w-[500px]
-      max-h-[400px] bg-base-100 backdrop-blur transition-shadow shadow-sm duration-300
+      max-h-[400px] bg-base-100 backdrop-blur transition-shadow shadow-2xl duration-300
       border-base-content/15 border-[1px] py-3 pl-4 pr-1 top-[60px] overflow-y-scroll
-      rounded-btn'
+      rounded-box'
       >
-        <div className='p-1 flex items-center gap-3 opacity-70 mb-1'>
-          <span>{t('pressPre1')}</span>
-          <kbd className='kbd kbd-sm'>Esc</kbd>
-          <span>{t('pressPre2')}</span>
-        </div>
+        {(location.pathname === '/' ||
+        location.pathname === '/management') && globalSearch.length > 0 ? (
+          <div className='p-1 flex items-center gap-3 opacity-70 mb-1'>
+            <span>{t('pressPre1')}</span>
+            <kbd className='kbd kbd-sm'>Enter</kbd>
+            <span>{t('pressPre3')}</span>
+          </div>
+        ) : (
+          <div className='p-1 flex items-center gap-3 opacity-70 mb-1'>
+            <span>{t('pressPre1')}</span>
+            <kbd className='kbd kbd-sm'>Esc</kbd>
+            <span>{t('pressPre2')}</span>
+          </div>
+        )}
         {searchHistory.length > 0 ? (
           <>
             {searchHistory.map((item, index) => (
@@ -268,15 +286,17 @@ const Navbar = () => {
 
         {globalSearch && (
           <div>
-            <div className='divider text-[12px] opacity-50'>
-              {t('countDeviceUnit')}
-            </div>
+            {devive.length > 0 && (
+              <div className='divider text-[12px] opacity-50'>
+                {t('countDeviceUnit')}
+              </div>
+            )}
             <div
               className={`grid grid-cols-1 ${
                 devive.length > 0 ? 'md:grid-cols-2' : ''
               } gap-2`}
             >
-              {devive.length > 0 ? (
+              {devive.length > 0 &&
                 devive.map((item, index) => (
                   <div
                     key={index}
@@ -284,7 +304,16 @@ const Navbar = () => {
                     onClick={() => {
                       const newItem = {
                         text: item.name,
-                        path: !tmsMode ? item.id : String(item.sn),
+                        path: (
+                          tmsMode
+                            ? !(
+                                role === 'LEGACY_ADMIN' ||
+                                role === 'LEGACY_USER'
+                              )
+                            : role === 'LEGACY_ADMIN' || role === 'LEGACY_USER'
+                        )
+                          ? String(item.sn)
+                          : item.id,
                         tag: 'device'
                       }
                       dispatch(setSearch(item.name))
@@ -292,11 +321,32 @@ const Navbar = () => {
                       updateSearchHistory(newItem)
                       cookies.set(
                         'deviceKey',
-                        !tmsMode ? item.id : item.sn,
+                        (
+                          tmsMode
+                            ? !(
+                                role === 'LEGACY_ADMIN' ||
+                                role === 'LEGACY_USER'
+                              )
+                            : role === 'LEGACY_ADMIN' || role === 'LEGACY_USER'
+                        )
+                          ? item.sn
+                          : item.id,
                         cookieOptions
                       ) // it's mean setSerial
                       dispatch(
-                        setDeviceKey(!tmsMode ? item.id : String(item.sn))
+                        setDeviceKey(
+                          (
+                            tmsMode
+                              ? !(
+                                  role === 'LEGACY_ADMIN' ||
+                                  role === 'LEGACY_USER'
+                                )
+                              : role === 'LEGACY_ADMIN' ||
+                                role === 'LEGACY_USER'
+                          )
+                            ? String(item.sn)
+                            : item.id
+                        )
                       )
                       navigate('/dashboard')
                       window.scrollTo(0, 0)
@@ -307,22 +357,19 @@ const Navbar = () => {
                     </div>
                     <span className='truncate max-w-[150px]'>{item.name}</span>
                   </div>
-                ))
-              ) : (
-                <div className='flex items-center justify-center py-3'>
-                  <span className='opacity-70'>{t('nodata')}</span>
-                </div>
-              )}
+                ))}
             </div>
-            <div className='divider text-[12px] opacity-50'>
-              {t('menuButton')}
-            </div>
+            {filter.length > 0 && (
+              <div className='divider text-[12px] opacity-50'>
+                {t('menuButton')}
+              </div>
+            )}
             <div
               className={`grid grid-cols-1 ${
                 filter.length > 0 ? 'md:grid-cols-2' : ''
               } gap-2`}
             >
-              {filter.length > 0 ? (
+              {filter.length > 0 &&
                 filter.map((item, index) => (
                   <div
                     key={index}
@@ -344,12 +391,7 @@ const Navbar = () => {
                       {t(item.text)}
                     </span>
                   </div>
-                ))
-              ) : (
-                <div className='flex items-center justify-center py-3'>
-                  <span className='opacity-70'>{t('nodata')}</span>
-                </div>
-              )}
+                ))}
             </div>
           </div>
         )}
@@ -362,7 +404,8 @@ const Navbar = () => {
     t,
     globalSearch,
     navigate,
-    dispatch
+    dispatch,
+    location
   ])
 
   return (
@@ -494,33 +537,31 @@ const Navbar = () => {
               <div className='divider divider-vertical m-0 before:h-[1px] after:h-[1px]'></div>
               <li
                 onClick={() =>
-                  Swal
-                    .fire({
-                      title: t('logoutDialog'),
-                      text: t('logoutDialogText'),
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonText: t('confirmButton'),
-                      cancelButtonText: t('cancelButton'),
-                      reverseButtons: false,
-                      customClass: {
-                        actions: 'custom-action',
-                        confirmButton: 'custom-confirmButton',
-                        cancelButton: 'custom-cancelButton'
-                      },
-                    })
-                    .then(result => {
-                      if (result.isConfirmed) {
-                        cookies.remove('tokenObject', cookieOptions)
-                        cookies.remove('userProfile', cookieOptions)
-                        cookies.remove('tmsMode', cookieOptions)
-                        cookies.remove('hosId', cookieOptions)
-                        cookies.remove('wardId', cookieOptions)
-                        cookies.remove('deviceKey', cookieOptions)
-                        cookies.update()
-                        window.location.href = '/login'
-                      }
-                    })
+                  Swal.fire({
+                    title: t('logoutDialog'),
+                    text: t('logoutDialogText'),
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: t('confirmButton'),
+                    cancelButtonText: t('cancelButton'),
+                    reverseButtons: false,
+                    customClass: {
+                      actions: 'custom-action',
+                      confirmButton: 'custom-confirmButton',
+                      cancelButton: 'custom-cancelButton'
+                    }
+                  }).then(result => {
+                    if (result.isConfirmed) {
+                      cookies.remove('tokenObject', cookieOptions)
+                      cookies.remove('userProfile', cookieOptions)
+                      cookies.remove('tmsMode', cookieOptions)
+                      cookies.remove('hosId', cookieOptions)
+                      cookies.remove('wardId', cookieOptions)
+                      cookies.remove('deviceKey', cookieOptions)
+                      cookies.update()
+                      window.location.href = '/login'
+                    }
+                  })
                 }
                 className='text-red-500 h-9'
               >

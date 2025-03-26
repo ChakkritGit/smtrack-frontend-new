@@ -45,8 +45,9 @@ const setUserProfile = (userData: UserProfileType | undefined) => ({
   payload: userData
 })
 
-const setTmsMode = () => ({
-  type: TMS_MODE
+const setTmsMode = (mode: boolean) => ({
+  type: TMS_MODE,
+  payload: mode
 })
 
 const setIsExpand = () => ({

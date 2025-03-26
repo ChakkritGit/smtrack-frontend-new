@@ -75,7 +75,7 @@ const HospitalAndWard = () => {
 
   useEffect(() => {
     const filter = ward?.filter(items => (hosId ? items.hospital.id.includes(hosId) : items))
-    const filterNewSystem = filter.filter((f) => !tmsMode ? f.type.includes('NEW') : f.type.includes('LEGACY'))
+    const filterNewSystem = filter.filter((f) => tmsMode ? f.type.includes('NEW') : f.type.includes('LEGACY'))
     setWardArray(filterNewSystem)
   }, [ward, hosId, tmsMode])
 

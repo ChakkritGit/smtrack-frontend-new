@@ -445,6 +445,7 @@ export default {
     wardsName: 'Ward',
     pressPre1: 'Press',
     pressPre2: 'to exit',
+    pressPre3: 'to search',
     token: 'Token',
     remmark: 'Remark',
     tag: 'Tag',

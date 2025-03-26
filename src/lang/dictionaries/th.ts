@@ -444,6 +444,7 @@ export default {
     wardsName: 'วอร์ด',
     pressPre1: 'กด',
     pressPre2: 'เพื่อออก',
+    pressPre3: 'เพื่อค้นหา',
     token: 'โทเค็น',
     remmark: 'หมายเหตุ',
     tag: 'แท็ก',

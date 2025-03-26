@@ -55,7 +55,7 @@ const utilsReducer = (
     case USER_PROFILE:
       return { ...state, userProfile: action.payload }
     case TMS_MODE:
-      return { ...state, tmsMode: !state.tmsMode }
+      return { ...state, tmsMode: action.payload }
     case IS_EXPAND:
       return { ...state, isExpand: !state.isExpand }
     case SUBMIT_LOADING:
