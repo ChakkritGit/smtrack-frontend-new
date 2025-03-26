@@ -21,13 +21,10 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import {
-  resetUtils,
-  setCookieEncode,
   setDeviceKey,
   setIsExpand,
   setSearch,
-  setTokenExpire,
-  setUserProfile
+  setTokenExpire
 } from '../../../redux/actions/utilsActions'
 import DefaultPic from '../../../assets/images/default-pic.png'
 import { UAParser } from 'ua-parser-js'
@@ -520,10 +517,8 @@ const Navbar = () => {
                         cookies.remove('hosId', cookieOptions)
                         cookies.remove('wardId', cookieOptions)
                         cookies.remove('deviceKey', cookieOptions)
-                        dispatch(resetUtils())
-                        dispatch(setCookieEncode(undefined))
-                        dispatch(setUserProfile(undefined))
                         cookies.update()
+                        window.location.href = '/login'
                       }
                     })
                 }

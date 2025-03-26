@@ -335,7 +335,7 @@ const Notifications = () => {
                       </div>
                       <div className='flex flex-col gap-1 w-full'>
                         <div className='flex items-center justify-between gap-3'>
-                          <span>{item.message}</span>
+                          <span className='font-medium'>{item.message}</span>
                           <div className='flex flex-col items-end opacity-70'>
                             <span className='text-[14px]'>
                               {item.createdAt.substring(11, 16)}
@@ -395,7 +395,7 @@ const Notifications = () => {
                       </div>
                       <div className='flex flex-col gap-1 w-full'>
                         <div className='flex items-center justify-between gap-3'>
-                          <span>{subTextNotiDetails(item.message)}</span>
+                          <span className='font-medium'>{subTextNotiDetails(item.message)}</span>
                           <div className='flex flex-col items-end opacity-70'>
                             <span className='text-[14px]'>
                               {item.createAt.substring(11, 16)}
@@ -434,7 +434,7 @@ const Notifications = () => {
     setTimeout(async () => {
       await fetchNotification(1)
       setIsLoading(false)
-    }, 1000)
+    }, 500)
   }
 
   return (

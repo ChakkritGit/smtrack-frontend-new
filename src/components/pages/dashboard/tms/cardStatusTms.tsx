@@ -106,12 +106,12 @@ const CardStatusTms = (props: PropsType) => {
         <div className='flex items-center gap-2'>
           <div
             className={`flex items-center justify-center rounded-btn bg-base-300 w-[32px] h-[32px] ${
-              deviceData?.log && deviceData?.log[0]?.plugin
+              deviceData?.log && !deviceData?.log[0]?.plugin
                 ? 'text-base-content bg-opacity-80 bg-red-500'
                 : ''
             }`}
           >
-            {deviceData?.log && deviceData?.log[0]?.plugin ? (
+            {deviceData?.log && !deviceData?.log[0]?.plugin ? (
               <RiAlertLine size={20} />
             ) : (
               <RiPlugLine size={20} />
@@ -121,11 +121,11 @@ const CardStatusTms = (props: PropsType) => {
         </div>
         <div
           className={`flex items-center justify-center text-[20px] font-bold h-full ${
-            deviceData?.log && deviceData?.log[0]?.plugin ? 'text-red-500' : ''
+            deviceData?.log && !deviceData?.log[0]?.plugin ? 'text-red-500' : ''
           }`}
         >
           {deviceData?.log
-            ? deviceData?.log[0]?.plugin
+            ? !deviceData?.log[0]?.plugin
               ? t('stateProblem')
               : t('stateNormal')
             : '—'}

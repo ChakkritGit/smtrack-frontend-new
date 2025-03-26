@@ -11,21 +11,13 @@ import {
   RiTranslate2
 } from 'react-icons/ri'
 import { RootState } from '../../redux/reducers/rootReducer'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import ProfileComponent from '../../components/pages/settings/profileComponent'
 import SoundAndNotificationComponents from '../../components/pages/settings/soundAndNotificationComponents'
 import AppearanceComponents from '../../components/pages/settings/appearanceComponents'
 import LanguageComponents from '../../components/pages/settings/languageComponents'
 import ResetPassword from '../../components/pages/settings/resetPassword'
-import {
-  cookieOptions,
-  cookies
-} from '../../constants/utils/utilsConstants'
-import {
-  resetUtils,
-  setCookieEncode,
-  setUserProfile
-} from '../../redux/actions/utilsActions'
+import { cookieOptions, cookies } from '../../constants/utils/utilsConstants'
 import Swal from 'sweetalert2'
 
 interface FormState {
@@ -33,7 +25,6 @@ interface FormState {
 }
 
 const Settings = () => {
-  const dispatch = useDispatch()
   const { t } = useTranslation()
   const { userProfile } = useSelector((state: RootState) => state.utils)
   const profileModalRef = useRef<HTMLDialogElement>(null)
@@ -150,35 +141,31 @@ const Settings = () => {
           </li>
           <li
             onClick={() =>
-              Swal
-                .fire({
-                  title: t('logoutDialog'),
-                  text: t('logoutDialogText'),
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonText: t('confirmButton'),
-                  cancelButtonText: t('cancelButton'),
-                  reverseButtons: false,
-                  customClass: {
-                    actions: 'custom-action',
-                    confirmButton: 'custom-confirmButton',
-                    cancelButton: 'custom-cancelButton'
-                  }
-                })
-                .then(result => {
-                  if (result.isConfirmed) {
-                    cookies.remove('tokenObject', cookieOptions)
-                    cookies.remove('userProfile', cookieOptions)
-                    cookies.remove('tmsMode', cookieOptions)
-                    cookies.remove('hosId', cookieOptions)
-                    cookies.remove('wardId', cookieOptions)
-                    cookies.remove('deviceKey', cookieOptions)
-                    dispatch(resetUtils())
-                    dispatch(setCookieEncode(undefined))
-                    dispatch(setUserProfile(undefined))
-                    cookies.update()
-                  }
-                })
+              Swal.fire({
+                title: t('logoutDialog'),
+                text: t('logoutDialogText'),
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: t('confirmButton'),
+                cancelButtonText: t('cancelButton'),
+                reverseButtons: false,
+                customClass: {
+                  actions: 'custom-action',
+                  confirmButton: 'custom-confirmButton',
+                  cancelButton: 'custom-cancelButton'
+                }
+              }).then(result => {
+                if (result.isConfirmed) {
+                  cookies.remove('tokenObject', cookieOptions)
+                  cookies.remove('userProfile', cookieOptions)
+                  cookies.remove('tmsMode', cookieOptions)
+                  cookies.remove('hosId', cookieOptions)
+                  cookies.remove('wardId', cookieOptions)
+                  cookies.remove('deviceKey', cookieOptions)
+                  cookies.update()
+                  window.location.href = '/login'
+                }
+              })
             }
             className={`btn btn-ghost font-normal text-red-500 flex-nowrap text-[16px] justify-start w-full flex`}
           >
