@@ -42,7 +42,7 @@ const Sidebar = () => {
   const { role } = tokenDecode || {}
 
   return (
-    <div
+    <aside
       className={`drawer-side shadow-sm z-[90] ${
         isExpand ? '!overflow-visible' : ''
       }`}
@@ -241,7 +241,7 @@ const Sidebar = () => {
           </div>
         </div>
       </ul>
-    </div>
+    </aside>
   )
 }
 

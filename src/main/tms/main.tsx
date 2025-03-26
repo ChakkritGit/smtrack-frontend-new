@@ -218,7 +218,7 @@ const MainTms = () => {
         <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content'>
           <Navbar />
-          <div
+          <section
             className={`min-h-[calc(100dvh-64px)] pb-[84px] sm:pb-0 ${
               ['cupcake', 'valentine', 'forest', 'pastel', 'acid'].includes(
                 themeMode
@@ -228,7 +228,7 @@ const MainTms = () => {
             }`}
           >
             <Outlet />
-          </div>
+          </section>
           <BottomBar />
         </div>
         <Sidebar />
