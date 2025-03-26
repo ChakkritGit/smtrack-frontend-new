@@ -460,6 +460,7 @@ export default {
     modifyBy: 'Modify by',
     buttonClear: 'Clear',
     sendFm: 'Sent',
+    noMoreLoad: 'End of notification',
 
     // connect
     ipAddress: 'IP',

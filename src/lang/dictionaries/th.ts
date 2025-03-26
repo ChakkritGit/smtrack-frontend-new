@@ -459,6 +459,7 @@ export default {
     modifyBy: 'แก้ไขโดย',
     buttonClear: 'ล้าง',
     sendFm: 'ส่งแล้ว',
+    noMoreLoad: 'สิ้นสุดการแจ้งเตือน',
 
     // connect
     ipAddress: 'IP',

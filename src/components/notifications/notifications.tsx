@@ -28,29 +28,33 @@ import { RootState } from '../../redux/reducers/rootReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 import { setTokenExpire } from '../../redux/actions/utilsActions'
-import { FaThermometerHalf } from "react-icons/fa"
+import { FaThermometerHalf } from 'react-icons/fa'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 const Notifications = () => {
   const dispatch = useDispatch()
-  const { tokenDecode, tmsMode, userProfile, socketData } = useSelector(
+  const { tokenDecode, tmsMode, userProfile } = useSelector(
     (state: RootState) => state.utils
   )
   const location = useLocation()
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const [page, setPage] = useState(1)
   const [notificationList, setNotification] = useState<NotificationType[]>([])
+  const [fetchMore, setFetchMore] = useState(false)
   const { role = 'USER' } = tokenDecode || {}
 
-  const fetchNotificaton = async () => {
+  const fetchNotificaton = async (page: number) => {
     try {
       const response = await axiosInstance.get<
         responseType<NotificationType[]>
       >(
         role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode
-          ? `/legacy/templog/alert/notification`
-          : `/log/notification`
+          ? `/legacy/templog/alert/notification?page=${page}&perpage=${10}`
+          : `/log/notification?page=${page}&perpage=${10}`
       )
-      setNotification(response.data.data)
+      setNotification(notificationList.concat(response.data.data))
+      setFetchMore(response.data.data.length !== 0)
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 401) {
@@ -60,6 +64,33 @@ const Notifications = () => {
       } else {
         console.error(error)
       }
+    }
+  }
+
+  useEffect(() => {
+    let subscribed = true
+    ;(async () => {
+      if (subscribed) {
+        await fetchNotificaton(1)
+      }
+    })()
+    return () => {
+      subscribed = false
+    }
+  }, [])
+
+  useEffect(() => {
+    if (page === 1) return
+    fetchNotificaton(page)
+  }, [page])
+
+  const handleLoadMoreData = () => {
+    if (fetchMore) {
+      const timeoutId = setTimeout(() => {
+        setPage(prevPage => prevPage + 1)
+      }, 1000)
+
+      return () => clearTimeout(timeoutId)
     }
   }
 
@@ -246,56 +277,76 @@ const Notifications = () => {
     }
   }, [location, userProfile, notificationList])
 
-  useEffect(() => {
-    fetchNotificaton()
-  }, [socketData])
-
   const NotificationList = useMemo(
     () => (
       <ul
         tabIndex={1}
-        className='dropdown-content bg-base-100 text-base-content rounded-box top-px mt-16 right-0 max-h-[calc(100dvh-180px)]
-        w-[360px] md:max-h-[520px] md:w-[480px] overflow-y-auto
-        border border-white/5 shadow-2xl outline outline-1 outline-black/5'
+        className='dropdown-content bg-base-100 text-base-content rounded-box top-px mt-16 right-0 w-[360px] md:w-[480px] border border-white/5 shadow-2xl outline outline-1 outline-black/5'
       >
-        <div className='flex items-center justify-between p-2 h-[54px] bg-base-100/70 backdrop-blur-md border-b border-base-content/10 shadow-sm sticky top-0 z-10'>
+        <div className='flex items-center justify-between rounded-t-box p-2 h-[54px] bg-base-100/70 backdrop-blur-md border-b border-base-content/10 shadow-sm sticky top-0 z-10'>
           <span className='text-base ml-2'>{t('titleNotification')}</span>
           <button
-            className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 max-h-[34px] min-h-[34px]
-             max-w-[34px] min-w-[34px] tooltip tooltip-left'
+            className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
             data-tip={t('isExapndText')}
             onClick={() => navigate('/notification')}
           >
             <RiArrowRightUpLine size={20} />
           </button>
         </div>
-        {/* <div className='divider divider-vertical before:h-[1px] after:h-[1px] m-0 h-0'></div> */}
         {role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode ? (
-          <div>
+          <div id='scrollableDiv' className='h-[520px] overflow-y-scroll'>
             {notificationList.length > 0 ? (
-              notificationList.map((item, index) => (
-                <li className='flex items-center gap-3 py-2 px-3' key={index}>
-                  <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
-                    <RiAlarmWarningFill size={24} />
+              <InfiniteScroll
+                dataLength={notificationList.length}
+                next={handleLoadMoreData}
+                hasMore={fetchMore}
+                scrollableTarget='scrollableDiv'
+                loader={
+                  <div>
+                    <div className='divider my-0 before:h-[1px] after:h-[1px]'></div>
+                    <div className='flex items-center justify-center p-4 pt-3'>
+                      <span className='loading loading-ring loading-md'></span>
+                    </div>
                   </div>
-                  <div className='flex flex-col gap-1 w-full'>
-                    <div className='flex items-center justify-between gap-3'>
-                      <span>{item.message}</span>
-                      <div className='flex flex-col items-end opacity-70'>
-                        <span className='text-[14px]'>
-                          {item.createdAt.substring(11, 16)}
-                        </span>
-                        <span className='w-max text-[14px]'>
-                          {item.createdAt.substring(0, 10)}
+                }
+                endMessage={
+                  <div>
+                    <div className='divider my-0 before:h-[1px] after:h-[1px]'></div>
+                    <div className='flex items-center justify-center p-4 pt-3 opacity-70'>
+                      <p className='text-sm'>{t('noMoreLoad')}</p>
+                    </div>
+                  </div>
+                }
+              >
+                <div>
+                  {notificationList.map((item, index) => (
+                    <li
+                      className='flex items-center gap-3 py-2 px-3'
+                      key={index}
+                    >
+                      <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
+                        <RiAlarmWarningFill size={24} />
+                      </div>
+                      <div className='flex flex-col gap-1 w-full'>
+                        <div className='flex items-center justify-between gap-3'>
+                          <span>{item.message}</span>
+                          <div className='flex flex-col items-end opacity-70'>
+                            <span className='text-[14px]'>
+                              {item.createdAt.substring(11, 16)}
+                            </span>
+                            <span className='w-max text-[14px]'>
+                              {item.createdAt.substring(0, 10)}
+                            </span>
+                          </div>
+                        </div>
+                        <span className='text-[14px] opacity-70'>
+                          {item?.mcuId}
                         </span>
                       </div>
-                    </div>
-                    <span className='text-[14px] opacity-70'>
-                      {item?.mcuId}
-                    </span>
-                  </div>
-                </li>
-              ))
+                    </li>
+                  ))}
+                </div>
+              </InfiniteScroll>
             ) : (
               <div className='flex items-center justify-center loading-hieght-full'>
                 <div>{t('notificationEmpty')}</div>
@@ -303,31 +354,59 @@ const Notifications = () => {
             )}
           </div>
         ) : (
-          <div>
+          <div id='scrollableDiv' className='h-[520px] overflow-y-scroll'>
             {notificationList.length > 0 ? (
-              notificationList.map((item, index) => (
-                <li className='flex items-center gap-3 py-2 px-3' key={index}>
-                  <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
-                    {subTextNotiDetailsIcon(item.message)}
+              <InfiniteScroll
+                dataLength={notificationList.length}
+                next={handleLoadMoreData}
+                hasMore={fetchMore}
+                scrollableTarget='scrollableDiv'
+                loader={
+                  <div>
+                    <div className='divider my-0 before:h-[1px] after:h-[1px]'></div>
+                    <div className='flex items-center justify-center p-4 pt-3'>
+                      <span className='loading loading-ring loading-md'></span>
+                    </div>
                   </div>
-                  <div className='flex flex-col gap-1 w-full'>
-                    <div className='flex items-center justify-between gap-3'>
-                      <span>{subTextNotiDetails(item.message)}</span>
-                      <div className='flex flex-col items-end opacity-70'>
-                        <span className='text-[14px]'>
-                          {item.createAt.substring(11, 16)}
-                        </span>
-                        <span className='w-max text-[14px]'>
-                          {item.createAt.substring(0, 10)}
+                }
+                endMessage={
+                  <div>
+                    <div className='divider my-0 before:h-[1px] after:h-[1px]'></div>
+                    <div className='flex items-center justify-center p-4 pt-3 opacity-70'>
+                      <p className='text-sm'>{t('noMoreLoad')}</p>
+                    </div>
+                  </div>
+                }
+              >
+                <div>
+                  {notificationList.map((item, index) => (
+                    <li
+                      className='flex items-center gap-3 py-2 px-3'
+                      key={index}
+                    >
+                      <div className='bg-primary/10 text-primary/70 rounded-btn p-1'>
+                        {subTextNotiDetailsIcon(item.message)}
+                      </div>
+                      <div className='flex flex-col gap-1 w-full'>
+                        <div className='flex items-center justify-between gap-3'>
+                          <span>{subTextNotiDetails(item.message)}</span>
+                          <div className='flex flex-col items-end opacity-70'>
+                            <span className='text-[14px]'>
+                              {item.createAt.substring(11, 16)}
+                            </span>
+                            <span className='w-max text-[14px]'>
+                              {item.createAt.substring(0, 10)}
+                            </span>
+                          </div>
+                        </div>
+                        <span className='text-[14px] opacity-70'>
+                          {item.device.name}
                         </span>
                       </div>
-                    </div>
-                    <span className='text-[14px] opacity-70'>
-                      {item.device.name}
-                    </span>
-                  </div>
-                </li>
-              ))
+                    </li>
+                  ))}
+                </div>
+              </InfiniteScroll>
             ) : (
               <div className='flex items-center justify-center loading-hieght-full'>
                 <div>{t('notificationEmpty')}</div>
