@@ -196,7 +196,7 @@ const Login = () => {
                 className='btn btn-primary w-full text-[16px]'
               >
                 {loading ? (
-                  <span className='loading loading-ring loading-md'></span>
+                  <span className='loading loading-spinner loading-md'></span>
                 ) : (
                   t('loginButton')
                 )}

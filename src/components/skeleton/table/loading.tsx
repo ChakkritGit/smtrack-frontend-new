@@ -5,7 +5,7 @@ const Loading = () => {
 
   return (
     <div className='flex items-center justify-center w-full p-3 h-full gap-3'>
-      <span className='loading loading-ring loading-md bg-base-content'></span>
+      <span className='loading loading-spinner loading-md bg-base-content'></span>
       <span className='text-base-content'>{t('loading')}</span>
     </div>
   )
