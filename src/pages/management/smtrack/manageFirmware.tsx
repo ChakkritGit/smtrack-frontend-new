@@ -29,7 +29,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { FileUploader } from 'react-drag-drop-files'
 import { filesize } from 'filesize'
-import { CircularProgressbar } from 'react-circular-progressbar'
+import { buildStyles, CircularProgressbar } from 'react-circular-progressbar'
 import Swal from 'sweetalert2'
 
 type selectFirmwareOption = {
@@ -149,21 +149,22 @@ const ManageFirmware = () => {
     if (file) {
       const formData = new FormData()
       formData.append('file', file as Blob)
-      console.log('file 1: ', file.name)
-      console.log('file 2: ', formData.get('file'))
       try {
         setSubmit(true)
         const response = await axiosInstance.post<responseType<string>>(
           `https://drive.siamatic.co.th/api/drive`,
           formData,
           {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
             onUploadProgress: progressEvent => {
               const { progress } = progressEvent
               setProgress(Number(progress) * 100)
             }
           }
         )
-        uploadModalRef.current?.close()
+        closeModal()
         Swal.fire({
           title: t('alertHeaderSuccess'),
           text: response.data.message,
@@ -365,6 +366,20 @@ const ManageFirmware = () => {
                   <CircularProgressbar
                     value={progress}
                     text={`${progress.toFixed()}%`}
+                    className='w-[13rem] h-[13rem]'
+                    strokeWidth={6}
+                    styles={buildStyles({
+                      strokeLinecap: 'round',
+                      textSize: '18px',
+                      pathTransition: 'stroke-dashoffset 0.5s ease 0s',
+                      pathTransitionDuration: 0.5,
+                      pathColor: `var(--fallback-p,oklch(var(--p)/var(--tw-bg-opacity, 1)))`,
+                      textColor:
+                        'var(--fallback-p,oklch(var(--p)/var(--tw-text-opacity, 1)))',
+                      trailColor: 'var(--fallback-p,oklch(var(--p)/0.15))',
+                      backgroundColor:
+                        'var(--fallback-p,oklch(var(--p)/var(--tw-bg-opacity, 1)))'
+                    })}
                   />
                 )
               ) : (

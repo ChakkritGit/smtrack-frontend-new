@@ -1,4 +1,5 @@
 import './index.css'
+import 'react-circular-progressbar/dist/styles.css'
 import '@react-pdf-viewer/core/lib/styles/index.css'
 import '@react-pdf-viewer/default-layout/lib/styles/index.css'
 import 'react-loading-skeleton/dist/skeleton.css'
