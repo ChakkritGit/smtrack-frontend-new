@@ -244,6 +244,7 @@ const Navbar = () => {
                 } flex items-center justify-between p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300`}
                 onClick={() => {
                   updateSearchHistory(item)
+                  setSearchOpen(false)
 
                   if (item.tag === 'menu') {
                     navigate(item.path)
@@ -272,6 +273,7 @@ const Navbar = () => {
                   onClick={e => {
                     e.stopPropagation()
                     removeHistoryItem(item.path)
+                    setSearchOpen(false)
                   }}
                 >
                   <RiCloseLine size={18} />
@@ -317,6 +319,7 @@ const Navbar = () => {
                           : item.id,
                         tag: 'device'
                       }
+                      setSearchOpen(false)
                       dispatch(setSearch(item.name))
                       setIsFocused(false)
                       updateSearchHistory(newItem)
@@ -381,6 +384,7 @@ const Navbar = () => {
                         path: item.path,
                         tag: 'menu'
                       }
+                      setSearchOpen(false)
                       dispatch(setSearch(t(item.text)))
                       navigate(item.path)
                       setIsFocused(false)
