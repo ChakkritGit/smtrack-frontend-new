@@ -396,10 +396,7 @@ const Adjustments = (props: AdjustmentsProps) => {
     client.unsubscribe(`${serial}/mute/status/receive`)
     client.unsubscribe(`${serial}/temp/real`)
     client.unsubscribe(`${serial}/mute/status/receive`)
-    client.publish(
-      `${serial}/temp`,
-      'off'
-    )
+    client.publish(`${serial}/temp`, 'off')
     //
 
     setAdjustmentsForm({
@@ -493,10 +490,7 @@ const Adjustments = (props: AdjustmentsProps) => {
             `siamatic/${deviceModel}/${version}/${serial}/temp`,
             'off'
           )
-          client.publish(
-            `${serial}/temp`,
-            'off'
-          )
+          client.publish(`${serial}/temp`, 'off')
           //
 
           client.unsubscribe(`${serial}/${beforeSelectProbe}/temp/real`)
@@ -516,17 +510,32 @@ const Adjustments = (props: AdjustmentsProps) => {
         })
         setProbeBefore(probeFiltered)
 
-        if (version === 'v2') {
-          client.subscribe(
-            `${serial}/${probeFiltered?.channel}/temp/real`,
-            err => {
+        if (deviceModel === 'etemp') {
+          if (version === 'v2') {
+            client.subscribe(
+              `${serial}/${probeFiltered?.channel}/temp/real`,
+              err => {
+                if (err) console.error('MQTT Subscribe Error', err)
+              }
+            )
+          } else {
+            client.subscribe(`${serial}/temp/real`, err => {
               if (err) console.error('MQTT Subscribe Error', err)
-            }
-          )
+            })
+          }
         } else {
-          client.subscribe(`${serial}/temp/real`, err => {
-            if (err) console.error('MQTT Subscribe Error', err)
-          })
+          if (version === 'v3') {
+            client.subscribe(
+              `${serial}/${probeFiltered?.channel}/temp/real`,
+              err => {
+                if (err) console.error('MQTT Subscribe Error', err)
+              }
+            )
+          } else {
+            client.subscribe(`${serial}/temp/real`, err => {
+              if (err) console.error('MQTT Subscribe Error', err)
+            })
+          }
         }
 
         // รอลบ
@@ -547,10 +556,7 @@ const Adjustments = (props: AdjustmentsProps) => {
           `siamatic/${deviceModel}/${version}/${serial}/temp`,
           'on'
         )
-        client.publish(
-          `${serial}/temp`,
-          'on'
-        )
+        client.publish(`${serial}/temp`, 'on')
         //
 
         setBeforeSelectProbe(probeFiltered?.channel)
@@ -592,10 +598,7 @@ const Adjustments = (props: AdjustmentsProps) => {
           `siamatic/${deviceModel}/${version}/${serial}/temp`,
           'off'
         )
-        client.publish(
-          `${serial}/temp`,
-          'off'
-        )
+        client.publish(`${serial}/temp`, 'off')
         client.unsubscribe(`${serial}/temp/real`)
 
         client.subscribe(`${serial}/mute/status/receive`, err => {

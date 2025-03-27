@@ -368,7 +368,7 @@ const ManageFirmware = () => {
                   />
                 )
               ) : (
-                <RiFileCheckLine size={84} />
+                <RiFileCheckLine size={84} className='text-primary' />
               )}
             </div>
             <div className='flex flex-col items-center justify-center gap-1 mt-3'>
