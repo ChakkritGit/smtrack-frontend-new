@@ -300,7 +300,7 @@ const Notifications = () => {
         {isLoading ? (
           <Loading />
         ) : role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode ? (
-          <div id='scrollableDiv' className='h-[520px] overflow-y-scroll'>
+          <div id='scrollableDiv' className='h-[520px] max-h-[calc(100dvh-180px)] md:max-h-[520px] overflow-y-scroll'>
             {notificationList.length > 0 ? (
               <InfiniteScroll
                 dataLength={notificationList.length}
@@ -360,7 +360,7 @@ const Notifications = () => {
             )}
           </div>
         ) : (
-          <div id='scrollableDiv' className='h-[520px] overflow-y-scroll'>
+          <div id='scrollableDiv' className='h-[520px] max-h-[calc(100dvh-230px)] md:max-h-[520px] overflow-y-scroll'>
             {notificationList.length > 0 ? (
               <InfiniteScroll
                 dataLength={notificationList.length}

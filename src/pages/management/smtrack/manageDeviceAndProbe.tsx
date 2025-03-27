@@ -6,7 +6,8 @@ import { setSearch } from '../../../redux/actions/utilsActions'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import ManageProbe from './manageProbe'
 import ManageDevice from './manageDevice'
-import { RiBox3Fill, RiBox3Line, RiSensorFill, RiSensorLine } from 'react-icons/ri'
+import { RiBox3Fill, RiBox3Line, RiCodeSSlashFill, RiCodeSSlashLine, RiSensorFill, RiSensorLine } from 'react-icons/ri'
+import ManageFirmware from './manageFirmware'
 
 const ManageDeviceAndProbe = () => {
   const dispatch = useDispatch()
@@ -52,6 +53,22 @@ const ManageDeviceAndProbe = () => {
             <span className='hidden md:block md:ml-2'>{t('subTabProbe')}</span>
           </a>
         )}
+        {
+          role === 'SUPER' &&
+          <a
+            role='tab'
+            className={`tab text-sm md:text-base ${
+              tab === 3 ? 'tab-active font-medium' : ''
+            }`}
+            onClick={() => {
+              cookies.set('manageDeviceTab', 3, cookieOptions)
+              setTab(3)
+            }}
+          >
+            {tab === 3 ? <RiCodeSSlashFill size={24} /> : <RiCodeSSlashLine size={24} />}
+            <span className='hidden md:block md:ml-2'>{t('firmWareVer')}</span>
+          </a>
+        }
       </div>
     ),
     [tab, role, t]
@@ -61,7 +78,7 @@ const ManageDeviceAndProbe = () => {
     <div>
       {manageMenu}
       <div className='mt-3'>
-        {tab === 1 ? <ManageDevice /> : <ManageProbe />}
+        {tab === 1 ? <ManageDevice /> : tab === 2 ? <ManageProbe /> : <ManageFirmware />}
       </div>
     </div>
   )
