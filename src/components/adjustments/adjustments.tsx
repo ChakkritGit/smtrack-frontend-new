@@ -510,32 +510,17 @@ const Adjustments = (props: AdjustmentsProps) => {
         })
         setProbeBefore(probeFiltered)
 
-        if (deviceModel === 'etemp') {
-          if (version === 'v2') {
-            client.subscribe(
-              `${serial}/${probeFiltered?.channel}/temp/real`,
-              err => {
-                if (err) console.error('MQTT Subscribe Error', err)
-              }
-            )
-          } else {
-            client.subscribe(`${serial}/temp/real`, err => {
+        if (version === 'v2' || version === 'v3') {
+          client.subscribe(
+            `${serial}/${probeFiltered?.channel}/temp/real`,
+            err => {
               if (err) console.error('MQTT Subscribe Error', err)
-            })
-          }
+            }
+          )
         } else {
-          if (version === 'v3') {
-            client.subscribe(
-              `${serial}/${probeFiltered?.channel}/temp/real`,
-              err => {
-                if (err) console.error('MQTT Subscribe Error', err)
-              }
-            )
-          } else {
-            client.subscribe(`${serial}/temp/real`, err => {
-              if (err) console.error('MQTT Subscribe Error', err)
-            })
-          }
+          client.subscribe(`${serial}/temp/real`, err => {
+            if (err) console.error('MQTT Subscribe Error', err)
+          })
         }
 
         // รอลบ
