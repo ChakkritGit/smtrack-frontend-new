@@ -24,6 +24,7 @@ import { cookieOptions, cookies } from '../../../constants/utils/utilsConstants'
 import { setDeviceKey } from '../../../redux/actions/utilsActions'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import Loading from '../../skeleton/table/loading'
 
 interface DeviceCardProps {
   devicesFiltered: DeviceType[]
@@ -85,13 +86,13 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
   }
 
   const UserCard = useMemo(() => {
+    if (loading) return <div className='h-[calc(100dvh-420px)]'><Loading /></div>
     if (devicesFiltered?.length > 0) {
       return (
         <DevicePagination
           totalRows={totalRows}
           data={devicesFiltered}
           initialPerPage={perPage}
-          loading={loading}
           currentPage={currentPage}
           handlePageChange={handlePageChange}
           handlePerRowsChange={handlePerRowsChange}

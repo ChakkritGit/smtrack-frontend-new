@@ -3,7 +3,6 @@ import PaginationPerpage from './paginationPerpage'
 import { SingleValue } from 'react-select'
 import { Option } from '../../types/global/hospitalAndWard'
 import { useTranslation } from 'react-i18next'
-import Loading from '../skeleton/table/loading'
 
 type PaginationProps<T> = {
   data: T[];
@@ -12,7 +11,6 @@ type PaginationProps<T> = {
   renderItem: (item: T, index: number) => ReactNode;
   handlePageChange: (page: number) => void
   handlePerRowsChange: (newPerPage: number, page: number) => Promise<void>
-  loading: boolean
   totalRows: number
   currentPage: number
 }
@@ -24,7 +22,6 @@ const DevicePagination = <T,>({
   itemPerPage,
   handlePageChange,
   handlePerRowsChange,
-  loading,
   totalRows,
   currentPage,
 }: PaginationProps<T>) => {
@@ -108,15 +105,9 @@ const DevicePagination = <T,>({
 
   return (
     <>
-      {
-      !loading ?<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-7 content-center justify-items-center mt-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-7 content-center justify-items-center mt-5">
         {data.map((item, index) => renderItem(item, index))}
       </div>
-      :
-      <div>
-        <Loading />
-      </div>
-      }
 
       <div className="flex flex-col lg:flex-row justify-between items-center mt-5 gap-4">
         <div className="flex items-center gap-2">
