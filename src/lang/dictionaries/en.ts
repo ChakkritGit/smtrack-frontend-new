@@ -462,6 +462,7 @@ export default {
     buttonClear: 'Clear',
     sendFm: 'Sent',
     noMoreLoad: 'End of notification',
+    deviceFilterNotUpdate: 'Not updated yet',
 
     // connect
     ipAddress: 'IP',
@@ -484,6 +485,7 @@ export default {
     alertHeaderSuccess: 'Success',
     alertHeaderUpdating: 'Updating',
     completeField: 'Please complete this field!',
+    completeSelect: 'Please select devices!',
     deleteUserTitle: 'Do you want to delete a user?',
     deleteDeviceTitle: 'Do you want to delete a device?',
     notReverseText: 'You will not be able to reverse this',

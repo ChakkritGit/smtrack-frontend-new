@@ -461,6 +461,7 @@ export default {
     buttonClear: 'ล้าง',
     sendFm: 'ส่งแล้ว',
     noMoreLoad: 'สิ้นสุดการแจ้งเตือน',
+    deviceFilterNotUpdate: 'ยังไม่อัพเดท',
 
     // connect
     ipAddress: 'IP',
@@ -483,6 +484,7 @@ export default {
     alertHeaderSuccess: 'สำเร็จ',
     alertHeaderUpdating: 'กำลังอัปเดท',
     completeField: 'โปรดป้อนข้อมูลให้ครบ',
+    completeSelect: 'โปรดเลือกอุปกรณ์',
     deleteUserTitle: 'คุณต้องการลบผู้ใช้หรือไม่',
     deleteDeviceTitle: 'คุณต้องการลบอุปกรณ์หรือไม่',
     notReverseText: 'คุณจะไม่สามารถย้อนกลับสิ่งนี้ได้',

@@ -449,7 +449,7 @@ input[type=number] {
   }
 }
 
-.btm-nav > *:where(.active) {
+.btm-nav>*:where(.active) {
   @apply bg-transparent;
 }
 

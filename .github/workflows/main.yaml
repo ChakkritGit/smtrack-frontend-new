@@ -65,13 +65,13 @@ jobs:
       with:
         payload: |
           {
-            "text": "✅ GitHub Action build siamatic/smtrack-frontend:1.0.2b10 result: ${{ job.status }}",
+            "text": "✅ GitHub Action build siamatic/smtrack-frontend:1.0.2b10 result: ${{ job.status }} 🙏🙏",
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "✅ GitHub Action build siamatic/smtrack-frontend:1.0.2b10 result: ${{ job.status }}"
+                  "text": "✅ GitHub Action build siamatic/smtrack-frontend:1.0.2b10 result: ${{ job.status }} 🙏🙏"
                 }
               }
             ]

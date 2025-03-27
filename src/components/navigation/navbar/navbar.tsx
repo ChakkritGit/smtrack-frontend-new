@@ -215,7 +215,7 @@ const Navbar = () => {
 
     return (
       <div
-        className='search-anim absolute min-w-[300px] w-[330px] max-w-[330px] md:min-w-[450px] min-h-[50px] md:max-w-[500px]
+        className='search-anim absolute min-w-[280px] w-[280px] max-w-[300px] md:min-w-[450px] min-h-[50px] md:max-w-[500px]
       max-h-[400px] bg-base-100 backdrop-blur transition-shadow shadow-2xl duration-300
       border-base-content/15 border-[1px] py-3 pl-4 pr-1 top-[60px] overflow-y-scroll
       rounded-box'
@@ -264,7 +264,7 @@ const Navbar = () => {
                   <div>
                     <RiHistoryLine size={18} />
                   </div>
-                  <span className='truncate  max-w-[300px]'>
+                  <span className='max-w-[170px] md:max-w-[300px] block truncate' style={{ direction: "rtl", textAlign: "left" }}>
                     {t(item.text)}
                   </span>
                 </div>
@@ -359,7 +359,7 @@ const Navbar = () => {
                     <div>
                       <RiDeviceLine size={18} />
                     </div>
-                    <span className='truncate max-w-[150px]'>{item.name}</span>
+                    <span className='max-w-[150px] block truncate' style={{ direction: "rtl", textAlign: "left" }}>{item.name}</span>
                   </div>
                 ))}
             </div>
@@ -392,7 +392,7 @@ const Navbar = () => {
                     }}
                   >
                     <div>{item.icon}</div>
-                    <span className='truncate max-w-[150px]'>
+                    <span className='max-w-[150px] block truncate' style={{ direction: "rtl", textAlign: "left" }}>
                       {t(item.text)}
                     </span>
                   </div>
@@ -419,7 +419,7 @@ const Navbar = () => {
         <div className='form-control'>
           <label
             className={`input input-bordered bg-base-200/50 ${
-              searchOpen ? 'flex' : 'hidden'
+              searchOpen ? 'flex w-[220px]' : 'hidden'
             } border-none h-10 w-[250px] items-center gap-2 lg:flex duration-300`}
           >
             <svg

@@ -47,6 +47,11 @@ type DeviceListType = {
   ward: string
   sn?: string
   staticName: string
+  hospital: string
+  hospitalName: string
+  location: string
+  wardName: string
+  firmware: string
 }
 
 interface DeviceLog extends DevicesType {

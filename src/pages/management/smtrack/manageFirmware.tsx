@@ -1,4 +1,5 @@
 import {
+  ChangeEvent,
   FormEvent,
   useCallback,
   useEffect,
@@ -6,9 +7,13 @@ import {
   useRef,
   useState
 } from 'react'
+import Select, { SingleValue } from 'react-select'
 import axiosInstance from '../../../constants/axios/axiosInstance'
 import { responseType } from '../../../types/smtrack/utilsRedux/utilsReduxType'
-import { FirmwareListType } from '../../../types/smtrack/devices/deviceType'
+import {
+  DeviceListType,
+  FirmwareListType
+} from '../../../types/smtrack/devices/deviceType'
 import { AxiosError } from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -23,14 +28,18 @@ import {
   RiCloseLargeLine,
   RiDeleteBin7Line,
   RiDragDropLine,
-  RiFileCheckLine,
   RiMore2Line
 } from 'react-icons/ri'
 import { useTranslation } from 'react-i18next'
 import { FileUploader } from 'react-drag-drop-files'
 import { filesize } from 'filesize'
-import { buildStyles, CircularProgressbar } from 'react-circular-progressbar'
+import {
+  buildStyles,
+  CircularProgressbarWithChildren
+} from 'react-circular-progressbar'
 import Swal from 'sweetalert2'
+import { Option } from '../../../types/global/hospitalAndWard'
+import { client } from '../../../services/mqtt'
 
 type selectFirmwareOption = {
   fileName: string
@@ -38,6 +47,29 @@ type selectFirmwareOption = {
   fileSize: string
   createDate: string
 }
+
+const mapOptions = <T, K extends keyof T>(
+  data: T[],
+  valueKey: K,
+  labelKey: K
+): Option[] =>
+  data?.map(item => ({
+    value: item[valueKey] as unknown as string,
+    label: item[labelKey] as unknown as string
+  }))
+
+const mapDefaultValue = <T, K extends keyof T>(
+  data: T[],
+  id: string,
+  valueKey: K,
+  labelKey: K
+): Option | undefined =>
+  data
+    ?.filter(item => item[valueKey] === id)
+    .map(item => ({
+      value: item[valueKey] as unknown as string,
+      label: item[labelKey] as unknown as string
+    }))[0]
 
 const ManageFirmware = () => {
   const { t } = useTranslation()
@@ -52,8 +84,38 @@ const ManageFirmware = () => {
   const [submit, setSubmit] = useState(false)
   const [error, setError] = useState(false)
   const [progress, setProgress] = useState(0)
+  const [selectedDevicesOption, setSelectedDevicesOption] = useState(
+    t('selectOTA')
+  )
+  const [selectedDevices, setSelectedDevices] = useState<string[]>([])
+  const [deviceList, setDeviceList] = useState<DeviceListType[]>([])
+  const [deviceFwFiltered, setDeviceFwFiltered] = useState<DeviceListType[]>([])
+  const [filterUpdated, setFilterUpdated] = useState(false)
+  let [onProgress, setOnProgress] = useState(0)
   const uploadModalRef = useRef<HTMLDialogElement>(null)
+  const selectUploadModalRef = useRef<HTMLDialogElement>(null)
+  const updateProgressModalRef = useRef<HTMLDialogElement>(null)
+  const onCancelRef = useRef<boolean>(false)
   const fileTypes = ['BIN']
+
+  const fetchDeviceList = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get<responseType<DeviceListType[]>>(
+        '/devices/dashboard/device'
+      )
+      setDeviceList(response.data.data)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          dispatch(setTokenExpire(true))
+        }
+
+        console.error(error.response?.data.message)
+      } else {
+        console.error(error)
+      }
+    }
+  }, [])
 
   const fetchFirmware = useCallback(async () => {
     try {
@@ -107,6 +169,44 @@ const ManageFirmware = () => {
       }
     }
   }, [])
+
+  const handleSelectedandClearSelected = (e: SingleValue<Option>) => {
+    const selectedValue = e?.value
+    if (!selectedValue) return
+    setSelectedDevicesOption(selectedValue)
+    setSelectedDevices([])
+  }
+
+  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target
+
+    if (checked) {
+      setSelectedDevices([...selectedDevices, value])
+    } else {
+      setSelectedDevices(selectedDevices.filter(device => device !== value))
+    }
+  }
+
+  const handleSelectAll = () => {
+    const filteredDevices = deviceList
+      .filter(item =>
+        item.id
+          .substring(0, 1)
+          .toLowerCase()
+          .includes(selectedDevicesOption.substring(0, 1).toLowerCase())
+      )
+      .map(device => device.id)
+
+    if (selectedDevices.length === filteredDevices.length) {
+      setSelectedDevices([])
+    } else {
+      setSelectedDevices(filteredDevices)
+    }
+  }
+
+  const filterFirmwareUpdated = () => {
+    setFilterUpdated(!filterUpdated)
+  }
 
   const handleChange = (files: File) => {
     if (files) {
@@ -263,9 +363,120 @@ const ManageFirmware = () => {
     }
   }
 
+  const handleUpdate = async () => {
+    if (selectedDevices.length > 0) {
+      try {
+        selectUploadModalRef.current?.close()
+        updateProgressModalRef.current?.showModal()
+        setOnProgress(0)
+        for (const item of selectedDevices.sort()) {
+          if (onCancelRef.current) break
+          await publishDeviceUpdate(item, selectedDevicesOption)
+        }
+
+        updateProgressModalRef.current?.close()
+        if (!onCancelRef.current) {
+          Swal.fire({
+            icon: 'success',
+            title: t('alertHeaderSuccess'),
+            text: t('sendingFirmwareSuccess'),
+            timer: 2000,
+            showConfirmButton: false
+          }).finally(() => {
+            selectUploadModalRef.current?.showModal()
+            onCancelRef.current = false
+            setOnProgress(0)
+            setSelectedDevices([])
+          })
+        } else {
+          updateProgressModalRef.current?.close()
+          Swal.fire({
+            icon: 'success',
+            title: t('alertHeaderSuccess'),
+            text: t('onCancel'),
+            timer: 2000,
+            showConfirmButton: false
+          }).finally(() => {
+            selectUploadModalRef.current?.showModal()
+            onCancelRef.current = false
+            setOnProgress(0)
+            setSelectedDevices([])
+          })
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          updateProgressModalRef.current?.close()
+          Swal.fire({
+            icon: 'error',
+            title: t('alertHeaderError'),
+            html: `${error.message}`,
+            timer: 2000,
+            showConfirmButton: false
+          }).finally(() => selectUploadModalRef.current?.showModal())
+        } else {
+          console.error(error)
+        }
+      }
+    } else {
+      selectUploadModalRef.current?.close()
+      Swal.fire({
+        title: t('alertHeaderWarning'),
+        text: t('completeSelect'),
+        icon: 'warning',
+        timer: 2000,
+        showConfirmButton: false
+      }).finally(() => selectUploadModalRef.current?.showModal())
+    }
+  }
+
+  const publishDeviceUpdate = async (
+    item: string,
+    selectedDevicesOption: string
+  ): Promise<void> => {
+    const deviceModel = item.substring(0, 3) === 'eTP' ? 'etemp' : 'items'
+    const version = item.substring(3, 5).toLowerCase()
+
+    if (!client.connected) {
+      throw new Error('Client not connected')
+    }
+
+    return new Promise(resolve => {
+      if (onCancelRef.current) {
+        resolve()
+        return
+      }
+
+      client.publish(
+        `siamatic/${deviceModel}/${version}/${item}/firmware`,
+        selectedDevicesOption
+      )
+      setOnProgress(prev => prev + 1)
+      setTimeout(resolve, 100)
+    })
+  }
+
   useEffect(() => {
     fetchFirmware()
   }, [])
+
+  useEffect(() => {
+    fetchDeviceList()
+  }, [])
+
+  useEffect(() => {
+    const newFilter = selectedDevicesOption.endsWith('bin')
+      ? selectedDevicesOption.split('v')[1].split('.b')[0]
+      : ''
+    if (filterUpdated) {
+      setDeviceFwFiltered(
+        deviceList.filter(
+          item => item.firmware?.toLowerCase() !== newFilter.toLowerCase()
+        )
+      )
+    } else {
+      setDeviceFwFiltered(deviceList)
+    }
+  }, [filterUpdated, selectedDevicesOption])
 
   useEffect(() => {
     const filter = firmwareList.filter(
@@ -345,6 +556,15 @@ const ManageFirmware = () => {
     [firmwareListFilter]
   )
 
+  const allFile: FirmwareListType = {
+    createDate: '',
+    fileName: t('selectOTA'),
+    fileSize: '',
+    filePath: ''
+  }
+
+  const updatedDevData = [allFile, ...firmwareList]
+
   const uploadJSXStyle = useMemo(() => {
     return (
       <div
@@ -363,27 +583,36 @@ const ManageFirmware = () => {
                 error ? (
                   <RiCloseCircleLine size={84} className='text-error' />
                 ) : (
-                  <CircularProgressbar
+                  <CircularProgressbarWithChildren
                     value={progress}
-                    text={`${progress.toFixed()}%`}
                     className='w-[13rem] h-[13rem]'
                     strokeWidth={6}
                     styles={buildStyles({
                       strokeLinecap: 'round',
-                      textSize: '18px',
                       pathTransition: 'stroke-dashoffset 0.5s ease 0s',
                       pathTransitionDuration: 0.5,
                       pathColor: `var(--fallback-p,oklch(var(--p)/var(--tw-bg-opacity, 1)))`,
-                      textColor:
-                        'var(--fallback-p,oklch(var(--p)/var(--tw-text-opacity, 1)))',
                       trailColor: 'var(--fallback-p,oklch(var(--p)/0.15))',
                       backgroundColor:
                         'var(--fallback-p,oklch(var(--p)/var(--tw-bg-opacity, 1)))'
                     })}
-                  />
+                  >
+                    <img
+                      src={FirmwareIcon}
+                      alt='Icon'
+                      className='w-[48px] h-[48px] object-contain'
+                    />
+                    <div className='text-xl mt-4 text-primary'>
+                      <strong>{progress.toFixed()}%</strong>
+                    </div>
+                  </CircularProgressbarWithChildren>
                 )
               ) : (
-                <RiFileCheckLine size={84} className='text-primary' />
+                <img
+                  src={FirmwareIcon}
+                  alt='Icon'
+                  className='w-[76px] h-[76px] object-contain'
+                />
               )}
             </div>
             <div className='flex flex-col items-center justify-center gap-1 mt-3'>
@@ -482,10 +711,159 @@ const ManageFirmware = () => {
     [uploadModalRef, file, error, submit, progress]
   )
 
+  const selectUploadModalComponent = useMemo(
+    () => (
+      <dialog
+        ref={selectUploadModalRef}
+        className='modal overflow-y-scroll py-10'
+      >
+        <div className='modal-box min-h-[30rem] w-11/12 max-w-6xl h-max max-h-max'>
+          <div className='flex items-center justify-between gap-2'>
+            <h3 className='font-bold text-lg'>{t('selectToUpdateButton')}</h3>
+            <button
+              type='button'
+              className='btn btn-ghost outline-none flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300'
+              onClick={() => selectUploadModalRef.current?.close()}
+            >
+              <RiCloseLargeLine size={20} />
+            </button>
+          </div>
+          <div className='flex items-center justify-end mt-3'>
+            <Select
+              options={mapOptions<FirmwareListType, keyof FirmwareListType>(
+                updatedDevData,
+                'fileName',
+                'fileName'
+              )}
+              value={mapDefaultValue<FirmwareListType, keyof FirmwareListType>(
+                updatedDevData,
+                selectedDevicesOption,
+                'fileName',
+                'fileName'
+              )}
+              onChange={handleSelectedandClearSelected}
+              autoFocus={false}
+              className='react-select-container custom-device-select z-[75] min-w-full md:min-w-[315px]'
+              classNamePrefix='react-select'
+            />
+          </div>
+          <div>
+            {selectedDevicesOption !== t('selectOTA') && (
+              <>
+                <div className='flex items-center gap-2 mt-3'>
+                  <label className='flex items-center gap-2'>
+                    <input
+                      type='checkbox'
+                      className='checkbox checkbox-sm checkbox-primary'
+                      checked={
+                        selectedDevices.length ===
+                        deviceList.filter(item =>
+                          item.id
+                            .substring(0, 1)
+                            .toLowerCase()
+                            .includes(
+                              selectedDevicesOption
+                                .substring(0, 1)
+                                .toLowerCase()
+                            )
+                        ).length
+                      }
+                      onChange={handleSelectAll}
+                    />
+                    {t('selectedAll')}
+                  </label>
+                  <label className='flex items-center gap-2'>
+                    <input
+                      type='checkbox'
+                      className='checkbox checkbox-sm checkbox-primary'
+                      checked={filterUpdated}
+                      onChange={filterFirmwareUpdated}
+                    />
+                    {t('deviceFilterNotUpdate')}
+                  </label>
+                </div>
+                <div className='divider my-0 before:h-[1px] after:h-[1px]'></div>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 mt-3'>
+                  {deviceFwFiltered
+                    .filter(items =>
+                      items.id
+                        .substring(0, 1)
+                        .toLowerCase()
+                        .includes(
+                          selectedDevicesOption.substring(0, 1).toLowerCase()
+                        )
+                    )
+                    .map((device, index) => (
+                      <div key={index}>
+                        <label className='flex items-center gap-2'>
+                          <input
+                            type='checkbox'
+                            className='checkbox checkbox-sm checkbox-primary'
+                            value={device.id}
+                            checked={selectedDevices.includes(device.id)}
+                            onChange={handleCheckboxChange}
+                          />
+                          {device.id}
+                        </label>
+                      </div>
+                    ))}
+                </div>
+              </>
+            )}
+          </div>
+          <div className='modal-action'>
+            <button className='btn btn-primary' onClick={() => handleUpdate()}>
+              {t('uploadButton')}
+            </button>
+          </div>
+        </div>
+      </dialog>
+    ),
+    [
+      updatedDevData,
+      selectedDevices,
+      selectedDevicesOption,
+      deviceFwFiltered,
+      filterUpdated,
+      deviceList
+    ]
+  )
+
+  const progressModalComponent = useMemo(
+    () => (
+      <dialog
+        ref={updateProgressModalRef}
+        className='modal overflow-y-scroll py-10'
+      >
+        <div className='modal-box'>
+          <div className='flex flex-col items-center justify-center gap-2'>
+            <span className='loading loading-spinner w-16'></span>
+            <span className='font-medium'>
+              {onProgress}/{selectedDevices.length}
+            </span>
+            <span>{t('sendingFirmware')}</span>
+            <button
+              className='btn btn-error mt-3'
+              onClick={() => (onCancelRef.current = true)}
+            >
+              {t('cancelButton')}
+            </button>
+          </div>
+        </div>
+      </dialog>
+    ),
+    [onProgress, selectedDevices]
+  )
+
   return (
     <div>
       <div className='flex items-center justify-end gap-3'>
-        <button className='btn btn-primary'>{t('selectToUpdateButton')}</button>
+        <button
+          className='btn btn-primary'
+          onClick={() => selectUploadModalRef.current?.showModal()}
+        >
+          {t('selectToUpdateButton')}
+        </button>
         <button
           className='btn btn-primary'
           onClick={() => uploadModalRef.current?.showModal()}
@@ -495,6 +873,8 @@ const ManageFirmware = () => {
       </div>
       {firmwareComponent}
       {uploadModalComponent}
+      {selectUploadModalComponent}
+      {progressModalComponent}
     </div>
   )
 }
