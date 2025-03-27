@@ -723,7 +723,10 @@ const ManageFirmware = () => {
             <button
               type='button'
               className='btn btn-ghost outline-none flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300'
-              onClick={() => selectUploadModalRef.current?.close()}
+              onClick={() => {
+                selectUploadModalRef.current?.close()
+                setSelectedDevices([])
+              }}
             >
               <RiCloseLargeLine size={20} />
             </button>
