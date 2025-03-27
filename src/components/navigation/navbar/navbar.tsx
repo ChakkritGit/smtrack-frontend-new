@@ -16,7 +16,8 @@ import {
   RiDeviceLine,
   RiNotification4Line,
   RiIdCardLine,
-  RiLogoutBoxRLine
+  RiLogoutBoxRLine,
+  RiCloseLargeLine
 } from 'react-icons/ri'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
@@ -75,6 +76,7 @@ const Navbar = () => {
   const searchWrapperRef = useRef<HTMLInputElement | null>(null)
   const profileModalRef = useRef<HTMLDialogElement>(null)
   const settingModalRef = useRef<HTMLDialogElement>(null)
+  const searchModalRef = useRef<HTMLDialogElement>(null)
   const parser = new UAParser()
   const os = parser.getOS().name
   const isWindows = os === 'Windows'
@@ -214,13 +216,13 @@ const Navbar = () => {
 
     return (
       <div
-        className='search-anim absolute min-w-[450px] min-h-[50px] max-w-[500px]
+        className='search-anim absolute min-w-[300px] w-[335px] max-w-[335px] md:min-w-[450px] min-h-[50px] md:max-w-[500px]
       max-h-[400px] bg-base-100 backdrop-blur transition-shadow shadow-2xl duration-300
-      border-base-content/15 border-[1px] py-3 pl-4 pr-1 top-[60px] overflow-y-scroll
+      border-base-content/15 border-[1px] py-3 pl-4 pr-1 top-[70px] md:top-[60px] overflow-y-scroll
       rounded-box'
       >
-        {(location.pathname === '/' ||
-        location.pathname === '/management') && globalSearch.length > 0 ? (
+        {(location.pathname === '/' || location.pathname === '/management') &&
+        globalSearch.length > 0 ? (
           <div className='p-1 flex items-center gap-3 opacity-70 mb-1'>
             <span>{t('pressPre1')}</span>
             <kbd className='kbd kbd-sm'>Enter</kbd>
@@ -243,6 +245,7 @@ const Navbar = () => {
                 } flex items-center justify-between p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300`}
                 onClick={() => {
                   updateSearchHistory(item)
+                  searchModalRef.current?.close()
 
                   if (item.tag === 'menu') {
                     navigate(item.path)
@@ -271,6 +274,7 @@ const Navbar = () => {
                   onClick={e => {
                     e.stopPropagation()
                     removeHistoryItem(item.path)
+                    searchModalRef.current?.close()
                   }}
                 >
                   <RiCloseLine size={18} />
@@ -316,6 +320,7 @@ const Navbar = () => {
                           : item.id,
                         tag: 'device'
                       }
+                      searchModalRef.current?.close()
                       dispatch(setSearch(item.name))
                       setIsFocused(false)
                       updateSearchHistory(newItem)
@@ -380,6 +385,7 @@ const Navbar = () => {
                         path: item.path,
                         tag: 'menu'
                       }
+                      searchModalRef.current?.close()
                       dispatch(setSearch(t(item.text)))
                       navigate(item.path)
                       setIsFocused(false)
@@ -481,7 +487,10 @@ const Navbar = () => {
             </div>
             {searchRecommend}
           </div>
-          <div className='btn btn-ghost lg:hidden'>
+          <div
+            className='btn btn-ghost lg:hidden'
+            onClick={() => searchModalRef.current?.showModal()}
+          >
             <RiSearchLine size={24} />
           </div>
         </div>
@@ -574,6 +583,75 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      <dialog
+        ref={searchModalRef}
+        className='modal items-start overflow-y-scroll py-5'
+      >
+        <div className='modal-box min-h-[40rem]'>
+          <div className='flex items-center justify-between gap-2'>
+            <h3 className='font-bold text-lg'>{t('searchButton')}</h3>
+            <button
+              type='button'
+              className='btn btn-ghost outline-none flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300'
+              onClick={() => searchModalRef.current?.close()}
+            >
+              <RiCloseLargeLine size={20} />
+            </button>
+          </div>
+          <div ref={searchWrapperRef} className='relative mt-4'>
+            <div className='form-control'>
+              <label className='input input-bordered bg-base-200/50 border-none h-14 w-full flex items-center gap-2 duration-300'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  viewBox='0 0 16 16'
+                  fill='currentColor'
+                  className='h-5 w-5 opacity-50'
+                >
+                  <path
+                    fillRule='evenodd'
+                    d='M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z'
+                    clipRule='evenodd'
+                  />
+                </svg>
+                <input
+                  name='Search'
+                  onFocus={() => setIsFocused(true)}
+                  onChange={e => dispatch(setSearch(e.target.value))}
+                  value={globalSearch}
+                  type='text'
+                  className='grow !w-28 md:w-auto caret-primary placeholder:text-base-content/50'
+                  placeholder='Search'
+                  autoComplete='off'
+                  ref={searchRef}
+                />
+                {clearText ? (
+                  <>
+                    <kbd className='kbd kbd-sm'>{isWindows ? 'Ctrl' : '⌘'}</kbd>
+                    <kbd className='kbd kbd-sm'>K</kbd>
+                  </>
+                ) : (
+                  <kbd
+                    className='kbd kbd-sm'
+                    onClick={() => {
+                      dispatch(setSearch(''))
+                      if (
+                        location.pathname === '/' ||
+                        location.pathname === '/management'
+                      ) {
+                        setIsCleared(true)
+                      }
+                    }}
+                  >
+                    X
+                  </kbd>
+                )}
+              </label>
+            </div>
+            {searchRecommend}
+          </div>
+        </div>
+      </dialog>
 
       <dialog ref={profileModalRef} className='modal overflow-y-scroll py-10'>
         <div className='modal-box max-w-[50rem] h-max max-h-max'>
