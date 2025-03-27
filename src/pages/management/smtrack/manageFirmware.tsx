@@ -40,6 +40,7 @@ import {
 import Swal from 'sweetalert2'
 import { Option } from '../../../types/global/hospitalAndWard'
 import { client } from '../../../services/mqtt'
+import Loading from '../../../components/skeleton/table/loading'
 
 type selectFirmwareOption = {
   fileName: string
@@ -83,6 +84,7 @@ const ManageFirmware = () => {
   const [dragChang, setDragChang] = useState<boolean>(false)
   const [submit, setSubmit] = useState(false)
   const [error, setError] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [progress, setProgress] = useState(0)
   const [selectedDevicesOption, setSelectedDevicesOption] = useState(
     t('selectOTA')
@@ -119,6 +121,7 @@ const ManageFirmware = () => {
 
   const fetchFirmware = useCallback(async () => {
     try {
+      setIsLoading(true)
       const response = await axiosInstance.get<
         responseType<FirmwareListType[]>
       >('https://drive.siamatic.co.th/api/drive')
@@ -167,6 +170,8 @@ const ManageFirmware = () => {
       } else {
         console.error(error)
       }
+    } finally {
+      setIsLoading(false)
     }
   }, [])
 
@@ -487,8 +492,17 @@ const ManageFirmware = () => {
     setFirmwareListFilter(filter)
   }, [firmwareList, globalSearch])
 
-  const firmwareComponent = useMemo(
-    () => (
+  const firmwareComponent = useMemo(() => {
+    if (isLoading) return <div className='h-[calc(100dvh-300px)]'>
+      <Loading />
+    </div>
+    if (firmwareListFilter.length === 0)
+      return (
+        <div className='flex items-center justify-center loading-hieght-full'>
+          <div>{t('nodata')}</div>
+        </div>
+      )
+    return (
       <FirmwarePagination
         data={firmwareListFilter}
         initialPerPage={10}
@@ -552,9 +566,8 @@ const ManageFirmware = () => {
           </div>
         )}
       />
-    ),
-    [firmwareListFilter]
-  )
+    )
+  }, [firmwareListFilter, isLoading])
 
   const allFile: FirmwareListType = {
     createDate: '',

@@ -41,6 +41,7 @@ import { UserRole } from '../../types/global/users/usersType'
 import { AxiosError } from 'axios'
 import StatusSelect from '../../components/selects/statusSelect'
 import RoleButtons from '../../components/pages/users/users'
+import Loading from '../../components/skeleton/table/loading'
 
 const Users = () => {
   const dispatch = useDispatch()
@@ -55,6 +56,7 @@ const Users = () => {
   const [userConnect, setUserConnect] = useState('')
   const [userInactive, setUserInactive] = useState(false)
   const [onEdit, setOnEdit] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [userPassword, setUserPassword] = useState('')
 
   const [formData, setFormData] = useState<FormState>({
@@ -77,6 +79,7 @@ const Users = () => {
 
   const fetchUsers = useCallback(async () => {
     try {
+      setIsLoading(true)
       const response = await axiosInstance.get<responseType<UsersType[]>>(
         '/auth/user'
       )
@@ -90,6 +93,8 @@ const Users = () => {
       } else {
         console.error(error)
       }
+    } finally {
+      setIsLoading(false)
     }
   }, [])
 
@@ -469,6 +474,12 @@ const Users = () => {
   }, [users, globalSearch, wardId, tmsMode, userConnect, userInactive])
 
   const UserCard = useMemo(() => {
+    if (isLoading)
+      return (
+        <div className='h-[calc(100dvh-300px)]'>
+          <Loading />
+        </div>
+      )
     if (usersFilter?.length > 0) {
       return (
         <UserPagination
@@ -590,7 +601,7 @@ const Users = () => {
         </div>
       )
     }
-  }, [usersFilter, role, t])
+  }, [usersFilter, role, t, isLoading])
 
   useEffect(() => {
     return () => {
