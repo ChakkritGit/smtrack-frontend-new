@@ -100,7 +100,7 @@ const FirmwarePagination = <T,>({
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 content-center justify-items-center mt-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-7 content-center justify-items-center mt-5">
         {paginatedData.map((item, index) => renderItem(item, index))}
       </div>
 
