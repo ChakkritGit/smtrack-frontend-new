@@ -90,10 +90,12 @@ const MainSmtrack = () => {
     if (!isSocketResponseType(response)) return
 
     if (
-      role === 'LEGACY_ADMIN' ||
-      role === 'LEGACY_USER' ||
+      (role === 'LEGACY_ADMIN' ||
       role === 'SUPER' ||
       role === 'SERVICE' ||
+      role === 'ADMIN' ||
+      role === 'USER' ||
+      role === 'GUEST') &&
       hosId === response.hospital
     ) {
       dispatch(setSocketData(response))

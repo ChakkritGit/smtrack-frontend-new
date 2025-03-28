@@ -93,6 +93,7 @@ const MainTms = () => {
       role === 'LEGACY_USER' ||
       role === 'SUPER' ||
       role === 'SERVICE' ||
+      role === 'ADMIN' &&
       hosId === response.hospital
     ) {
       dispatch(setSocketData(response))
@@ -151,7 +152,7 @@ const MainTms = () => {
       return
     }
 
-    if (socketData && !popUpMode && !soundMode) {
+    if (socketData && !popUpMode && !soundMode && isMessageValid) {
       if (!isPlayingRef.current) {
         notiSound.play()
         isPlayingRef.current = true
