@@ -32,7 +32,7 @@ const RoleButtons = (props: RoleButtonProps) => {
   }
 
   return (
-    <div className='flex items-center justify-start flex-wrap gap-3 mt-5'>
+    <div className='flex items-center justify-start flex-wrap gap-3'>
       {/* LEGACY_ADMIN เห็นแค่ LEGACY_ADMIN และ LEGACY_USER */}
       {role === UserRole.LEGACY_ADMIN ? (
         <>

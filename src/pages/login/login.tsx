@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import LanguageList from '../../components/language/languageList'
 import { RiAtLine, RiKey2Line } from 'react-icons/ri'
+import { Helmet } from 'react-helmet-async'
 
 const Login = () => {
   const { t } = useTranslation()
@@ -105,6 +106,10 @@ const Login = () => {
 
   return (
     <div className='min-h-dvh flex flex-col items-center justify-center gap-7'>
+      <Helmet >
+        <title>login</title>
+      </Helmet>
+
       <div className='card bg-base-100 w-[350px] sm:w-[500px] md:w-[500px] lg:w-[600px] h-max shadow-xl'>
         <div className='px-5 sm:px-7 lg:px-10 pt-5'>
           <div className='text-end'>
