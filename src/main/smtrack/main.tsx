@@ -96,7 +96,7 @@ const MainSmtrack = () => {
       role === 'ADMIN' ||
       role === 'USER' ||
       role === 'GUEST') &&
-      hosId?.toLowerCase().includes(response.hospital.toLowerCase())
+      hosId?.toLowerCase() === response.hospital.toLowerCase()
     ) {
       dispatch(setSocketData(response))
     }

@@ -94,7 +94,7 @@ const MainTms = () => {
       role === 'SUPER' ||
       role === 'SERVICE' ||
       role === 'ADMIN') &&
-      hosId?.toLowerCase().includes(response.hospital.toLowerCase())
+      hosId?.toLowerCase() === response.hospital.toLowerCase()
     ) {
       dispatch(setSocketData(response))
     }
