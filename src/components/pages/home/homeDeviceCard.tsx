@@ -105,7 +105,7 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
               <div className='flex items-start justify-between'>
                 <div className='avatar'>
                   <div className='w-28 rounded-btn'>
-                    <img src={item.positionPic ?? Default} />
+                    <img src={item.positionPic ?? Default} alt={`device-image-${item.id ?? 'dev_img'}`} />
                   </div>
                 </div>
                 <div className='flex flex-col gap-1'>
@@ -114,6 +114,8 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                       className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 tooltip tooltip-left'
                       data-tip={t('sideDashboard')}
                       onClick={() => handleRowClicked(item)}
+                      name='to-dashboard'
+                      aria-label={t('sideDashboard')}
                     >
                       <RiDashboardLine size={24} />
                     </button>
@@ -121,13 +123,15 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                       className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 tooltip tooltip-left'
                       data-tip={t('adjustMents')}
                       onClick={() => openAdjustModal(item.probe, item.id)}
+                      name='device-adjustments'
+                      aria-label={t('adjustMents')}
                     >
                       <RiSettings3Line size={24} />
                     </button>
                   </div>
                   <div
-                    className={`badge text-white border-none h-[30px] ${
-                      item.online ? 'bg-green-500' : 'bg-red-500'
+                    className={`badge text-black font-medium border-none h-[30px] ${
+                      item.online ? 'bg-green-400' : 'bg-red-400'
                     }`}
                   >
                     {item.online ? t('deviceOnline') : t('deviceOffline')}

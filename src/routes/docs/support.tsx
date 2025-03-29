@@ -128,19 +128,22 @@ const Support = () => {
             onChange={handleChange}
           />
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-            <select
-              name='countryCode'
-              className='select select-bordered w-full'
-              value={formData.countryCode}
-              onChange={handleChange}
-              defaultValue={'+66'}
-            >
-              {countryCodes.map((item, index) => (
-                <option key={index} value={item.code}>
-                  {item.country} ({item.code})
-                </option>
-              ))}
-            </select>
+            <label htmlFor='countryCode'>
+              <select
+                id='countryCode'
+                name='countryCode'
+                className='select select-bordered w-full'
+                value={formData.countryCode}
+                onChange={handleChange}
+                defaultValue={'+66'}
+              >
+                {countryCodes.map((item, index) => (
+                  <option key={index} value={item.code}>
+                    {item.country} ({item.code})
+                  </option>
+                ))}
+              </select>
+            </label>
             <input
               type='tel'
               name='phone'
@@ -182,12 +185,12 @@ const Support = () => {
         </form>
         <p className='text-center text-sm text-gray-500 mt-4'>
           {t('contactAgree')}{' '}
-          <a
+          <span
             onClick={() => navigate('/privacy-policy')}
             className='link link-primary font-semibold'
           >
             {t('contactAgreeLink')}
-          </a>
+          </span>
         </p>
       </div>
     </div>

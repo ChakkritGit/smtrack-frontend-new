@@ -15,19 +15,19 @@ const SoundAndNotificationComponents = () => {
   return (
     <div>
       <span className='text-[24px]'>{t('titleNotification')}</span>
-      <div className='flex items-center justify-between mt-3'>
+      <label className='flex items-center justify-between mt-3'>
         <span>{t('allNotification')}</span>
         <input
           type='checkbox'
           className='toggle'
           checked={!popUpMode}
-          onClick={() => {
+          onChange={() => {
             dispatch(setPopUpMode())
             cookies.set('popUpMode', !popUpMode, cookieOptions)
           }}
         />
-      </div>
-      <div
+      </label>
+      <label
         className={`flex items-center justify-between mt-5 ml-3 ${
           popUpMode ? 'opacity-50' : ''
         }`}
@@ -41,12 +41,12 @@ const SoundAndNotificationComponents = () => {
           className='toggle'
           checked={!soundMode}
           disabled={popUpMode}
-          onClick={() => {
+          onChange={() => {
             dispatch(setSoundMode())
             cookies.set('soundMode', !soundMode, cookieOptions)
           }}
         />
-      </div>
+      </label>
     </div>
   )
 }

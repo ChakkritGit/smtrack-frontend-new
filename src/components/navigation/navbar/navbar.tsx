@@ -264,7 +264,10 @@ const Navbar = () => {
                   <div>
                     <RiHistoryLine size={18} />
                   </div>
-                  <span className='max-w-[170px] md:max-w-[300px] block truncate' style={{ direction: "rtl", textAlign: "left" }}>
+                  <span
+                    className='max-w-[170px] md:max-w-[300px] block truncate'
+                    style={{ direction: 'rtl', textAlign: 'left' }}
+                  >
                     {t(item.text)}
                   </span>
                 </div>
@@ -359,7 +362,12 @@ const Navbar = () => {
                     <div>
                       <RiDeviceLine size={18} />
                     </div>
-                    <span className='max-w-[150px] block truncate' style={{ direction: "rtl", textAlign: "left" }}>{item.name}</span>
+                    <span
+                      className='max-w-[150px] block truncate'
+                      style={{ direction: 'rtl', textAlign: 'left' }}
+                    >
+                      {item.name}
+                    </span>
                   </div>
                 ))}
             </div>
@@ -392,7 +400,10 @@ const Navbar = () => {
                     }}
                   >
                     <div>{item.icon}</div>
-                    <span className='max-w-[150px] block truncate' style={{ direction: "rtl", textAlign: "left" }}>
+                    <span
+                      className='max-w-[150px] block truncate'
+                      style={{ direction: 'rtl', textAlign: 'left' }}
+                    >
                       {t(item.text)}
                     </span>
                   </div>
@@ -530,11 +541,13 @@ const Navbar = () => {
             </div>
           )}
         </div>
-        {!searchOpen && <div className='flex items-center flex-row-reverse md:flex-row'>
-          <Notifications />
-          <ThemeList />
-          <LanguageList />
-        </div>}
+        {!searchOpen && (
+          <div className='flex items-center flex-row-reverse md:flex-row'>
+            <Notifications />
+            <ThemeList />
+            <LanguageList />
+          </div>
+        )}
         <div className='flex-none gap-2 hidden lg:block'>
           <div className='dropdown dropdown-end'>
             <div
@@ -561,59 +574,62 @@ const Navbar = () => {
               tabIndex={0}
               className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-max p-2 shadow'
             >
-              <li
-                onClick={() => profileModalRef?.current?.showModal()}
-                className='h-9'
-              >
-                <a className='text-[16px] h-9 flex items-center gap-2'>
+              <li className='h-9'>
+                <button
+                  onClick={() => profileModalRef?.current?.showModal()}
+                  className='text-[16px] h-9 flex items-center gap-2 w-full text-left'
+                >
                   <RiIdCardLine />
                   {t('profile')}
-                </a>
+                </button>
               </li>
-              <li
-                onClick={() => settingModalRef?.current?.showModal()}
-                className='h-9'
-              >
-                <a className='text-[16px] h-9 flex items-center gap-2'>
+
+              <li className='h-9'>
+                <button
+                  onClick={() => settingModalRef?.current?.showModal()}
+                  className='text-[16px] h-9 flex items-center gap-2 w-full text-left'
+                >
                   <RiNotification4Line />
                   {t('titleNotification')}
-                </a>
+                </button>
               </li>
+
               <div className='divider divider-vertical m-0 before:h-[1px] after:h-[1px]'></div>
-              <li
-                onClick={() =>
-                  Swal.fire({
-                    title: t('logoutDialog'),
-                    text: t('logoutDialogText'),
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: t('confirmButton'),
-                    cancelButtonText: t('cancelButton'),
-                    reverseButtons: false,
-                    customClass: {
-                      actions: 'custom-action',
-                      confirmButton: 'custom-confirmButton',
-                      cancelButton: 'custom-cancelButton'
-                    }
-                  }).then(result => {
-                    if (result.isConfirmed) {
-                      cookies.remove('tokenObject', cookieOptions)
-                      cookies.remove('userProfile', cookieOptions)
-                      cookies.remove('tmsMode', cookieOptions)
-                      cookies.remove('hosId', cookieOptions)
-                      cookies.remove('wardId', cookieOptions)
-                      cookies.remove('deviceKey', cookieOptions)
-                      cookies.update()
-                      window.location.href = '/login'
-                    }
-                  })
-                }
-                className='text-red-500 h-9'
-              >
-                <a className='text-[16px] h-9 flex items-center gap-2'>
+
+              <li className='h-9'>
+                <button
+                  onClick={() =>
+                    Swal.fire({
+                      title: t('logoutDialog'),
+                      text: t('logoutDialogText'),
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonText: t('confirmButton'),
+                      cancelButtonText: t('cancelButton'),
+                      reverseButtons: false,
+                      customClass: {
+                        actions: 'custom-action',
+                        confirmButton: 'custom-confirmButton',
+                        cancelButton: 'custom-cancelButton'
+                      }
+                    }).then(result => {
+                      if (result.isConfirmed) {
+                        cookies.remove('tokenObject', cookieOptions)
+                        cookies.remove('userProfile', cookieOptions)
+                        cookies.remove('tmsMode', cookieOptions)
+                        cookies.remove('hosId', cookieOptions)
+                        cookies.remove('wardId', cookieOptions)
+                        cookies.remove('deviceKey', cookieOptions)
+                        cookies.update()
+                        window.location.href = '/login'
+                      }
+                    })
+                  }
+                  className='text-red-500 text-[16px] h-9 flex items-center gap-2 w-full text-left'
+                >
                   <RiLogoutBoxRLine />
                   {t('tabLogout')}
-                </a>
+                </button>
               </li>
             </ul>
           </div>

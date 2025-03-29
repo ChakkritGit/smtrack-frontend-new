@@ -20,7 +20,7 @@ const RoleButtons = (props: RoleButtonProps) => {
         className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
           userConnect === level
             ? 'btn-primary text-white'
-            : 'btn-ghost border border-gray-500/50 text-gray-500'
+            : 'btn-ghost border border-base-content/50 text-base-content'
         }`}
         onClick={() => handleFilterConnect(level)}
       >

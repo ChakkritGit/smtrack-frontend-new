@@ -527,6 +527,8 @@ const Users = () => {
                     <button
                       tabIndex={0}
                       role='button'
+                      name='menuButton'
+                      aria-label={t('menuButton')}
                       data-tip={t('menuButton')}
                       className='btn btn-ghost flex p-0 max-w-[30px] min-w-[30px] max-h-[30px] min-h-[30px] tooltip tooltip-left'
                     >
@@ -539,7 +541,7 @@ const Users = () => {
                       <li onClick={() => openEditModal(item)}>
                         <div className='flex items-center gap-3 text-[16px]'>
                           <RiEditLine size={20} />
-                          <a>{t('editButton')}</a>
+                          <span>{t('editButton')}</span>
                         </div>
                       </li>
                       {(role === 'SUPER' ||
@@ -550,7 +552,7 @@ const Users = () => {
                           <li onClick={() => deleteUser(item.id)}>
                             <div className='flex items-center gap-3 text-[16px] text-red-500 hover:bg-red-500 hover:text-white'>
                               <RiDeleteBin7Line size={20} />
-                              <a>{t('deleteButton')}</a>
+                              <span>{t('deleteButton')}</span>
                             </div>
                           </li>
                         </>
@@ -645,7 +647,7 @@ const Users = () => {
               className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
                 userInactive
                   ? 'btn-primary text-white'
-                  : 'btn-ghost border border-gray-500/50 text-gray-500'
+                  : 'btn-ghost border border-base-content/50 text-base-content'
               }`}
               onClick={() => setUserInactive(!userInactive)}
             >

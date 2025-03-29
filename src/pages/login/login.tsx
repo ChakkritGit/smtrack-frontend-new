@@ -106,8 +106,8 @@ const Login = () => {
 
   return (
     <div className='min-h-dvh flex flex-col items-center justify-center gap-7'>
-      <Helmet >
-        <title>login</title>
+      <Helmet prioritizeSeoTags>
+        <title>SMTrack+ - Login</title>
       </Helmet>
 
       <div className='card bg-base-100 w-[350px] sm:w-[500px] md:w-[500px] lg:w-[600px] h-max shadow-xl'>

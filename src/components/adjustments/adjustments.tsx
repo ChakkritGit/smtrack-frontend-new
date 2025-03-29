@@ -1,5 +1,6 @@
 import {
   FormEvent,
+  Ref,
   RefObject,
   SetStateAction,
   useCallback,
@@ -631,6 +632,8 @@ const Adjustments = (props: AdjustmentsProps) => {
           <h3 className='font-bold text-base'>{serial}</h3>
           <button
             type='button'
+            name='close-modal'
+            aria-label={t('closeButton')}
             className='btn btn-ghost outline-none flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300'
             onClick={resetForm}
           >
@@ -721,7 +724,7 @@ const Adjustments = (props: AdjustmentsProps) => {
               <h3 className='font-bold text-base'>{t('adjustMents')}</h3>
               <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
                 <span>{t('tempMin')}</span>
-                <div className='flex items-center justify-center gap-2 w-full'>
+                <label className='flex items-center justify-center gap-2 w-full'>
                   <button
                     className='btn btn-ghost bg-orange-500 text-white text-lg'
                     type='button'
@@ -786,12 +789,12 @@ const Adjustments = (props: AdjustmentsProps) => {
                   >
                     +
                   </button>
-                </div>
+                </label>
               </div>
 
               <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
                 <span>{t('tempMax')}</span>
-                <div className='flex items-center justify-center gap-2 w-full'>
+                <label className='flex items-center justify-center gap-2 w-full'>
                   <button
                     className='btn btn-ghost bg-orange-500 text-white text-lg'
                     type='button'
@@ -856,12 +859,12 @@ const Adjustments = (props: AdjustmentsProps) => {
                   >
                     +
                   </button>
-                </div>
+                </label>
               </div>
 
               <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
                 <span>{t('humiMin')}</span>
-                <div className='flex items-center justify-center gap-2 w-full'>
+                <label className='flex items-center justify-center gap-2 w-full'>
                   <button
                     className='btn btn-ghost bg-blue-500 text-white text-lg'
                     type='button'
@@ -920,12 +923,12 @@ const Adjustments = (props: AdjustmentsProps) => {
                   >
                     +
                   </button>
-                </div>
+                </label>
               </div>
 
               <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
                 <span>{t('humiMax')}</span>
-                <div className='flex items-center justify-center gap-2 w-full'>
+                <label className='flex items-center justify-center gap-2 w-full'>
                   <button
                     className='btn btn-ghost bg-blue-500 text-white text-lg'
                     type='button'
@@ -984,7 +987,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                   >
                     +
                   </button>
-                </div>
+                </label>
               </div>
 
               <div className='md:grid grid-cols-1 hidden md:grid-cols-2 gap-4 mt-4 w-full'>
@@ -995,6 +998,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                       {t('probeTempSubTb')}
                     </span>
                     <ReactSlider
+                      aria-label={t('Temperature-min-max')}
                       className='relative flex items-center w-full h-2 bg-gray-300 rounded-btn my-3'
                       thumbClassName='flex items-center justify-center'
                       trackClassName='bg-orange-500/20 h-2 rounded-btn'
@@ -1011,14 +1015,20 @@ const Adjustments = (props: AdjustmentsProps) => {
                       step={0.01}
                       min={probeFiltered?.name === 'PT100' ? -180 : -40}
                       max={probeFiltered?.name === 'PT100' ? 200 : 120}
-                      renderThumb={(props, state) => (
-                        <div
-                          {...props}
-                          className='flex items-center justify-center w-[42px] h-[32px] bg-orange-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50'
-                        >
-                          {state.valueNow}
-                        </div>
-                      )}
+                      renderThumb={(props, state) => {
+                        const { key, ref, ...validProps } = props
+                        return (
+                          <div
+                            {...validProps}
+                            ref={ref as Ref<HTMLDivElement> | undefined}
+                            key={key}
+                            className='flex items-center justify-center w-[42px] h-[32px] bg-orange-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50'
+                            aria-label={t('Temperature-min-max')}
+                          >
+                            {state.valueNow}
+                          </div>
+                        )
+                      }}
                     />
                   </div>
                 </div>
@@ -1030,6 +1040,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                       {t('probeHumiSubTb')}
                     </span>
                     <ReactSlider
+                      aria-label={t('Humidity-min-max')}
                       className='relative flex items-center w-full h-2 bg-gray-300 rounded-btn my-3'
                       thumbClassName='flex items-center justify-center'
                       trackClassName='bg-blue-500/20 h-2 rounded-btn'
@@ -1046,14 +1057,20 @@ const Adjustments = (props: AdjustmentsProps) => {
                       step={0.01}
                       min={0}
                       max={100}
-                      renderThumb={(props, state) => (
-                        <div
-                          {...props}
-                          className='flex items-center justify-center w-[42px] h-[32px] bg-blue-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50'
-                        >
-                          {state.valueNow}
-                        </div>
-                      )}
+                      renderThumb={(props, state) => {
+                        const { key, ref, ...validProps } = props
+                        return (
+                          <div
+                            {...validProps}
+                            ref={ref as Ref<HTMLDivElement> | undefined}
+                            key={key}
+                            className='flex items-center justify-center w-[42px] h-[32px] bg-blue-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50'
+                            aria-label={t('Humidity-min-max')}
+                          >
+                            {state.valueNow}
+                          </div>
+                        )
+                      }}
                     />
                   </div>
                 </div>
@@ -1061,8 +1078,12 @@ const Adjustments = (props: AdjustmentsProps) => {
 
               <div className='md:grid grid-cols-1 hidden md:grid-cols-2 gap-4 mt-4 w-full'>
                 {/* Temperature */}
-                <div className='flex justify-between gap-2 w-full'>
+                <label
+                  htmlFor='tempMin'
+                  className='flex justify-between gap-2 w-full'
+                >
                   <input
+                    id='tempMin'
                     name='tempMin'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
@@ -1114,11 +1135,15 @@ const Adjustments = (props: AdjustmentsProps) => {
                       }
                     }}
                   />
-                </div>
+                </label>
 
                 {/* Humidity */}
-                <div className='flex justify-between gap-2 w-full'>
+                <label
+                  htmlFor='tempMin'
+                  className='flex justify-between gap-2 w-full'
+                >
                   <input
+                    id='tempMin'
                     name='humiMin'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
@@ -1170,7 +1195,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                       }
                     }}
                   />
-                </div>
+                </label>
               </div>
 
               <div className='divider divider-vertical my-2'></div>
@@ -1181,6 +1206,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                   <div className='label flex-col items-start'>
                     <span className='label-text mb-2'>{t('adjustTemp')}</span>
                     <ReactSlider
+                      aria-label={t('Temperature-adjustment')}
                       className={`relative flex items-center w-full h-2 bg-gray-300 rounded-btn my-3 ${
                         isLoadingMqtt ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
@@ -1206,16 +1232,22 @@ const Adjustments = (props: AdjustmentsProps) => {
                         role === 'LEGACY_USER' ||
                         role === 'GUEST'
                       }
-                      renderThumb={(props, state) => (
-                        <div
-                          {...props}
-                          className={`flex items-center justify-center w-[42px] h-[32px] bg-orange-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50 ${
-                            isLoadingMqtt ? 'cursor-not-allowed' : ''
-                          }`}
-                        >
-                          {state.valueNow}
-                        </div>
-                      )}
+                      renderThumb={(props, state) => {
+                        const { key, ref, ...validProps } = props
+                        return (
+                          <div
+                            {...validProps}
+                            ref={ref as Ref<HTMLDivElement> | undefined}
+                            key={key}
+                            className={`flex items-center justify-center w-[42px] h-[32px] bg-orange-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50 ${
+                              isLoadingMqtt ? 'cursor-not-allowed' : ''
+                            }`}
+                            aria-label={t('Temperature-adjustment')}
+                          >
+                            {state.valueNow}
+                          </div>
+                        )
+                      }}
                     />
                   </div>
                 </div>
@@ -1225,6 +1257,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                   <div className='label flex-col items-start'>
                     <span className='label-text mb-2'>{t('adjustHumi')}</span>
                     <ReactSlider
+                      aria-label={t('Humidity-adjustment')}
                       className={`relative flex items-center w-full h-2 bg-gray-300 rounded-btn my-3 ${
                         isLoadingMqtt ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
@@ -1250,16 +1283,22 @@ const Adjustments = (props: AdjustmentsProps) => {
                         role === 'LEGACY_USER' ||
                         role === 'GUEST'
                       }
-                      renderThumb={(props, state) => (
-                        <div
-                          {...props}
-                          className={`flex items-center justify-center w-[42px] h-[32px] bg-blue-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50 ${
-                            isLoadingMqtt ? 'cursor-not-allowed' : ''
-                          }`}
-                        >
-                          {state.valueNow}
-                        </div>
-                      )}
+                      renderThumb={(props, state) => {
+                        const { key, ref, ...validProps } = props
+                        return (
+                          <div
+                            {...validProps}
+                            ref={ref as Ref<HTMLDivElement> | undefined}
+                            key={key}
+                            className={`flex items-center justify-center w-[42px] h-[32px] bg-blue-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50 ${
+                              isLoadingMqtt ? 'cursor-not-allowed' : ''
+                            }`}
+                            aria-label={t('Humidity-adjustment')}
+                          >
+                            {state.valueNow}
+                          </div>
+                        )
+                      }}
                     />
                   </div>
                 </div>
@@ -1267,8 +1306,12 @@ const Adjustments = (props: AdjustmentsProps) => {
 
               <div className='md:grid grid-cols-1 hidden md:grid-cols-2 gap-4 mt-4 w-full'>
                 {/* Temperature */}
-                <div className='flex justify-between gap-2 w-full'>
+                <label
+                  htmlFor='adjustTemp'
+                  className='flex justify-between gap-2 w-full'
+                >
                   <input
+                    id='adjustTemp'
                     name='adjustTemp'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
@@ -1305,11 +1348,15 @@ const Adjustments = (props: AdjustmentsProps) => {
                       }
                     }}
                   />
-                </div>
+                </label>
 
                 {/* Humidity */}
-                <div className='flex justify-between gap-2 w-full'>
+                <label
+                  htmlFor='adjustMumi'
+                  className='flex justify-between gap-2 w-full'
+                >
                   <input
+                    id='adjustMumi'
                     name='adjustMumi'
                     autoFocus={false}
                     className='input input-bordered text-center w-full'
@@ -1346,12 +1393,12 @@ const Adjustments = (props: AdjustmentsProps) => {
                       }
                     }}
                   />
-                </div>
+                </label>
               </div>
 
               <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
                 <span>{t('adjustTemp')}</span>
-                <div className='flex items-center justify-center gap-2 w-full'>
+                <label className='flex items-center justify-center gap-2 w-full'>
                   <button
                     disabled={
                       isLoadingMqtt ||
@@ -1437,12 +1484,12 @@ const Adjustments = (props: AdjustmentsProps) => {
                   >
                     +
                   </button>
-                </div>
+                </label>
               </div>
 
               <div className='flex md:hidden flex-col items-center justify-center gap-3 mt-4 w-full'>
                 <span>{t('adjustHumi')}</span>
-                <div className='flex items-center justify-center gap-2 w-full'>
+                <label className='flex items-center justify-center gap-2 w-full'>
                   <button
                     disabled={
                       isLoadingMqtt ||
@@ -1528,7 +1575,7 @@ const Adjustments = (props: AdjustmentsProps) => {
                   >
                     +
                   </button>
-                </div>
+                </label>
               </div>
             </div>
 

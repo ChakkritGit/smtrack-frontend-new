@@ -52,7 +52,7 @@ const Sidebar = () => {
         aria-label='close sidebar'
         className='drawer-overlay'
       ></label>
-      <ul
+      <div
         className={`menu bg-base-100 text-base-content min-h-full flex flex-col !items-center justify-between !transition-all !ease-in-out !duration-300 ${
           isExpand ? 'w-[100px]' : 'w-[235px]'
         }`}
@@ -179,20 +179,24 @@ const Sidebar = () => {
             {(role === 'SUPER' ||
               role === 'SERVICE' ||
               role === 'ADMIN' ||
-              role === 'LEGACY_ADMIN') && wardData.find((f) => f.type === 'NEW') && (
-              <div className='flex flex-col items-center gap-2'>
-                {!isExpand && (
-                  <span className='text-[12px] truncate'>
-                    *Switch SMTrack and Line mode
-                  </span>
-                )}
-                <div className='flex items-center justify-center gap-2'>
+              role === 'LEGACY_ADMIN') &&
+              wardData.find(f => f.type === 'NEW') && (
+                <label
+                  htmlFor='ModeToggle'
+                  className='flex flex-col items-center justify-center gap-2'
+                >
+                  {!isExpand && (
+                    <span className='text-[12px] truncate'>
+                      *Switch SMTrack and Line mode
+                    </span>
+                  )}
                   <input
-                    name='TmsModeToggle'
+                    id='ModeToggle'
+                    name='ModeToggle'
                     type='checkbox'
                     className='toggle toggle-md'
                     checked={tmsMode}
-                    onClick={async () => {
+                    onChange={async () => {
                       dispatch(setDeviceKey(''))
                       dispatch(setHosId(undefined))
                       dispatch(setWardId(undefined))
@@ -209,9 +213,8 @@ const Sidebar = () => {
                       dispatch(setTmsMode(false))
                     }}
                   />
-                </div>
-              </div>
-            )}
+                </label>
+              )}
             <Link
               to={'/settings'}
               className={`btn font-normal flex-nowrap justify-start w-full ${
@@ -240,7 +243,7 @@ const Sidebar = () => {
             </Link>
           </div>
         </div>
-      </ul>
+      </div>
     </aside>
   )
 }

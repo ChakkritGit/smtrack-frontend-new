@@ -84,6 +84,7 @@ const CardInFoComponent = (props: PropsType) => {
           </div>
         </div>
         <button
+          aria-label={t('adjustMents')}
           className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 tooltip tooltip-left'
           data-tip={t('adjustMents')}
           onClick={() =>

@@ -26,16 +26,16 @@ const ChartSwiperWrapper = (props: ChartSwiperWrapperProps) => {
   const { activeIndex, setActiveIndex } = useSwiperSync() as GlobalContextType
 
   useEffect(() => {
-      if (swiperRef.current) {
-        swiperRef.current.slideTo(activeIndex)
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(activeIndex)
 
-        if (!isPause) {
-          swiperRef.current.autoplay.start()
-        } else {
-          swiperRef.current.autoplay.stop()
-        }
+      if (!isPause) {
+        swiperRef.current.autoplay.start()
+      } else {
+        swiperRef.current.autoplay.stop()
       }
-    }, [activeIndex, isPause])
+    }
+  }, [activeIndex, isPause])
 
   const SwiperFragment = useMemo(() => {
     return (
@@ -56,7 +56,7 @@ const ChartSwiperWrapper = (props: ChartSwiperWrapperProps) => {
           clickable: true
         }}
         onSlideChange={swiper => setActiveIndex(swiper.activeIndex)}
-        onSwiper={swiper => swiperRef.current = swiper}
+        onSwiper={swiper => (swiperRef.current = swiper)}
         effect={'creative'}
         creativeEffect={{
           prev: {
@@ -108,6 +108,7 @@ const ChartSwiperWrapper = (props: ChartSwiperWrapperProps) => {
           <span className='text-[20px] font-bold'>{t('pageChart')}</span>
         </div>
         <button
+          aria-label={t('fullChart')}
           className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
           data-tip={t('fullChart')}
           onClick={() =>

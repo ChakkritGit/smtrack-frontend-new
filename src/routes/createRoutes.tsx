@@ -53,7 +53,7 @@ const router = (role: string, tmsMode: boolean) =>
       element: <Support />
     },
     {
-      path: 'app',
+      path: '/app',
       element: <App />
     },
     {

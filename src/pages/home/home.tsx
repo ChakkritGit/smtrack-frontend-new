@@ -232,7 +232,11 @@ const Home = () => {
 
   useEffect(() => {
     const handleCk = (e: KeyboardEvent) => {
-      if (globalSearch !== '' && e.key?.toLowerCase() === 'enter' && isFocused) {
+      if (
+        globalSearch !== '' &&
+        e.key?.toLowerCase() === 'enter' &&
+        isFocused
+      ) {
         e.preventDefault()
         if (isFocused) {
           searchRef.current?.blur()
@@ -316,26 +320,42 @@ const Home = () => {
         <div className='flex items-end lg:items-center gap-3 flex-col lg:flex-row lg:h-[40px]'>
           <div className='flex items-center gap-3'>
             <button
-              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
+              className={`flex items-center justify-center !border-base-content/70 btn w-max h-[36px] min-h-0 p-2 font-normal ${
                 deviceConnect === 'online'
-                  ? 'btn-primary text-white'
+                  ? 'btn-primary text-white !border-primary'
                   : 'btn-ghost border border-gray-500 text-gray-500'
               }`}
               onClick={() => handleFilterConnect('online')}
             >
               <div className='w-[10px] h-[10px] bg-green-500 rounded-btn'></div>
-              <span>{t('deviceOnline')}</span>
+              <span
+                className={`${
+                  deviceConnect === 'online'
+                    ? 'text-base-200'
+                    : '  text-base-content'
+                } font-medium`}
+              >
+                {t('deviceOnline')}
+              </span>
             </button>
             <button
-              className={`flex items-center justify-center btn w-max h-[36px] min-h-0 p-2 font-normal ${
+              className={`flex items-center justify-center !border-base-content/70 btn w-max h-[36px] min-h-0 p-2 font-normal ${
                 deviceConnect === 'offline'
-                  ? 'btn-primary text-white'
+                  ? 'btn-primary text-white !border-primary'
                   : 'btn-ghost border border-gray-500 text-gray-500'
               }`}
               onClick={() => handleFilterConnect('offline')}
             >
               <div className='w-[10px] h-[10px] bg-red-500 rounded-btn'></div>
-              <span>{t('deviceOffline')}</span>
+              <span
+                className={`${
+                  deviceConnect === 'offline'
+                    ? 'text-base-200'
+                    : '  text-base-content'
+                } font-medium`}
+              >
+                {t('deviceOffline')}
+              </span>
             </button>
           </div>
           <div className='divider divider-horizontal mx-0 py-2 hidden lg:flex'></div>
@@ -349,6 +369,8 @@ const Home = () => {
               } w-[36px] h-[36px] min-h-0 p-2 tooltip tooltip-top`}
               onClick={() => changListAndGrid(1)}
               data-tip={t('list')}
+              name='List-view'
+              aria-label={t('list')}
             >
               <RiListUnordered size={20} />
             </button>
@@ -360,6 +382,8 @@ const Home = () => {
               } w-[36px] h-[36px] min-h-0 p-2 tooltip tooltip-top`}
               onClick={() => changListAndGrid(2)}
               data-tip={t('grid')}
+              name='Grid-view'
+              aria-label={t('grid')}
             >
               <RiLayoutGridLine size={20} />
             </button>

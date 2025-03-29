@@ -110,13 +110,13 @@ const DevicePagination = <T,>({
       </div>
 
       <div className="flex flex-col lg:flex-row justify-between items-center mt-5 gap-4">
-        <div className="flex items-center gap-2">
+        <label className="flex items-center gap-2">
           <span>{t('selectPerPage')}</span>
           <PaginationPerpage
             perPage={itemPerPage}
             value={initialPerPage}
             handlePerPageChange={handlePerPageChange} />
-        </div>
+        </label>
 
         <div className="join">
           <button

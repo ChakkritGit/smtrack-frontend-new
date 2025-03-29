@@ -141,19 +141,25 @@ const Dashboard = () => {
             <h2 className='text-xl mb-0'>{t('selectDeviceDrop')}</h2>
             <button
               type='button'
+              name='close-modal'
+              aria-label={t('closeButton')}
               className='btn btn-ghost outline-none flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300'
               onClick={() => navigate('/')}
             >
               <RiCloseLargeLine size={20} />
             </button>
           </div>
-          <DeviceList />
+          <label htmlFor='react-select-9-input'>
+            <DeviceList />
+          </label>
         </div>
       </dialog>
       {deviceKey && (
         <>
           <div className='flex items-center justify-between flex-wrap lg:flex-nowrap xl:flex-nowrap gap-3 mt-[16px]'>
-            <DeviceList />
+            <label htmlFor='react-select-11-input'>
+              <DeviceList />
+            </label>
             <div className='flex items-center gap-3 justify-end w-full flex-wrap'>
               {deviceLogs && deviceLogs?.probe?.length > 1 && (
                 <label
@@ -162,6 +168,8 @@ const Dashboard = () => {
                   data-tip={isPause ? t('startSlide') : t('stopSlide')}
                 >
                   <button
+                    name={isPause ? t('startSlide') : t('stopSlide')}
+                    aria-label={isPause ? t('startSlide') : t('stopSlide')}
                     className='btn btn-primary bg-opacity-15 text-primary border-primary border-2 p-0 hover:opacity-50 hover:border-primary hover:bg-transparent duration-300 max-h-[28px] min-h-[28px] max-w-[28px] min-w-[28px]'
                     onClick={togglePause}
                   >

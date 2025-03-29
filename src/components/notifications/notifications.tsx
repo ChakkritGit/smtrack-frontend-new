@@ -450,7 +450,7 @@ const Notifications = () => {
         onClick={handleClick}
       >
         {notificationList.length > 0 && (
-          <span className='indicator-item badge badge-secondary px-1 top-3 right-4 lg:right-3'>
+          <span className='indicator-item badge badge-primary px-1 top-3 right-4 lg:right-3'>
             {notificationList.length > 99 ? '99+' : notificationList.length}
           </span>
         )}
