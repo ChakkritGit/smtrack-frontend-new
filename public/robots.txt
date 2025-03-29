@@ -22,4 +22,4 @@ Allow: /settings
 Allow: /notification
 Allow: /changelog
 Allow: /management/flasher
-Sitemap: https://www.siamatic.dev/sitemap.xml
+Sitemap: https://siamatic.dev/sitemap.xml
