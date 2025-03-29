@@ -58,7 +58,11 @@ const Notifications = () => {
       setNotification(prevList =>
         pages === 1 ? response.data.data : prevList.concat(response.data.data)
       )
-      setFetchMore(response.data.data.length !== 0)
+      if (response.data.data.length < 10) {
+        setFetchMore(false)
+      } else {
+        setFetchMore(true)
+      }
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 401) {
