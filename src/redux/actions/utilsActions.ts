@@ -83,7 +83,7 @@ const setDeviceKey = (id: string) => ({
   payload: id
 })
 
-const setSocketData = (data: SocketResponseType) => ({
+const setSocketData = (data: SocketResponseType | null) => ({
   type: SOCKET_DATA,
   payload: data
 })

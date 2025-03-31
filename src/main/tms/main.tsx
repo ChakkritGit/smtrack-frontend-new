@@ -149,6 +149,7 @@ const MainTms = () => {
       isMessageValid?.includes('device offline') ||
       isMessageValid?.includes('device online')
     ) {
+      dispatch(setSocketData(null))
       return
     }
 
@@ -211,6 +212,7 @@ const MainTms = () => {
         }
       )
     }
+    dispatch(setSocketData(null))
   }, [socketData, soundMode, popUpMode])
 
   return (

@@ -147,8 +147,8 @@ const columnData = (
       name: t('deviceConnectTb'),
       cell: item => (
         <div
-          className={`w-max h-[24px] px-2 flex items-center justify-center rounded-btn ${
-            item.online ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+          className={`w-max h-[24px] px-2 text-black flex items-center justify-center rounded-btn ${
+            item.online ? 'bg-green-400' : 'bg-red-400'
           } duration-300`}
           onClick={() => handleRowClicked(item)}
         >

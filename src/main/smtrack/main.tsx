@@ -91,11 +91,11 @@ const MainSmtrack = () => {
 
     if (
       (role === 'LEGACY_ADMIN' ||
-      role === 'SUPER' ||
-      role === 'SERVICE' ||
-      role === 'ADMIN' ||
-      role === 'USER' ||
-      role === 'GUEST') &&
+        role === 'SUPER' ||
+        role === 'SERVICE' ||
+        role === 'ADMIN' ||
+        role === 'USER' ||
+        role === 'GUEST') &&
       hosId?.toLowerCase() === response.hospital.toLowerCase()
     ) {
       dispatch(setSocketData(response))
@@ -151,6 +151,7 @@ const MainSmtrack = () => {
       isMessageValid?.includes('device offline') ||
       isMessageValid?.includes('device online')
     ) {
+      dispatch(setSocketData(null))
       return
     }
 
@@ -213,6 +214,8 @@ const MainSmtrack = () => {
         }
       )
     }
+
+    dispatch(setSocketData(null))
   }, [socketData, soundMode, popUpMode])
 
   return (

@@ -493,9 +493,12 @@ const ManageFirmware = () => {
   }, [firmwareList, globalSearch])
 
   const firmwareComponent = useMemo(() => {
-    if (isLoading) return <div className='h-[calc(100dvh-300px)]'>
-      <Loading />
-    </div>
+    if (isLoading)
+      return (
+        <div className='h-[calc(100dvh-300px)]'>
+          <Loading />
+        </div>
+      )
     if (firmwareListFilter.length === 0)
       return (
         <div className='flex items-center justify-center loading-hieght-full'>
@@ -739,6 +742,7 @@ const ManageFirmware = () => {
               onClick={() => {
                 selectUploadModalRef.current?.close()
                 setSelectedDevices([])
+                setSelectedDevicesOption(t('selectOTA'))
               }}
             >
               <RiCloseLargeLine size={20} />
@@ -828,9 +832,15 @@ const ManageFirmware = () => {
             )}
           </div>
           <div className='modal-action'>
-            <button className='btn btn-primary' onClick={() => handleUpdate()}>
-              {t('uploadButton')}
-            </button>
+            {selectedDevicesOption !== t('selectOTA') && (
+              <button
+                disabled={selectedDevices.length === 0}
+                className='btn btn-primary'
+                onClick={() => handleUpdate()}
+              >
+                {t('uploadButton')}
+              </button>
+            )}
           </div>
         </div>
       </dialog>

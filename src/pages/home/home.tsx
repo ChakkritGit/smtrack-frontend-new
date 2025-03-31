@@ -225,6 +225,13 @@ const Home = () => {
   }, [wardId])
 
   useEffect(() => {
+    setInterval(() => {
+      fetchDevices(currentPage, perPage, globalSearch)
+      fetchDeviceCount(currentPage, perPage)
+    }, 300000)
+  }, [currentPage, perPage, globalSearch])
+
+  useEffect(() => {
     return () => {
       dispatch(setSearch(''))
     }
@@ -293,7 +300,9 @@ const Home = () => {
   return (
     <div className='p-3 px-[16px]'>
       <div className='grid grid-cols-1 md:grid-cols-2 content-between items-center gap-3 mt-[16px]'>
-        <span className='font-bold text-[20px] w-full'>{t('showAllBox')}</span>
+        <span className='font-medium text-[20px] w-full'>
+          {t('showAllBox')}
+        </span>
         <div className='flex items-center justify-end w-full'>
           {role === 'SUPER' && (
             <div className='flex items-center gap-2 bg-base-300 p-2 px-3 rounded-btn w-max'>
@@ -316,7 +325,7 @@ const Home = () => {
         setCountFilter={setCountFilter}
       />
       <div className='flex lg:items-center justify-between flex-col lg:flex-row gap-3 lg:gap-0 my-4'>
-        <span className='font-bold text-[20px]'>{t('detailAllBox')}</span>
+        <span className='font-medium text-[20px]'>{t('detailAllBox')}</span>
         <div className='flex items-end lg:items-center gap-3 flex-col lg:flex-row lg:h-[40px]'>
           <div className='flex items-center gap-3'>
             <button

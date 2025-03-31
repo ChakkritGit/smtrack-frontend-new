@@ -56,7 +56,7 @@ type UtilsAction =
   | { type: typeof HOS_ID; payload: string }
   | { type: typeof WARD_ID; payload: string }
   | { type: typeof DEVICE_KEY; payload: string }
-  | { type: typeof SOCKET_DATA; payload: SocketResponseType }
+  | { type: typeof SOCKET_DATA; payload: SocketResponseType | null }
   | { type: typeof TOKEN_EXPIRE; payload: boolean }
   | { type: typeof POPUP_MODE }
   | { type: typeof SOUND_MODE }

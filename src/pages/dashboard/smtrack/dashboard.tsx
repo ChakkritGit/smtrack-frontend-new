@@ -96,6 +96,13 @@ const Dashboard = () => {
     fetchDeviceLogs()
   }, [deviceKey])
 
+  useEffect(() => {
+    if (!deviceKey) return
+    setInterval(() => {
+      fetchDeviceLogs()
+    }, 300000)
+  }, [deviceKey])
+
   const CardInfoComponent = useMemo(() => {
     return (
       <CardInFoComponent
