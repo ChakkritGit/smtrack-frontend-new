@@ -1,7 +1,7 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
-import path from "path"
+import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -22,6 +22,8 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 100 * 1024 * 1024 // 100MB
       },
       workbox: {
+        clientsClaim: true,
+        skipWaiting: true,
         cleanupOutdatedCaches: true,
         sourcemap: true,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,json,mp3}'],
@@ -173,7 +175,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "../"),
+      '@': path.resolve(__dirname, '../')
     }
   }
 })
