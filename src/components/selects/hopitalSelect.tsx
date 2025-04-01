@@ -1,16 +1,23 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/reducers/rootReducer'
-import { useContext } from 'react'
+import { Dispatch, SetStateAction, useContext } from 'react'
 import { GlobalContextType } from '../../types/global/globalContext'
 import { GlobalContext } from '../../contexts/globalContext'
 import { Hospital, Option } from '../../types/global/hospitalAndWard'
 import { setHosId } from '../../redux/actions/utilsActions'
 import Select from 'react-select'
+import { AddDeviceForm } from '../../types/tms/devices/deviceType'
 
-const HopitalSelect = () => {
+interface HosSelectType {
+  formData: AddDeviceForm
+  setFormData: Dispatch<SetStateAction<AddDeviceForm>>
+}
+
+const HopitalSelect = (props: HosSelectType) => {
   const dispatch = useDispatch()
   const { hosId } = useSelector((state: RootState) => state.utils)
   const { hospital } = useContext(GlobalContext) as GlobalContextType
+  const { formData, setFormData } = props
 
   const mapOptions = <T, K extends keyof T>(
     data: T[],
@@ -35,9 +42,10 @@ const HopitalSelect = () => {
         label: item[labelKey] as unknown as string
       }))[0]
 
-  const getHospital = (hospitalID: string | undefined) => {
+  const getHospital = (hospitalID: string | undefined, hosName: string | undefined) => {
     if (hospitalID !== '') {
       dispatch(setHosId(String(hospitalID)))
+      setFormData({...formData, hospitalName: hosName})
     } else {
       dispatch(setHosId(''))
     }
@@ -53,7 +61,7 @@ const HopitalSelect = () => {
         'id',
         'hosName'
       )}
-      onChange={e => getHospital(e?.value)}
+      onChange={e => getHospital(e?.value, e?.label)}
       autoFocus={false}
       className='react-select-container custom-menu-select w-full'
       classNamePrefix='react-select'

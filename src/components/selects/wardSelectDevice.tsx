@@ -48,9 +48,9 @@ const WardSelectDevice = (props: WardSelectType) => {
         label: item[labelKey] as unknown as string
       }))[0]
 
-  const getWard = (wardID: string | undefined) => {
+  const getWard = (wardID: string | undefined, wardName: string | undefined) => {
     if (wardID !== '') {
-      setFormData({ ...formData, ward: String(wardID) })
+      setFormData({ ...formData, ward: wardID, wardName: wardName })
     }
   }
 
@@ -70,7 +70,7 @@ const WardSelectDevice = (props: WardSelectType) => {
         'id',
         'wardName'
       )}
-      onChange={e => getWard(e?.value)}
+      onChange={e => getWard(e?.value, e?.label)}
       autoFocus={false}
       className='react-select-container custom-menu-select w-full'
       classNamePrefix='react-select'

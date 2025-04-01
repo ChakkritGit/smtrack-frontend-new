@@ -102,8 +102,10 @@ type AddDeviceType = {
 type AddDeviceForm = {
   id?: string
   hospital?: string
+  hospitalName?: string
   ward?: string
   name?: string
+  wardName?: string
   location?: string
   position?: string
   remark?: string

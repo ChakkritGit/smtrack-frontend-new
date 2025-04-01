@@ -111,7 +111,9 @@ const ManageDevice = () => {
     id: '',
     name: '',
     hospital: '',
+    hospitalName: '',
     ward: '',
+    wardName: '',
     location: '',
     position: '',
     remark: '',
@@ -499,7 +501,9 @@ const ManageDevice = () => {
       id: device.id,
       name: device.name,
       hospital: device.hospital,
+      hospitalName: device.hospitalName,
       ward: device.ward,
+      wardName: device.wardName,
       location: device.location,
       position: device.position,
       remark: device.remark,
@@ -1397,7 +1401,10 @@ const ManageDevice = () => {
                       <span className='font-medium text-red-500 mr-1'>*</span>
                       {t('hospitalsName')}
                     </span>
-                    <HopitalSelect />
+                    <HopitalSelect
+                      formData={formData}
+                      setFormData={setFormData}
+                    />
                   </label>
                 </div>
 
