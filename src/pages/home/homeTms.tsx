@@ -185,7 +185,7 @@ const HomeTms = () => {
   return (
     <div className='p-3 px-[16px]'>
       <div className='flex lg:items-center justify-between flex-col lg:flex-row gap-3 lg:gap-0 my-4'>
-        <span className='font-bold text-[20px]'>{t('detailAllBox')}</span>
+        <span className='font-medium text-[20px]'>{t('detailAllBox')}</span>
         <div className='flex items-end lg:items-center gap-3 flex-col lg:flex-row lg:h-[40px]'>
           <HospitalAndWard />
         </div>

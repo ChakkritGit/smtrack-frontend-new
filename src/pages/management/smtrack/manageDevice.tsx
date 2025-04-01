@@ -347,7 +347,12 @@ const ManageDevice = () => {
           icon: 'success',
           showConfirmButton: false,
           timer: 2500
-        })
+        }).finally(() =>
+          client.publish(
+            `siamatic/${deviceModel}/${version}/${formData.id}/adj`,
+            'on'
+          )
+        )
       } catch (error) {
         editModalRef.current?.close()
         if (error instanceof AxiosError) {

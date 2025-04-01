@@ -2,6 +2,7 @@ import { AxiosError } from 'axios'
 import {
   ChangeEvent,
   FormEvent,
+  Ref,
   useCallback,
   useEffect,
   useRef,
@@ -31,6 +32,7 @@ import Select, { SingleValue } from 'react-select'
 import { Option } from '../../../types/global/hospitalAndWard'
 import { DeviceListType } from '../../../types/smtrack/devices/deviceType'
 import ReactSlider from 'react-slider'
+import { client } from '../../../services/mqtt'
 
 type OptionData = {
   value: string
@@ -118,6 +120,9 @@ const ManageProbe = () => {
     thirdMinute: ''
   })
   const { role } = tokenDecode ?? {}
+  const deviceModel =
+    formData?.id?.substring(0, 3) === 'eTP' ? 'etemp' : 'items'
+  const version = formData?.id?.substring(3, 5).toLowerCase()
 
   const mapOptions = <T, K extends keyof T>(
     data: T[],
@@ -221,7 +226,12 @@ const ManageProbe = () => {
           icon: 'success',
           showConfirmButton: false,
           timer: 2500
-        })
+        }).finally(() =>
+          client.publish(
+            `siamatic/${deviceModel}/${version}/${formData.id}/adj`,
+            'on'
+          )
+        )
       } catch (error) {
         addModalRef.current?.close()
         if (error instanceof AxiosError) {
@@ -620,7 +630,11 @@ const ManageProbe = () => {
     },
     {
       name: t('probeChanel'),
-      cell: item => <span className='badge badge-primary font-bold'>{item.channel ?? '—'}</span>,
+      cell: item => (
+        <span className='badge badge-primary font-bold'>
+          {item.channel ?? '—'}
+        </span>
+      ),
       sortable: false,
       center: true
     },
@@ -650,26 +664,24 @@ const ManageProbe = () => {
             <button
               className='btn btn-ghost flex text-white min-w-[32px] max-w-[32px] min-h-[32px] max-h-[32px] p-0 bg-red-500'
               onClick={() =>
-                Swal
-                  .fire({
-                    title: t('deleteProbe'),
-                    text: t('notReverseText'),
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: t('confirmButton'),
-                    cancelButtonText: t('cancelButton'),
-                    reverseButtons: false,
-                    customClass: {
-                      actions: 'custom-action',
-                      confirmButton: 'custom-confirmButton',
-                      cancelButton: 'custom-cancelButton'
-                    },
-                  })
-                  .then(result => {
-                    if (result.isConfirmed) {
-                      deleteDevices(item.id)
-                    }
-                  })
+                Swal.fire({
+                  title: t('deleteProbe'),
+                  text: t('notReverseText'),
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: t('confirmButton'),
+                  cancelButtonText: t('cancelButton'),
+                  reverseButtons: false,
+                  customClass: {
+                    actions: 'custom-action',
+                    confirmButton: 'custom-confirmButton',
+                    cancelButton: 'custom-cancelButton'
+                  }
+                }).then(result => {
+                  if (result.isConfirmed) {
+                    deleteDevices(item.id)
+                  }
+                })
               }
             >
               <RiDeleteBin7Line size={20} />
@@ -1215,14 +1227,19 @@ const ManageProbe = () => {
                       step={0.01}
                       min={-40}
                       max={120}
-                      renderThumb={(props, state) => (
-                        <div
-                          {...props}
-                          className='flex items-center justify-center w-[42px] h-[32px] bg-orange-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50'
-                        >
-                          {state.valueNow}
-                        </div>
-                      )}
+                      renderThumb={(props, state) => {
+                        const { key, ref, ...validProps } = props
+                        return (
+                          <div
+                            {...validProps}
+                            ref={ref as Ref<HTMLDivElement> | undefined}
+                            key={key}
+                            className='flex items-center justify-center w-[42px] h-[32px] bg-orange-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50'
+                          >
+                            {state.valueNow}
+                          </div>
+                        )
+                      }}
                     />
                   </label>
                 </div>
@@ -1250,14 +1267,19 @@ const ManageProbe = () => {
                       step={0.01}
                       min={0}
                       max={100}
-                      renderThumb={(props, state) => (
-                        <div
-                          {...props}
-                          className='flex items-center justify-center w-[42px] h-[32px] bg-blue-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50'
-                        >
-                          {state.valueNow}
-                        </div>
-                      )}
+                      renderThumb={(props, state) => {
+                        const { key, ref, ...validProps } = props
+                        return (
+                          <div
+                            {...validProps}
+                            ref={ref as Ref<HTMLDivElement> | undefined}
+                            key={key}
+                            className='flex items-center justify-center w-[42px] h-[32px] bg-blue-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50'
+                          >
+                            {state.valueNow}
+                          </div>
+                        )
+                      }}
                     />
                   </label>
                 </div>
@@ -1859,14 +1881,19 @@ const ManageProbe = () => {
                       step={0.01}
                       min={-40}
                       max={120}
-                      renderThumb={(props, state) => (
-                        <div
-                          {...props}
-                          className='flex items-center justify-center w-[42px] h-[32px] bg-orange-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50'
-                        >
-                          {state.valueNow}
-                        </div>
-                      )}
+                      renderThumb={(props, state) => {
+                        const { key, ref, ...validProps } = props
+                        return (
+                          <div
+                            {...validProps}
+                            ref={ref as Ref<HTMLDivElement> | undefined}
+                            key={key}
+                            className='flex items-center justify-center w-[42px] h-[32px] bg-orange-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-orange-500/50'
+                          >
+                            {state.valueNow}
+                          </div>
+                        )
+                      }}
                     />
                   </label>
                 </div>
@@ -1894,14 +1921,19 @@ const ManageProbe = () => {
                       step={0.01}
                       min={0}
                       max={100}
-                      renderThumb={(props, state) => (
-                        <div
-                          {...props}
-                          className='flex items-center justify-center w-[42px] h-[32px] bg-blue-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50'
-                        >
-                          {state.valueNow}
-                        </div>
-                      )}
+                      renderThumb={(props, state) => {
+                        const { key, ref, ...validProps } = props
+                        return (
+                          <div
+                            {...validProps}
+                            ref={ref as Ref<HTMLDivElement> | undefined}
+                            key={key}
+                            className='flex items-center justify-center w-[42px] h-[32px] bg-blue-500 text-white font-bold text-[12px] shadow-md rounded-btn p-1 cursor-pointer outline-blue-500/50'
+                          >
+                            {state.valueNow}
+                          </div>
+                        )
+                      }}
                     />
                   </label>
                 </div>
