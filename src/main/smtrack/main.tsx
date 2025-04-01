@@ -91,13 +91,13 @@ const MainSmtrack = () => {
 
     if (
       (role === 'LEGACY_ADMIN' ||
-        role === 'SUPER' ||
-        role === 'SERVICE' ||
         role === 'ADMIN' ||
         role === 'USER' ||
         role === 'GUEST') &&
       hosId?.toLowerCase() === response.hospital.toLowerCase()
     ) {
+      dispatch(setSocketData(response))
+    } else if (role === 'SUPER' || role === 'SERVICE') {
       dispatch(setSocketData(response))
     }
   }
