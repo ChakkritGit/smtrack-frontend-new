@@ -11,11 +11,13 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { I18nextProvider } from 'react-i18next'
-import Routes from './routes/routes.tsx'
-import i18n from './lang/i18n.ts'
-import store from './redux/store/index.ts'
 import { Toaster } from 'react-hot-toast'
 import { HelmetProvider } from 'react-helmet-async'
+import { StyleSheetManager } from 'styled-components'
+import Routes from './routes/routes.tsx'
+import i18n from './lang/i18n.ts'
+import isPropValid from '@emotion/is-prop-valid'
+import store from './redux/store/index.ts'
 
 class AppRenderer {
   private static instance: AppRenderer
@@ -50,14 +52,16 @@ class AppRenderer {
 
     createRoot(rootElement).render(
       <StrictMode>
-        <HelmetProvider>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <Routes />
-              <Toaster position='bottom-right' reverseOrder={false} />
-            </I18nextProvider>
-          </Provider>
-        </HelmetProvider>
+        <StyleSheetManager shouldForwardProp={isPropValid}>
+          <HelmetProvider>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <Routes />
+                <Toaster position='bottom-left' reverseOrder={false} />
+              </I18nextProvider>
+            </Provider>
+          </HelmetProvider>
+        </StyleSheetManager>
       </StrictMode>
     )
   }
