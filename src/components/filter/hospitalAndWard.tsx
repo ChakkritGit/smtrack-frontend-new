@@ -53,11 +53,6 @@ const HospitalAndWard = () => {
   const getHospital = (hospitalID: string | undefined) => {
     if (hospitalID !== '') {
       updateLocalStorageAndDispatch('hosId', hospitalID, setHosId, dispatch)
-      setWardArray(
-        ward.filter(items =>
-          hospitalID ? items.hospital.id.includes(hospitalID) : items
-        )
-      )
     } else {
       cookies.remove('hosId', cookieOptions)
       dispatch(setHosId(''))
@@ -78,7 +73,13 @@ const HospitalAndWard = () => {
       hosId ? items.hospital.id.includes(hosId) : items
     )
 
-    if (role === 'SUPER' || role === 'SERVICE' || role === 'ADMIN' || role === 'USER' || role === 'GUEST') {
+    if (
+      role === 'SUPER' ||
+      role === 'SERVICE' ||
+      role === 'ADMIN' ||
+      role === 'USER' ||
+      role === 'GUEST'
+    ) {
       const filterNewSystem = filter.filter(f =>
         !tmsMode ? f.type.includes('NEW') : f.type.includes('LEGACY')
       )
@@ -121,6 +122,7 @@ const HospitalAndWard = () => {
         <>
           {(role === 'SUPER' || role === 'SERVICE') && (
             <Select
+              key={hosId}
               options={mapOptions<Hospital, keyof Hospital>(
                 updatedHosData,
                 'id',
@@ -139,6 +141,7 @@ const HospitalAndWard = () => {
             />
           )}
           <Select
+            key={wardId}
             options={mapOptions<Ward, keyof Ward>(
               updatedWardData,
               'id',

@@ -67,7 +67,10 @@ const Sidebar = () => {
                 isExpand ? 'w-24 h-max' : 'w-32 h-28'
               } object-contain p-0 hover:bg-transparent`}
             />
-            <h3 className='text-[24px]'>
+            <h3
+              className='text-[24px] truncate max-w-[180px]'
+              title={ward?.hospital.hosName}
+            >
               {ward?.hospital.hosName
                 ? isExpand
                   ? ward?.hospital.hosName[0]
@@ -239,7 +242,8 @@ const Sidebar = () => {
                 isExpand ? 'text-center' : 'text-right'
               } hover:underline cursor-pointer`}
             >
-              {import.meta.env.VITE_APP_VERSION}
+              {/* {import.meta.env.VITE_APP_VERSION} */}
+              Version 2.0.1-beta_latest
             </Link>
           </div>
         </div>

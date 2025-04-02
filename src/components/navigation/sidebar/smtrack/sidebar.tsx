@@ -295,7 +295,8 @@ const Sidebar = () => {
                 isExpand ? 'text-center' : 'text-right'
               } hover:underline cursor-pointer`}
             >
-              {import.meta.env.VITE_APP_VERSION}
+              {/* {import.meta.env.VITE_APP_VERSION} */}
+              Version 2.0.1-beta_latest
             </Link>
           </div>
         </div>

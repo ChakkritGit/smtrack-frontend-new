@@ -247,7 +247,7 @@ const ProfileComponent = (props: ProfileProps) => {
       {!edit ? (
         <div className='flex flex-col md:flex-row gap-5 md:gap-0 items-center justify-between'>
           <div className='flex flex-col pl-3'>
-            <div className='flex items-center gap-2'>
+            <div className='flex items-center flex-wrap justify-center gap-2 mb-2 md:mb-auto'>
               <span className='text-[20px] lg:text-[32px] md:text-[24px] font-medium'>
                 {userProfile?.display ?? '—'}
               </span>

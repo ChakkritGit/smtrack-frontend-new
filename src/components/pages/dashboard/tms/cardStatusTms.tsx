@@ -155,7 +155,7 @@ const CardStatusTms = (props: PropsType) => {
           </div>
           <div>
             <span>↓</span>
-            <span>{tempOfDayTms(deviceData)?.max ?? '—'} °C</span>
+            <span>{tempOfDayTms(deviceData)?.min ?? '—'} °C</span>
           </div>
         </div>
       </div>

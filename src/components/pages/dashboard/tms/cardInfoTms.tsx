@@ -17,7 +17,8 @@ const CardInfoTms = (props: PropsType) => {
           <div className='flex items-center gap-2'>
             <p className='font-bold'>{t('deviceNameBox')} • </p>
             <p
-              className='truncate max-w-[150px] lg:max-w-[300px]'
+              className='block truncate text-left max-w-[150px] lg:max-w-[300px]'
+              style={{ direction: 'rtl'}}
               title={deviceData?.name ?? '—'}
             >
               {deviceData?.name ?? '—'}
