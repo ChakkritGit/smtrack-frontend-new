@@ -433,7 +433,7 @@ const Navbar = () => {
         <div className='form-control'>
           <label
             className={`input input-bordered bg-base-200/50 ${
-              searchOpen ? 'flex w-[215px]' : 'hidden'
+              searchOpen ? 'flex w-[210px]' : 'hidden'
             } border-none h-10 w-[250px] items-center gap-2 lg:flex duration-300`}
           >
             <svg
@@ -535,7 +535,7 @@ const Navbar = () => {
             </div>
           ) : (
             <div
-              className='btn btn-ghost lg:hidden ml-3'
+              className='btn btn-ghost lg:hidden'
               onClick={() => {
                 setSearchOpen(false)
               }}

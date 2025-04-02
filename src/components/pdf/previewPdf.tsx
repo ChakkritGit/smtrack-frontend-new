@@ -35,6 +35,7 @@ function PreviewPDF () {
   const location = useLocation() as Location<ChartPreviewPdfType>
   const parser = new UAParser()
   const os = parser.getOS().name
+  const isWindows = os === 'Windows'
   const defaultLayoutPluginInstance = defaultLayoutPlugin()
   const pdfUrl = '/pdf.worker.min.js'
 
@@ -99,16 +100,7 @@ function PreviewPDF () {
       <div className='h-full mt-3'>
         {!instance.url ? (
           <Loading />
-        ) : os === 'iOS' ? (
-          <Worker workerUrl={pdfUrl}>
-            <div className='w-full h-full'>
-              <Viewer
-                fileUrl={instance?.url ?? ''}
-                plugins={[defaultLayoutPluginInstance]}
-              />
-            </div>
-          </Worker>
-        ) : (
+        ) : isWindows ? (
           <PDFViewer
             width={'100%'}
             height={'100%'}
@@ -117,6 +109,15 @@ function PreviewPDF () {
           >
             {pdfViewer}
           </PDFViewer>
+        ) : (
+          <Worker workerUrl={pdfUrl}>
+            <div className='w-full h-full'>
+              <Viewer
+                fileUrl={instance?.url ?? ''}
+                plugins={[defaultLayoutPluginInstance]}
+              />
+            </div>
+          </Worker>
         )}
       </div>
     </div>
