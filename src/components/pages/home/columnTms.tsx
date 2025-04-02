@@ -1,5 +1,8 @@
 import { TFunctionNonStrict } from 'i18next'
-import { DeviceTmsType, TmsLogType } from '../../../types/tms/devices/deviceType'
+import {
+  DeviceTmsType,
+  TmsLogType
+} from '../../../types/tms/devices/deviceType'
 import { TableColumn } from 'react-data-table-component'
 import { DoorKey } from '../../../types/global/doorQty'
 import { RiDoorClosedLine, RiDoorOpenLine } from 'react-icons/ri'
@@ -86,7 +89,6 @@ const columnTms = (
   ]
 }
 
-
 const subColumnData = (
   t: TFunctionNonStrict<'translation', undefined>
 ): TableColumn<TmsLogType>[] => {
@@ -142,8 +144,7 @@ const subColumnData = (
     },
     {
       name: t('devicePlugTb'),
-      selector: item =>
-        !item?.plugin ? t('stateNormal') : t('stateProblem'),
+      selector: item => (!item?.plugin ? t('stateProblem') : t('stateNormal')),
       sortable: false,
       center: true
     }

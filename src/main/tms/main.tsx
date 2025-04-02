@@ -88,10 +88,7 @@ const MainTms = () => {
 
     if (!isSocketResponseType(response)) return
 
-    if (
-      (role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || role === 'ADMIN') &&
-      hosId?.toLowerCase() === response.hospital.toLowerCase()
-    ) {
+    if (hosId?.toLowerCase() === response.hospital.toLowerCase()) {
       dispatch(setSocketData(response))
     } else if (role === 'SUPER' || role === 'SERVICE') {
       dispatch(setSocketData(response))
