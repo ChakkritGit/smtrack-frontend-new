@@ -57,11 +57,13 @@ const BottomNavItem = (props: BottomItemProps) => {
           icon: [RiUser6Fill, RiUser6Line],
           text: t('sidePermission')
         },
-        {
-          to: '/management',
-          icon: [RiListSettingsFill, RiListSettingsLine],
-          text: t('sideManage')
-        }
+        ...(role === 'SUPER' || role === 'SERVICE' ? [
+          {
+            to: '/management',
+            icon: [RiListSettingsFill, RiListSettingsLine],
+            text: t('sideManage')
+          }
+        ] : [])
       ]
         .filter(f => {
           if (role === 'USER' || role === 'LEGACY_USER' || role === 'GUEST') {

@@ -76,7 +76,7 @@ const Sidebar = () => {
             </h3>
           </div>
           <div className='divider mt-0 mb-0'></div>
-          <div className='flex items-center justify-center flex-col gap-2 p-3'>
+          <div className='items-center justify-center flex-col gap-2 p-3 hidden md:flex'>
             <Link
               to={'/'}
               className={`btn font-normal flex-nowrap justify-start w-full ${
