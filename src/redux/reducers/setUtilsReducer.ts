@@ -19,7 +19,8 @@ import {
   SOUND_MODE,
   POPUP_MODE,
   RESET_UTILS,
-  TOKEN_EXPIRE
+  TOKEN_EXPIRE,
+  SHOULD_FETCH
 } from '../types/utilsTypes'
 
 const initialState: UtilsState = {
@@ -38,6 +39,7 @@ const initialState: UtilsState = {
   socketData: null,
   popUpMode: cookies.get('popUpMode') ?? false,
   tokenExpire: false,
+  shouldFetch: false,
   soundMode: cookies.get('soundMode') ?? false
 }
 
@@ -55,7 +57,7 @@ const utilsReducer = (
     case USER_PROFILE:
       return { ...state, userProfile: action.payload }
     case TMS_MODE:
-      return { ...state, tmsMode: action.payload }
+      return { ...state, tmsMode: !state.tmsMode }
     case IS_EXPAND:
       return { ...state, isExpand: !state.isExpand }
     case SUBMIT_LOADING:
@@ -78,6 +80,8 @@ const utilsReducer = (
       return { ...state, soundMode: !state.soundMode }
     case TOKEN_EXPIRE:
       return { ...state, tokenExpire: action.payload }
+    case SHOULD_FETCH:
+      return { ...state, shouldFetch: !state.shouldFetch }
     case RESET_UTILS:
       return initialState
     default:

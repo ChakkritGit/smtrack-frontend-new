@@ -32,6 +32,7 @@ import {
 import { IoSwapVertical } from 'react-icons/io5'
 import {
   setHosId,
+  setSholdFetch,
   setSubmitLoading,
   setTokenExpire
 } from '../../../redux/actions/utilsActions'
@@ -82,8 +83,14 @@ type selectFirmwareOption = {
 const ManageDevice = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const { wardId, globalSearch, cookieDecode, tokenDecode, hosId } =
-    useSelector((state: RootState) => state.utils)
+  const {
+    wardId,
+    globalSearch,
+    cookieDecode,
+    tokenDecode,
+    hosId,
+    shouldFetch
+  } = useSelector((state: RootState) => state.utils)
   const { searchRef, isFocused, setIsFocused, isCleared, setIsCleared } =
     useContext(GlobalContext) as GlobalContextType
   const [devices, setDevices] = useState<DeviceType[]>([])
@@ -902,6 +909,18 @@ const ManageDevice = () => {
     if (!token) return
     fetchDevices(1)
   }, [token, wardId])
+
+  const shouldFetchFunc = async () => {
+    await fetchDevices(1, 10, globalSearch)
+    dispatch(setSholdFetch())
+  }
+
+  useEffect(() => {
+    if (globalSearch === '') return
+    if (shouldFetch) {
+      shouldFetchFunc()
+    }
+  }, [shouldFetch, globalSearch])
 
   const columns: TableColumn<DeviceType>[] = [
     {

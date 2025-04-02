@@ -120,7 +120,7 @@ const ChartSwiperWrapper = (props: ChartSwiperWrapperProps) => {
           <RiArrowRightUpLine size={20} />
         </button>
       </div>
-      <div className='h-full chart-h'>{SwiperFragment}</div>
+      <div>{SwiperFragment}</div>
     </div>
   )
 }

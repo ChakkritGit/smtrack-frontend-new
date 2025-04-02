@@ -31,7 +31,7 @@ const DataTableWrapperTms = (props: DataTableWrapperProps) => {
           <RiArrowRightUpLine size={20} />
         </button>
       </div>
-      <div className='h-full chart-h'>
+      <div>
         <DataTableMiniTms deviceLogs={deviceLogs} />
       </div>
     </div>

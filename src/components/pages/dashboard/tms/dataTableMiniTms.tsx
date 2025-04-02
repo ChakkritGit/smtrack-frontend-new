@@ -63,7 +63,7 @@ const DataTableMiniTms = (props: TableMiniProps) => {
       cell: item => item.tempValue.toFixed(2) + '°C',
       sortable: false,
       center: true
-    },
+    }
     // {
     //   name: t('deviceConnectTb'),
     //   cell: item => (item.internet ? t('deviceOffline') : t('deviceOnline')),
@@ -97,7 +97,7 @@ const DataTableMiniTms = (props: TableMiniProps) => {
         noDataComponent={<DataTableNoData />}
         paginationPerPage={10}
         paginationRowsPerPageOptions={[10, 30, 50, 100]}
-        className='md:!max-h-[calc(100dvh-630px)]'
+        className='md:!max-h-[calc(100dvh-635px)] !max-h-[calc(100dvh-435px)]'
       />
     </div>
   )

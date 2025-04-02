@@ -22,7 +22,8 @@ import {
   SOUND_MODE,
   POPUP_MODE,
   RESET_UTILS,
-  TOKEN_EXPIRE
+  TOKEN_EXPIRE,
+  SHOULD_FETCH
 } from '../types/utilsTypes'
 
 const setCookieEncode = (dataEncode?: string) => ({
@@ -45,9 +46,8 @@ const setUserProfile = (userData: UserProfileType | undefined) => ({
   payload: userData
 })
 
-const setTmsMode = (mode: boolean) => ({
-  type: TMS_MODE,
-  payload: mode
+const setTmsMode = () => ({
+  type: TMS_MODE
 })
 
 const setIsExpand = () => ({
@@ -101,6 +101,10 @@ const setTokenExpire = (state: boolean) => ({
   payload: state
 })
 
+const setSholdFetch = () => ({
+  type: SHOULD_FETCH
+})
+
 const resetUtils = () => ({
   type: RESET_UTILS
 })
@@ -122,5 +126,6 @@ export {
   setPopUpMode,
   setSoundMode,
   setTokenExpire,
+  setSholdFetch,
   resetUtils
 }

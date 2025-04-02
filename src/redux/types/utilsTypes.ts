@@ -22,6 +22,7 @@ const SOCKET_DATA = 'SOCKET_DATA'
 const POPUP_MODE = 'POPUP_MODE'
 const SOUND_MODE = 'SOUND_MODE'
 const TOKEN_EXPIRE = 'TOKEN_EXPIRE'
+const SHOULD_FETCH = 'SHOULD_FETCH'
 const RESET_UTILS = 'RESET_UTILS'
 
 interface UtilsState {
@@ -40,6 +41,7 @@ interface UtilsState {
   socketData: SocketResponseType | null
   popUpMode: boolean
   soundMode: boolean
+  shouldFetch: boolean
   tokenExpire: boolean
 }
 
@@ -50,7 +52,7 @@ type UtilsAction =
   | { type: typeof USER_PROFILE; payload: UserProfileType | undefined }
   | { type: typeof GLOBAL_SEARCH; payload: string }
   | { type: typeof THEME_MODE; payload: string }
-  | { type: typeof TMS_MODE; payload: boolean }
+  | { type: typeof TMS_MODE }
   | { type: typeof IS_EXPAND }
   | { type: typeof SUBMIT_LOADING }
   | { type: typeof HOS_ID; payload: string }
@@ -60,6 +62,7 @@ type UtilsAction =
   | { type: typeof TOKEN_EXPIRE; payload: boolean }
   | { type: typeof POPUP_MODE }
   | { type: typeof SOUND_MODE }
+  | { type: typeof SHOULD_FETCH }
   | { type: typeof RESET_UTILS }
 
 export {
@@ -79,6 +82,7 @@ export {
   POPUP_MODE,
   SOUND_MODE,
   TOKEN_EXPIRE,
+  SHOULD_FETCH,
   RESET_UTILS
 }
 export type { UtilsState, UtilsAction }

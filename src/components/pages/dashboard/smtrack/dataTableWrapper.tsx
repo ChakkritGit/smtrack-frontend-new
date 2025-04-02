@@ -116,7 +116,7 @@ const DataTableWrapper = (props: DataTableWrapperProps) => {
           <RiArrowRightUpLine size={20} />
         </button>
       </div>
-      <div className='h-full chart-h'>{DataTableFragment}</div>
+      <div>{DataTableFragment}</div>
     </div>
   )
 }

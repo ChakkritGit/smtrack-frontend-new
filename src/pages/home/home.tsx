@@ -16,6 +16,7 @@ import {
 import {
   setDeviceKey,
   setSearch,
+  setSholdFetch,
   setTokenExpire
 } from '../../redux/actions/utilsActions'
 import { DeviceCountType } from '../../types/smtrack/devices/deviceCount'
@@ -39,8 +40,15 @@ const Home = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { globalSearch, userProfile, hosId, wardId, tokenDecode, socketData } =
-    useSelector((state: RootState) => state.utils)
+  const {
+    globalSearch,
+    userProfile,
+    hosId,
+    wardId,
+    tokenDecode,
+    socketData,
+    shouldFetch
+  } = useSelector((state: RootState) => state.utils)
   const {
     hospital,
     ward,
@@ -218,6 +226,18 @@ const Home = () => {
 
     return () => {}
   }, [devices, socketData, currentPage, perPage, globalSearch, isFocused])
+
+  const shouldFetchFunc = async () =>  {
+    await fetchDevices(1, 10, globalSearch)
+    dispatch(setSholdFetch())
+  }
+
+  useEffect(() => {
+    if (globalSearch === '') return
+    if (shouldFetch) {
+      shouldFetchFunc()
+    }
+  }, [shouldFetch, globalSearch])
 
   useEffect(() => {
     fetchDevices(1)

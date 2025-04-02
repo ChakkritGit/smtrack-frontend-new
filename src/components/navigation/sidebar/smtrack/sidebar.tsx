@@ -260,13 +260,13 @@ const Sidebar = () => {
                       cookies.remove('wardId', cookieOptions)
                       cookies.remove('deviceKey', cookieOptions)
                       cookies.remove('searchHistory', cookieOptions)
-                      cookies.set('tmsMode', true, cookieOptions)
+                      cookies.set('tmsMode', !tmsMode, cookieOptions)
                       cookies.update()
 
                       await new Promise(resolve => setTimeout(resolve, 300))
 
                       navigate('/')
-                      dispatch(setTmsMode(true))
+                      dispatch(setTmsMode())
                     }}
                   />
                 </label>

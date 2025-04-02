@@ -91,14 +91,6 @@ type LogChartTms = {
   _value: number
 }
 
-type AddDeviceType = {
-  id?: string
-  ward: string
-  hospital: string
-  sn: string
-  name: string
-}
-
 type AddDeviceForm = {
   id?: string
   hospital?: string
@@ -113,6 +105,7 @@ type AddDeviceForm = {
   image?: File | null
   imagePreview?: string | null
   config?: ConfigType | null
+  sn?: string
 }
 
 type NetworkFormInit = {
@@ -143,7 +136,6 @@ export type {
   DeviceLogTms,
   DeviceLogsTms,
   LogChartTms,
-  AddDeviceType,
   AddDeviceForm,
   NetworkFormInit,
   TmsLogType

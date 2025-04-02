@@ -204,13 +204,13 @@ const Sidebar = () => {
                       cookies.remove('wardId', cookieOptions)
                       cookies.remove('deviceKey', cookieOptions)
                       cookies.remove('searchHistory', cookieOptions)
-                      cookies.set('tmsMode', false, cookieOptions)
+                      cookies.set('tmsMode', !tmsMode, cookieOptions)
                       cookies.update()
 
                       await new Promise(resolve => setTimeout(resolve, 500))
 
                       navigate('/')
-                      dispatch(setTmsMode(false))
+                      dispatch(setTmsMode())
                     }}
                   />
                 </label>

@@ -74,10 +74,22 @@ const HospitalAndWard = () => {
   }
 
   useEffect(() => {
-    const filter = ward?.filter(items => (hosId ? items.hospital.id.includes(hosId) : items))
-    const filterNewSystem = filter.filter((f) => tmsMode ? f.type.includes('NEW') : f.type.includes('LEGACY'))
-    setWardArray(filterNewSystem)
-  }, [ward, hosId, tmsMode])
+    const filter = ward?.filter(items =>
+      hosId ? items.hospital.id.includes(hosId) : items
+    )
+
+    if (role === 'SUPER' || role === 'SERVICE' || role === 'ADMIN' || role === 'USER' || role === 'GUEST') {
+      const filterNewSystem = filter.filter(f =>
+        !tmsMode ? f.type.includes('NEW') : f.type.includes('LEGACY')
+      )
+      setWardArray(filterNewSystem)
+    } else {
+      const filterNewSystem = filter.filter(f =>
+        tmsMode ? f.type.includes('NEW') : f.type.includes('LEGACY')
+      )
+      setWardArray(filterNewSystem)
+    }
+  }, [ward, hosId, tmsMode, role])
 
   const allHos = {
     id: '',
@@ -127,7 +139,11 @@ const HospitalAndWard = () => {
             />
           )}
           <Select
-            options={mapOptions<Ward, keyof Ward>(updatedWardData, 'id', 'wardName')}
+            options={mapOptions<Ward, keyof Ward>(
+              updatedWardData,
+              'id',
+              'wardName'
+            )}
             value={mapDefaultValue<Ward, keyof Ward>(
               updatedWardData,
               wardId ? wardId : '',

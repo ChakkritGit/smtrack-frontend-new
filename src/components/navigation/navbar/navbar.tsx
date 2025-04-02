@@ -21,9 +21,10 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import {
-  setDeviceKey,
+  // setDeviceKey,
   setIsExpand,
   setSearch,
+  setSholdFetch,
   setTokenExpire
 } from '../../../redux/actions/utilsActions'
 import DefaultPic from '../../../assets/images/default-pic.png'
@@ -251,11 +252,12 @@ const Navbar = () => {
                     dispatch(setSearch(t(item.text)))
                     setIsFocused(false)
                   } else if (item.tag === 'device') {
-                    cookies.set('deviceKey', item.path, cookieOptions) // it's mean setSerial
-                    dispatch(setDeviceKey(item.path))
+                    // cookies.set('deviceKey', item.path, cookieOptions) // it's mean setSerial
+                    // dispatch(setDeviceKey(item.path))
                     dispatch(setSearch(t(item.text)))
-                    navigate('/dashboard')
-                    window.scrollTo(0, 0)
+                    dispatch(setSholdFetch())
+                    // navigate('/dashboard')
+                    // window.scrollTo(0, 0)
                     setIsFocused(false)
                   }
                 }}
@@ -324,39 +326,40 @@ const Navbar = () => {
                       }
                       setSearchOpen(false)
                       dispatch(setSearch(item.name))
+                      dispatch(setSholdFetch())
                       setIsFocused(false)
                       updateSearchHistory(newItem)
-                      cookies.set(
-                        'deviceKey',
-                        (
-                          tmsMode
-                            ? !(
-                                role === 'LEGACY_ADMIN' ||
-                                role === 'LEGACY_USER'
-                              )
-                            : role === 'LEGACY_ADMIN' || role === 'LEGACY_USER'
-                        )
-                          ? item.sn
-                          : item.id,
-                        cookieOptions
-                      ) // it's mean setSerial
-                      dispatch(
-                        setDeviceKey(
-                          (
-                            tmsMode
-                              ? !(
-                                  role === 'LEGACY_ADMIN' ||
-                                  role === 'LEGACY_USER'
-                                )
-                              : role === 'LEGACY_ADMIN' ||
-                                role === 'LEGACY_USER'
-                          )
-                            ? String(item.sn)
-                            : item.id
-                        )
-                      )
-                      navigate('/dashboard')
-                      window.scrollTo(0, 0)
+                      // cookies.set(
+                      //   'deviceKey',
+                      //   (
+                      //     tmsMode
+                      //       ? !(
+                      //           role === 'LEGACY_ADMIN' ||
+                      //           role === 'LEGACY_USER'
+                      //         )
+                      //       : role === 'LEGACY_ADMIN' || role === 'LEGACY_USER'
+                      //   )
+                      //     ? item.sn
+                      //     : item.id,
+                      //   cookieOptions
+                      // ) // it's mean setSerial
+                      // dispatch(
+                      //   setDeviceKey(
+                      //     (
+                      //       tmsMode
+                      //         ? !(
+                      //             role === 'LEGACY_ADMIN' ||
+                      //             role === 'LEGACY_USER'
+                      //           )
+                      //         : role === 'LEGACY_ADMIN' ||
+                      //           role === 'LEGACY_USER'
+                      //     )
+                      //       ? String(item.sn)
+                      //       : item.id
+                      //   )
+                      // )
+                      // navigate('/dashboard')
+                      // window.scrollTo(0, 0)
                     }}
                   >
                     <div>

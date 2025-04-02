@@ -12,11 +12,11 @@ import {
 import { Option, Ward } from '../../../types/global/hospitalAndWard'
 import { WardType } from '../../../types/smtrack/wards/wardType'
 import Select from 'react-select'
-import { AddDeviceType } from '../../../types/tms/devices/deviceType'
+import { AddDeviceForm } from '../../../types/tms/devices/deviceType'
 
 interface WardSelectType {
-  formData: AddDeviceType
-  setFormData: Dispatch<SetStateAction<AddDeviceType>>
+  formData: AddDeviceForm
+  setFormData: Dispatch<SetStateAction<AddDeviceForm>>
 }
 
 const WardSelectTms = (props: WardSelectType) => {
@@ -66,11 +66,14 @@ const WardSelectTms = (props: WardSelectType) => {
       options={mapOptions<Ward, keyof Ward>(filterWard, 'id', 'wardName')}
       value={mapDefaultValue<Ward, keyof Ward>(
         filterWard,
-        formData.ward,
+        String(formData.ward),
         'id',
         'wardName'
       )}
-      onChange={e => getWard(e?.value)}
+      onChange={e => {
+        getWard(e?.value)
+        setFormData({ ...formData, wardName: e?.label })
+      }}
       autoFocus={false}
       className='react-select-container w-full'
       classNamePrefix='react-select'

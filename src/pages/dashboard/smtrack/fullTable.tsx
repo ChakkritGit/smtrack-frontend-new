@@ -334,7 +334,7 @@ const FullTable = () => {
   }, [deviceLogs, dataLog])
 
   return (
-    <div className='container mx-auto p-3'>
+    <div className='p-3 px-5 overflow-hidden'>
       <div className='breadcrumbs text-sm mt-3'>
         <ul>
           <li>
@@ -344,10 +344,12 @@ const FullTable = () => {
             </a>
           </li>
           <li>
-            <span className='inline-flex items-center gap-2'>
+            <div className='flex items-center gap-2'>
               <RiTableFill size={16} className='mr-1' />
-              {t('fullTable')}
-            </span>
+              <span>{t('fullChart')}</span>
+              <span>-</span>
+              <span>{deviceLogs?.id}</span>
+            </div>
           </li>
         </ul>
       </div>
@@ -383,18 +385,20 @@ const FullTable = () => {
           </a>
         </div>
         <div className='flex items-center gap-3 justify-end w-full'>
-          {deviceLogs && deviceLogs?.probe?.length > 1 && <label
-            htmlFor='button'
-            className='tooltip tooltip-top flex'
-            data-tip={isPause ? t('startSlide') : t('stopSlide')}
-          >
-            <button
-              className='btn btn-primary bg-opacity-15 text-primary border-primary border-2 p-0 hover:opacity-50 hover:border-primary hover:bg-transparent duration-300 max-h-[28px] min-h-[28px] max-w-[28px] min-w-[28px]'
-              onClick={togglePause}
+          {deviceLogs && deviceLogs?.probe?.length > 1 && (
+            <label
+              htmlFor='button'
+              className='tooltip tooltip-top flex'
+              data-tip={isPause ? t('startSlide') : t('stopSlide')}
             >
-              {isPause ? <RiPlayLine size={20} /> : <RiStopLine size={20} />}
-            </button>
-          </label>}
+              <button
+                className='btn btn-primary bg-opacity-15 text-primary border-primary border-2 p-0 hover:opacity-50 hover:border-primary hover:bg-transparent duration-300 max-h-[28px] min-h-[28px] max-w-[28px] min-w-[28px]'
+                onClick={togglePause}
+              >
+                {isPause ? <RiPlayLine size={20} /> : <RiStopLine size={20} />}
+              </button>
+            </label>
+          )}
           <div className='dropdown dropdown-end z-50'>
             <button
               tabIndex={0}

@@ -67,7 +67,7 @@ const DataTableMini = (props: TableMiniProps) => {
     },
     {
       name: t('deviceConnectTb'),
-      cell: item => !item.internet ? t('stateDisconnect') : t('stateConnect'),
+      cell: item => (!item.internet ? t('stateDisconnect') : t('stateConnect')),
       sortable: false,
       center: true
     }
@@ -94,7 +94,7 @@ const DataTableMini = (props: TableMiniProps) => {
         noDataComponent={<DataTableNoData />}
         paginationPerPage={12}
         paginationRowsPerPageOptions={[12, 30, 50, 100]}
-        className='md:!max-h-[calc(100dvh-650px)]'
+        className='md:!max-h-[calc(100dvh-635px)] !max-h-[calc(100dvh-435px)]'
       />
     </div>
   )

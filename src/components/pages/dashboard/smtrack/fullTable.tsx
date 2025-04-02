@@ -76,16 +76,15 @@ const FullTableComponent = (props: FullTablePropType) => {
     },
     {
       name: t('deviceConnectTb'),
-      selector: (items) => !items.internet ? t('stateDisconnect') : t('stateConnect'),
+      selector: items =>
+        !items.internet ? t('stateDisconnect') : t('stateConnect'),
       sortable: false,
-      center: true,
+      center: true
     },
     {
       name: t('deviceSdCard'),
       cell: items => (
-        <span>
-          {!items.extMemory ? t('stateProblem') : t('stateNormal')}
-        </span>
+        <span>{!items.extMemory ? t('stateProblem') : t('stateNormal')}</span>
       ),
       sortable: false,
       center: true
@@ -122,18 +121,18 @@ const FullTableComponent = (props: FullTablePropType) => {
     },
     {
       name: t('devicePlugTb'),
-      cell: (items) => (
+      cell: items => (
         <span>{!items.plug ? t('stateProblem') : t('stateNormal')}</span>
       ),
       sortable: false,
-      center: true,
+      center: true
     },
     {
       name: t('deviceBatteryTb'),
-      cell: (items) => `${items.battery}%`,
+      cell: items => `${items.battery}%`,
       sortable: false,
-      center: true,
-    },
+      center: true
+    }
   ]
 
   useEffect(() => {
@@ -157,10 +156,10 @@ const FullTableComponent = (props: FullTablePropType) => {
         progressComponent={<Loading />}
         paginationPerPage={12}
         paginationRowsPerPageOptions={[12, 30, 50, 100]}
-        className='md:!max-h-[calc(100dvh-300px)]'
+        className='md:!max-h-[calc(100dvh-300px)] lg:!max-h-[calc(100dvh-200px)] xl:!max-h-full !max-h-[calc(100dvh-420px)]'
       />
     ),
-    [reverseArray, isLoading]
+    [reverseArray, isLoading, columns]
   )
 
   return (

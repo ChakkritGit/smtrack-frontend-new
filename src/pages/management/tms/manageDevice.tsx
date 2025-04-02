@@ -10,7 +10,7 @@ import {
   useState
 } from 'react'
 import {
-  AddDeviceType,
+  AddDeviceForm,
   DeviceTmsType
 } from '../../../types/tms/devices/deviceType'
 import axiosInstance from '../../../constants/axios/axiosInstance'
@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AxiosError } from 'axios'
 import {
   setHosId,
+  setSholdFetch,
   setSubmitLoading,
   setTokenExpire
 } from '../../../redux/actions/utilsActions'
@@ -37,9 +38,8 @@ import { GlobalContext } from '../../../contexts/globalContext'
 const ManageDevice = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
-  const { wardId, globalSearch, cookieDecode, hosId } = useSelector(
-    (state: RootState) => state.utils
-  )
+  const { wardId, globalSearch, cookieDecode, hosId, shouldFetch } =
+    useSelector((state: RootState) => state.utils)
   const { searchRef, isFocused, setIsFocused, isCleared, setIsCleared } =
     useContext(GlobalContext) as GlobalContextType
   const [devices, setDevices] = useState<DeviceTmsType[]>([])
@@ -48,9 +48,11 @@ const ManageDevice = () => {
   const [perPage, setPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
   const { token } = cookieDecode || {}
-  const [formData, setFormData] = useState<AddDeviceType>({
+  const [formData, setFormData] = useState<AddDeviceForm>({
     ward: '',
+    wardName: '',
     hospital: '',
+    hospitalName: '',
     sn: '',
     name: ''
   })
@@ -98,7 +100,9 @@ const ManageDevice = () => {
   const resetForm = () => {
     setFormData({
       ward: '',
+      wardName: '',
       hospital: '',
+      hospitalName: '',
       sn: '',
       name: ''
     })
@@ -193,6 +197,18 @@ const ManageDevice = () => {
     fetchDevices(1)
   }, [token, wardId])
 
+  const shouldFetchFunc = async () => {
+    await fetchDevices(1, 10, globalSearch)
+    dispatch(setSholdFetch())
+  }
+
+  useEffect(() => {
+    if (globalSearch === '') return
+    if (shouldFetch) {
+      shouldFetchFunc()
+    }
+  }, [shouldFetch, globalSearch])
+
   const deleteDevice = async (id: string) => {
     const result = await Swal.fire({
       title: t('deleteDeviceTitle'),
@@ -244,8 +260,10 @@ const ManageDevice = () => {
     setFormData({
       id: device.id,
       hospital: device.hospital,
+      hospitalName: device.hospitalName,
       ward: device.ward,
       name: device.name,
+      wardName: device.wardName,
       sn: device.sn
     })
     editModalRef.current?.showModal()
@@ -412,6 +430,10 @@ const ManageDevice = () => {
     }
   }, [globalSearch, currentPage, perPage, isCleared, isFocused])
 
+  useEffect(() => {
+    console.log('data: ', formData)
+  }, [formData])
+
   return (
     <div>
       <div className='flex flex-col lg:flex-row lg:items-center justify-between mt-3'>
@@ -462,7 +484,10 @@ const ManageDevice = () => {
                     <span className='font-medium text-red-500 mr-1'>*</span>
                     {t('userHospitals')}
                   </span>
-                  <HopitalSelect />
+                  <HopitalSelect
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
                 </label>
               </div>
 
@@ -553,7 +578,10 @@ const ManageDevice = () => {
                     <span className='font-medium text-red-500 mr-1'>*</span>
                     {t('userHospitals')}
                   </span>
-                  <HopitalSelect />
+                  <HopitalSelect
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
                 </label>
               </div>
 

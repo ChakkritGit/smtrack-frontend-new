@@ -18,7 +18,10 @@ import {
 } from 'react-icons/ri'
 import FullTableTmsComponent from '../../../components/pages/dashboard/tms/fullTableTms'
 import { useDispatch } from 'react-redux'
-import { setDeviceKey, setTokenExpire } from '../../../redux/actions/utilsActions'
+import {
+  setDeviceKey,
+  setTokenExpire
+} from '../../../redux/actions/utilsActions'
 import toast from 'react-hot-toast'
 import * as XLSX from 'xlsx'
 
@@ -229,7 +232,7 @@ const FullTableTms = () => {
   }, [deviceLogs?.sn])
 
   return (
-    <div className='container mx-auto p-3'>
+    <div className='p-3 px-5 overflow-hidden'>
       <div className='breadcrumbs text-sm mt-3'>
         <ul>
           <li>
@@ -239,10 +242,12 @@ const FullTableTms = () => {
             </a>
           </li>
           <li>
-            <span className='inline-flex items-center gap-2'>
+            <div className='flex items-center gap-2'>
               <RiTableFill size={16} className='mr-1' />
-              {t('fullTable')}
-            </span>
+              <span>{t('fullChart')}</span>
+              <span>-</span>
+              <span>{deviceLogs?.id}</span>
+            </div>
           </li>
         </ul>
       </div>

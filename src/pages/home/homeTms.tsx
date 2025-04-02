@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import {
   setDeviceKey,
   setSearch,
+  setSholdFetch,
   setTokenExpire
 } from '../../redux/actions/utilsActions'
 import HospitalAndWard from '../../components/filter/hospitalAndWard'
@@ -24,7 +25,7 @@ const HomeTms = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { wardId, globalSearch } = useSelector(
+  const { wardId, globalSearch, shouldFetch } = useSelector(
     (state: RootState) => state.utils
   )
   const { searchRef, isFocused, setIsFocused, isCleared, setIsCleared } =
@@ -125,6 +126,18 @@ const HomeTms = () => {
       </div>
     )
   }
+
+  const shouldFetchFunc = async () => {
+    await fetchDevices(1, 10, globalSearch)
+    dispatch(setSholdFetch())
+  }
+
+  useEffect(() => {
+    if (globalSearch === '') return
+    if (shouldFetch) {
+      shouldFetchFunc()
+    }
+  }, [shouldFetch, globalSearch])
 
   useEffect(() => {
     const handleCk = (e: KeyboardEvent) => {
