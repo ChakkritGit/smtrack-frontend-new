@@ -25,7 +25,7 @@ const HomeTms = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { wardId, globalSearch, shouldFetch } = useSelector(
+  const { wardId, globalSearch, shouldFetch, tokenDecode } = useSelector(
     (state: RootState) => state.utils
   )
   const { searchRef, isFocused, setIsFocused, isCleared, setIsCleared } =
@@ -35,6 +35,7 @@ const HomeTms = () => {
   const [totalRows, setTotalRows] = useState(0)
   const [perPage, setPerPage] = useState(cookies.get('homeRowPerPageTms') ?? 10)
   const [currentPage, setCurrentPage] = useState(1)
+  const { role } = tokenDecode || {}
 
   const fetchDevices = useCallback(
     async (page: number, size = perPage, search?: string) => {
@@ -95,7 +96,7 @@ const HomeTms = () => {
   }, [])
 
   const columns: TableColumn<DeviceTmsType>[] = useMemo(
-    () => columnTms(t, handleRowClicked),
+    () => columnTms(t, handleRowClicked, role),
     [t, navigate]
   )
 

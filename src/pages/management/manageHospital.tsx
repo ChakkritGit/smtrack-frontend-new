@@ -35,7 +35,7 @@ import Swal from 'sweetalert2'
 import { setSubmitLoading, setTokenExpire } from '../../redux/actions/utilsActions'
 import { GlobalContextType } from '../../types/global/globalContext'
 import { GlobalContext } from '../../contexts/globalContext'
-import HopitalSelect from '../../components/selects/hopitalSelect'
+import AddHopitalSelect from '../../components/selects/addHopitalSelect'
 
 const ManageHospital = () => {
   const dispatch = useDispatch()
@@ -1094,7 +1094,7 @@ const ManageHospital = () => {
                       <span className='font-medium text-red-500 mr-1'>*</span>
                       {t('userHospitals')}
                     </span>
-                    <HopitalSelect />
+                    <AddHopitalSelect />
                   </label>
                 </div>
 

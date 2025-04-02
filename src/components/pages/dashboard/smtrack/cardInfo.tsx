@@ -59,7 +59,8 @@ const CardInFoComponent = (props: PropsType) => {
           <div className='flex items-center gap-2'>
             <p className='font-bold'>{t('deviceNameBox')} • </p>
             <p
-              className='truncate max-w-[150px] lg:max-w-[300px]'
+              className='max-w-[150px] lg:max-w-[300px] block truncate text-left'
+              style={{ direction: 'rtl'}}
               title={deviceData?.name ?? '—'}
             >
               {deviceData?.name ?? '—'}
@@ -68,7 +69,8 @@ const CardInFoComponent = (props: PropsType) => {
           <div className='flex items-center gap-2'>
             <p className='font-bold'>{t('deviceSnBox')} • </p>
             <p
-              className='truncate max-w-[150px] lg:max-w-[300px]'
+              className='max-w-[150px] lg:max-w-[300px] block truncate text-left'
+              style={{ direction: 'rtl'}}
               title={deviceData?.id ?? '—'}
             >
               {deviceData?.id ?? '—'}
@@ -180,25 +182,25 @@ const CardInFoComponent = (props: PropsType) => {
           </Swiper>
           <div className='flex items-center gap-3'>
             <p className='font-bold'>•</p>
-            <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+            <p className='truncate max-w-[200px] lg:max-w-[300px]'>
               {deviceData?.location ?? '—'}
             </p>
           </div>
           <div className='flex items-center gap-3'>
             <p className='font-bold'>• {t('ipAddress')}:</p>
-            <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+            <p className='truncate max-w-[200px] lg:max-w-[300px]'>
               {deviceData?.config?.ip ?? '—'}
             </p>
           </div>
           <div className='flex items-center gap-3'>
             <p className='font-bold'>• {t('macAddress')}:</p>
-            <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+            <p className='truncate max-w-[200px] lg:max-w-[300px]'>
               {deviceData?.config?.mac ?? '—'}
             </p>
           </div>
           <div className='flex items-center gap-3'>
             <p className='font-bold'>• {t('firmWareVer')}:</p>
-            <p className='truncate max-w-[150px] lg:max-w-[300px]'>
+            <p className='truncate max-w-[200px] lg:max-w-[300px]'>
               {deviceData?.firmware ?? '—'}
             </p>
           </div>

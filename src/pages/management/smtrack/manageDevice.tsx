@@ -955,7 +955,7 @@ const ManageDevice = () => {
     {
       name: t('deviceNameBox'),
       cell: item => (
-        <span className='truncate max-w-[80px]'>
+        <span className='max-w-[80px] block truncate text-left' style={{ direction: 'rtl'}}>
           {item.name ? item.name : '—'}
         </span>
       ),

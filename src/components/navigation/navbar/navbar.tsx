@@ -267,8 +267,8 @@ const Navbar = () => {
                     <RiHistoryLine size={18} />
                   </div>
                   <span
-                    className='max-w-[170px] md:max-w-[300px] block truncate'
-                    style={{ direction: 'rtl', textAlign: 'left' }}
+                    className='max-w-[170px] md:max-w-[300px] block truncate text-left'
+                    style={{ direction: 'rtl'}}
                   >
                     {t(item.text)}
                   </span>

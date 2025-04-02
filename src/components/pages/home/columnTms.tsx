@@ -6,10 +6,12 @@ import {
 import { TableColumn } from 'react-data-table-component'
 import { DoorKey } from '../../../types/global/doorQty'
 import { RiDoorClosedLine, RiDoorOpenLine } from 'react-icons/ri'
+import { UserRole } from '../../../types/global/users/usersType'
 
 const columnTms = (
   t: TFunctionNonStrict<'translation', undefined>,
-  handleRowClicked: (row: DeviceTmsType) => void
+  handleRowClicked: (row: DeviceTmsType) => void,
+  role: UserRole | undefined
 ): TableColumn<DeviceTmsType>[] => {
   return [
     {
@@ -27,6 +29,40 @@ const columnTms = (
       center: true,
       width: '200px'
     },
+    ...(role === 'SUPER' ? [
+      {
+        name: t('hosName'),
+        cell: (item: DeviceTmsType) => (
+          <div
+            className='tooltip'
+            data-tip={item.hospitalName ?? '—'}
+            onClick={() => handleRowClicked(item)}
+          >
+            <span className='truncate max-w-[150px]'>{item.hospitalName ?? '—'}</span>
+          </div>
+        ),
+        sortable: false,
+        // center: true
+        width: '280px'
+      },
+    ] : []),
+    ...((role === 'SUPER' || role === 'LEGACY_ADMIN' || role === 'ADMIN') ? [
+      {
+        name: t('wardName'),
+        cell: (item: DeviceTmsType) => (
+          <div
+            className='tooltip'
+            data-tip={item.wardName ?? '—'}
+            onClick={() => handleRowClicked(item)}
+          >
+            <span className='truncate max-w-[150px]'>{item.wardName ?? '—'}</span>
+          </div>
+        ),
+        sortable: false,
+        // center: true
+        width: '280px'
+      },
+    ] : []),
     {
       name: t('deviceNameTb'),
       cell: item => (
