@@ -33,15 +33,31 @@ const FullTableTmsComponent = (props: FullTablePropType) => {
       center: true
     },
     {
-      name: t('deviceProbeTb'),
-      cell: item => <span title={item.sn}>{item.probe}</span>,
+      name: t('deviceDate'),
+      cell: items =>
+        new Date(items._time).toLocaleString('th-TH', {
+          day: '2-digit',
+          month: '2-digit',
+          year: '2-digit',
+          timeZone: 'UTC'
+        }),
       sortable: false,
       center: true
     },
     {
       name: t('deviceTime'),
-      cell: item =>
-        `${item._time.substring(0, 10)} ${item._time.substring(11, 16)}`,
+      cell: items =>
+        new Date(items._time).toLocaleString('th-TH', {
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: 'UTC'
+        }),
+      sortable: false,
+      center: true
+    },
+    {
+      name: t('deviceProbeTb'),
+      cell: item => <span title={item.sn}>{item.probe}</span>,
       sortable: false,
       center: true
     },
