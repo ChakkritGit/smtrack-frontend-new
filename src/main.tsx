@@ -57,7 +57,7 @@ class AppRenderer {
             <Provider store={store}>
               <I18nextProvider i18n={i18n}>
                 <Routes />
-                <Toaster position='bottom-left' reverseOrder={false} />
+                <Toaster position='bottom-right' reverseOrder={false} />
               </I18nextProvider>
             </Provider>
           </HelmetProvider>
