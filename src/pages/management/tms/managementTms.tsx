@@ -31,11 +31,12 @@ const ManagementTms = () => {
 
   const manageMenu = useMemo(
     () => (
-      <div role='tablist' className='tabs tabs-bordered md:w-max mt-3'>
+      <div className='flex items-center gap-2 border-b-2 border-primary w-full mt-3'>
         <a
-          role='tab'
-          className={`tab text-sm md:text-lg ${
-            tab === 1 ? 'tab-active font-medium' : ''
+          className={`flex items-center text-sm md:text-lg border-2 border-b-0 p-2 rounded-tl-btn rounded-tr-btn cursor-pointer ${
+            tab === 1
+              ? 'font-medium bg-primary border-primary text-white'
+              : 'border-base-content/70'
           }`}
           onClick={() => {
             cookies.set('manageHospitalTab', 1, cookieOptions)
@@ -52,9 +53,10 @@ const ManagementTms = () => {
           role === 'LEGACY_ADMIN') && (
           <>
             <a
-              role='tab'
-              className={`tab text-sm md:text-lg ${
-                tab === 2 ? 'tab-active font-medium' : ''
+              className={`flex items-center text-sm md:text-lg border-2 border-b-0 p-2 rounded-tl-btn rounded-tr-btn cursor-pointer ${
+                tab === 2
+                  ? 'font-medium bg-primary border-primary text-white'
+                  : 'border-base-content/70'
               }`}
               onClick={() => {
                 cookies.set('manageHospitalTab', 2, cookieOptions)
@@ -71,9 +73,10 @@ const ManagementTms = () => {
               </span>
             </a>
             <a
-              role='tab'
-              className={`tab text-sm md:text-lg ${
-                tab === 3 ? 'tab-active font-medium' : ''
+              className={`flex items-center text-sm md:text-lg border-2 border-b-0 p-2 rounded-tl-btn rounded-tr-btn cursor-pointer ${
+                tab === 3
+                  ? 'font-medium bg-primary border-primary text-white'
+                  : 'border-base-content/70'
               }`}
               onClick={() => {
                 cookies.set('manageHospitalTab', 3, cookieOptions)

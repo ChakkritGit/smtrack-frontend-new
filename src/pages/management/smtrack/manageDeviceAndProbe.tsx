@@ -6,7 +6,14 @@ import { setSearch } from '../../../redux/actions/utilsActions'
 import { RootState } from '../../../redux/reducers/rootReducer'
 import ManageProbe from './manageProbe'
 import ManageDevice from './manageDevice'
-import { RiBox3Fill, RiBox3Line, RiCodeSSlashFill, RiCodeSSlashLine, RiSensorFill, RiSensorLine } from 'react-icons/ri'
+import {
+  RiBox3Fill,
+  RiBox3Line,
+  RiCodeSSlashFill,
+  RiCodeSSlashLine,
+  RiSensorFill,
+  RiSensorLine
+} from 'react-icons/ri'
 import ManageFirmware from './manageFirmware'
 
 const ManageDeviceAndProbe = () => {
@@ -24,11 +31,12 @@ const ManageDeviceAndProbe = () => {
 
   const manageMenu = useMemo(
     () => (
-      <div role='tablist' className='tabs tabs-bordered w-72 md:w-max mt-3'>
+      <div className='flex items-center gap-2 border-b-2 border-primary w-full mt-3'>
         <a
-          role='tab'
-          className={`tab text-sm md:text-base ${
-            tab === 1 ? 'tab-active font-medium' : ''
+          className={`flex items-center text-sm md:text-base border-2 border-b-0 px-2 py-[0.3rem] rounded-tl-btn rounded-tr-btn cursor-pointer ${
+            tab === 1
+              ? 'font-medium bg-primary border-primary text-white'
+              : 'border-base-content/70'
           }`}
           onClick={() => {
             cookies.set('manageDeviceTab', 1, cookieOptions)
@@ -40,35 +48,44 @@ const ManageDeviceAndProbe = () => {
         </a>
         {(role === 'SUPER' || role === 'SERVICE') && (
           <a
-            role='tab'
-            className={`tab text-sm md:text-base ${
-              tab === 2 ? 'tab-active font-medium' : ''
+            className={`flex items-center text-sm md:text-base border-2 border-b-0 px-2 py-[0.3rem] rounded-tl-btn rounded-tr-btn cursor-pointer ${
+              tab === 2
+                ? 'font-medium bg-primary border-primary text-white'
+                : 'border-base-content/70'
             }`}
             onClick={() => {
               cookies.set('manageDeviceTab', 2, cookieOptions)
               setTab(2)
             }}
           >
-            {tab === 2 ? <RiSensorFill size={24} /> : <RiSensorLine size={24} />}
+            {tab === 2 ? (
+              <RiSensorFill size={24} />
+            ) : (
+              <RiSensorLine size={24} />
+            )}
             <span className='hidden md:block md:ml-2'>{t('subTabProbe')}</span>
           </a>
         )}
-        {
-          role === 'SUPER' &&
+        {role === 'SUPER' && (
           <a
-            role='tab'
-            className={`tab text-sm md:text-base ${
-              tab === 3 ? 'tab-active font-medium' : ''
+            className={`flex items-center text-sm md:text-base border-2 border-b-0 px-2 py-[0.3rem] rounded-tl-btn rounded-tr-btn cursor-pointer ${
+              tab === 3
+                ? 'font-medium bg-primary border-primary text-white'
+                : 'border-base-content/70'
             }`}
             onClick={() => {
               cookies.set('manageDeviceTab', 3, cookieOptions)
               setTab(3)
             }}
           >
-            {tab === 3 ? <RiCodeSSlashFill size={24} /> : <RiCodeSSlashLine size={24} />}
+            {tab === 3 ? (
+              <RiCodeSSlashFill size={24} />
+            ) : (
+              <RiCodeSSlashLine size={24} />
+            )}
             <span className='hidden md:block md:ml-2'>{t('firmWareVer')}</span>
           </a>
-        }
+        )}
       </div>
     ),
     [tab, role, t]
@@ -78,7 +95,13 @@ const ManageDeviceAndProbe = () => {
     <div>
       {manageMenu}
       <div className='mt-3'>
-        {tab === 1 ? <ManageDevice /> : tab === 2 ? <ManageProbe /> : <ManageFirmware />}
+        {tab === 1 ? (
+          <ManageDevice />
+        ) : tab === 2 ? (
+          <ManageProbe />
+        ) : (
+          <ManageFirmware />
+        )}
       </div>
     </div>
   )

@@ -13,6 +13,7 @@ import { useSwiperSync } from '../../../../constants/utils/utilsConstants'
 import { GlobalContextType } from '../../../../types/global/globalContext'
 import { Swiper as SwiperType } from 'swiper/types'
 import ImageModal from '../../../ui/imageModal'
+import { getColor } from '../../../../constants/utils/color'
 
 type PropsType = {
   deviceData: DeviceLogsType | undefined
@@ -28,6 +29,7 @@ const CardInFoComponent = (props: PropsType) => {
   const { deviceData, fetchDevices, swiperInfoRef, isPause } = props
   const [serial, setSerial] = useState<string>('')
   const [probeData, setProbeData] = useState<ProbeType[]>([])
+  const [colors, setColors] = useState<string[]>([])
   const openAdjustModalRef = useRef<HTMLDialogElement>(null)
   const { activeIndex, setActiveIndex } = useSwiperSync() as GlobalContextType
   const modalRef = useRef<HTMLDialogElement>(null)
@@ -52,6 +54,12 @@ const CardInFoComponent = (props: PropsType) => {
     }
   }, [activeIndex, isPause, swiperInfoRef])
 
+  useEffect(() => {
+    if (deviceData) {
+      getColor(deviceData?.positionPic ?? DefaultPic, 0, setColors)
+    }
+  }, [deviceData])
+
   return (
     <div className='p-5 h-full'>
       <div className='flex items-start justify-between'>
@@ -60,7 +68,7 @@ const CardInFoComponent = (props: PropsType) => {
             <p className='font-bold'>{t('deviceNameBox')} • </p>
             <p
               className='max-w-[150px] lg:max-w-[300px] block truncate text-left'
-              style={{ direction: 'rtl'}}
+              style={{ direction: 'rtl' }}
               title={deviceData?.name ?? '—'}
             >
               {deviceData?.name ?? '—'}
@@ -70,7 +78,7 @@ const CardInFoComponent = (props: PropsType) => {
             <p className='font-bold'>{t('deviceSnBox')} • </p>
             <p
               className='max-w-[150px] lg:max-w-[300px] block truncate text-left'
-              style={{ direction: 'rtl'}}
+              style={{ direction: 'rtl' }}
               title={deviceData?.id ?? '—'}
             >
               {deviceData?.id ?? '—'}
@@ -101,14 +109,18 @@ const CardInFoComponent = (props: PropsType) => {
       </div>
       <div className='flex justify-between flex-col lg:flex-row gap-3 mt-2 h-full'>
         <div
-          className='flex justify-center items-center w-full lg:w-[35%] lg:h-48'
+          className='flex justify-center items-center w-full lg:w-[35%] lg:h-48 relative'
           onClick={() => modalRef.current?.showModal()}
         >
           <img
             src={deviceData?.positionPic ?? DefaultPic}
             alt='Device-image'
-            className='rounded-btn w-max h-[85%] object-contain cursor-pointer hover:scale-95 duration-300'
+            className='rounded-btn w-max h-[85%] object-contain cursor-pointer hover:scale-95 duration-300 absolute z-20'
           />
+          <div
+            className='blur-[96px] w-28 h-[85%] absolute z-10'
+            style={{ backgroundColor: colors[0], opacity: '50%' }}
+          ></div>
         </div>
         <div className='w-full lg:w-[60%] lg:h-48 p-1'>
           <Swiper

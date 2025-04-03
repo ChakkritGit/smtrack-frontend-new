@@ -1,3 +1,6 @@
+import { Vibrant } from "node-vibrant/browser"
+import { Dispatch, SetStateAction } from "react"
+
 const getOKLCHColor = (themeMode: string, system: string): string => {
   switch (themeMode) {
     case 'light':
@@ -71,4 +74,17 @@ const getOKLCHColor = (themeMode: string, system: string): string => {
   }
 }
 
-export { getOKLCHColor }
+const getColor = async (image: string, index: number, setColors: Dispatch<SetStateAction<string[]>>) => {
+  try {
+    const palette = await Vibrant.from(image).getPalette()
+    setColors(prevColors => {
+      const updatedColors = [...prevColors]
+      updatedColors[index] = palette.Vibrant?.hex || ''
+      return updatedColors
+    })
+  } catch (error) {
+    console.error('Error fetching color:', error)
+  }
+}
+
+export { getOKLCHColor, getColor }

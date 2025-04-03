@@ -34,7 +34,6 @@ import {
 } from '../../redux/actions/utilsActions'
 import Swal from 'sweetalert2'
 import { resizeImage } from '../../constants/utils/image'
-import HopitalSelect from '../../components/selects/hopitalSelect'
 import WardSelect from '../../components/selects/wardSelect'
 import RoleSelect from '../../components/selects/roleSelect'
 import { UserRole } from '../../types/global/users/usersType'
@@ -42,6 +41,8 @@ import { AxiosError } from 'axios'
 import StatusSelect from '../../components/selects/statusSelect'
 import RoleButtons from '../../components/pages/users/users'
 import Loading from '../../components/skeleton/table/loading'
+import { getColor } from '../../constants/utils/color'
+import AddHopitalSelect from '../../components/selects/addHopitalSelect'
 
 const Users = () => {
   const dispatch = useDispatch()
@@ -58,7 +59,6 @@ const Users = () => {
   const [onEdit, setOnEdit] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [userPassword, setUserPassword] = useState('')
-
   const [formData, setFormData] = useState<FormState>({
     username: '',
     password: '',
@@ -72,6 +72,7 @@ const Users = () => {
     imageFile: null,
     imagePreview: null
   })
+  const [colors, setColors] = useState<string[]>([])
 
   const addModalRef = useRef<HTMLDialogElement>(null)
   const editModalRef = useRef<HTMLDialogElement>(null)
@@ -473,6 +474,14 @@ const Users = () => {
     setUsersFilter(newFilter)
   }, [users, globalSearch, wardId, tmsMode, userConnect, userInactive])
 
+  useEffect(() => {
+    if (usersFilter.length > 0) {
+      usersFilter.forEach((item, index) => {
+        getColor(item.pic ?? defaultPic, index, setColors)
+      })
+    }
+  }, [usersFilter])
+
   const UserCard = useMemo(() => {
     if (isLoading)
       return (
@@ -486,114 +495,127 @@ const Users = () => {
           data={usersFilter}
           initialPerPage={10}
           itemPerPage={[10, 30, 50, 100]}
-          renderItem={(item, index) => (
-            <div
-              className={`min-h-[240px] max-h-[270px] w-full shadow-sm ${
-                !item.status ? 'bg-base-100/40' : 'bg-base-100'
-              } rounded-btn`}
-              key={index}
-            >
+          renderItem={(item, index) => {
+            const bgColor = colors[index] || 'transparent'
+
+            return (
               <div
-                className='h-full flex flex-col items-center gap-4 px-3 py-4'
-                key={item.id}
+                className={`min-h-[240px] max-h-[270px] w-full shadow-sm ${
+                  !item.status ? 'bg-base-100/40' : 'bg-base-100'
+                } rounded-btn overflow-hidden`}
+                key={index}
               >
-                <div className='flex items-center justify-between w-full'>
-                  {item.status ? (
-                    <span
-                      className={`badge bg-opacity-15 border-1 font-bold h-[25px] ${
-                        item.role
-                          ? item.role === 'SUPER'
-                            ? 'badge-super'
-                            : item.role === 'SERVICE'
-                            ? 'badge-service'
-                            : item.role === 'ADMIN'
-                            ? 'badge-admin'
-                            : item.role === 'USER'
-                            ? 'badge-user'
-                            : 'badge-guest'
-                          : ''
-                      }`}
-                    >
-                      {item.role ? getRoleLabel(item.role, t) : '—'}
-                    </span>
-                  ) : (
-                    <span
-                      className={`badge bg-red-500/15 border-red-500 text-red-500 bg-opacity-15 border-1 font-bold h-[25px]`}
-                    >
-                      {!item.status ? t('userInactive') : t('userActive')}
-                    </span>
-                  )}
-                  <div className='dropdown dropdown-end'>
-                    <button
-                      tabIndex={0}
-                      role='button'
-                      name='menuButton'
-                      aria-label={t('menuButton')}
-                      data-tip={t('menuButton')}
-                      className='btn btn-ghost flex p-0 max-w-[30px] min-w-[30px] max-h-[30px] min-h-[30px] tooltip tooltip-left'
-                    >
-                      <RiMore2Line size={20} />
-                    </button>
-                    <ul
-                      tabIndex={0}
-                      className='dropdown-content menu bg-base-100 rounded-box z-[1] max-w-[180px] w-[140px] p-2 shadow'
-                    >
-                      <li onClick={() => openEditModal(item)}>
-                        <div className='flex items-center gap-3 text-[16px]'>
-                          <RiEditLine size={20} />
-                          <span>{t('editButton')}</span>
-                        </div>
-                      </li>
-                      {(role === 'SUPER' ||
-                        role === 'ADMIN' ||
-                        role === 'LEGACY_ADMIN') && (
-                        <>
-                          <div className='divider my-1 h-2 before:h-[1px] after:h-[1px]'></div>
-                          <li onClick={() => deleteUser(item.id)}>
-                            <div className='flex items-center gap-3 text-[16px] text-red-500 hover:bg-red-500 hover:text-white'>
-                              <RiDeleteBin7Line size={20} />
-                              <span>{t('deleteButton')}</span>
-                            </div>
-                          </li>
-                        </>
-                      )}
-                    </ul>
-                  </div>
-                </div>
                 <div
-                  className={`flex items-center justify-center ${
-                    !item.status ? 'grayscale' : ''
-                  }`}
+                  className='h-full flex flex-col items-center gap-4 px-3 py-4'
+                  key={item.id}
                 >
-                  <div className='avatar'>
-                    <div className='w-24 rounded-btn'>
-                      <img src={item.pic ? item.pic : defaultPic} alt='user' />
+                  <div className='flex items-center justify-between w-full'>
+                    {item.status ? (
+                      <span
+                        className={`badge bg-opacity-15 border-1 font-bold h-[25px] ${
+                          item.role
+                            ? item.role === 'SUPER'
+                              ? 'badge-super'
+                              : item.role === 'SERVICE'
+                              ? 'badge-service'
+                              : item.role === 'ADMIN'
+                              ? 'badge-admin'
+                              : item.role === 'USER'
+                              ? 'badge-user'
+                              : 'badge-guest'
+                            : ''
+                        }`}
+                      >
+                        {item.role ? getRoleLabel(item.role, t) : '—'}
+                      </span>
+                    ) : (
+                      <span
+                        className={`badge bg-red-500/15 border-red-500 text-red-500 bg-opacity-15 border-1 font-bold h-[25px]`}
+                      >
+                        {!item.status ? t('userInactive') : t('userActive')}
+                      </span>
+                    )}
+                    <div className='dropdown dropdown-end'>
+                      <button
+                        tabIndex={0}
+                        role='button'
+                        name='menuButton'
+                        aria-label={t('menuButton')}
+                        data-tip={t('menuButton')}
+                        className='btn btn-ghost flex p-0 max-w-[30px] min-w-[30px] max-h-[30px] min-h-[30px] tooltip tooltip-left'
+                      >
+                        <RiMore2Line size={20} />
+                      </button>
+                      <ul
+                        tabIndex={0}
+                        className='dropdown-content menu bg-base-100 rounded-box z-[1] max-w-[180px] w-[140px] p-2 shadow'
+                      >
+                        <li onClick={() => openEditModal(item)}>
+                          <div className='flex items-center gap-3 text-[16px]'>
+                            <RiEditLine size={20} />
+                            <span>{t('editButton')}</span>
+                          </div>
+                        </li>
+                        {(role === 'SUPER' ||
+                          role === 'ADMIN' ||
+                          role === 'LEGACY_ADMIN') && (
+                          <>
+                            <div className='divider my-1 h-2 before:h-[1px] after:h-[1px]'></div>
+                            <li onClick={() => deleteUser(item.id)}>
+                              <div className='flex items-center gap-3 text-[16px] text-red-500 hover:bg-red-500 hover:text-white'>
+                                <RiDeleteBin7Line size={20} />
+                                <span>{t('deleteButton')}</span>
+                              </div>
+                            </li>
+                          </>
+                        )}
+                      </ul>
                     </div>
                   </div>
-                </div>
-                <div className='flex flex-col items-center justify-center'>
-                  <label
-                    htmlFor='span'
-                    className='tooltip tooltip-top'
-                    data-tip={item.display ?? '—'}
+                  <div
+                    className={`flex items-center justify-center ${
+                      !item.status ? 'grayscale' : ''
+                    }`}
                   >
-                    <span className='truncate block max-w-[180px] text-[20px]'>
-                      {item.display ?? '—'}
-                    </span>
-                  </label>
-                  <label
-                    htmlFor='span'
-                    className='tooltip tooltip-bottom'
-                    data-tip={item.username ?? '—'}
-                  >
-                    <span className='truncate block max-w-[180px] text-base-content/50 text-[16px]'>
-                      @{item.username ?? '—'}
-                    </span>
-                  </label>
+                    <div className='relative w-24 h-24'>
+                      <div className='avatar absolute z-20'>
+                        <div className='w-24 rounded-btn'>
+                          <img
+                            src={item.pic ? item.pic : defaultPic}
+                            alt='user'
+                          />
+                        </div>
+                      </div>
+                      <div
+                        className='blur-[69px] w-24 h-24 absolute z-10'
+                        style={{ backgroundColor: bgColor, opacity: '30%' }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div className='flex flex-col items-center justify-center'>
+                    <label
+                      htmlFor='span'
+                      className='tooltip tooltip-top'
+                      data-tip={item.display ?? '—'}
+                    >
+                      <span className='truncate block max-w-[180px] text-[20px]'>
+                        {item.display ?? '—'}
+                      </span>
+                    </label>
+                    <label
+                      htmlFor='span'
+                      className='tooltip tooltip-bottom'
+                      data-tip={item.username ?? '—'}
+                    >
+                      <span className='truncate block max-w-[180px] text-base-content/50 text-[16px]'>
+                        @{item.username ?? '—'}
+                      </span>
+                    </label>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )
+          }}
         />
       )
     } else {
@@ -603,7 +625,7 @@ const Users = () => {
         </div>
       )
     }
-  }, [usersFilter, role, t, isLoading])
+  }, [usersFilter, role, t, isLoading, colors])
 
   useEffect(() => {
     return () => {
@@ -712,7 +734,7 @@ const Users = () => {
                     <span className='font-medium text-red-500 mr-1'>*</span>
                     {t('userHospitals')}
                   </span>
-                  <HopitalSelect />
+                  <AddHopitalSelect />
                 </label>
               </div>
 
