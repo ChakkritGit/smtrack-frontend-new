@@ -152,13 +152,13 @@ export default defineConfig({
   ],
   build: {
     chunkSizeWarningLimit: 100000, // Unit is in KB => 100MB
-    rollupOptions: {
-      output: {
-        entryFileNames: 'assets/[name].js',
-        chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]'
-      }
-    }
+    // rollupOptions: {
+    //   output: {
+    //     entryFileNames: 'assets/[name].js',
+    //     chunkFileNames: 'assets/[name].js',
+    //     assetFileNames: 'assets/[name].[ext]'
+    //   }
+    // }
   },
   server: {
     port: 12345,
