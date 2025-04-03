@@ -463,6 +463,8 @@ export default {
     sendFm: 'Sent',
     noMoreLoad: 'End of notification',
     deviceFilterNotUpdate: 'Not updated yet',
+    switchingMode: 'Switching...',
+    currentMode: '*Switch SMTrack and Line mode',
 
     // connect
     ipAddress: 'IP',

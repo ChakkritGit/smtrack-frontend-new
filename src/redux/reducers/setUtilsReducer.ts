@@ -20,7 +20,8 @@ import {
   POPUP_MODE,
   RESET_UTILS,
   TOKEN_EXPIRE,
-  SHOULD_FETCH
+  SHOULD_FETCH,
+  SWITCHING_MODE
 } from '../types/utilsTypes'
 
 const initialState: UtilsState = {
@@ -40,6 +41,7 @@ const initialState: UtilsState = {
   popUpMode: cookies.get('popUpMode') ?? false,
   tokenExpire: false,
   shouldFetch: false,
+  switchingMode: false,
   soundMode: cookies.get('soundMode') ?? false
 }
 
@@ -82,6 +84,8 @@ const utilsReducer = (
       return { ...state, tokenExpire: action.payload }
     case SHOULD_FETCH:
       return { ...state, shouldFetch: !state.shouldFetch }
+    case SWITCHING_MODE:
+      return { ...state, switchingMode: !state.switchingMode }
     case RESET_UTILS:
       return initialState
     default:

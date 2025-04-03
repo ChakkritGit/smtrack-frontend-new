@@ -23,6 +23,7 @@ const POPUP_MODE = 'POPUP_MODE'
 const SOUND_MODE = 'SOUND_MODE'
 const TOKEN_EXPIRE = 'TOKEN_EXPIRE'
 const SHOULD_FETCH = 'SHOULD_FETCH'
+const SWITCHING_MODE = 'SWITCHING_MODE'
 const RESET_UTILS = 'RESET_UTILS'
 
 interface UtilsState {
@@ -42,6 +43,7 @@ interface UtilsState {
   popUpMode: boolean
   soundMode: boolean
   shouldFetch: boolean
+  switchingMode: boolean
   tokenExpire: boolean
 }
 
@@ -63,6 +65,7 @@ type UtilsAction =
   | { type: typeof POPUP_MODE }
   | { type: typeof SOUND_MODE }
   | { type: typeof SHOULD_FETCH }
+  | { type: typeof SWITCHING_MODE }
   | { type: typeof RESET_UTILS }
 
 export {
@@ -83,6 +86,7 @@ export {
   SOUND_MODE,
   TOKEN_EXPIRE,
   SHOULD_FETCH,
+  SWITCHING_MODE,
   RESET_UTILS
 }
 export type { UtilsState, UtilsAction }

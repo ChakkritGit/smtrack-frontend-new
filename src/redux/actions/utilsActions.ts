@@ -23,7 +23,8 @@ import {
   POPUP_MODE,
   RESET_UTILS,
   TOKEN_EXPIRE,
-  SHOULD_FETCH
+  SHOULD_FETCH,
+  SWITCHING_MODE
 } from '../types/utilsTypes'
 
 const setCookieEncode = (dataEncode?: string) => ({
@@ -105,6 +106,10 @@ const setSholdFetch = () => ({
   type: SHOULD_FETCH
 })
 
+const setSwitchingMode = () => ({
+  type: SWITCHING_MODE
+})
+
 const resetUtils = () => ({
   type: RESET_UTILS
 })
@@ -127,5 +132,6 @@ export {
   setSoundMode,
   setTokenExpire,
   setSholdFetch,
+  setSwitchingMode,
   resetUtils
 }

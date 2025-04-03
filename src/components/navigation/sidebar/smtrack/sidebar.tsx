@@ -20,6 +20,7 @@ import {
 import {
   setDeviceKey,
   setHosId,
+  setSwitchingMode,
   setTmsMode,
   setWardId
 } from '../../../../redux/actions/utilsActions'
@@ -38,9 +39,8 @@ const Sidebar = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const location = useLocation()
-  const { isExpand, userProfile, tmsMode, tokenDecode } = useSelector(
-    (state: RootState) => state.utils
-  )
+  const { isExpand, userProfile, tmsMode, tokenDecode, switchingMode } =
+    useSelector((state: RootState) => state.utils)
   const { ward: wardData } = useContext(GlobalContext) as GlobalContextType
   const { ward } = userProfile || {}
   const { role } = tokenDecode || {}
@@ -241,10 +241,19 @@ const Sidebar = () => {
                   htmlFor='ModeToggle'
                   className='flex flex-col items-center justify-center gap-2'
                 >
-                  {!isExpand && (
-                    <span className='text-[12px] truncate'>
-                      *Switch SMTrack and Line mode
-                    </span>
+                  {!isExpand ? (
+                    <div className='flex items-center gap-2'>
+                      {switchingMode && (
+                        <span className='loading loading-spinner loading-xs'></span>
+                      )}
+                      <span className='text-[12px] truncate'>
+                        {!switchingMode ? t('currentMode') : t('switchingMode')}
+                      </span>
+                    </div>
+                  ) : (
+                    switchingMode && (
+                      <span className='loading loading-spinner loading-xs mb-2'></span>
+                    )
                   )}
                   <input
                     id='ModeToggle'
@@ -253,6 +262,7 @@ const Sidebar = () => {
                     className='toggle toggle-md'
                     checked={tmsMode}
                     onChange={async () => {
+                      dispatch(setSwitchingMode())
                       dispatch(setDeviceKey(''))
                       dispatch(setHosId(undefined))
                       dispatch(setWardId(undefined))
@@ -267,6 +277,7 @@ const Sidebar = () => {
 
                       navigate('/')
                       dispatch(setTmsMode())
+                      dispatch(setSwitchingMode())
                     }}
                   />
                 </label>

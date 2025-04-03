@@ -462,6 +462,8 @@ export default {
     sendFm: 'ส่งแล้ว',
     noMoreLoad: 'สิ้นสุดการแจ้งเตือน',
     deviceFilterNotUpdate: 'ยังไม่อัพเดท',
+    switchingMode: 'กำลังสลับ...',
+    currentMode: '*สลับ SMTrack และ Line โหมด',
 
     // connect
     ipAddress: 'IP',
@@ -491,7 +493,8 @@ export default {
     customMessageLogData: 'ช่วงเวลาที่เลือกห่างกันมากกว่า 30 วัน',
     deactivateDevice: 'คุณต้องการปิดการใช้งานหรือไม่',
     deactivateDeviceText: 'หากคุณปิดการใช้งานอุปกรณ์จะหยุดทำงานทันที',
-    moveDeviceActive: 'ไม่สามารถย้ายอุปกรณ์ที่กำลังเปิดใช้งานอยู่ กรุณาปิดอุปกรณ์ก่อนทำการย้ายข้อมูล',
+    moveDeviceActive:
+      'ไม่สามารถย้ายอุปกรณ์ที่กำลังเปิดใช้งานอยู่ กรุณาปิดอุปกรณ์ก่อนทำการย้ายข้อมูล',
     reactivateDevice: 'คุณต้องการเปิดการใช้งานหรือไม่',
     reactivateDeviceText: 'หากคุณเปิดการใช้งานอุปกรณ์จะกลับมาทำงานทันที',
     deleteProbe: 'คุณต้องการลบโพรบหรือไม่',
