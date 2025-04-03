@@ -33,7 +33,7 @@ const ManageDeviceAndProbe = () => {
     () => (
       <div className='flex items-center gap-2 border-b-2 border-primary w-full mt-3'>
         <a
-          className={`flex items-center text-sm md:text-base border-2 border-b-0 px-2 py-[0.3rem] rounded-tl-btn rounded-tr-btn cursor-pointer ${
+          className={`flex items-center text-sm md:text-base border-2 border-b-0 px-2 py-[0.3rem] rounded-tl-md rounded-tr-md cursor-pointer ${
             tab === 1
               ? 'font-medium bg-primary border-primary text-white'
               : 'border-base-content/70'
@@ -48,7 +48,7 @@ const ManageDeviceAndProbe = () => {
         </a>
         {(role === 'SUPER' || role === 'SERVICE') && (
           <a
-            className={`flex items-center text-sm md:text-base border-2 border-b-0 px-2 py-[0.3rem] rounded-tl-btn rounded-tr-btn cursor-pointer ${
+            className={`flex items-center text-sm md:text-base border-2 border-b-0 px-2 py-[0.3rem] rounded-tl-md rounded-tr-md cursor-pointer ${
               tab === 2
                 ? 'font-medium bg-primary border-primary text-white'
                 : 'border-base-content/70'
@@ -68,7 +68,7 @@ const ManageDeviceAndProbe = () => {
         )}
         {role === 'SUPER' && (
           <a
-            className={`flex items-center text-sm md:text-base border-2 border-b-0 px-2 py-[0.3rem] rounded-tl-btn rounded-tr-btn cursor-pointer ${
+            className={`flex items-center text-sm md:text-base border-2 border-b-0 px-2 py-[0.3rem] rounded-tl-md rounded-tr-md cursor-pointer ${
               tab === 3
                 ? 'font-medium bg-primary border-primary text-white'
                 : 'border-base-content/70'

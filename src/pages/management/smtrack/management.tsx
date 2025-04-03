@@ -33,7 +33,7 @@ const Management = () => {
     () => (
       <div className='flex items-center gap-2 border-b-2 border-primary w-full mt-3'>
         <a
-          className={`flex items-center text-sm md:text-lg border-2 border-b-0 p-2 rounded-tl-btn rounded-tr-btn cursor-pointer ${
+          className={`flex items-center text-sm md:text-lg border-2 border-b-0 p-2 rounded-tl-md rounded-tr-md cursor-pointer ${
             tab === 1
               ? 'font-medium bg-primary border-primary text-white'
               : 'border-base-content/70'
@@ -54,7 +54,7 @@ const Management = () => {
           role === 'LEGACY_ADMIN') && (
           <>
             <a
-              className={`flex items-center text-sm md:text-lg border-2 border-b-0 p-2 rounded-tl-btn rounded-tr-btn cursor-pointer ${
+              className={`flex items-center text-sm md:text-lg border-2 border-b-0 p-2 rounded-tl-md rounded-tr-md cursor-pointer ${
                 tab === 2
                   ? 'font-medium bg-primary border-primary text-white'
                   : 'border-base-content/70'
@@ -74,7 +74,7 @@ const Management = () => {
               </span>
             </a>
             <a
-              className={`flex items-center text-sm md:text-lg border-2 border-b-0 p-2 rounded-tl-btn rounded-tr-btn cursor-pointer ${
+              className={`flex items-center text-sm md:text-lg border-2 border-b-0 p-2 rounded-tl-md rounded-tr-md cursor-pointer ${
                 tab === 3
                   ? 'font-medium bg-primary border-primary text-white'
                   : 'border-base-content/70'
