@@ -181,41 +181,52 @@ const FullTableTms = () => {
     log: LogChartTms[]
   }) => {
     return new Promise<boolean>((resolve, reject) => {
-      if (object.deviceData && object.log.length > 0) {
-        const newArray = object.log.map((items, index) => {
+      if (!object.deviceData || object.log.length === 0) {
+        return reject(false)
+      }
+
+      const workbook = XLSX.utils.book_new()
+      const groupedData: Record<string, LogChartTms[]> = {}
+
+      object.log.forEach(log => {
+        if (!groupedData[log.probe]) {
+          groupedData[log.probe] = []
+        }
+        groupedData[log.probe].push(log)
+      })
+
+      Object.keys(groupedData).forEach(probe => {
+        const data = groupedData[probe].map((log, index) => {
+          const isHumidity = /hum/i.test(probe)
           return {
             No: index + 1,
-            DeviceSN: items.sn,
+            DeviceSN: log.sn,
             DeviceName: object.deviceData?.name,
-            TemperatureMin: deviceLogs.minTemp,
-            TemperatureMax: deviceLogs.maxTemp,
-            Date: new Date(items._time).toLocaleString('th-TH', {
+            Date: new Date(log._time).toLocaleString('th-TH', {
               day: '2-digit',
               month: '2-digit',
               year: 'numeric',
               timeZone: 'UTC'
             }),
-            Time: new Date(items._time).toLocaleString('th-TH', {
+            Time: new Date(log._time).toLocaleString('th-TH', {
               hour: '2-digit',
               minute: '2-digit',
               second: '2-digit',
               timeZone: 'UTC'
             }),
-            Temperature: items._value.toFixed(2)
+            [isHumidity ? 'Humidity' : 'Temperature']: log._value.toFixed(2)
           }
         })
 
-        const ws = XLSX.utils.json_to_sheet(newArray)
-        const wb = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(wb, ws, String(newArray[0].DeviceSN))
+        const worksheet = XLSX.utils.json_to_sheet(data)
+        XLSX.utils.book_append_sheet(workbook, worksheet, `Probe_${probe}`)
+      })
 
-        try {
-          XLSX.writeFile(wb, 'smtrack-data-table' + '.xlsx')
-          resolve(true)
-        } catch (error) {
-          reject(false)
-        }
-      } else {
+      try {
+        XLSX.writeFile(workbook, `Device_${object.deviceData.sn}_Data.xlsx`)
+        resolve(true)
+      } catch (error) {
+        console.error(error)
         reject(false)
       }
     })

@@ -111,10 +111,10 @@ const DashboardTms = () => {
                 </div>
               </div>
               <div className='grid grid-cols-1 lg:grid-cols-2 mt-4 gap-3'>
-                <div className='w-full h-[435px]'>
+                <div className='w-full min-h-[385px]'>
                   <ChartSwiperWrapperTms deviceLogs={deviceLogs} />
                 </div>
-                <div className='w-full h-[435px]'>
+                <div className='w-full min-h-[385px]'>
                   <DataTableWrapperTms deviceLogs={deviceLogs} />
                 </div>
               </div>

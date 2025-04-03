@@ -10,13 +10,13 @@ interface ChartMiniProps {
 
 const ChartMiniTms = (props: ChartMiniProps) => {
   const { t } = useTranslation()
-  const { deviceLogs, minTemp, maxTemp } = props
+  const { deviceLogs } = props
 
-  const tempAvgValues = deviceLogs?.log
-    ? deviceLogs?.log.map(item => item.tempValue)
-    : [0]
-  const minTempAvg = Math.min(...tempAvgValues) - 2
-  const maxTempAvg = Math.max(...tempAvgValues) + 2
+  // const tempAvgValues = deviceLogs?.log
+  //   ? deviceLogs?.log.map(item => item.tempValue)
+  //   : [0]
+  // const minTempAvg = Math.min(...tempAvgValues) - 2
+  // const maxTempAvg = Math.max(...tempAvgValues) + 2
 
   const mappedData = deviceLogs?.log
     ? deviceLogs.log.map(item => ({
@@ -44,20 +44,20 @@ const ChartMiniTms = (props: ChartMiniProps) => {
     })
   )
 
-  series.push(
-    {
-      type: 'area',
-      name: t('tempMin'),
-      zIndex: 60,
-      data: mappedData.map(data => ({ x: data.time, y: minTemp }))
-    },
-    {
-      type: 'area',
-      name: t('tempMax'),
-      zIndex: 60,
-      data: mappedData.map(data => ({ x: data.time, y: maxTemp }))
-    }
-  )
+  // series.push(
+  //   {
+  //     type: 'area',
+  //     name: t('tempMin'),
+  //     zIndex: 60,
+  //     data: mappedData.map(data => ({ x: data.time, y: minTemp }))
+  //   },
+  //   {
+  //     type: 'area',
+  //     name: t('tempMax'),
+  //     zIndex: 60,
+  //     data: mappedData.map(data => ({ x: data.time, y: maxTemp }))
+  //   }
+  // )
 
   const generateColors = (count: number) => {
     const colors = ['oklch(73.24% 0.1973 44.47 / 1)']
@@ -95,8 +95,8 @@ const ChartMiniTms = (props: ChartMiniProps) => {
         fontWeight: 600
       }
     },
-    min: minTempAvg - 5,
-    max: maxTempAvg + 5
+    // min: minTempAvg - 5,
+    // max: maxTempAvg + 5
   }))
 
   const options: ApexCharts.ApexOptions = {

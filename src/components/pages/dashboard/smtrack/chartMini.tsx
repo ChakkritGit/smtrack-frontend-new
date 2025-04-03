@@ -270,8 +270,8 @@ const ChartMini = (props: ChartMiniProps) => {
     colors: [
       'oklch(79% 0.1305 238 / var(--tw-text-opacity, 0.45))',
       'oklch(73.24% 0.1973 44.47 / var(--tw-text-opacity, 1))',
-      'oklch(81% 0.1696 175 / var(--tw-text-opacity, 1))',
-      'oklch(81% 0.2319 126 / var(--tw-text-opacity, 1))',
+      'oklch(0.81 0.1825 170.47 / var(--tw-text-opacity, 1))',
+      'oklch(0.81 0.1825 170.47 / var(--tw-text-opacity, 1))',
       'oklch(90% 0.1378 90 / var(--tw-text-opacity, 1))'
     ],
     fill: {

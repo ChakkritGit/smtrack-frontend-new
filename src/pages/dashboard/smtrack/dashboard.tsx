@@ -206,13 +206,13 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className='grid grid-cols-1 lg:grid-cols-2 mt-4 gap-3'>
-                <div className='w-full'>
+                <div className='w-full min-h-[385px]'>
                   <ChartSwiperWrapper
                     deviceLogs={deviceLogs}
                     isPause={isPause}
                   />
                 </div>
-                <div className='w-full'>
+                <div className='w-full min-h-[385px]'>
                   <DataTableWrapper deviceLogs={deviceLogs} isPause={isPause} />
                 </div>
               </div>

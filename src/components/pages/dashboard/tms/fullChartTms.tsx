@@ -13,11 +13,11 @@ interface FullChartPropType {
 
 const FullChartTmsComponent = (props: FullChartPropType) => {
   const { t } = useTranslation()
-  const { dataLog, tempMin, tempMax, isLoading } = props
+  const { dataLog, isLoading } = props
 
-  const tempAvgValues = dataLog ? dataLog.map(item => item._value) : [0]
-  const minTempAvg = Math.min(...tempAvgValues) - 2
-  const maxTempAvg = Math.max(...tempAvgValues) + 2
+  // const tempAvgValues = dataLog ? dataLog.map(item => item._value) : [0]
+  // const minTempAvg = Math.min(...tempAvgValues) - 2
+  // const maxTempAvg = Math.max(...tempAvgValues) + 2
 
   const mappedData = dataLog
     ? dataLog.map(item => ({
@@ -45,20 +45,20 @@ const FullChartTmsComponent = (props: FullChartPropType) => {
     })
   )
 
-  series.push(
-    {
-      type: 'area',
-      name: t('tempMin'),
-      zIndex: 60,
-      data: mappedData.map(data => ({ x: data.time, y: tempMin }))
-    },
-    {
-      type: 'area',
-      name: t('tempMax'),
-      zIndex: 60,
-      data: mappedData.map(data => ({ x: data.time, y: tempMax }))
-    }
-  )
+  // series.push(
+  //   {
+  //     type: 'area',
+  //     name: t('tempMin'),
+  //     zIndex: 60,
+  //     data: mappedData.map(data => ({ x: data.time, y: tempMin }))
+  //   },
+  //   {
+  //     type: 'area',
+  //     name: t('tempMax'),
+  //     zIndex: 60,
+  //     data: mappedData.map(data => ({ x: data.time, y: tempMax }))
+  //   }
+  // )
 
   const generateColors = (count: number) => {
     const colors = ['oklch(73.24% 0.1973 44.47 / 1)']
@@ -96,8 +96,8 @@ const FullChartTmsComponent = (props: FullChartPropType) => {
         fontWeight: 600
       }
     },
-    min: minTempAvg,
-    max: maxTempAvg
+    // min: minTempAvg,
+    // max: maxTempAvg
   }))
 
   const options: ApexCharts.ApexOptions = {

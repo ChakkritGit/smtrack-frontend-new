@@ -251,14 +251,28 @@ const Notifications = () => {
         }
 
         const size = 64
+        const borderRadius = 12
         canvas.width = size
         canvas.height = size
 
+        ctx.beginPath()
+        ctx.moveTo(borderRadius, 0)
+        ctx.lineTo(size - borderRadius, 0)
+        ctx.arcTo(size, 0, size, borderRadius, borderRadius)
+        ctx.lineTo(size, size - borderRadius)
+        ctx.arcTo(size, size, size - borderRadius, size, borderRadius)
+        ctx.lineTo(borderRadius, size)
+        ctx.arcTo(0, size, 0, size - borderRadius, borderRadius)
+        ctx.lineTo(0, borderRadius)
+        ctx.arcTo(0, 0, borderRadius, 0, borderRadius)
+        ctx.closePath()
+        ctx.clip()
+
         ctx.drawImage(img, 0, 0, size, size)
 
-        const dotSize = 24
-        const x = size - dotSize + 10
-        const y = dotSize / 5 + 10
+        const dotSize = 26
+        const x = size - dotSize + 11
+        const y = dotSize / 5 + 9
         ctx.fillStyle = '#e74c3c'
         ctx.beginPath()
         ctx.arc(x, y, dotSize / 2, 0, Math.PI * 2)
@@ -304,7 +318,10 @@ const Notifications = () => {
         {isLoading ? (
           <Loading />
         ) : role === 'LEGACY_ADMIN' || role === 'LEGACY_USER' || tmsMode ? (
-          <div id='scrollableDiv' className='h-[520px] max-h-[calc(100dvh-180px)] md:max-h-[520px] overflow-y-scroll'>
+          <div
+            id='scrollableDiv'
+            className='h-[520px] max-h-[calc(100dvh-180px)] md:max-h-[520px] overflow-y-scroll'
+          >
             {notificationList.length > 0 ? (
               <InfiniteScroll
                 dataLength={notificationList.length}
@@ -364,7 +381,10 @@ const Notifications = () => {
             )}
           </div>
         ) : (
-          <div id='scrollableDiv' className='h-[520px] max-h-[calc(100dvh-230px)] md:max-h-[520px] overflow-y-scroll'>
+          <div
+            id='scrollableDiv'
+            className='h-[520px] max-h-[calc(100dvh-230px)] md:max-h-[520px] overflow-y-scroll'
+          >
             {notificationList.length > 0 ? (
               <InfiniteScroll
                 dataLength={notificationList.length}
@@ -399,7 +419,9 @@ const Notifications = () => {
                       </div>
                       <div className='flex flex-col gap-1 w-full'>
                         <div className='flex items-center justify-between gap-3'>
-                          <span className='font-medium'>{subTextNotiDetails(item.message)}</span>
+                          <span className='font-medium'>
+                            {subTextNotiDetails(item.message)}
+                          </span>
                           <div className='flex flex-col items-end opacity-70'>
                             <span className='text-[14px]'>
                               {item.createAt.substring(11, 16)}
