@@ -351,18 +351,14 @@ const Home = () => {
             <button
               className={`flex items-center justify-center !border-base-content/70 btn w-max h-[36px] min-h-0 p-2 font-normal ${
                 deviceConnect === 'online'
-                  ? 'btn-primary text-white !border-primary'
+                  ? 'btn-primary bg-opacity-50 text-white !border-primary'
                   : 'btn-ghost border border-gray-500 text-gray-500'
               }`}
               onClick={() => handleFilterConnect('online')}
             >
-              <div className='w-[10px] h-[10px] bg-green-500 rounded-btn'></div>
+              <div className={`w-[10px] h-[10px] ${deviceConnect === 'online' ? 'bg-base-content' : 'bg-green-500'} rounded-btn`}></div>
               <span
-                className={`${
-                  deviceConnect === 'online'
-                    ? 'text-base-200'
-                    : '  text-base-content'
-                } font-medium`}
+                className={`text-base-content font-medium`}
               >
                 {t('deviceOnline')}
               </span>
@@ -370,18 +366,14 @@ const Home = () => {
             <button
               className={`flex items-center justify-center !border-base-content/70 btn w-max h-[36px] min-h-0 p-2 font-normal ${
                 deviceConnect === 'offline'
-                  ? 'btn-primary text-white !border-primary'
+                  ? 'btn-primary bg-opacity-50 text-white !border-primary'
                   : 'btn-ghost border border-gray-500 text-gray-500'
               }`}
               onClick={() => handleFilterConnect('offline')}
             >
-              <div className='w-[10px] h-[10px] bg-red-500 rounded-btn'></div>
+              <div className={`w-[10px] h-[10px] ${deviceConnect === 'offline' ? 'bg-base-content' : 'bg-red-500'} rounded-btn`}></div>
               <span
-                className={`${
-                  deviceConnect === 'offline'
-                    ? 'text-base-200'
-                    : '  text-base-content'
-                } font-medium`}
+                className={`text-base-content font-medium`}
               >
                 {t('deviceOffline')}
               </span>
@@ -393,8 +385,8 @@ const Home = () => {
             <button
               className={`flex items-center justify-center btn ${
                 listAndGrid === 1
-                  ? 'btn-primary text-white'
-                  : 'btn-ghost border border-primary text-primary'
+                  ? 'btn-primary text-base-content'
+                  : 'btn-ghost border-base-content text-base-content'
               } w-[36px] h-[36px] min-h-0 p-2 tooltip tooltip-top`}
               onClick={() => changListAndGrid(1)}
               data-tip={t('list')}
@@ -406,8 +398,8 @@ const Home = () => {
             <button
               className={`flex items-center justify-center btn ${
                 listAndGrid === 2
-                  ? 'btn-primary text-white'
-                  : 'btn-ghost border border-primary text-primary'
+                  ? 'btn-primary text-base-content'
+                  : 'btn-ghost border border-base-content text-base-content'
               } w-[36px] h-[36px] min-h-0 p-2 tooltip tooltip-top`}
               onClick={() => changListAndGrid(2)}
               data-tip={t('grid')}
