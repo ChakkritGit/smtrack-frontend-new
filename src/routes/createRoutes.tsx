@@ -11,7 +11,6 @@ import Support from './docs/support'
 import TermsConditions from './docs/termsConditions'
 import PrivacyPolicy from './docs/privacyPolicy'
 import ErrorScreen from './error/error'
-import OpenGraphCanvas from '../components/ui/og'
 
 const router = (role: string, tmsMode: boolean) =>
   createBrowserRouter([
@@ -56,10 +55,6 @@ const router = (role: string, tmsMode: boolean) =>
     {
       path: '/app',
       element: <App />
-    },
-    {
-      path: '/open-graph',
-      element: <OpenGraphCanvas />
     },
     {
       path: '/login',
