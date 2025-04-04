@@ -1,14 +1,12 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import imageUrl from '../../assets/images/app-logo.png'
 
 const OpenGraphCanvas = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [image, setImage] = useState('')
+  const canvas = document.createElement('canvas')
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
     const ctx = canvas.getContext('2d')
-
     if (!ctx) {
       console.error('❌ Canvas context is null')
       return
@@ -90,29 +88,13 @@ const OpenGraphCanvas = () => {
           textY += 40
         }
 
-        console.log(
-          '🖼️ Canvas image generated with',
-          fallbackFont,
-          'font and bottom bar'
-        )
-
         const dataUrl = canvas.toDataURL('image/png')
-        downloadImage(dataUrl)
+        setImage(dataUrl)
       }
     }
 
-    const downloadImage = (dataUrl: string) => {
-      const link = document.createElement('a')
-      link.href = dataUrl
-      link.download = 'smtrack-og-image.png'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      console.log('✅ PNG image downloaded automatically')
-    }
-
     loadFonts()
-  }, [imageUrl])
+  }, [])
 
   function wrapText (
     ctx: CanvasRenderingContext2D,
@@ -137,7 +119,7 @@ const OpenGraphCanvas = () => {
     return lines
   }
 
-  return <canvas ref={canvasRef} />
+  return <img src={image} alt='og' />
 }
 
 export default OpenGraphCanvas
