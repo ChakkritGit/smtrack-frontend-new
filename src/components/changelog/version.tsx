@@ -14,20 +14,30 @@ const V2 = () => (
   </div>
 )
 
-const V201 = () => (
-  <div className='border-y py-3 px-2 border-base-content/10'>
-    <div className='mt-2'>
-      <span className='font-bold'>v2.0.1</span> - beta version
-    </div>
-    <div>
-      <div className='ml-3'>
-        <span className='font-bold text-lg'>-</span>
-        <span className='ml-3'>
-          The latest version contains bugs fixes.
-        </span>
+const DateVersion = () => {
+  const currentDate: Date = new Date()
+  const formattedDate = currentDate
+    .toLocaleDateString('en-US', {
+      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit'
+    })
+    .replace(/\//g, '-')
+  return (
+    <div className='border-y py-3 px-2 border-base-content/10'>
+      <div className='mt-2'>
+        <span className='font-bold'>{formattedDate}</span> - beta version
+      </div>
+      <div>
+        <div className='ml-3'>
+          <span className='font-bold text-lg'>-</span>
+          <span className='ml-3'>
+            This is a test version. It may contain bugs or unexpected issues.
+          </span>
+        </div>
       </div>
     </div>
-  </div>
-)
+  )
+}
 
-export { V2, V201 }
+export { V2, DateVersion }

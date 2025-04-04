@@ -41,6 +41,15 @@ const Sidebar = () => {
   const { ward } = userProfile || {}
   const { role } = tokenDecode || {}
 
+  const currentDate: Date = new Date()
+  const formattedDate = currentDate
+    .toLocaleDateString('en-US', {
+      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit'
+    })
+    .replace(/\//g, '-')
+
   return (
     <aside
       className={`drawer-side shadow-sm z-[90] ${
@@ -254,7 +263,7 @@ const Sidebar = () => {
               } hover:underline cursor-pointer`}
             >
               {/* {import.meta.env.VITE_APP_VERSION} */}
-              Version 04-04-25-beta_latest
+              Version {formattedDate}-beta_latest
             </Link>
           </div>
         </div>

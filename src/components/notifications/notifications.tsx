@@ -34,7 +34,7 @@ import Loading from '../skeleton/table/loading'
 
 const Notifications = () => {
   const dispatch = useDispatch()
-  const { tokenDecode, tmsMode, userProfile } = useSelector(
+  const { tokenDecode, tmsMode, userProfile, themeMode } = useSelector(
     (state: RootState) => state.utils
   )
   const location = useLocation()
@@ -270,10 +270,13 @@ const Notifications = () => {
 
         ctx.drawImage(img, 0, 0, size, size)
 
+        const rootStyle = getComputedStyle(document.documentElement)
+        const primaryColor = rootStyle.getPropertyValue('--p').trim()
+
         const dotSize = 26
         const x = size - dotSize + 11
         const y = dotSize / 5 + 9
-        ctx.fillStyle = '#e74c3c'
+        ctx.fillStyle = primaryColor ? `oklch(${primaryColor}` : '#e74c3c'
         ctx.beginPath()
         ctx.arc(x, y, dotSize / 2, 0, Math.PI * 2)
         ctx.fill()
@@ -297,7 +300,7 @@ const Notifications = () => {
         )
       }
     }
-  }, [location, userProfile, notificationList])
+  }, [location, userProfile, notificationList, themeMode])
 
   const NotificationList = useMemo(
     () => (
