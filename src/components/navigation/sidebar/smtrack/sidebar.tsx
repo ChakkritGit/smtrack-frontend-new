@@ -57,7 +57,7 @@ const Sidebar = () => {
         className='drawer-overlay'
       ></label>
       <div
-        className={`menu bg-base-100 text-base-content min-h-full flex flex-col !items-center justify-between !transition-all !ease-in-out !duration-300 ${
+        className={`menu bg-base-100 text-base-content min-h-full flex flex-col !items-center justify-between !transition-all !ease-linear !duration-300 ${
           isExpand ? 'w-[100px]' : 'w-[235px]'
         }`}
       >
@@ -67,7 +67,7 @@ const Sidebar = () => {
               onClick={() => navigate('/')}
               src={ward?.hospital.hosPic ? ward.hospital.hosPic : DefaultPic}
               alt='Hospital-img'
-              className={`btn btn-ghost rounded-box transition-all ease-in-out duration-300 ${
+              className={`btn btn-ghost rounded-box transition-all ease-linear duration-300 ${
                 isExpand ? 'w-24 h-max' : 'w-32 h-28'
               } object-contain p-0 hover:bg-transparent`}
             />
@@ -307,7 +307,7 @@ const Sidebar = () => {
               } hover:underline cursor-pointer`}
             >
               {/* {import.meta.env.VITE_APP_VERSION} */}
-              Version 2.0.1-beta_latest
+              Version 04-04-25-beta_latest
             </Link>
           </div>
         </div>

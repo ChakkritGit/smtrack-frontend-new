@@ -491,7 +491,7 @@ const Repair = () => {
 
   const DataTableComponent = useMemo(() => {
     return (
-      <div className='dataTableWrapper bg-base-100 rounded-btn p-3 mt-5 duration-300'>
+      <div className='dataTableWrapper bg-base-100 rounded-btn p-3 mt-5 duration-300 ease-linear'>
         <DataTable
           responsive
           fixedHeader

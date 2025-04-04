@@ -217,7 +217,7 @@ const Navbar = () => {
     return (
       <div
         className='search-anim absolute min-w-[280px] w-[280px] max-w-[300px] md:min-w-[450px] min-h-[50px] md:max-w-[500px]
-      max-h-[400px] bg-base-100 backdrop-blur transition-shadow shadow-2xl duration-300
+      max-h-[400px] bg-base-100 backdrop-blur transition-shadow shadow-2xl duration-300 ease-linear
       border-base-content/15 border-[1px] py-3 pl-4 pr-1 top-[60px] overflow-y-scroll
       rounded-box'
       >
@@ -242,7 +242,7 @@ const Navbar = () => {
                 key={index}
                 className={`${
                   index !== 0 ? 'mt-1' : ''
-                } flex items-center justify-between p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300`}
+                } flex items-center justify-between p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300 ease-linear`}
                 onClick={() => {
                   updateSearchHistory(item)
                   setSearchOpen(false)
@@ -274,7 +274,7 @@ const Navbar = () => {
                   </span>
                 </div>
                 <button
-                  className='p-1 rounded-full hover:bg-red-500 hover:text-white duration-300'
+                  className='p-1 rounded-full hover:bg-red-500 hover:text-white duration-300 ease-linear'
                   onClick={e => {
                     e.stopPropagation()
                     removeHistoryItem(item.path)
@@ -308,7 +308,7 @@ const Navbar = () => {
                 devive.map((item, index) => (
                   <div
                     key={index}
-                    className='flex items-center gap-2 p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300'
+                    className='flex items-center gap-2 p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300 ease-linear'
                     onClick={() => {
                       const newItem = {
                         text: item.name,
@@ -388,7 +388,7 @@ const Navbar = () => {
                 filter.map((item, index) => (
                   <div
                     key={index}
-                    className='flex items-center gap-2 p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300'
+                    className='flex items-center gap-2 p-2 rounded-btn cursor-pointer hover:bg-primary/30 duration-300 ease-linear'
                     onClick={() => {
                       const newItem = {
                         text: item.text,
@@ -434,7 +434,7 @@ const Navbar = () => {
           <label
             className={`input input-bordered bg-base-200/50 ${
               searchOpen ? 'flex w-[210px]' : 'hidden'
-            } border-none h-10 w-[250px] items-center gap-2 lg:flex duration-300`}
+            } border-none h-10 w-[250px] items-center gap-2 lg:flex duration-300 ease-linear`}
           >
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -502,7 +502,7 @@ const Navbar = () => {
   )
 
   return (
-    <nav className='bg-base-100/80 text-base-content sticky top-0 z-[80] flex h-16 w-full justify-center backdrop-blur transition-shadow duration-300 [transform:translate3d(0,0,0)] shadow-sm'>
+    <nav className='bg-base-100/80 text-base-content sticky top-0 z-[80] flex h-16 w-full justify-center backdrop-blur transition-shadow duration-300 ease-linear [transform:translate3d(0,0,0)] shadow-sm'>
       <div className='navbar'>
         <div className='flex-1 lg:gap-3'>
           <label

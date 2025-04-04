@@ -81,7 +81,7 @@ const DashboardTms = () => {
             <h2 className='text-xl mb-0'>{t('selectDeviceDrop')}</h2>
             <button
               type='button'
-              className='btn btn-ghost outline-none flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300'
+              className='btn btn-ghost outline-none flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 ease-linear'
               onClick={() => navigate('/')}
             >
               <RiCloseLargeLine size={20} />

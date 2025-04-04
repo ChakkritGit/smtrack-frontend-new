@@ -308,7 +308,7 @@ const Notifications = () => {
         <div className='flex items-center justify-between rounded-t-box p-2 h-[54px] bg-base-100/70 backdrop-blur-md border-b border-base-content/10 shadow-sm sticky top-0 z-10'>
           <span className='text-base ml-2'>{t('titleNotification')}</span>
           <button
-            className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
+            className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 ease-linear max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
             data-tip={t('isExapndText')}
             onClick={() => navigate('/notification')}
           >

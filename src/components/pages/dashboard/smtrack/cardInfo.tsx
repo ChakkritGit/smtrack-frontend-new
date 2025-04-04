@@ -95,7 +95,7 @@ const CardInFoComponent = (props: PropsType) => {
         </div>
         <button
           aria-label={t('adjustMents')}
-          className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 tooltip tooltip-left'
+          className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 ease-linear tooltip tooltip-left'
           data-tip={t('adjustMents')}
           onClick={() =>
             openAdjustModal(
@@ -112,7 +112,7 @@ const CardInFoComponent = (props: PropsType) => {
           className='flex justify-center items-center w-full h-56 md:h-52 lg:h-48 relative'
           onClick={() => modalRef.current?.showModal()}
         >
-          <div className='avatar cursor-pointer hover:scale-95 duration-300 absolute z-20'>
+          <div className='avatar cursor-pointer hover:scale-95 duration-300 ease-linear absolute z-20'>
             <div className='w-56 h-56 md:w-52 md:h-52 lg:w-48 lg:h-48 rounded-btn'>
               <img
                 src={deviceData?.positionPic ?? DefaultPic}
@@ -121,7 +121,7 @@ const CardInFoComponent = (props: PropsType) => {
             </div>
           </div>
           <div
-            className='blur-[128px] w-28 h-[85%] absolute opacity-75 z-10 duration-300'
+            className='blur-[128px] w-28 h-[85%] absolute opacity-75 z-10 duration-700 ease-linear'
             style={{ backgroundColor: colors[0] }}
           ></div>
         </div>

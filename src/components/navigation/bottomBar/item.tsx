@@ -29,7 +29,7 @@ const BottomNavItem = (props: BottomItemProps) => {
 
   return (
     <div
-      className={`btm-nav overflow-hidden bottom-0 px-3 pb-2 sm:hidden bg-base-100/80 backdrop-blur ease-in-out duration-300 z-[89]
+      className={`btm-nav overflow-hidden bottom-0 px-3 pb-2 sm:hidden bg-base-100/80 backdrop-blur ease-linear duration-300 z-[89]
         ${
           isScrollingDown
             ? '!h-[0px] opacity-0'
@@ -90,7 +90,7 @@ const BottomNavItem = (props: BottomItemProps) => {
                 {text}
               </span>
               <span
-                className='absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-[2px] bg-base-content transition-all duration-300 ease-in-out'
+                className='absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-[2px] bg-base-content transition-all duration-300 ease-linear'
                 style={{ opacity: isActive ? 1 : 0 }}
               />
             </Link>
@@ -105,7 +105,7 @@ const BottomNavItem = (props: BottomItemProps) => {
       >
         <div className='avatar'>
           <div
-            className={`w-[24px] duration-300 rounded-btn ${
+            className={`w-[24px] duration-300 rounded-btn ease-linear ${
               isScrollingDown ? 'scale-0' : 'scale-100'
             }`}
           >
@@ -116,7 +116,7 @@ const BottomNavItem = (props: BottomItemProps) => {
           {t('tabAccount')}
         </span>
         <span
-          className='absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-[2px] bg-base-content transition-all duration-300'
+          className='absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-[2px] bg-base-content transition-all duration-300 ease-linear'
           style={{ opacity: location.pathname === '/settings' ? 1 : 0 }}
         />
       </Link>

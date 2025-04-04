@@ -447,7 +447,7 @@ const FullChart = () => {
               data-tip={isPause ? t('startSlide') : t('stopSlide')}
             >
               <button
-                className='btn btn-primary bg-opacity-15 text-primary border-primary border-2 p-0 hover:opacity-50 hover:border-primary hover:bg-transparent duration-300 max-h-[28px] min-h-[28px] max-w-[28px] min-w-[28px]'
+                className='btn btn-primary bg-opacity-15 text-primary border-primary border-2 p-0 hover:opacity-50 hover:border-primary hover:bg-transparent duration-300 ease-linear max-h-[28px] min-h-[28px] max-w-[28px] min-w-[28px]'
                 onClick={togglePause}
               >
                 {isPause ? <RiPlayLine size={20} /> : <RiStopLine size={20} />}

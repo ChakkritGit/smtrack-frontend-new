@@ -160,13 +160,13 @@ const HospitalAndWard = () => {
           />
           <RiCloseLine
             size={24}
-            className='cursor-pointer hover:fill-primary duration-300'
+            className='cursor-pointer hover:fill-primary duration-300 ease-linear'
             onClick={() => setShowFilter(false)}
           />
         </>
       ) : (
         <div
-          className='flex items-center gap-2 cursor-pointer hover:fill-primary hover:text-primary duration-300'
+          className='flex items-center gap-2 cursor-pointer hover:fill-primary hover:text-primary duration-300 ease-linear'
           onClick={() => setShowFilter(true)}
         >
           <RiFilter3Line size={24} />

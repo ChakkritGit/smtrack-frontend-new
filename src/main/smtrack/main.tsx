@@ -184,7 +184,7 @@ const MainSmtrack = () => {
               </span>
             </div>
             <button
-              className='flex items-center justify-center bg-base-300/50 text-base-content/60 border-none rounded-full p-2 cursor-pointer hover:bg-red-500/20 hover:text-red-700 duration-300'
+              className='flex items-center justify-center bg-base-300/50 text-base-content/60 border-none rounded-full p-2 cursor-pointer hover:bg-red-500/20 hover:text-red-700 duration-300 ease-linear'
               onClick={() => toast.dismiss(_t.id)}
             >
               <RiCloseLargeFill size={24} />
@@ -214,7 +214,7 @@ const MainSmtrack = () => {
 
   return (
     <main>
-      <div className='drawer lg:drawer-open w-auto duration-300'>
+      <div className='drawer lg:drawer-open w-auto duration-300 ease-linear'>
         <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content'>
           <Navbar />

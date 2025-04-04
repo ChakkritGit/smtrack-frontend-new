@@ -695,7 +695,7 @@ const ManageFirmware = () => {
             <h3 className='font-bold text-lg'>{t('uploadButton')}</h3>
             <button
               type='button'
-              className='btn btn-ghost outline-none flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300'
+              className='btn btn-ghost outline-none flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 ease-linear'
               onClick={closeModal}
             >
               <RiCloseLargeLine size={20} />
@@ -718,7 +718,9 @@ const ManageFirmware = () => {
           </div>
           <div className='modal-action'>
             <form onSubmit={handleSubmit}>
-              <button className='btn btn-primary'>{t('uploadButton')}</button>
+              <button className='btn btn-primary' disabled={file === undefined}>
+                {t('uploadButton')}
+              </button>
             </form>
           </div>
         </div>
@@ -738,7 +740,7 @@ const ManageFirmware = () => {
             <h3 className='font-bold text-lg'>{t('selectToUpdateButton')}</h3>
             <button
               type='button'
-              className='btn btn-ghost outline-none flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300'
+              className='btn btn-ghost outline-none flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 ease-linear'
               onClick={() => {
                 selectUploadModalRef.current?.close()
                 setSelectedDevices([])

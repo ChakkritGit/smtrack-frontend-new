@@ -929,7 +929,7 @@ const ManageDevice = () => {
         <>
           {role === 'SUPER' ? (
             <div
-              className='flex items-center gap-1 cursor-pointer hover:opacity-50 duration-300'
+              className='flex items-center gap-1 cursor-pointer hover:opacity-50 duration-300 ease-linear'
               onClick={() => {
                 try {
                   navigator.clipboard.writeText(item.id)
@@ -955,7 +955,10 @@ const ManageDevice = () => {
     {
       name: t('deviceNameBox'),
       cell: item => (
-        <span className='max-w-[80px] block truncate text-left' style={{ direction: 'rtl'}}>
+        <span
+          className='max-w-[80px] block truncate text-left'
+          style={{ direction: 'rtl' }}
+        >
           {item.name ? item.name : '—'}
         </span>
       ),
@@ -1018,7 +1021,7 @@ const ManageDevice = () => {
             name: t('token'),
             cell: (item: DeviceType) => (
               <div
-                className='flex items-center gap-1 cursor-pointer hover:opacity-50 duration-300'
+                className='flex items-center gap-1 cursor-pointer hover:opacity-50 duration-300 ease-linear'
                 onClick={() => {
                   try {
                     navigator.clipboard.writeText(item.token)
@@ -1272,7 +1275,7 @@ const ManageDevice = () => {
         </div>
       </div>
 
-      <div className='dataTableWrapper bg-base-100 rounded-btn p-3 mt-5 duration-300'>
+      <div className='dataTableWrapper bg-base-100 rounded-btn p-3 mt-5 duration-300 ease-linear'>
         <DataTable
           responsive
           fixedHeader
@@ -2272,7 +2275,11 @@ const ManageDevice = () => {
             >
               {t('cancelButton')}
             </button>
-            <button type='submit' className='btn btn-primary'>
+            <button
+              type='submit'
+              className='btn btn-primary'
+              disabled={deviceId === ''}
+            >
               {t('submitButton')}
             </button>
           </div>

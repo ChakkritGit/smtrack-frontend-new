@@ -306,7 +306,7 @@ const Home = () => {
   const ExpandedComponent = ({ data }: { data: DeviceType }) => {
     const { probe } = data
     return (
-      <div className='dataTableSubWrapper bg-base-100 rounded-btn duration-300'>
+      <div className='dataTableSubWrapper bg-base-100 rounded-btn duration-300 ease-linear'>
         <DataTable
           columns={subColumns}
           data={probe}
@@ -412,7 +412,7 @@ const Home = () => {
         </div>
       </div>
       {listAndGrid === 1 ? (
-        <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300'>
+        <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300 ease-linear'>
           <DataTable
             responsive
             fixedHeader

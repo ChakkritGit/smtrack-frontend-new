@@ -20,7 +20,7 @@ const DataTableWrapperTms = (props: DataTableWrapperProps) => {
           <span className='text-[20px] font-bold'>{t('pageTable')}</span>
         </div>
         <button
-          className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
+          className='btn btn-ghost border border-base-content/20 flex p-0 duration-300 ease-linear max-h-[34px] min-h-[34px] max-w-[34px] min-w-[34px] tooltip tooltip-left'
           data-tip={t('fullTable')}
           onClick={() =>
             navigate('/dashboard/table', {

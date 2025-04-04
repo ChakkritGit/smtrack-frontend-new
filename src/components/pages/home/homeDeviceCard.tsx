@@ -131,14 +131,14 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                       </div>
                     </div>
                     <div
-                      className='blur-[128px] w-28 h-28 absolute opacity-75 z-10 duration-300'
+                      className='blur-[128px] w-28 h-28 absolute opacity-75 z-10 duration-700 ease-linear'
                       style={{ backgroundColor: bgColor }}
                     ></div>
                   </div>
                   <div className='flex flex-col gap-1'>
                     <div className='flex items-center gap-1'>
                       <button
-                        className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 tooltip tooltip-left'
+                        className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 ease-linear tooltip tooltip-left'
                         data-tip={t('sideDashboard')}
                         onClick={() => handleRowClicked(item)}
                         name='to-dashboard'
@@ -147,7 +147,7 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                         <RiDashboardLine size={24} />
                       </button>
                       <button
-                        className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 tooltip tooltip-left'
+                        className='btn btn-ghost flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 ease-linear tooltip tooltip-left'
                         data-tip={t('adjustMents')}
                         onClick={() => openAdjustModal(item.probe, item.id)}
                         name='device-adjustments'

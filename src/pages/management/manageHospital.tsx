@@ -659,7 +659,7 @@ const ManageHospital = () => {
   ]
 
   const ExpandedComponent = memo(({ data }: { data: HospitalsType }) => (
-    <div className='dataTableSubWrapper bg-base-100 rounded-btn duration-300'>
+    <div className='dataTableSubWrapper bg-base-100 rounded-btn duration-300 ease-linear'>
       <DataTable
         columns={subWardColumns}
         data={data.ward}
@@ -690,7 +690,7 @@ const ManageHospital = () => {
           </button>
         </div>
       </div>
-      <div className='dataTableWrapper bg-base-100 rounded-btn p-3 mt-5 duration-300'>
+      <div className='dataTableWrapper bg-base-100 rounded-btn p-3 mt-5 duration-300 ease-linear'>
         <DataTable
           columns={columns}
           data={filterHospital}

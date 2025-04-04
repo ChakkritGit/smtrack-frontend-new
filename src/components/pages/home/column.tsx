@@ -96,7 +96,7 @@ const columnData = (
               isTempOutOfRange
                 ? 'bg-red-500 text-white'
                 : 'border border-primary text-primary'
-            } duration-300`}
+            } duration-300 ease-linear`}
             onClick={() => handleRowClicked(item)}
           >
             {isTempOutOfRange ? (
@@ -128,7 +128,7 @@ const columnData = (
                   item.log[0]?.[doorKey]
                     ? 'bg-red-500 text-white'
                     : 'border border-primary text-primary'
-                } duration-300`}
+                } duration-300 ease-linear`}
               >
                 {item.log[0]?.[doorKey] ? (
                   <RiDoorOpenLine size={14} />
@@ -149,7 +149,7 @@ const columnData = (
         <div
           className={`w-max h-[24px] px-2 text-black flex items-center justify-center rounded-btn ${
             item.online ? 'bg-green-400' : 'bg-red-400'
-          } duration-300`}
+          } duration-300 ease-linear`}
           onClick={() => handleRowClicked(item)}
         >
           {item.online ? t('deviceOnline') : t('deviceOffline')}
@@ -181,7 +181,7 @@ const columnData = (
               calculateDate(item).daysRemaining <= 0
                 ? 'bg-red-500 text-white'
                 : ''
-            } duration-300`}
+            } duration-300 ease-linear`}
             onClick={() => handleRowClicked(item)}
           >
             {item.warranty[0]?.expire
@@ -209,7 +209,7 @@ const columnData = (
       cell: item => (
         <RiSettings3Line
           size={24}
-          className='hover:fill-primary duration-300'
+          className='hover:fill-primary duration-300 ease-linear'
           onClick={() => openAdjustModal(item.probe, item.id)}
         />
       ),
@@ -304,7 +304,7 @@ const subColumnData = (
               isTempOutOfRange
                 ? 'bg-red-500 text-white'
                 : 'border border-primary text-primary'
-            } duration-300`}
+            } duration-300 ease-linear`}
           >
             {isTempOutOfRange ? (
               <RiErrorWarningLine size={14} />
@@ -337,7 +337,7 @@ const subColumnData = (
                   deviceLog?.door1 || deviceLog?.door2 || deviceLog?.door3
                     ? 'bg-red-500 text-white'
                     : 'border border-primary text-primary'
-                } duration-300`}
+                } duration-300 ease-linear`}
               >
                 {deviceLog?.door1 || deviceLog?.door2 || deviceLog?.door3 ? (
                   <RiDoorOpenLine size={14} />

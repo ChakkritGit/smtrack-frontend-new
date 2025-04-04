@@ -226,7 +226,7 @@ const ProfileComponent = (props: ProfileProps) => {
                 )}
               </div>
 
-              <div className='absolute hover:opacity-85 duration-300 flex items-center justify-center bottom-0 right-0 bg-base-200 p-2 rounded-full border-[3px] border-base-100'>
+              <div className='absolute hover:opacity-85 duration-300 ease-linear flex items-center justify-center bottom-0 right-0 bg-base-200 p-2 rounded-full border-[3px] border-base-100'>
                 <RiCameraLine size={20} className='text-base-content/80' />
               </div>
             </div>
@@ -274,7 +274,7 @@ const ProfileComponent = (props: ProfileProps) => {
             </span>
           </div>
           <button
-            className='w-full md:w-[80px] h-[45px] md:h-[40px] font-bold rounded-btn border-[2px] border-base-content text-[14px] md:text-base-content hover:opacity-50 duration-300'
+            className='w-full md:w-[80px] h-[45px] md:h-[40px] font-bold rounded-btn border-[2px] border-base-content text-[14px] md:text-base-content hover:opacity-50 duration-300 ease-linear'
             onClick={() => {
               setEdit(true)
               setDisplayName(userProfile?.display ?? '—')

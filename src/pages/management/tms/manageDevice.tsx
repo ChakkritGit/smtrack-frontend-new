@@ -361,7 +361,7 @@ const ManageDevice = () => {
       name: t('token'),
       cell: item => (
         <div
-          className='flex items-center gap-1 cursor-pointer hover:opacity-50 duration-300'
+          className='flex items-center gap-1 cursor-pointer hover:opacity-50 duration-300 ease-linear'
           onClick={() => {
             try {
               navigator.clipboard.writeText(item.token)
@@ -448,7 +448,7 @@ const ManageDevice = () => {
           </button>
         </div>
       </div>
-      <div className='dataTableWrapper bg-base-100 rounded-btn p-3 mt-5 duration-300'>
+      <div className='dataTableWrapper bg-base-100 rounded-btn p-3 mt-5 duration-300 ease-linear'>
         <DataTable
           responsive
           fixedHeader

@@ -634,7 +634,7 @@ const Adjustments = (props: AdjustmentsProps) => {
             type='button'
             name='close-modal'
             aria-label={t('closeButton')}
-            className='btn btn-ghost outline-none flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300'
+            className='btn btn-ghost outline-none flex p-0 min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] duration-300 ease-linear'
             onClick={resetForm}
           >
             <RiCloseLargeLine size={20} />

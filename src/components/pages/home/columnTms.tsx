@@ -100,7 +100,7 @@ const columnTms = (
                   item.log[0]?.door
                     ? 'bg-red-500 text-white'
                     : 'border border-primary text-primary'
-                } duration-300`}
+                } duration-300 ease-linear`}
               >
                 {item.log[0]?.door ? (
                   <RiDoorOpenLine size={14} />
@@ -163,7 +163,7 @@ const subColumnData = (
                   item?.door
                     ? 'bg-red-500 text-white'
                     : 'border border-primary text-primary'
-                } duration-300`}
+                } duration-300 ease-linear`}
               >
                 {item?.door ? (
                   <RiDoorOpenLine size={14} />

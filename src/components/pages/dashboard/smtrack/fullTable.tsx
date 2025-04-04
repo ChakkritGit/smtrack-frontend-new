@@ -104,7 +104,7 @@ const FullTableComponent = (props: FullTablePropType) => {
                   item.door1 || item.door2 || item.door3
                     ? 'bg-red-500 text-white'
                     : 'border border-primary text-primary'
-                } duration-300`}
+                } duration-300 ease-linear`}
               >
                 {item.door1 || item.door2 || item.door3 ? (
                   <RiDoorOpenLine size={14} />
@@ -163,7 +163,7 @@ const FullTableComponent = (props: FullTablePropType) => {
   )
 
   return (
-    <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300 mt-5'>
+    <div className='dataTableWrapper bg-base-100 rounded-btn p-3 duration-300 ease-linear mt-5'>
       {table}
     </div>
   )

@@ -40,7 +40,7 @@ const CardInfoTms = (props: PropsType) => {
           <img
             src={DefaultPic}
             alt='Device-image'
-            className='rounded-btn w-max h-[85%] object-contain cursor-pointer hover:scale-95 duration-300'
+            className='rounded-btn w-max h-[85%] object-contain cursor-pointer hover:scale-95 duration-300 ease-linear'
           />
         </div>
         <div className='w-full lg:w-[60%] h-3/4 p-1'>

@@ -155,7 +155,7 @@ const ResetPassword = () => {
           <span className='ml-5'>{t('titlePassword')}</span>
           <button
             onClick={() => setOnEdit(true)}
-            className='md:w-[140px] h-[45px] md:h-[40px] px-2 font-bold rounded-btn border-[2px] border-base-content text-[14px] md:text-base-content hover:opacity-50 duration-300'
+            className='md:w-[140px] h-[45px] md:h-[40px] px-2 font-bold rounded-btn border-[2px] border-base-content text-[14px] md:text-base-content hover:opacity-50 duration-300 ease-linear'
           >
             {t('changPassword')}
           </button>
