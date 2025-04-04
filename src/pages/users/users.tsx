@@ -587,8 +587,8 @@ const Users = () => {
                         </div>
                       </div>
                       <div
-                        className='blur-[69px] w-24 h-24 absolute z-10'
-                        style={{ backgroundColor: bgColor, opacity: '30%' }}
+                        className='blur-[128px] w-24 h-24 absolute opacity-75 z-10 duration-300'
+                        style={{ backgroundColor: bgColor }}
                       ></div>
                     </div>
                   </div>

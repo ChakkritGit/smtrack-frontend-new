@@ -109,17 +109,20 @@ const CardInFoComponent = (props: PropsType) => {
       </div>
       <div className='flex justify-between flex-col lg:flex-row gap-3 mt-2 h-full'>
         <div
-          className='flex justify-center items-center w-full lg:w-[35%] lg:h-48 relative'
+          className='flex justify-center items-center w-full h-56 md:h-52 lg:h-48 relative'
           onClick={() => modalRef.current?.showModal()}
         >
-          <img
-            src={deviceData?.positionPic ?? DefaultPic}
-            alt='Device-image'
-            className='rounded-btn w-max h-[85%] object-contain cursor-pointer hover:scale-95 duration-300 absolute z-20'
-          />
+          <div className='avatar cursor-pointer hover:scale-95 duration-300 absolute z-20'>
+            <div className='w-56 h-56 md:w-52 md:h-52 lg:w-48 lg:h-48 rounded-btn'>
+              <img
+                src={deviceData?.positionPic ?? DefaultPic}
+                alt='Device-image'
+              />
+            </div>
+          </div>
           <div
-            className='blur-[96px] w-28 h-[85%] absolute z-10'
-            style={{ backgroundColor: colors[0], opacity: '50%' }}
+            className='blur-[128px] w-28 h-[85%] absolute opacity-75 z-10 duration-300'
+            style={{ backgroundColor: colors[0] }}
           ></div>
         </div>
         <div className='w-full lg:w-[60%] lg:h-48 p-1'>

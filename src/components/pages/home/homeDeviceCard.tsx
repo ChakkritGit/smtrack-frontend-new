@@ -131,8 +131,8 @@ const HomeDeviceCard = (props: DeviceCardProps) => {
                       </div>
                     </div>
                     <div
-                      className='blur-[96px] w-28 h-28 absolute z-10'
-                      style={{ backgroundColor: bgColor, opacity: '50%' }}
+                      className='blur-[128px] w-28 h-28 absolute opacity-75 z-10 duration-300'
+                      style={{ backgroundColor: bgColor }}
                     ></div>
                   </div>
                   <div className='flex flex-col gap-1'>
