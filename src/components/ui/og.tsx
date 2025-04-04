@@ -95,7 +95,20 @@ const OpenGraphCanvas = () => {
           fallbackFont,
           'font and bottom bar'
         )
+
+        const dataUrl = canvas.toDataURL('image/png')
+        downloadImage(dataUrl)
       }
+    }
+
+    const downloadImage = (dataUrl: string) => {
+      const link = document.createElement('a')
+      link.href = dataUrl
+      link.download = 'smtrack-og-image.png'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      console.log('✅ PNG image downloaded automatically')
     }
 
     loadFonts()
